@@ -92,7 +92,7 @@ for i in range(len(Alist)):
  
     
 plt.figure(1)
-plt.axvline(WS_TO, label='take off W/S')
+plt.axvline(WS_TO, label='take off W/S',color='r')
 plt.axvline(WS_landing, label='landing W/s')
 plt.plot(WS,TW,label='min CL takeoff TW in function of WS')
 plt.legend()
