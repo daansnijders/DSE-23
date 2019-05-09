@@ -13,12 +13,13 @@ from math import *
 conc1_conf1 = [90, 4000, 19.44] 
 conc1_conf2 = [120, 2000, 25.92]
 conc1_conf3 = [120, 4000, 25.92]
-conc2_conf1 = [90, 4000, 25.92]
+conc2_conf1 = [90, 4000, 19.44]
 conc2_conf2 = [120, 2000, 25.92]
 conc2_conf3 = [120, 4000, 25.92]
 conc3_conf1 = [90, 4000, 19.44]
 conc3_conf2 = [120, 2000, 25.92]
 conc3_conf3 = [120, 4000, 25.92]
+
 
 #generate one list
 conc_conf = [[conc1_conf1, conc1_conf2, conc1_conf3], [conc2_conf1, conc2_conf2, conc2_conf3],[conc3_conf1,conc3_conf2,conc3_conf3]]
@@ -40,6 +41,8 @@ for i in range(len(conc_conf)):
     for j in range(len(conc_conf[i])):
         V_os = 2*0.2*conc_conf[i][j][2]*0.74        #[m3] Overhead storage volume
         conc_conf[i][j].append(V_os)
+        
+conc_conf[1][0][2] = 25.92      #[m] The length of the fuselage does not change, but module does not contain overhead space
 
 d_f_inner = N_sa*seat_width + (N_sa+N_aisle+1)*armrest + N_aisle*aisle_width + 2*s_clearance    #[m] Inner diameter
 d_f_outer = 1.045*d_f_inner + 0.084                                                             #[m] Outer diameter
@@ -81,6 +84,8 @@ l_cockpit = 4                   #[m] Cockpit length
 
 for i in range(len(conc_conf)):
     for j in range(len(conc_conf[i])):
-        l_f = l_cockpit + l_tail + conc_conf[i][j][2]       #[m] Fuselage length
+        l_f = l_cockpit + l_tail + conc_conf[i][j][2]       #[m]
         conc_conf[i][j].append(l_f)
+
+
 
