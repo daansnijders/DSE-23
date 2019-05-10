@@ -97,8 +97,3 @@ plt.legend()
 plt.show()
 
 
-
-#weights of the concepts and configurations
-
-W_baseline=506305.22
-W_maxconf=687128.52
