@@ -8,23 +8,22 @@ Created on Thu May  9 10:58:36 2019
 """ Fuselage Design """
 from math import *
 
-""" Initial data for the different concepts and configurations """
+#Initial data for the different concepts and configurations
 # [N_pax, Range [km], l_cabin, V_os, V_cc (Available), V_carry_on, V_check_in, V_cargo (V_available - V_luggage), l_f]
-conc1_conf1 = [90, 4000, 19.44] 
-conc1_conf2 = [120, 2000, 25.92]
-conc1_conf3 = [120, 4000, 25.92]
-conc2_conf1 = [90, 4000, 19.44]
-conc2_conf2 = [120, 2000, 25.92]
-conc2_conf3 = [120, 4000, 25.92]
-conc3_conf1 = [90, 4000, 19.44]
-conc3_conf2 = [120, 2000, 25.92]
-conc3_conf3 = [120, 4000, 25.92]
-
+conc1_conf1 = [94, 4000, 19.44] 
+conc1_conf2 = [125, 2000, 25.92]
+conc1_conf3 = [125, 4000, 25.92]
+conc2_conf1 = [94, 4000, 19.44]
+conc2_conf2 = [125, 2000, 25.92]
+conc2_conf3 = [125, 4000, 25.92]
+conc3_conf1 = [94, 4000, 19.44]
+conc3_conf2 = [125, 2000, 25.92]
+conc3_conf3 = [125, 4000, 25.92]
 
 #generate one list
 conc_conf = [[conc1_conf1, conc1_conf2, conc1_conf3], [conc2_conf1, conc2_conf2, conc2_conf3],[conc3_conf1,conc3_conf2,conc3_conf3]]
 
-
+#Go from inches to meters
 inch_to_m = 0.0254
 
 #data on the interior
@@ -65,6 +64,7 @@ for i in range(len(conc_conf)):
         V_cc = conc_conf[i][j][2]*0.45*A_cc                 #[m3] Total available cargo hold volume
         Wtot_carry_on = conc_conf[i][j][0] * W_carry_on     #[kg] Total carry-on weight
         Wtot_check_in = conc_conf[i][j][0] * W_check_in     #[kg] Total check-in weight
+        print (Wtot_carry_on + Wtot_check_in)
         V_carry_on = Wtot_carry_on / rho_lugg               #[m3] Total carry-on volume needed
         V_check_in = Wtot_check_in / rho_lugg               #[m3] Total check-in volume needed
         V_cargo = V_cc - (V_carry_on + V_check_in - conc_conf[i][j][3]) #[m3] Total available cargo volume
