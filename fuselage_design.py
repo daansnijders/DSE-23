@@ -78,10 +78,10 @@ for i in range(len(conc_conf)):
         conc_conf[i][j].append(M_cargo)
         conc_conf[i][j].append(M_payload)
         
+l_cockpit = 4                   #[m] Cockpit length
 l_nose = 1.85 * d_f_outer       #[m] Nose cone length
 l_tailcone = 3.5*d_f_outer      #[m] Tail cone length
 l_tail = 1.6 * d_f_outer        #[m] Tail length
-l_cockpit = 4                   #[m] Cockpit length
 
 for i in range(len(conc_conf)):
     for j in range(len(conc_conf[i])):
