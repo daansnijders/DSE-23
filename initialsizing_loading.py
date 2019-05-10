@@ -51,7 +51,7 @@ e=0.85
 c=15
 
 
-Alist=[8,10,12,14,16]
+A=11
 
 
 #calculate the  stall speed at landing
@@ -72,35 +72,28 @@ WS=np.arange(100,7100,100)
 TW=WS*1/CL_TO_av*1/sigma*1/TOP
 
 #cruise performance and climb performance 
-for i in range(len(Alist)):
-    print (i)
-    A=Alist[i]
-    CD=CD0+CL_clean_av**2/(pi*e*A)
-    
-    CD_climb=4*CD0
-    CL_climb=(3*CD0*pi*A*e)**0.5
-    
-    TW_TO=(rho_0/rho)**0.75*(CD0*0.5*rho*V**2/(WS)+(WS)*1/(pi*A*e*0.5*rho*V**2))
-    TW_climb=c/(WS*2/rho_0*1/CL_climb)**0.5 + CD_climb/CL_climb
-    TW_cV=c/V+2*(CD0/(pi*A*e))**0.5
-    
-    
-    plt.figure(1)
-    plt.plot(WS,TW_TO,label='cruise condition at A= %2.3f' %A )      
-    plt.plot(WS,TW_climb,label='climb condition at A= %2.3f' %A ) 
-    plt.axhline(TW_cV,label='CV condition at A= %2.3f' %A ) 
- 
-    
+
+CD=CD0+CL_clean_av**2/(pi*e*A)
+
+CD_climb=4*CD0
+CL_climb=(3*CD0*pi*A*e)**0.5
+
+TW_TO=(rho_0/rho)**0.75*(CD0*0.5*rho*V**2/(WS)+(WS)*1/(pi*A*e*0.5*rho*V**2))
+TW_climb=c/(WS*2/rho_0*1/CL_climb)**0.5 + CD_climb/CL_climb
+TW_cV=c/(300/3.6)+2*(CD0/(pi*A*e))**0.5
+
+
 plt.figure(1)
-plt.axvline(WS_TO, label='take off W/S',color='r')
-plt.axvline(WS_landing, label='landing W/s')
-plt.plot(WS,TW,label='min CL takeoff TW in function of WS')
+plt.plot(WS,TW_TO, label='Cruise condition ')      
+plt.plot(WS,TW_climb,label='Climb rate condition' ) 
+plt.axhline(TW_cV,label='Climb gradient condition' ) 
+plt.axvline(WS_TO, label='Take off W/S',color='r')
+plt.axvline(WS_landing, label='Landing W/S')
+plt.plot(WS,TW,label='Take-off condition ')
+plt.title('Wing/Thrust Loading diagram')
+plt.xlabel('W/S',size=16)
+plt.ylabel('T/W',size=16)
 plt.legend()
 plt.show()
 
 
-
-#weights of the concepts and configurations
-
-W_baseline=506305.22
-W_maxconf=687128.52
