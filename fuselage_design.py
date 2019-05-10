@@ -21,6 +21,7 @@ conc3_conf2 = [120, 2000, 25.92]
 conc3_conf3 = [120, 4000, 25.92]
 
 
+
 #generate one list
 conc_conf = [[conc1_conf1, conc1_conf2, conc1_conf3], [conc2_conf1, conc2_conf2, conc2_conf3],[conc3_conf1,conc3_conf2,conc3_conf3]]
 
