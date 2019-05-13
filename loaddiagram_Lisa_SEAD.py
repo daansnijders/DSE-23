@@ -60,7 +60,7 @@ Xlemac_F120=18.1163751
 
 
 
-def loading_diagrams(Xlemac,Wwing,OEW,W_payload_total,CG_wing):
+def loading_diagrams(Xlemac,W_wing,OEW,W_payload_total,CG_wing):
     W_payload=W_payload_total-W_pass_total
     W_payload_front=W_payload*volume_cargo_front/volume_cargo
     W_payload_aft=W_payload*volume_cargo_aft/volume_cargo
@@ -180,20 +180,20 @@ xcg1_F120,xcg2_F120,WeightF120= loading_diagrams(Xlemac_F120,Wwing_F120,OEW_F120
 #xcg1_min, xcg2_min,Weigth3= loading_diagrams(Xlemac_min)
 
 
-min_cg=[min(xcg1_min)-2,min(xcg1)-2,min(xcg1_plus)-2]    
-max_cg=[max(xcg2_min)+2,max(xcg2)+2,max(xcg2_plus)+2]        
-long_pos=[ Xlemac_min/fuselage_length,Xlemac/fuselage_length, Xlemac_plus/fuselage_length]
+#min_cg=[min(xcg1_min)-2,min(xcg1)-2,min(xcg1_plus)-2]    
+#max_cg=[max(xcg2_min)+2,max(xcg2)+2,max(xcg2_plus)+2]        
+#long_pos=[ Xlemac_min/fuselage_length,Xlemac/fuselage_length, Xlemac_plus/fuselage_length]
 #wing longitudinal position vs cg position 
 
 
-plt.figure()
-plt.plot(min_cg,long_pos,label='Most forward CG location')
-plt.plot(max_cg,long_pos,label='Most aft CG location')   
-plt.xlabel('center of gravity range [% of MAC]', fontsize=12) 
-plt.ylabel('Longitudinal wing position (Xlemac/Lfuselage) [-]', fontsize=12)
-plt.title('c.g. range vs. wing longitudinal position diagram ',fontsize=14)
-plt.legend()
-plt.show()
+#plt.figure()
+#plt.plot(min_cg,long_pos,label='Most forward CG location')
+#plt.plot(max_cg,long_pos,label='Most aft CG location')   
+#plt.xlabel('center of gravity range [% of MAC]', fontsize=12) 
+#plt.ylabel('Longitudinal wing position (Xlemac/Lfuselage) [-]', fontsize=12)
+#plt.title('c.g. range vs. wing longitudinal position diagram ',fontsize=14)
+#plt.legend()
+##plt.show()
 
 
 
