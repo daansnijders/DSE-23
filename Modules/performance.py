@@ -6,7 +6,7 @@ Constants
 """
 rho = 1.225
 g = 9.81
-h_screen = 10.
+h_screen = 11.
 
 """
 Variables
@@ -45,9 +45,18 @@ def take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, C_D
     """
     Climb out distance
     """
-    x_climb = (h_screen - h_transition) / np.tan(climb_angle)
-
-    x_total_airborne = x_transition - x_climb
+    x_climb = 0
+    if h_transition < h_screen:
+        x_climb = (h_screen - h_transition) / np.tan(climb_angle)
+    x_total_airborne = x_transition + x_climb
     x_total = distance_ground + x_total_airborne
     # print(x_total)
-    return distance_ground, x_total
+    return distance_ground, x_transition, x_climb, x_total
+
+
+distance_ground, x_transition, x_climb, x_total = take_off_field_length(rho, g, h_screen, MTOW,
+                                                                        thrust_takeoff_one_engine, C_D, C_L_max, S)
+# print('distance ground', distance_ground)
+# print('x_transition', x_transition)
+# print('x_climb', x_climb)
+# print('x_total', x_total)
