@@ -7,6 +7,7 @@ Created on Fri May  3 09:45:17 2019
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
+from modules.airfoil_calculations import *
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
 import numpy as np
 
@@ -62,3 +63,10 @@ dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   
 # Empennage parameters
 V_h = 1.28                                                                      # [-]
 x_h = 0.9
+
+
+
+
+#airfoil design 
+
+Re1, Re2, Re3, Cl_des=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_2_rad, b, taper_ratio)
