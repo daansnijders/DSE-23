@@ -10,10 +10,44 @@ Analysis of Concept 1 fuselage joint.
 Assumptions:
 1) Fuselage is cylindrical
 2) Fuselage structural mass and payload is distributed equally
-3) Clamped at wing
-4) Tail is not generating lift
+3) Point load, unclamped, fuel and wing weight conincide with wing lift, tail lift
+    conincide with tail weight, canard lift conincide with canard weight
+4) Stringers carry longitudinal stress
 5) z_CG at the center of fuselage, symmetrical in x,y,zplane
 6) Aluminium 7075-T6, yield strength 503MPa
+7) Torsion neglected
+8) Effect of buckling neglected
+    
+Description:
+1) The program begins with plugging in the fixed parameters
+2) The location and mass of components are inputted into the program
+3) Difference in OEW and sum of components is included into the mass of fuselage
+4) Force and moment equilibrium is performed to obtain lift for canard and tail
+5) Internal Shear Diagram produced
+6) Internal Bending moment diagram produced
+7) 8) FUNCTION 1 : Moment of inertia created
+9) Longtitudinal stress due to pressure difference (37000ft and 2438ft CS25)
+10) Bending stress calculated
+11) Number of stringers needed at each point of the fuselage is calculated which 
+    depends on surface area of the stringers (Idealized boom structure)
+12) Skin Thickness calculated due to radial stress by pressure
+13) Shear Stress calculated.
+    
+Input:
+Refer to parameters below
+
+Output:
+1) Number of bolts (joints) needed at front and back of fuselage extension
+2) Max normal stress at the joints
+3) Max Shear stress at the joints
+
+To be done:
+1)Verification
+2)Influence of fatigue
+3)Different loadings
+4)Total mass of reinforcement needed (Size of web frames and bolts and fittings)
+5)Influence of other failure mode (bearing)
+-------------------------------------------------------------------------------
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -40,7 +74,8 @@ load_factor = 2.1
 g = 9.81
 
 # Fuselage length [m]
-l_fuselage = 29.335        
+l_fuselage = 29.335
+l_fuselage_short = 19.44        
 # Fuselage diameter [m]
 d_fuselage = 3.685
 # Fuselage structure mass [kg]
@@ -70,6 +105,25 @@ m_canard = (157.4050988-113.8873926)/157.4050988*6280.313608
 # Canard location [m]
 x_canard = 8
 
+"""Bolts Details"""
+l_reinforcement = 500           # [mm]
+rho_material = 2810             # [kg/m^3]
+
+"""Pressure at 2438ft [Pa]"""
+P1 = isa(2438/3.281)[1]
+"""Pressure at 37000ft [Pa]"""
+P2 = isa(37000/3.281)[1]
+
+"""
+Analysis (Step Size)
+-------------------------------------------------------------------------------
+"""
+
+n = 1000
+step_size = l_fuselage/n
+n = 1000
+step_size = l_fuselage/n
+
 """
 Adjusting m_fuselage to include main and nose landing gear
 """
@@ -89,9 +143,7 @@ L_tail = delta_F-L_canard
 
 
 
-"""Analysis"""
-n = 1000
-step_size = l_fuselage/n
+
 
 """
 Point Loads: Canard weight, Canard Lift,Fuel Weight, Wing Group weight, Wing Lift, Tail weight, Tail Lift
@@ -167,11 +219,6 @@ def mmoi(stringer_number,radius,stringer_area):   #[-,mm,mm^2]
     MMOI = sum((stringer_lst[:,1])**2*stringer_lst[:,2])
     return [MMOI,mean_y]
 
-"""Pressure at 2438ft [Pa]"""
-P1 = isa(2438/3.281)[1]
-"""Pressure at 37000ft [Pa]"""
-P2 = isa(37000/3.281)[1]
-
 """Calculate number of stringers needed"""
 fuselage_radius = d_fuselage/2     #[m]
 stringer_number = 2
@@ -203,21 +250,19 @@ plt.show()
 
 """Number of bolts at the joint"""
 
-x_joint1 = -(25.92-19.44)/2+x_canard         #[m]
-x_joint2 = (25.92-19.44)/2+x_canard         #[m]
-n_joint1 = stringer_lst[min(range(len(x_lst)), key=lambda i: abs(x_lst[i]-x_joint1))]
-n_joint2 = stringer_lst[min(range(len(x_lst)), key=lambda i: abs(x_lst[i]-x_joint2))]
-
-"""Bolts Details"""
-l_reinforcement = 500           # [mm]
-rho_material = 2810             # [kg/m^3]
+x_joint1 = -(l_fuselage-l_fuselage_short)/2+x_canard         #[m]
+x_joint2 = (l_fuselage-l_fuselage_short)/2+x_canard         #[m]
+joint1 = min(range(len(x_lst)), key=lambda i: abs(x_lst[i]-x_joint1))
+joint2 = min(range(len(x_lst)), key=lambda i: abs(x_lst[i]-x_joint2))
+n_joint1 = stringer_lst[joint1]
+n_joint2 = stringer_lst[joint2]
 
 
 """ Thickness of skin """
 t_skin = (P1-P2)*safety_factor*fuselage_radius/(yield_strength*10**6)
 print("Skin thickness= ",t_skin*10**3, " mm")
 
-""" Maximum Stress """
+""" Maximum Normal Stress """
 print("Maximum Normal Stress = ", max(stress_lst), " MPa")
     
 """ Shear Stress """
@@ -237,12 +282,33 @@ def shear(shear_lst, stringer_lst,fuselage_radius, stringer_area):
     shear_stress = np.array(shear_stress)
     return shear_stress
 
-test = shear(shear_lst, stringer_lst,fuselage_radius, stringer_area)
-fig = plt.figure()
-ax = fig.add_subplot(111,projection='3d')
-ax.scatter(test[:,1],test[:,2],test[:,3],c=abs(test[:,-1]))
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_zlabel('z')
+shear_stress_all = shear(shear_lst, stringer_lst,fuselage_radius, stringer_area)
+#fig = plt.figure()
+#ax = fig.add_subplot(111,projection='3d')
+#ax.scatter(shear_flow_all[:,1],shear_flow_all[:,2],shear_flow_all[:,3],c=abs(shear_flow_all[:,-1]))
+#ax.set_xlabel('x')
+#ax.set_ylabel('y')
+#ax.set_zlabel('z')
     
-    
+joint1_normal_stress = stress_lst[joint1]
+joint2_normal_stress = stress_lst[joint2]
+
+joint1_shear_idx = np.where(shear_stress_all[:,1] == shear_stress_all[np.abs(shear_stress_all[:,1] - x_joint1).argmin(),1])
+joint1_shear = (shear_stress_all[joint1_shear_idx,:])
+joint1_maxshear = np.max(joint1_shear[:,:,-1])
+
+joint2_shear_idx = np.where(shear_stress_all[:,1] == shear_stress_all[np.abs(shear_stress_all[:,1] - x_joint2).argmin(),1])
+joint2_shear = (shear_stress_all[joint2_shear_idx,:])
+joint2_maxshear = np.max(joint2_shear[:,:,-1])
+print("")
+print("Joint 1 Forward")
+print("---------------")
+print("Number of joints = ", n_joint1)
+print("Normal Stress = ", joint1_normal_stress, " MPa")
+print("Shear Stress = ", joint1_maxshear, " MPa")
+
+print("Joint 2 Aft")
+print("---------------")
+print("Number of joints = ", n_joint2)
+print("Normal Stress = ", joint2_normal_stress, " MPa")
+print("Shear Stress = ", joint2_maxshear, " MPa")
