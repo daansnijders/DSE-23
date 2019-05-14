@@ -10,8 +10,6 @@ from math import *
 from modules.initialsizing_weights import *
 from inputs.constants import *
 
-
-
 def get_d_f_inner(N_sa, seat_width, N_aisle, armrest, aisle_width, s_clearance):
     return [N_sa*seat_width + (N_sa+N_aisle+1)*armrest + N_aisle*aisle_width + 2*s_clearance for i in range(3)]
 
@@ -40,7 +38,7 @@ def get_overhead_volume(l_cabin):
 
 def get_cargo_volume(R_f,cabinlength):
     p = [R_f[i]- h_max - h_floor for i in range(3)]        	#[m] Distance between the lower point of the inner fuselage and the floor
-    print(p)
+    #print(p)
     phi = [2 * acos(1-p[i]/R_f[i]) for i in range(3)]          #[rad] Angle between the two connection points of the fuselage and floor
     A_cc = [0.5 * R_f[i]**2*(phi [i]- sin(phi[i]))     for i in range(3)]        #[Cargo hold area]m^2
     V_cc = [cabinlength[i]*0.45*A_cc[i] for i in range(3)]  #[m3] Total available cargo hold volume
