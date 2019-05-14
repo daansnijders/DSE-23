@@ -52,8 +52,6 @@ def get_cargo_storage(R_f,cabinlength,Npax,V_os):
     M_payload[i] = [N_pax[i]* (W_carry_on[i] + W_check_in[i] + W_pax[i]) + M_cargo[i]  for i in [0,1,2]]#[kg] Total payload weight
     return V_cc , M_cargo,M_payload
     
-def get_fuselage_length(l_cockpit, l_tail, l_cabin) :       
-    return l_cockpit + l_tail + l_cabin
 
 
 

@@ -33,6 +33,8 @@ l_nose = get_l_nose(d_f_outer)
 l_tailcone = get_l_tailcone(d_f_outer)
 l_tail = get_l_tail(d_f_outer)
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)
+
+
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2]
