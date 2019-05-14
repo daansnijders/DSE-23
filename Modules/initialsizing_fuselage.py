@@ -38,20 +38,33 @@ def get_overhead_volume(l_cabin):
 
 
 
-def get_cargo_storage(R_f,cabinlength,Npax,V_os):
+def get_cargo_volume(R_f,cabinlength,Npax,V_os):
     p = R_f- h_max - h_floor        	#[m] Distance between the lower point of the inner fuselage and the floor
     phi = 2 * acos(1-p/R_f)             #[rad] Angle between the two connection points of the fuselage and floor
     A_cc = 0.5 * R_f**2*(phi - sin(phi))           #[Cargo hold area]m^2
-    V_cc = [cabinlength[i]*0.45*A_cc for i in range(3)]    #[m3] Total available cargo hold volume
-    Wtot_carry_on =[ N_pax[i] * W_carry_on  for i in [0,1,2]]  #[kg] Total carry-on weight
-    Wtot_check_in =[ N_pax[i] * W_check_in  for i in [0,1,2] ]  #[kg] Total check-in weight 
-    V_carry_on[i] = [Wtot_carry_on[i] / rho_lugg for i in range(3) ]             #[m3] Total carry-on volume needed
-    V_check_in[i]= [Wtot_check_in[i] / rho_lugg  for i in range(3)]             #[m3] Total check-in volume needed
-    V_cargo[i] = [V_cc[i] - (V_carry_on[i] + V_check_in[i] - V_os[i]) for i in [0,1,2]] #[m3] Total available cargo volume
+    V_cc = [cabinlength[i]*0.45*A_cc for i in range(3)]  #[m3] Total available cargo hold volume
+    return V_cc
+
+def get_volumes(N_pax, V_cc):
+    Wtot_carry_on = [ N_pax[i] * W_carry_on  for i in [0,1,2]]  #[kg] Total carry-on weight
+    Wtot_check_in = [ N_pax[i] * W_check_in  for i in [0,1,2] ]  #[kg] Total check-in weight 
+    V_carry_on = [Wtot_carry_on[i] / rho_lugg for i in range(3) ]             #[m3] Total carry-on volume needed
+    V_check_in= [Wtot_check_in[i] / rho_lugg  for i in range(3)]             #[m3] Total check-in volume needed
+    V_cargo = [V_cc[i] - (V_carry_on[i] + V_check_in[i] - V_os[i]) for i in [0,1,2]] #[m3] Total available cargo volume
+    return Wtot_carry_on, Wtot_check_in, V_carry_on, V_check_in,V_cargo
+
+def get_cargo_mass(Npax,V_cc):
+    Wtot_carry_on, Wtot_check_in,V_carry_on,V_check_in,V_cargo=get_volumes(N_pax,V_cc)
     M_cargo[i] = [V_cargo[i] * rho_cargo  for i in [0,1,2]]
-    M_payload[i] = [N_pax[i]* (W_carry_on[i] + W_check_in[i] + W_pax[i]) + M_cargo[i]  for i in [0,1,2]]#[kg] Total payload weight
-    return V_cc , M_cargo,M_payload
+    M_payload = [N_pax[i]* (W_carry_on[i] + W_check_in[i] + W_pax[i]) + M_cargo[i]  for i in [0,1,2]]#[kg] Total payload weight
+    return M_cargo
+def get_payload_mass(N_pax,V_cc):
+    Wtot_carry_on, Wtot_check_in,V_carry_on,V_check_in,V_cargo=get_volumes(N_pax,V_cc)
+    return [N_pax[i]* (W_carry_on[i] + W_check_in[i] + W_pax[i]) + M_cargo[i]  for i in [0,1,2]]#[kg] Total payload weight
     
+    
+def get_fuselage_length(l_cockpit, l_tail, l_cabin) :       
+    return l_cockpit + l_tail + l_cabin
 
 
 

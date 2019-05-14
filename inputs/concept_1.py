@@ -33,10 +33,9 @@ l_nose = get_l_nose(d_f_outer)
 l_tailcone = get_l_tailcone(d_f_outer)
 l_tail = get_l_tail(d_f_outer)
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)
-
-
 # Wing parameters
-A = [11,11,11]                                                                  # [-]
+A = [11,11,11]   
+e=[0.85,0.85,0.85]                                                               # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2]
 b = get_b(A,S)                                                                  # [m]
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad]
