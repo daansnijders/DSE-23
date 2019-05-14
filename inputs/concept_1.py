@@ -9,6 +9,7 @@ from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_cg import *
+from modules.airfoil_calculations import *
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
 import numpy as np
 
@@ -36,9 +37,17 @@ l_tailcone = get_l_tailcone(d_f_outer)                                          
 l_tail = get_l_tail(d_f_outer)                                                  # [m]
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m]
 
+R_f=[d_f_outer[i]/2 for i in range(3)] 
+
+V_os= get_overhead_volume(l_cabin)
+V_cc=get_cargo_volume(R_f,l_cabin)
+M_cargo_available=get_cargo_mass(N_pax,V_cc, V_os)
+M_payload_total=get_payload_mass(M_cargo_available,N_pax,V_cc,V_os)
+
 
 # Wing parameters
-A = [11,11,11]                                                                  # [-]
+A = [11,11,11]   
+e=[0.85,0.85,0.85]                                                               # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2]
 b = get_b(A,S)                                                                  # [m]
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad]
@@ -63,7 +72,6 @@ A_v = [1.9, 1.9, 1.9]                                                           
 taper_ratio_v = [0.375, 0.375, 0.375]                                           # [-]
 lambda_v_le = [np.deg2rad(40) for i in range(3)]                                # [rad]
 
-                     
 x_h = get_x_h(l_f)                                                              # [m]
 x_v = x_h                                                                       # [m]
 
@@ -83,7 +91,6 @@ Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            
 
 
 
+#airfoil design 
 
-
-
-
+Re1, Re2, Re3, Cl_des=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_2_rad, b, taper_ratio)
