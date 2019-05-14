@@ -6,5 +6,11 @@ Created on Fri May  3 09:45:17 2019
 @author: Lisa
 """
 
-from inputs import *
+from inputs.concept_1 import *
 from modules.initialsizing_undercarriage import *
+from modules.initialsizing_fuselage import *
+
+conf_1 = [90,4000]                                                              # [pax,range]
+conf_2 = [120,2000]                                                             # [pax,range]
+conf_3 = [120,4000]                                                             # [pax,range]
+
