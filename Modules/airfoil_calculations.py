@@ -28,14 +28,15 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_c2, b, Taper):
     Re2 = [(rho*V_cruise*avgC[i])/mu for i in range(3)]   # Reynolds number at avg chord [-]
     Re3 = [(rho*V_cruise*Ct[i])/mu   for i in range(3)]   # Reynolds number at tip chord [-]
     q = 0.5*rho*V_cruise**2        # Dynamic pressure [Pa]
-    WSbegin = [(MTOW[i]*FF1*FF2*FF3*FF4)/S[i]   for i in range(3)]        # Wing Loading begin cruise  
-    WSend = [(MTOW[i]*FF1*FF2*FF3*FF4*FF5)/S[i]  for i in range(3)]        # Wing loading end cruise
+    
+    WSbegin = [(MTOW[i]*9.81*FF1*FF2*FF3*FF4)/S[i]   for i in range(3)]        # Wing Loading begin cruise  
+    WSend = [(MTOW[i]*9.81*FF1*FF2*FF3*FF4*FF5)/S[i]  for i in range(3)]        # Wing loading end cruise
     CLdes =[ 1.1*(1/q)*(0.5*(WSbegin[i] + WSend[i]))   for i in range(3)] # Wing CL design [-]
                                              
     Veff =[ V_cruise*cos(sweep_c2[i])  for i in range(3)]              # Effective velocity [m/s]
     qeff =[ 0.5*rho*Veff[i]**2   for i in range(3)]                    # Effective Dynamic Pressure [Pa]
     Cl_des = [(q*CLdes[i])/qeff  [i] for i in range(3)]                   # Airfoil Cl design [-]
-    
+    print(WSend)
     return(Re1, Re2, Re3, Cl_des)
     
 
