@@ -7,6 +7,7 @@ Created on Fri May  3 09:45:17 2019
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
+from modules.airfoil_calculations import * 
 from inputs.constants import M_cruise, M_x, rho, V_cruise,p,R,T
 import numpy as np
 N_pax = [90,120,120]
@@ -38,8 +39,12 @@ R_f=[d_f_outer[i]/2 for i in range(3)]
 
 V_os= get_overhead_volume(l_cabin)
 V_cc=get_cargo_volume(R_f,l_cabin)
-M_cargo_available=get_cargo_mass(N_pax,V_cc, V_os)
-M_payload_total=get_payload_mass(M_cargo_available,N_pax,V_cc,V_os)
+Wtot_carry_on, Wtot_check_in, V_carry_on, V_check_in=get_masses_volumes(N_pax, V_cc, V_os)
+
+V_cargo_available=get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)
+M_cargo_available=get_cargo_mass(N_pax,M_payload)
+
+
 
 
 # Wing parameters
@@ -57,17 +62,9 @@ MAC = get_MAC(Cr, taper_ratio)                                                  
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
 
-#aerodynamics
 
 
-#propulsion
 
-#structures
+#airfoil design 
 
-#Performance
-
-
-#materials
-
-
-# 
+Re1, Re2, Re3, Cl_des=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_2_rad, b, taper_ratio)

@@ -9,6 +9,7 @@ from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from inputs.constants import M_cruise, M_x, rho, V_cruise,p,R,T
+from modules.airfoil_calculations import *
 import numpy as np
 
 N_pax = [90,120,120]
@@ -35,15 +36,19 @@ d_f_outer = get_d_f_outer(d_f_inner)
 l_nose = get_l_nose(d_f_outer)
 l_tailcone = get_l_tailcone(d_f_outer)
 l_tail = get_l_tail(d_f_outer)
-l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail) #UPDATE THE FUSELAGE LENGTH IS THE SAME 
+l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail) #UPDATE THE FUSELAGE LENGTH IS THE SAME done
 l_module=max(l_f)-l_f[0]
 l_f[0]=max(l_f)
 R_f=[d_f_outer[i]/2 for i in range(3)] 
 
 V_os= get_overhead_volume(l_cabin)
 V_cc=get_cargo_volume(R_f,l_cabin)
-M_cargo_available=get_cargo_mass(N_pax,V_cc, V_os)
-M_payload_total=get_payload_mass(M_cargo_available,N_pax,V_cc,V_os)
+Wtot_carry_on, Wtot_check_in, V_carry_on, V_check_in=get_masses_volumes(N_pax, V_cc, V_os)
+
+V_cargo_available=get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)
+M_cargo_available=get_cargo_mass(N_pax,M_payload)
+
+
 
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
@@ -60,3 +65,8 @@ MAC = get_MAC(Cr, taper_ratio)                                                  
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
 
+
+
+#airfoil design 
+
+Re1, Re2, Re3, Cl_des=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_2_rad, b, taper_ratio)
