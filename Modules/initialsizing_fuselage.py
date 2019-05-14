@@ -8,6 +8,7 @@ Created on Thu May  9 10:58:36 2019
 """ Fuselage Design """
 from math import *
 
+
 #Initial data for the different concepts and configurations
 # [N_pax, Range [km], l_cabin, V_os, V_cc (Available), V_carry_on, V_check_in, V_cargo (V_available - V_luggage), l_f]
 conc1_conf1 = [94, 4000, 19.44] 
@@ -35,7 +36,7 @@ seat_pitch = 32*inch_to_m       #[m]
 seat_width = 20*inch_to_m       #[m]
 armrest = 2*inch_to_m           #[m] Armrest width
 
-lcabin=N_pax/N_sa*1.08
+#lcabin=N_pax/N_sa*1.08
 
 
 for i in range(len(conc_conf)):

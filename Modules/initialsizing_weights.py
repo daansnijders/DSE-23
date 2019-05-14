@@ -6,7 +6,7 @@ Created on Tue May 14 09:25:55 2019
 """
 
 def get_MTOW(OEW):
-    MTOW = [(OEW[0]+1000)/0.582, (OEW[1]+1000)/0.582, (OEW[2]+1000)/0.582]    # [kg]
+    MTOW = [(OEW[0]+1000)/0.582, (OEW[1]+1000)/0.582, (OEW[2]+1000)/0.582]      # [kg]
     return MTOW
     
 def get_M_fuel(MTOW,M_ff):
@@ -14,7 +14,7 @@ def get_M_fuel(MTOW,M_ff):
     return M_fuel
 
 def get_T_req(T_W, MTOW):
-    return [T_W[i] * MTOW[i] for i in [0,1,2]]
+    return [T_W[i] * MTOW[i] * 9.80665 for i in [0,1,2]]                                  # [N]
 
 def get_M_payload(MTOW, OEW, M_fuel):
     return [MTOW[i] - OEW[i] - M_fuel[i] for i in [0,1,2]]
