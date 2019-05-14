@@ -35,6 +35,8 @@ seat_pitch = 32*inch_to_m       #[m]
 seat_width = 20*inch_to_m       #[m]
 armrest = 2*inch_to_m           #[m] Armrest width
 
+lcabin=N_pax/N_sa*1.08
+
 
 for i in range(len(conc_conf)):
     for j in range(len(conc_conf[i])):
