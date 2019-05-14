@@ -16,7 +16,7 @@ ft_to_m=0.3048
 H_ft=37000   #[feet]
 H_m=H_ft*ft_to_m      #[m]
 M_cr=0.75
-
+M_x = 0.935
 
 #air constants
 gamma=1.4
@@ -39,7 +39,6 @@ elif H_m<20000:
     T1=216.65
     a1=0
     p1=22632
-
 
     T=T1+a1*(H_m)
     p=p1*e**(-g/(R*T)*(H_m-11000))
