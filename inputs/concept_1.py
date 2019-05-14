@@ -14,7 +14,7 @@ from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
 import numpy as np
 
 N_pax = [90,120,120]                                                            # [-]
-R = [4000,2000,4000]                                                            # [m]
+R = [4000E3,2000E3,4000E3]                                                      # [m]
 
 T_W    = [0.295,0.295,0.295]                                                    # [-]
 W_S    = [4253, 4253, 4253]                                                     # [N/m^2]
@@ -25,7 +25,6 @@ MTOW = get_MTOW(OEW)                                                            
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg]
 T_req = get_T_req(T_W, MTOW)                                                    # [N]
 M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      # [kg]
-
 
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m]
