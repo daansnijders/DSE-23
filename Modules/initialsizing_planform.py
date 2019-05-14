@@ -17,7 +17,7 @@ MTOW=40000*9.81
 A=11
 
 
-def planformsizing(H,M_cr,S,MTOW,A,):
+def planformsizing(H,M_cr,S,MTOW,A):
 
     M_dd=M_cr+0.03
     if M_cr>0.7:
