@@ -10,25 +10,32 @@ from math import *
 from modules.initialsizing_weights import *
 from inputs.constants import *
 
-def get_cabinlength(N_pax,N_sa):
-    return [N_pax[i]/N_sa*1.08 for i in[0,1,2]]
 
-def overhead_volume(cabinlength):
-    return[2*0.2*cabinlength[i]*0.74 for i in [0,1,2]]
- 
-#conc_conf[1][0][2] = 25.92      #[m] The length of the fuselage does not change, but module does not contain overhead space IMPLEMENT THIS SOMEWHERE
-def get_nose_tail_length(d_f_outer):
-    l_nose = 1.85 * d_f_outer       #[m] Nose cone length
-    l_tailcone = 3.5*d_f_outer      #[m] Tail cone length
-    l_tail = 1.6 * d_f_outer        #[m] Tail length
-    return l_nose, L_tailcone, l_tail
 
-def fuselage_diameter():  #inner and outer diameter
-    d_f_inner = N_sa*seat_width + (N_sa+N_aisle+1)*armrest + N_aisle*aisle_width + 2*s_clearance    #[m] Inner diameter
-    d_f_outer = 1.045*d_f_inner + 0.084                                                         #[m] Outer diameter
-    R_f = d_f_outer/2     #[m] Radius of the fuselage    
-    l_nose, l_tailcone, l_tail=get_nose_tail_length(d_f_outer)            #[m] nose and tail lengths
-    return d_f_inner, d_f_outer , R_f, l_nose, l_tailcone, l_tail
+def get_d_f_inner(N_sa, seat_width, N_aisle, armrest, aisle_width, s_clearance):
+    return [N_sa*seat_width + (N_sa+N_aisle+1)*armrest + N_aisle*aisle_width + 2*s_clearance for i in range(3)]
+
+def get_d_f_outer(d_f_inner):
+    return [1.045*d_f_inner[i] + 0.084 for i in range(3)]
+
+def get_l_cabin(N_pax,N_sa):
+    return [N_pax[i]/N_sa*1.08 for i in range(3)]
+
+def get_l_nose(d_f_outer):
+    return [1.85 * d_f_outer[i] for i in range(3)]
+
+def get_l_tail(d_f_outer):
+    return [1.6 * d_f_outer[i] for i in range(3)]
+
+def get_l_tailcone(d_f_outer):
+    return [3.5 * d_f_outer[i] for i in range(3)]
+
+def get_l_fuselage(l_cockpit, l_cabin, l_tail):
+    return [l_cockpit + l_cabin[i] + l_tail[i] for i in range(3)]
+
+def get_overhead_volume(l_cabin):
+    return [2*0.2*l_cabin[i]*0.74 for i in range(3)]
+
 
 
 def get_cargo_storage(R_f,cabinlength,Npax,V_os):
@@ -45,8 +52,8 @@ def get_cargo_storage(R_f,cabinlength,Npax,V_os):
     M_payload[i] = [N_pax[i]* (W_carry_on[i] + W_check_in[i] + W_pax[i]) + M_cargo[i]  for i in [0,1,2]]#[kg] Total payload weight
     return V_cc , M_cargo,M_payload
     
-def fuselage_length(l_tail,l_cabin) :       
-    return [l_cockpit + l_tail + l_cabin ]
+def get_fuselage_length(l_cockpit, l_tail, l_cabin) :       
+    return l_cockpit + l_tail + l_cabin
 
 
 

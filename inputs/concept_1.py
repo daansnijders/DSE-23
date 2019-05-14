@@ -6,10 +6,12 @@ Created on Fri May  3 09:45:17 2019
 """
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
-from inputs.constants import M_cruise, M_x, rho, V_cruise,p,R,T
+from modules.initialsizing_fuselage import *
+from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
 import numpy as np
 
-
+N_pax = [90,120,120]
+R = [4000,2000,4000]
 
 T_W    = [0.295,0.295,0.295]                                                    # [-]
 W_S    = [4253, 4253, 4253]                                                     # [N/m^2]
@@ -23,8 +25,14 @@ M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      
 
 
 # Fuselage parameters
-
-
+l_cabin = get_l_cabin(N_pax,N_sa)
+d_f_inner = get_d_f_inner(N_sa, seat_width, N_aisle,\
+                          armrest, aisle_width, s_clearance)
+d_f_outer = get_d_f_outer(d_f_inner)
+l_nose = get_l_nose(d_f_outer)
+l_tailcone = get_l_tailcone(d_f_outer)
+l_tail = get_l_tail(d_f_outer)
+l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2]
@@ -40,5 +48,6 @@ MAC = get_MAC(Cr, taper_ratio)                                                  
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
 
-
-# Propulsion parameters
+# Empennage parameters
+V_h = 1.28                                                                      # [-]
+x_h = 0.9
