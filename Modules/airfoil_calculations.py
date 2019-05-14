@@ -11,14 +11,6 @@ from inputs.performance_inputs import *
 #### Inputs needed for the definition, they are from requirements or from previous sizing ####
 #### This is an example for concept 1, configuration 1 ####
 
-
-
-
-#MTOW = 484363.0809   # Maximum Take-off Weight [N]
-
-
-
-
 #### Definition calculates different Reynold numbers for different locations 
 #### and calculates Cl design for the airfoils
 def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_c2, b, Taper):

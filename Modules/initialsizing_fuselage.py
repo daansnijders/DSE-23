@@ -51,17 +51,17 @@ def get_masses_volumes(N_pax, V_cc, V_os):
     Wtot_check_in = [ N_pax[i] * W_check_in  for i in range(3) ]  #[kg] Total check-in weight 
     V_carry_on = [Wtot_carry_on[i] / rho_lugg for i in range(3) ]             #[m3] Total carry-on volume needed
     V_check_in= [Wtot_check_in[i] / rho_lugg  for i in range(3)]             #[m3] Total check-in volume needed
-    V_cargo = [V_cc[i] - (V_carry_on[i] + V_check_in[i] - V_os[i]) for i in range(3)] #[m3] Total available cargo volume
-    return Wtot_carry_on, Wtot_check_in, V_carry_on, V_check_in,V_cargo
+    return Wtot_carry_on, Wtot_check_in, V_carry_on, V_check_in
 
-def get_cargo_mass(N_pax,V_cc, V_os):
-    Wtot_carry_on, Wtot_check_in,V_carry_on,V_check_in,V_cargo=get_masses_volumes(N_pax,V_cc, V_os)
-    M_cargo = [V_cargo[i] * rho_cargo  for i in range(3)]                    #[kg] Total cargo weight
+
+def get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in):
+    return[V_cc[i] - (V_carry_on[i] + V_check_in[i] - V_os[i]) for i in range(3)] #[m3] Total available cargo volume
+
+def get_cargo_mass(N_pax,M_payload):
+    M_cargo =[ M_payload[i]-N_pax[i]*(W_pax+W_carry_on+W_check_in)  for i in range(3)]               #[kg] Total cargo weight
     return M_cargo
 
-def get_payload_mass(M_cargo,N_pax,V_cc,V_os):
-    Wtot_carry_on, Wtot_check_in,V_carry_on,V_check_in,V_cargo=get_masses_volumes(N_pax,V_cc, V_os)
-    return [N_pax[i]* (W_carry_on + W_check_in + W_pax) + M_cargo[i]  for i in range(3) ]#[kg] Total payload weight
+
     
 
 
