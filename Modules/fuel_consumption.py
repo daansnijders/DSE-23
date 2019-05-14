@@ -18,4 +18,5 @@ def cruise_thrust(cruise_altitude, cruise_velocity, S_wing, C_D_cruise):
 def cruise_fuel(thrust_cruise, cruise_range, cruise_velocity): # todo fuel per kilometer (?)
     fuel_flow_cruise = fuel_flow(thrust_cruise)
     total_fuel_used_cruise = cruise_range / cruise_velocity * fuel_flow_cruise
-    return fuel_flow_cruise
+    return fuel_flow_cruise, total_fuel_used_cruise
+
