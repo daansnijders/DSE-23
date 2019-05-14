@@ -10,8 +10,6 @@ from math import *
 from modules.initialsizing_weights import *
 from inputs.constants import *
 
-
-
 def get_d_f_inner(N_sa, seat_width, N_aisle, armrest, aisle_width, s_clearance):
     return [N_sa*seat_width + (N_sa+N_aisle+1)*armrest + N_aisle*aisle_width + 2*s_clearance for i in range(3)]
 
