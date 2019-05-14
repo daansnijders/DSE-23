@@ -78,6 +78,13 @@ y_mlg = max([y_mlg,y_mlg1,y_mlg2])                                              
 print(x_mlg,y_mlg,z_mlg)
 print(x_nlg,y_nlg,z_nlg)
 
+def test_scrape_angle():
+    print((x_tail - x_mlg)*np.tan(theta_rad))
+    print(z_mlg)
+
+test_scrape_angle()
+
+# Plotting stuff if one is interested.
 def set_aspect_equal_3d(ax):
     """Fix equal aspect bug for 3D plots."""
 
@@ -100,7 +107,7 @@ def set_aspect_equal_3d(ax):
     ax.set_ylim3d([ymean - plot_radius, ymean + plot_radius])
     ax.set_zlim3d([zmean - plot_radius, zmean + plot_radius])
 
-plot = True
+plot = False
 if plot:
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')    
