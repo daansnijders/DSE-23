@@ -20,11 +20,11 @@ Cl_TO=1.9
 
 #CL_land_min=1.8
 Cl_land=2.8
-#CL_land_av=2.3
+#CL_land_av=2.8
 
 #take off and landing
-Sland=1500/0.3048           #field length in feet
-Stakeoff=2000/0.3048        # field length in feet
+Sland=1500/ft_to_m           #field length in feet
+Stakeoff=2000/ft_to_m        # field length in feet
 TOP=175*4.8824*9.81         #N/M^2
 sigma=1
 
@@ -36,13 +36,9 @@ Cfe=0.0045
 d_CD0_to=0.015
 d_CD0_landing=0.065
 d_CD0_gear=0.02
-
+A=11
 e=0.85
 c=15
-A=11
-
-
-
 
 def dragcoefficient(Cfe, Swet_S):
     CD0=Cfe*Swet_S
@@ -57,7 +53,7 @@ def stallspeedlanding(fieldlenghtlanding):
         V_s=V_a/1.3
         return V_s
     
-def wingloading(CL,V):
+def wingloading_landing(CL,V):
     WS=0.5*rho_0*V**2*CL
     return WS
 
@@ -75,7 +71,7 @@ def thrustloading_cruise(CD0,WSrange):
     return TW_cruise
 
 def thrustloading_climbrate(c,CL,CD,WSrange):
-    TW_climb=c/(WSrange*2/rho*1/CL)**0.5 + CD/CL
+    TW_climb=c/(WSrange*2/(rho_0*CL))**0.5 + CD/CL
     return TW_climb
 def thrustloading_climbgradient(c,V,CD0):
     TW_cV=c/(V)+2*(CD0/(pi*A*e))**0.5
@@ -95,16 +91,18 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
     
     V_s=stallspeedlanding(Sland)
     print(V_s)
-    V_climb=1.5*V_s
-    WS_L=wingloading(Cl_land, V_s)
+    V_climb=300/3.6
+    WS_L=wingloading_landing(Cl_land, V_s)
     WS_TO=wingloading_takeoff(Sland,Cl_land,f)
+    
     TW_TO=thurstloading_takeoff(TOP,sigma,Cl_TO,WSrange)
     TW_cruise=thrustloading_cruise(CD0,WSrange)
+    
     TW_climb=thrustloading_climbrate(c,Cl_climb,CD_climb,WSrange)
     TW_cV= thrustloading_climbgradient(c,V_climb,CD0)
-    
+    print(WS_L)
     plt.figure()
-    plt.plot(WSrange,TW_TO, label='Cruise condition ')      
+    plt.plot(WSrange,TW_cruise, label='Cruise condition ')      
     plt.plot(WSrange,TW_climb,label='Climb rate condition' ) 
     plt.axhline(TW_cV,label='Climb gradient condition' ) 
     plt.axvline(WS_TO, label='Take off W/S',color='r')
@@ -119,7 +117,7 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
 
 CD0, CD0_TO, CD0_land=dragcoefficient(Cfe,Swet_S)
 
-loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,100,7000,100)
+loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,100,7100,100)
 #WS=np.arange(100,7100,100)
 #
 #WS_landing=0.5*rho_0*V_s**2*CL_land_max
