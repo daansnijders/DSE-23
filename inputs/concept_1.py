@@ -28,11 +28,21 @@ M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      
 l_cabin = get_l_cabin(N_pax,N_sa)
 d_f_inner = get_d_f_inner(N_sa, seat_width, N_aisle,\
                           armrest, aisle_width, s_clearance)
+
 d_f_outer = get_d_f_outer(d_f_inner)
 l_nose = get_l_nose(d_f_outer)
 l_tailcone = get_l_tailcone(d_f_outer)
 l_tail = get_l_tail(d_f_outer)
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)
+
+R_f=[d_f_outer[i]/2 for i in range(3)] 
+
+V_os= get_overhead_volume(l_cabin)
+V_cc=get_cargo_volume(R_f,l_cabin)
+M_cargo_available=get_cargo_mass(N_pax,V_cc, V_os)
+M_payload_total=get_payload_mass(M_cargo_available,N_pax,V_cc,V_os)
+
+
 # Wing parameters
 A = [11,11,11]   
 e=[0.85,0.85,0.85]                                                               # [-]
