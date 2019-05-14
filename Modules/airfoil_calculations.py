@@ -13,8 +13,7 @@ from inputs.performance_inputs import *
 
 
 
-Cr = 4.91489505      # Root chord [m]
-Ct = 1.520444671     # Tip chord [m]
+
 #MTOW = 484363.0809   # Maximum Take-off Weight [N]
 
 
@@ -36,7 +35,7 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_c2, b, Taper):
     Veff =[ V_cruise*cos(sweep_c2[i])  for i in range(3)]              # Effective velocity [m/s]
     qeff =[ 0.5*rho*Veff[i]**2   for i in range(3)]                    # Effective Dynamic Pressure [Pa]
     Cl_des = [(q*CLdes[i])/qeff  [i] for i in range(3)]                   # Airfoil Cl design [-]
-    print(WSend)
+    
     return(Re1, Re2, Re3, Cl_des)
     
 
