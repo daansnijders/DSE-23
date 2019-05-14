@@ -47,7 +47,7 @@ M_payload_total=get_payload_mass(M_cargo_available,N_pax,V_cc,V_os)
 
 # Wing parameters
 A = [11,11,11]   
-e=[0.85,0.85,0.85]                                                               # [-]
+e=[0.85,0.85,0.85]                                                              # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2]
 b = get_b(A,S)                                                                  # [m]
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad]
@@ -80,7 +80,7 @@ y_cg = get_y_cg()                                                               
 z_cg = get_z_cg(d_f_outer)                                                      # [m]
 
 S_h = get_S_h(S, MAC, x_cg, V_h, x_h)                                           # [m^2]
-S_v = get_S_v(S, MAC, x_cg, V_v, x_v)
+S_v = get_S_v(S, MAC, x_cg, V_v, x_v)                                           # [m^2]
 
 b_h = get_b_h(S_h, A_h)                                                         # [m]          
 b_v = get_b_v(S_v, A_v)                                                         # [m]

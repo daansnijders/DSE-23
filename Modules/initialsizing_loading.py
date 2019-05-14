@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import * 
 from inputs.constants import *
-from inputs.perfomance_inputs import *
+from inputs.performance_inputs import *
 
 def dragcoefficient(Cfe, Swet_S):
     CD0=Cfe*Swet_S
@@ -61,7 +61,7 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
     WSrange=get_WSrange(WSstart,WSend,D_Ws)
     
     V_s=stallspeedlanding(Sland)
-    print(V_s)
+
     V_climb=300/3.6
     WS_L=wingloading_landing(Cl_land, V_s)
     WS_TO=wingloading_takeoff(Sland,Cl_land,f)
@@ -71,7 +71,7 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
     
     TW_climb=thrustloading_climbrate(c,Cl_climb,CD_climb,WSrange)
     TW_cV= thrustloading_climbgradient(c,V_climb,CD0)
-    print(WS_L)
+    
     plt.figure()
     plt.plot(WSrange,TW_cruise, label='Cruise condition ')      
     plt.plot(WSrange,TW_climb,label='Climb rate condition' ) 
@@ -87,8 +87,8 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
 
 
 CD0, CD0_TO, CD0_land=dragcoefficient(Cfe,Swet_S)
-
-loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,100,7100,100)
+#
+#loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,100,7100,100)
 #WS=np.arange(100,7100,100)
 #
 #WS_landing=0.5*rho_0*V_s**2*CL_land_max
