@@ -10,8 +10,8 @@ Created on Fri May  3 09:45:17 2019
 
 
 from inputs.concept_1 import *
-from modules.initialsizing_undercarriage import *
 from modules.initialsizing_fuselage import *
+from modules.initialsizing_planform import *
 
 conf_1 = [90,4000]                                                              # [pax,range]
 conf_2 = [120,2000]                                                             # [pax,range]

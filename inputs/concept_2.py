@@ -4,9 +4,6 @@ Created on Fri May  3 09:45:17 2019
 
 @author: Lisa
 """
-#design constants
-A=11
-e=0.85
 
 
 

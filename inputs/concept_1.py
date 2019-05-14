@@ -6,7 +6,7 @@ Created on Fri May  3 09:45:17 2019
 """
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
-from inputs.constants import M_cr, M_x, rho, V_
+from inputs.constants import M_cruise, M_x, rho, V_cruise,p,R,T
 import numpy as np
 
 
@@ -26,13 +26,19 @@ M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      
 
 
 # Wing parameters
-A = [11,11,11]
-S = get_S(MTOW,W_S)
-b = get_b(A,S)
-lambda_4_rad = get_lambda_4_rad(M_cr,M_x)
-taper_ratio = get_taper_ratio(lambda_4_rad)
-lambda_2_rad = get_lambda_2_rad(lambda_4_rad,A,taper_ratio)
-Cr = get_Cr(S,taper_ratio,b)
-CL = get_CL(MTOW,rho,V_C,S)
+A = [11,11,11]                                                                  # [-]
+S = get_S(MTOW,W_S)                                                             # [m^2]
+b = get_b(A,S)                                                                  # [m]
+lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad]
+taper_ratio = get_taper_ratio(lambda_4_rad)                                     # [-]
+lambda_2_rad = get_lambda_2_rad(lambda_4_rad,A,taper_ratio)                     # [rad]
+Cr = get_Cr(S,taper_ratio,b)                                                    # [m]
+Ct = get_Ct(Cr, taper_ratio)                                                    # [m]
+CL = get_CL(MTOW,rho,V_cruise,S)                                                # [-]
+t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   # [-]
+MAC = get_MAC(Cr, taper_ratio)                                                  # [m]
+y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
+dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
+
 
 # Propulsion parameters
