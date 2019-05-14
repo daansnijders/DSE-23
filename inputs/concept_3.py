@@ -11,7 +11,7 @@ from modules.airfoil_calculations import *
 from inputs.constants import M_cruise, M_x, rho, V_cruise,p,R,T
 import numpy as np
 N_pax = [90,120,120]
-R = [4000,2000,4000]
+R = [4000,2000,4000]                                                            # [km]
 
 T_W    = [0.295,0.295,0.295]                                                    # [-]
 W_S    = [4253, 4253, 4253]                                                     # [N/m^2]
