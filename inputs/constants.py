@@ -38,7 +38,7 @@ if H_m<11000:
 elif H_m<20000:
     T1=216.65
     a1=0
-    p1=22632
+    p1=22631.7
 
     T=T1+a1*(H_m)
     p=p1*e**(-g/(R*T)*(H_m-11000))
@@ -50,7 +50,9 @@ elif H_m<20000:
 a=(gamma*R*T)**0.5
 V_cruise=M_cruise*a
 
-#fuselage interior design 
+
+
+#FUSELAGE
 #data on the interior
 N_sa = 5                        # Number of seats abreast
 N_aisle = 1                     # Number of aisles
@@ -60,4 +62,15 @@ seat_pitch = 32*inch_to_m       #[m]
 seat_width = 20*inch_to_m       #[m]
 armrest = 2*inch_to_m           #[m] Armrest width
 
+#average masses on passengers and payload
+W_carry_on = 6.1                #[kg] Average carry-on luggage weight
+W_check_in  = 16.7              #[kg] Average check-in luggage weight
+W_pax = 83.8 - W_carry_on       #[kg] Average passenger weight
+rho_lugg = 170                  #[kg/m3] Average luggage density
+rho_cargo = 160                 #[kg/m3] Average cargo density
+
+#constant dimensions in the aircraft
+h_max = 0.9                        #[m] Distance between the center of the fuselage and the floor
+h_floor = 0.2                    #[m] Floor heigth
+l_cockpit = 4                   #[m] Cockpit length
 
