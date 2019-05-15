@@ -21,8 +21,8 @@ def get_Cr_h(S_h, taper_ratio_h, b_h):
 def get_Ct_h(Cr_h, taper_ratio_h):
     return [Cr_h[i] * taper_ratio_h[i] for i in range(3)]
 
-def get_S_v(S, MAC, x_cg, V_v, x_v):
-     return [V_v[i]*S[i]* MAC[i] / (x_v[i] - x_cg[i]) for i in range(3)]
+def get_S_v(S, b, x_cg, V_v, x_v):
+     return [V_v[i]*S[i]* b[i] / (x_v[i] - x_cg[i]) for i in range(3)]
  
 def get_b_v(S_v, A_v):
     return [np.sqrt(S_v[i]*A_v[i]) for i in range(3)]

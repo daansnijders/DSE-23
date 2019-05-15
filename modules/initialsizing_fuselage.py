@@ -34,8 +34,6 @@ def get_l_fuselage(l_cockpit, l_cabin, l_tail):
 def get_overhead_volume(l_cabin):
     return [2*0.2*l_cabin[i]*0.74 for i in range(3)]
 
-
-
 def get_cargo_volume(R_f,cabinlength):
     p = [R_f[i]- h_max - h_floor for i in range(3)]        	#[m] Distance between the lower point of the inner fuselage and the floor
     phi = [2 * acos(1-p[i]/R_f[i]) for i in range(3)]          #[rad] Angle between the two connection points of the fuselage and floor
@@ -44,24 +42,15 @@ def get_cargo_volume(R_f,cabinlength):
     return V_cc
 
 def get_masses_volumes(N_pax, V_cc, V_os):
-    Wtot_carry_on = [ N_pax[i] * W_carry_on  for i in range(3)]  #[kg] Total carry-on weight
-    Wtot_check_in = [ N_pax[i] * W_check_in  for i in range(3) ]  #[kg] Total check-in weight 
-    V_carry_on = [Wtot_carry_on[i] / rho_lugg for i in range(3) ]             #[m3] Total carry-on volume needed
-    V_check_in= [Wtot_check_in[i] / rho_lugg  for i in range(3)]             #[m3] Total check-in volume needed
-    return Wtot_carry_on, Wtot_check_in, V_carry_on, V_check_in
-
+    Mtot_carry_on = [ N_pax[i] * M_carry_on  for i in range(3)]  #[kg] Total carry-on weight
+    Mtot_check_in = [ N_pax[i] * M_check_in  for i in range(3) ]  #[kg] Total check-in weight 
+    V_carry_on = [Mtot_carry_on[i] / rho_lugg for i in range(3) ]             #[m3] Total carry-on volume needed
+    V_check_in= [Mtot_check_in[i] / rho_lugg  for i in range(3)]             #[m3] Total check-in volume needed
+    return Mtot_carry_on, Mtot_check_in, V_carry_on, V_check_in
 
 def get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in):
     return[V_cc[i] - (V_carry_on[i] + V_check_in[i] - V_os[i]) for i in range(3)] #[m3] Total available cargo volume
 
 def get_cargo_mass(N_pax,M_payload):
-    M_cargo =[ M_payload[i]-N_pax[i]*(W_pax+W_carry_on+W_check_in)  for i in range(3)]               #[kg] Total cargo weight
+    M_cargo =[ M_payload[i]-N_pax[i]*(M_pax+M_carry_on+M_check_in)  for i in range(3)]               #[kg] Total cargo weight
     return M_cargo
-
-
-    
-
-
-
-
-

@@ -20,32 +20,33 @@ T_W    = [0.295,0.295,0.295]                                                    
 W_S    = [4253, 4253, 4253]                                                     # [N/m^2]
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg]
 OEW = [27745.73, 27069.62, 38729.81]                                            # [-]
-
 MTOW = get_MTOW(OEW)                                                            # [kg]
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg]
 T_req = get_T_req(T_W, MTOW)                                                    # [N]
 M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      # [kg]
 
+
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m]
+
 d_f_inner = get_d_f_inner(N_sa, seat_width, N_aisle,\
                           armrest, aisle_width, s_clearance)                    # [m]
+
 d_f_outer = get_d_f_outer(d_f_inner)                                            # [m]
 l_nose = get_l_nose(d_f_outer)                                                  # [m]
 l_tailcone = get_l_tailcone(d_f_outer)                                          # [m]
 l_tail = get_l_tail(d_f_outer)                                                  # [m]
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m]
-
 R_f=[d_f_outer[i]/2 for i in range(3)]                                          # [m]
 
 V_os= get_overhead_volume(l_cabin)                                              # [m^3]
 V_cc=get_cargo_volume(R_f,l_cabin)                                              # [m^3]
-Wtot_carry_on, Wtot_check_in, V_carry_on\
-, V_check_in=get_masses_volumes(N_pax, V_cc, V_os)                              # [m^3]
+
+Mtot_carry_on, Mtot_check_in, V_carry_on\
+, V_check_in=get_masses_volumes(N_pax, V_cc, V_os)                              # [kg,kg,m^3,m^3]
 
 V_cargo_available=get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)  # [m^3]
 M_cargo_available=get_cargo_mass(N_pax,M_payload)                               # [kg]
-
 
 
 # Wing parameters
@@ -83,7 +84,7 @@ y_cg = get_y_cg()                                                               
 z_cg = get_z_cg(d_f_outer)                                                      # [m]
 
 S_h = get_S_h(S, MAC, x_cg, V_h, x_h)                                           # [m^2]
-S_v = get_S_v(S, MAC, x_cg, V_v, x_v)                                           # [m^2]
+S_v = get_S_v(S, b, x_cg, V_v, x_v)                                             # [m^2]
 
 b_h = get_b_h(S_h, A_h)                                                         # [m]          
 b_v = get_b_v(S_v, A_v)                                                         # [m]
@@ -93,10 +94,5 @@ Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m]
 
 
-
 #airfoil design 
-
 Re1, Re2, Re3, Cl_des=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_2_rad, b, taper_ratio)
-
-
-

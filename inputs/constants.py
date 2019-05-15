@@ -64,9 +64,9 @@ seat_width = 20*inch_to_m       #[m]
 armrest = 2*inch_to_m           #[m] Armrest width
 
 #average masses on passengers and payload
-W_carry_on = 6.1                #[kg] Average carry-on luggage weight
-W_check_in  = 16.7              #[kg] Average check-in luggage weight
-W_pax = 83.8 - W_carry_on       #[kg] Average passenger weight
+M_carry_on = 6.1                #[kg] Average carry-on luggage weight
+M_check_in  = 16.7              #[kg] Average check-in luggage weight
+M_pax = 83.8 - M_carry_on       #[kg] Average passenger weight
 rho_lugg = 170                  #[kg/m3] Average luggage density
 rho_cargo = 160                 #[kg/m3] Average cargo density
 
