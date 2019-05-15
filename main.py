@@ -5,10 +5,12 @@ Created on Fri May  3 09:45:17 2019
 
 @author: Lisa
 """
+from inputs.concept_1 import *
+from inputs.concept_2 import *
+from inputs.concept_3 import *
 
 
-
-concept = 1
+concept = 3
 
 if concept == 1:
     from inputs.concept_1 import *
