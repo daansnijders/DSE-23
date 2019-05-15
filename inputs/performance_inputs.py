@@ -25,6 +25,7 @@ Sland=1500/ft_to_m           #field length in feet
 Stakeoff=2000/ft_to_m        # field length in feet
 TOP=175*4.8824*9.81         #N/M^2
 sigma=1
+h_screen = 50 * ft_to_m         # [m] Screen height
 
 #statistical input for cd0
 f=0.84

@@ -1,5 +1,4 @@
 import numpy as np
-from modules.fuel_consumption import fuel_flow
 
 # requirement; take-off run 2000 meters @ sea level
 
@@ -21,30 +20,30 @@ from modules.fuel_consumption import fuel_flow
 # S = 113.8873926
 
 
-def climb_gradient(T, D, m, g):
+def get_climb_gradient(T, D, m, g):
     y = (T-D)/m/g
     return y
 
 
-def rate_of_climb(T, D, V, m, g):
+def get_rate_of_climb(T, D, V, m, g):
     # from Lan, C.E. and Roskam, J., Airplane Aerodynamics & Performance, page 384
-    RC = climb_gradient(T, D, m, g) * V
+    RC = get_climb_gradient(T, D, m, g) * V
     return RC
 
 
-def stall_speed(W, T, alpha_C_L_max, rho, C_L_max, S):
+def get_stall_speed(W, T, alpha_C_L_max, rho, C_L_max, S):
     theta_thrust = 0 # thrustline inclination
     V_stall = np.sqrt(2*(W-T*np.sin(alpha_C_L_max + theta_thrust))/(rho*C_L_max*S))
     return V_stall
 
 
-def friction_coefficient(pressure_nose, weight, x_m, x_n, x_cg, h_cg):
+def get_friction_coefficient(pressure_nose, weight, x_m, x_n, x_cg, h_cg):
     mu = ((pressure_nose / weight - 1) * (x_m - x_cg) + pressure_nose / weight * (x_cg - x_n))\
          / (h_cg * (1 - pressure_nose / weight))
     return mu
 
 
-def take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D, C_L_TO,
+def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D, C_L_TO,
                           S, mu_TO): #MTOW in kg
     """
     Ground run
@@ -88,7 +87,7 @@ def take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thr
 # print('x_total', x_total)
 
 
-def landing_field_length(maximum_thrust, MTOW, g, h_screen, rho, S, C_L_LA, C_D, mu_LA):
+def get_landing_field_length(maximum_thrust, MTOW, g, h_screen, rho, S, C_L_LA, C_D, mu_LA):
     minimum_time_before_landing = 10*60 # s
     m_landing = MTOW - fuel_flow(0.7 * maximum_thrust) * minimum_time_before_landing
     V_min = np.sqrt(m_landing * g / .5 / rho / S / C_L_LA)
@@ -121,3 +120,23 @@ def landing_field_length(maximum_thrust, MTOW, g, h_screen, rho, S, C_L_LA, C_D,
 
     x_total = x_total_airborne + x_tr + x_brake
     return x_total
+
+
+def fuel_flow(thrust):
+    # only true for PW1525G
+    # approximately linear relation between thrust and fuel consumption
+    # from linear regression;
+    ff = 7E-6 * thrust + 0.0147                                                             # kg/s
+    # R^2 = 0.9981
+    return ff
+
+
+def cruise_thrust(rho, cruise_velocity, S_wing, C_D_cruise):
+    T = 0.5 * rho * cruise_velocity**2 * S_wing * C_D_cruise     # N
+    return T
+
+
+def cruise_fuel(thrust_cruise, cruise_range, cruise_velocity): # todo fuel per kilometer (?)
+    fuel_flow_cruise = fuel_flow(thrust_cruise)
+    total_fuel_used_cruise = cruise_range / cruise_velocity * fuel_flow_cruise
+    return fuel_flow_cruise, total_fuel_used_cruise
