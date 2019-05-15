@@ -76,4 +76,4 @@ h_floor = 0.2                    #[m] Floor heigth
 l_cockpit = 4                   #[m] Cockpit length
 
 #airfield constants
-h_screen = 50 * ft_to_m
+h_screen = 50 * ft_to_m         # [m] Screen height
