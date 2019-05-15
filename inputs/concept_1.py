@@ -54,7 +54,7 @@ Dnacel = 1.1*Dfan                                                               
 
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
-e=[0.85,0.85,0.85]                                                              # [-]
+e = [0.85,0.85,0.85]                                                              # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2]
 b = get_b(A,S)                                                                  # [m]
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad]
@@ -69,6 +69,7 @@ y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]
 
+Scan = 20.024981                                                                # [m^2]
 
 # Empennage parameters
 V_h = [1.28, 1.28, 1.28]                                                        # [-]
@@ -107,4 +108,4 @@ Cl_max = [1.552, 1.582, 1.584]
 # CL_alpha: Wing CL_alpha for three configurations
 Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
-CD0, CDcruise, LoverD=drag(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, lambda_le_rad, CLdes)
+CD0, CDcruise, LoverD=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, lambda_le_rad, CLdes)

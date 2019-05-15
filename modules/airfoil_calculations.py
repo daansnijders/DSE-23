@@ -12,7 +12,7 @@ from inputs.performance_inputs import *
 #### and calculates Cl design for the airfoils and CL max for the wing
 def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Taper, A, Cl_max):
     avgC = [(Cr[i] + Ct[i])/2   for i in range(3)]   # Average chord [m]
-    Re1 =[ (rho*V_cruise*Cr[i])/mu   for i in range(3)]   # Reynolds number at root chord [-]
+    Re1 = [(rho*V_cruise*Cr[i])/mu   for i in range(3)]   # Reynolds number at root chord [-]
     Re2 = [(rho*V_cruise*avgC[i])/mu for i in range(3)]   # Reynolds number at avg chord [-]
     Re3 = [(rho*V_cruise*Ct[i])/mu   for i in range(3)]   # Reynolds number at tip chord [-]
     q = 0.5*rho*V_cruise**2        # Dynamic pressure [Pa]
@@ -34,16 +34,38 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Ta
     return(Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax)
        
 
-#### drag calculates CD0 for each concept and configuration as well as CDcruise    
-def drag(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, sweep_le, CLdes):
-    #Drag calculations
-    Wing = [1.07*2*S[i]*0.003 for i in range(3)]
+#### drag1 calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 1   
+def drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, sweep_le, CLdes):
+    Wing = []
+    
+    for i in range(3):
+        if i == 0:
+            Wing.append(1.07*2*S[0]*0.003)
+        if i != 0:
+            Wing.append(1.07*2*S[2]*0.003)
+            
     l2 = [l_fuselage[i] - l_nose[i] - l_tailcone[i] for i in range(3)]
     Fuselage = [0.0024*(pi*D[i]/4)*(1/(3*l_nose[i]**2)*((4*l_nose[i]**2+D[i]**2/4)**(1.5)-D[i]**3/8)-D[i]+4*l2[i]+2*sqrt(l_tailcone[i]**2+D[i]**2/4)) for i in range(3)]
     Nacelle = Dnacel*0.0060
     Tailplane = [1.05*2*(S_h[i] + S_v[i])*0.0025  for i in range(3)]
+    CD0 = [1/S[0]*(Wing[i] + Fuselage[i] + Nacelle + Tailplane[i])*1.1  for i in range(3)]
     
-    CD0 = [1/S[i]*(Wing[i] + Fuselage[i] + Nacelle + Tailplane[i])*1.1  for i in range(3)]
+    e = [4.61*(1-0.045*A[i]**0.68)*(cos(sweep_le[i]))**0.15 -3.1 for i in range(3)]
+    
+    CDcruise = [CD0[i] + 1/(pi*A[i]*e[i])*CLdes[i]**2 for i in range(3)]
+    
+    LoverD = [CLdes[i]/CDcruise[i] for i in range(3)]
+    return(CD0, CDcruise, LoverD)
+    
+
+#### drag2 calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 2   
+def drag2(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, sweep_le, CLdes):
+    Wing = [1.07*2*S[i]*0.003 for i in range(3)]  
+    l2 = [l_fuselage[i] - l_nose[i] - l_tailcone[i] for i in range(3)]
+    Fuselage = [0.0024*(pi*D[i]/4)*(1/(3*l_nose[i]**2)*((4*l_nose[i]**2+D[i]**2/4)**(1.5)-D[i]**3/8)-D[i]+4*l2[i]+2*sqrt(l_tailcone[i]**2+D[i]**2/4)) for i in range(3)]
+    Nacelle = Dnacel*0.0060
+    Tailplane = [1.05*2*(S_h[i] + S_v[i])*0.0025  for i in range(3)]
+    CD0 = [1/S[0]*(Wing[i] + Fuselage[i] + Nacelle + Tailplane[i])*1.1  for i in range(3)]
     
     e = [4.61*(1-0.045*A[i]**0.68)*(cos(sweep_le[i]))**0.15 -3.1 for i in range(3)]
     
