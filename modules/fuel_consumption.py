@@ -1,6 +1,3 @@
-from ISA import isa_meters
-
-
 def fuel_flow(thrust):
     # only true for PW1525G
     # approximately linear relation between thrust and fuel consumption
@@ -10,8 +7,8 @@ def fuel_flow(thrust):
     return ff
 
 
-def cruise_thrust(cruise_altitude, cruise_velocity, S_wing, C_D_cruise):
-    T = 0.5 * isa_meters(cruise_altitude)[2] * cruise_velocity**2 * S_wing * C_D_cruise     # N
+def cruise_thrust(rho, cruise_velocity, S_wing, C_D_cruise):
+    T = 0.5 * rho * cruise_velocity**2 * S_wing * C_D_cruise     # N
     return T
 
 
@@ -20,3 +17,5 @@ def cruise_fuel(thrust_cruise, cruise_range, cruise_velocity): # todo fuel per k
     total_fuel_used_cruise = cruise_range / cruise_velocity * fuel_flow_cruise
     return fuel_flow_cruise, total_fuel_used_cruise
 
+
+# Cj
