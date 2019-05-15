@@ -48,3 +48,6 @@ FF2 = 0.99           # Fuel Fraction phase 2 [-]
 FF3 = 0.995          # Fuel Fraction phase 3 [-]
 FF4 = 0.98           # Fuel Fraction phase 4 [-]
 FF5 = 0.8366         # Fuel Fraction phase 5 [-]
+
+#engine characteristics
+thrust_max = 108.5E3        # [N] maximum engine thrust (1 engine) a.k.a. rated output
