@@ -11,7 +11,7 @@ def get_z_cg(d_f_outer):
 def get_y_cg():
     return [0,0,0]
 
-def get_x_cg(l_f, MTOW, MAC):
+def get_x_cg(l_f, MTOW, MAC, concept_3 = False):
     x_c_wcg = 0.205
     x_c_oewcg = 0.225
     l_engine = 3.184
@@ -41,13 +41,15 @@ def get_x_cg(l_f, MTOW, MAC):
     
     x_le_MAC = [x_le_MAC_org[0], x_le_MAC_org[0] \
                 + (l_f[1] - l_f[0]), x_le_MAC_org[0] + (l_f[2] - l_f[0])]
+    if concept_3:
+        x_le_MAC = [max(x_le_MAC_org) for i in range(3)]
 
     x_cg_wing = [x_le_MAC[i] + x_c_wcg * MAC[i] for i in range(3)]
     x_cg_eng = [x_le_MAC[i]-0.6*l_engine for i in range(3)]
     
     x_cg_wing_group = [(M_wing[i]*x_cg_wing[i] \
                         +x_cg_eng[i]*M_eng[i])/M_wing_group[i] for i in range(3)]
-    
+
     x_cg = [(M_wing_group[i]*x_cg_wing_group[i] \
              + M_fuselage_group[i]*x_cg_fuselage_group[i])/(M_wing_group[i] \
              + M_fuselage_group[i]) for i in range(3)]

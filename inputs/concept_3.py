@@ -7,17 +7,19 @@ Created on Fri May  3 09:45:17 2019
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
-from modules.airfoil_calculations import * 
-from inputs.constants import M_cruise, M_x, rho, V_cruise,p,R,T
+from modules.initialsizing_empennage import *
+from modules.initialsizing_cg import *
+from modules.airfoil_calculations import *
+from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
 import numpy as np
-N_pax = [90,120,120]
+
+N_pax = [90,120,120]                                                            # [-]
 R = [4000E3,2000E3,4000E3]                                                      # [m]
 
 T_W    = [0.295,0.295,0.295]                                                    # [-]
 W_S    = [4253, 4253, 4253]                                                     # [N/m^2]
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg]
-OEW = [29444.7, 28425.84, 40108.34]                                            # [-]
-
+OEW = [36689.95, 39579.53, 40108.34]                                            # [-]
 MTOW = get_MTOW(OEW)                                                            # [kg]
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg]
 T_req = get_T_req(T_W, MTOW)                                                    # [N]
@@ -25,26 +27,28 @@ M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      
 
 
 # Fuselage parameters
-l_cabin = get_l_cabin(N_pax,N_sa)
+l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m]
+
 d_f_inner = get_d_f_inner(N_sa, seat_width, N_aisle,\
-                          armrest, aisle_width, s_clearance)
+                          armrest, aisle_width, s_clearance)                    # [m]    
 
-d_f_outer = get_d_f_outer(d_f_inner)
-l_nose = get_l_nose(d_f_outer)
-l_tailcone = get_l_tailcone(d_f_outer)
-l_tail = get_l_tail(d_f_outer)
-l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail) #UPDATE THE FUSELAGE LENGTH IS THE SAME 
-
-R_f=[d_f_outer[i]/2 for i in range(3)] 
-
-V_os= get_overhead_volume(l_cabin)
-V_cc=get_cargo_volume(R_f,l_cabin)
-Wtot_carry_on, Wtot_check_in, V_carry_on, V_check_in=get_masses_volumes(N_pax, V_cc, V_os)
-
-V_cargo_available=get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)
-M_cargo_available=get_cargo_mass(N_pax,M_payload)
+d_f_outer = get_d_f_outer(d_f_inner)                                            # [m]
+l_nose = get_l_nose(d_f_outer)                                                  # [m]
+l_tailcone = get_l_tailcone(d_f_outer)                                          # [m]
+l_tail = get_l_tail(d_f_outer)                                                  # [m]
+l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m]
 
 
+R_f = [d_f_outer[i]/2 for i in range(3)]                                        # [m]
+
+V_os = get_overhead_volume(l_cabin)                                             # [m^3]
+V_cc = get_cargo_volume(R_f,l_cabin)                                            # [m^3]
+
+Mtot_carry_on, Mtot_check_in, V_carry_on\
+, V_check_in = get_masses_volumes(N_pax, V_cc, V_os)                            # [kg,kg,m^3,m^3]
+
+V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)# [m^3]
+M_cargo_available = get_cargo_mass(N_pax,M_payload)                             # [kg]
 
 
 # Wing parameters
@@ -61,10 +65,42 @@ t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m]
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
+lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]
 
 
+# Empennage parameters
+V_h = [1.28, 1.28, 1.28]                                                        # [-]
+A_h = [4.95, 4.95, 4.95]                                                        # [-]
+taper_ratio_h = [0.39, 0.39, 0.39]                                              # [-]
+lambda_h_le = [np.deg2rad(34) for i in range(3)]                                # [rad]
 
+V_v = [0.1, 0.1, 0.1]                                                           # [-]
+A_v = [1.9, 1.9, 1.9]                                                           # [-]
+taper_ratio_v = [0.375, 0.375, 0.375]                                           # [-]
+lambda_v_le = [np.deg2rad(40) for i in range(3)]                                # [rad]
+
+x_le_h = get_x_h(l_f)                                                           # [m]
+x_le_v = x_le_h                                                                 # [m]
+
+x_cg = get_x_cg(l_f,MTOW, MAC, concept_3 = True)                                # [m]
+y_cg = get_y_cg()                                                               # [m]
+z_cg = get_z_cg(d_f_outer)                                                      # [m]
+
+S_h = get_S_h(S, MAC, x_cg, V_h, x_le_h)                                        # [m^2]
+S_v = get_S_v(S, b, x_cg, V_v, x_le_v)                                          # [m^2]
+
+b_h = get_b_h(S_h, A_h)                                                         # [m]          
+b_v = get_b_v(S_v, A_v)                                                         # [m]
+Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                        # [m]
+Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                            # [m]
+Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        # [m]
+Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m]
+
+
+#Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
+Cl_max = [1.552, 1.582, 1.584]
 
 #airfoil design 
-
-Re1, Re2, Re3, Cl_des=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_2_rad, b, taper_ratio)
+# CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
+# CL_alpha: Wing CL_alpha for three configurations
+Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
