@@ -36,19 +36,20 @@ l_tailcone = get_l_tailcone(d_f_outer)                                          
 l_tail = get_l_tail(d_f_outer)                                                  # [m]
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m]
 
-R_f=[d_f_outer[i]/2 for i in range(3)] 
+R_f=[d_f_outer[i]/2 for i in range(3)]                                          # [m]
 
-V_os= get_overhead_volume(l_cabin)
-V_cc=get_cargo_volume(R_f,l_cabin)
-Wtot_carry_on, Wtot_check_in, V_carry_on, V_check_in=get_masses_volumes(N_pax, V_cc, V_os)
+V_os= get_overhead_volume(l_cabin)                                              # [m^3]
+V_cc=get_cargo_volume(R_f,l_cabin)                                              # [m^3]
+Wtot_carry_on, Wtot_check_in, V_carry_on\
+, V_check_in=get_masses_volumes(N_pax, V_cc, V_os)                              # [m^3]
 
-V_cargo_available=get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)
-M_cargo_available=get_cargo_mass(N_pax,M_payload)
+V_cargo_available=get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)  # [m^3]
+M_cargo_available=get_cargo_mass(N_pax,M_payload)                               # [kg]
 
 
 
 # Wing parameters
-A = [11,11,11]   
+A = [11,11,11]                                                                  # [-]
 e=[0.85,0.85,0.85]                                                              # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2]
 b = get_b(A,S)                                                                  # [m]
