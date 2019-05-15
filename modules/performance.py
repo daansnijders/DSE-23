@@ -3,22 +3,22 @@ from modules.fuel_consumption import fuel_flow
 
 # requirement; take-off run 2000 meters @ sea level
 
-"""
-Constants
-"""
-rho = 1.225
-g = 9.81
-h_screen = 15.24
-
-"""
-Variables
-"""
-MTOW = 49391.28866 # kg
-thrust_takeoff_one_engine = 108.54E3 # N
-thrust_climb_out_one_engine = 108.54E3 * .85
-C_D = 0.04
-C_L_max = 1.4
-S = 113.8873926
+# """
+# Constants
+# """
+# rho = 1.225
+# g = 9.81
+# h_screen = 15.24
+#
+# """
+# Variables
+# """
+# MTOW = 49391.28866 # kg
+# thrust_takeoff_one_engine = 108.54E3 # N
+# thrust_climb_out_one_engine = 108.54E3 * .85
+# C_D = 0.04
+# C_L_max = 1.4
+# S = 113.8873926
 
 
 def climb_gradient(T, D, m, g):
@@ -83,9 +83,9 @@ def take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thr
     return x_total
 
 
-x_total = take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D,
-                                C_L_max, S, 0.05)
-print('x_total', x_total)
+# x_total = take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D,
+#                                 C_L_max, S, 0.05)
+# print('x_total', x_total)
 
 
 def landing_field_length(maximum_thrust, MTOW, g, h_screen, rho, S, C_L_LA, C_D, mu_LA):
