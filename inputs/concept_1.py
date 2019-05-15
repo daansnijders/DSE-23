@@ -67,9 +67,7 @@ t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m]
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
-lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]
-
-Scan = 20.024981                                                                # [m^2]
+lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]                                                                # [m^2]
 
 # Empennage parameters
 V_h = [1.28, 1.28, 1.28]                                                        # [-]
