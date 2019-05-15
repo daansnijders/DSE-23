@@ -65,6 +65,7 @@ t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m]
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
+lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]
 
 
 # Empennage parameters
@@ -78,15 +79,15 @@ A_v = [1.9, 1.9, 1.9]                                                           
 taper_ratio_v = [0.375, 0.375, 0.375]                                           # [-]
 lambda_v_le = [np.deg2rad(40) for i in range(3)]                                # [rad]
 
-x_h = get_x_h(l_f)                                                              # [m]
-x_v = x_h                                                                       # [m]
+x_le_h = get_x_h(l_f)                                                           # [m]
+x_le_v = x_le_h                                                                 # [m]
 
 x_cg = get_x_cg(l_f,MTOW, MAC)                                                  # [m]
 y_cg = get_y_cg()                                                               # [m]
 z_cg = get_z_cg(d_f_outer)                                                      # [m]
 
-S_h = get_S_h(S, MAC, x_cg, V_h, x_h)                                           # [m^2]
-S_v = get_S_v(S, b, x_cg, V_v, x_v)                                             # [m^2]
+S_h = get_S_h(S, MAC, x_cg, V_h, x_le_h)                                        # [m^2]
+S_v = get_S_v(S, b, x_cg, V_v, x_le_v)                                          # [m^2]
 
 b_h = get_b_h(S_h, A_h)                                                         # [m]          
 b_v = get_b_v(S_v, A_v)                                                         # [m]
@@ -96,5 +97,10 @@ Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m]
 
 
+#Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
+Cl_max = [1.552, 1.582, 1.584]
+
 #airfoil design 
-Re1, Re2, Re3, Cl_des=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_2_rad, b, taper_ratio)
+# CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
+# CL_alpha: Wing CL_alpha for three configurations
+Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)

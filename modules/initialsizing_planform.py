@@ -24,6 +24,9 @@ def get_lambda_2_rad(lambda_4_rad,A,taper_ratio):
 def get_Cr(S,taper_ratio,b):
     return [2*S[i]/((1+taper_ratio[i])*b[i]) for i in range(3)]
 
+def get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio):
+    return [np.arctan(np.tan(lambda_4_rad[i])-(Cr[i]/(2*b[i]))*(taper_ratio[i]-1)) for i in range(3)]
+
 def get_CL(MTOW,rho,V,S):
     return [MTOW[i]*9.80665/(0.5*rho*V**2*S[i]) for i in range(3)]
 
