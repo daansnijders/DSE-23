@@ -13,7 +13,7 @@ from inputs.performance_inputs import *
 
 #### Definition calculates different Reynold numbers for different locations 
 #### and calculates Cl design for the airfoils
-def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Taper, A, Cl_max, S_h, S_v):
+def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Taper, A, Cl_max):
     avgC = [(Cr[i] + Ct[i])/2   for i in range(3)]   # Average chord [m]
     Re1 =[ (rho*V_cruise*Cr[i])/mu   for i in range(3)]   # Reynolds number at root chord [-]
     Re2 = [(rho*V_cruise*avgC[i])/mu for i in range(3)]   # Reynolds number at avg chord [-]
@@ -34,12 +34,13 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Ta
     #Wing CLmax for different Re numbers
     CLmax = [0.8*Cl_max[i]-0.24 for i in range(3)]
     
+    return(Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax)
+       
+    
+def Drag(S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel):
     #Drag calculations
     Wing = 1.07*2*S
-    Fuselage = 
-    Nacelle = 
+    l2 = l_fuselage-l_nose-l_tailcone
+    Fuselage = (pi*D/4)*(1/(3*l_nose**2)*((4*l_nose**2+D**2/4)**(1.5)-D**3/8)-D+4*l2+2*sqrt(l_tailcone**2+D**2/4))
+    Nacelle = Dnacel
     Tailplane = 1.05*2*(S_h + S_v) 
-    
-    return(Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax)
-    
-

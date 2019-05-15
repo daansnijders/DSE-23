@@ -50,6 +50,9 @@ Mtot_carry_on, Mtot_check_in, V_carry_on\
 V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)# [m^3]
 M_cargo_available = get_cargo_mass(N_pax,M_payload)                             # [kg]
 
+#Propulsion
+Dfan = 2.006                                                                    # [m]
+Dnacel = 1.1*Dfan                                                               # [m]
 
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
