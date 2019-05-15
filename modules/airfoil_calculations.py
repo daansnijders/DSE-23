@@ -58,8 +58,8 @@ def drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, sweep_le, C
     return(CD0, CDcruise, LoverD)
     
 
-#### drag2 calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 2   
-def drag2(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, sweep_le, CLdes):
+#### drag calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 2 AND 3   
+def drag(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, sweep_le, CLdes):
     Wing = [1.07*2*S[i]*0.003 for i in range(3)]  
     l2 = [l_fuselage[i] - l_nose[i] - l_tailcone[i] for i in range(3)]
     Fuselage = [0.0024*(pi*D[i]/4)*(1/(3*l_nose[i]**2)*((4*l_nose[i]**2+D[i]**2/4)**(1.5)-D[i]**3/8)-D[i]+4*l2[i]+2*sqrt(l_tailcone[i]**2+D[i]**2/4)) for i in range(3)]
