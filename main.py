@@ -10,7 +10,7 @@ from inputs.concept_2 import *
 from inputs.concept_3 import *
 
 
-concept = 3
+concept = 1
 
 if concept == 1:
     from inputs.concept_1 import *
