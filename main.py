@@ -28,6 +28,6 @@ output = open('output.csv', 'w')
 output.write(repr(R) + '\n' )
 output.close()
 
-
+print('ok')
 
 #loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,100,7100,100)
