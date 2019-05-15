@@ -37,10 +37,14 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Ta
     return(Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax)
        
     
-def Drag(S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel):
+def drag(S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel):
     #Drag calculations
-    Wing = 1.07*2*S
-    l2 = l_fuselage-l_nose-l_tailcone
-    Fuselage = (pi*D/4)*(1/(3*l_nose**2)*((4*l_nose**2+D**2/4)**(1.5)-D**3/8)-D+4*l2+2*sqrt(l_tailcone**2+D**2/4))
-    Nacelle = Dnacel
-    Tailplane = 1.05*2*(S_h + S_v) 
+    Wing = [1.07*2*S[i]*0.003 for i in range(3)]
+    l2 = [l_fuselage[i] - l_nose[i] - l_tailcone[i] for i in range(3)]
+    Fuselage = [0.0024*(pi*D[i]/4)*(1/(3*l_nose[i]**2)*((4*l_nose[i]**2+D[i]**2/4)**(1.5)-D[i]**3/8)-D[i]+4*l2[i]+2*sqrt(l_tailcone[i]**2+D[i]**2/4)) for i in range(3)]
+    Nacelle = Dnacel*0.0060
+    Tailplane = [1.05*2*(S_h[i] + S_v[i])*0.0025  for i in range(3)]
+    
+    CD0 = [1/S[i]*(Wing[i] + Fuselage[i] + Nacelle + Tailplane[i])*1.1  for i in range(3)]
+    
+    return(CD0)
