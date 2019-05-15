@@ -13,7 +13,7 @@ from inputs.performance_inputs import *
 
 #### Definition calculates different Reynold numbers for different locations 
 #### and calculates Cl design for the airfoils
-def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Taper, A):
+def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Taper, A, Cl_max):
     avgC = [(Cr[i] + Ct[i])/2   for i in range(3)]   # Average chord [m]
     Re1 =[ (rho*V_cruise*Cr[i])/mu   for i in range(3)]   # Reynolds number at root chord [-]
     Re2 = [(rho*V_cruise*avgC[i])/mu for i in range(3)]   # Reynolds number at avg chord [-]
@@ -31,6 +31,9 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Ta
     beta = sqrt(1-M_cruise**2)      # Prandtl-Glauert compressibility correction factor
     CL_alpha = [(2*pi*A[i])/(2 + sqrt(4+(A[i]*beta/0.95)**2*(1+(tan(sweep_c2[i])**2)/beta**2)))  for i in range(3)]
     
-    return(Re1, Re2, Re3, CLdes, Cl_des, CL_alpha)
+    #Wing CLmax for different Re numbers
+    CLmax = [0.8*Cl_max[i]-0.24 for i in range(3)]
+    
+    return(Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax)
     
 

@@ -66,7 +66,10 @@ y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]
 
+#Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
+Cl_max = [1.552, 1.582, 1.584]
 
 #airfoil design 
-
-Re1, Re2, Re3, CLdes, Cl_des, CL_alpha=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A)
+# CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
+# CL_alpha: Wing CL_alpha for three configurations
+Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
