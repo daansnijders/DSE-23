@@ -122,7 +122,7 @@ def get_landing_field_length(maximum_thrust, MTOW, g, h_screen, rho, S, C_L_LA, 
     return x_total
 
 
-def fuel_flow(thrust):
+def get_fuel_flow(thrust):
     # only true for PW1525G
     # approximately linear relation between thrust and fuel consumption
     # from linear regression;
@@ -131,12 +131,12 @@ def fuel_flow(thrust):
     return ff
 
 
-def cruise_thrust(rho, cruise_velocity, S_wing, C_D_cruise):
+def get_cruise_thrust(rho, cruise_velocity, S_wing, C_D_cruise):
     T = 0.5 * rho * cruise_velocity**2 * S_wing * C_D_cruise     # N
     return T
 
 
-def cruise_fuel(thrust_cruise, cruise_range, cruise_velocity): # todo fuel per kilometer (?)
+def get_cruise_fuel(thrust_cruise, cruise_range, cruise_velocity): # todo fuel per kilometer (?)
     fuel_flow_cruise = fuel_flow(thrust_cruise)
     total_fuel_used_cruise = cruise_range / cruise_velocity * fuel_flow_cruise
     return fuel_flow_cruise, total_fuel_used_cruise
