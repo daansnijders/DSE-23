@@ -8,11 +8,8 @@ from math import *
 from inputs.constants import *
 from inputs.performance_inputs import *
 
-#### Inputs needed for the definition, they are from requirements or from previous sizing ####
-#### This is an example for concept 1, configuration 1 ####
-
-#### Definition calculates different Reynold numbers for different locations 
-#### and calculates Cl design for the airfoils
+#### airfoil calculates different Reynold numbers for different locations 
+#### and calculates Cl design for the airfoils and CL max for the wing
 def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Taper, A, Cl_max):
     avgC = [(Cr[i] + Ct[i])/2   for i in range(3)]   # Average chord [m]
     Re1 =[ (rho*V_cruise*Cr[i])/mu   for i in range(3)]   # Reynolds number at root chord [-]
@@ -36,8 +33,9 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Ta
     
     return(Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax)
        
-    
-def drag(S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel):
+
+#### drag calculates CD0 for each concept and configuration as well as CDcruise    
+def drag(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, sweep_le, CLdes):
     #Drag calculations
     Wing = [1.07*2*S[i]*0.003 for i in range(3)]
     l2 = [l_fuselage[i] - l_nose[i] - l_tailcone[i] for i in range(3)]
@@ -47,4 +45,9 @@ def drag(S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel):
     
     CD0 = [1/S[i]*(Wing[i] + Fuselage[i] + Nacelle + Tailplane[i])*1.1  for i in range(3)]
     
-    return(CD0)
+    e = [4.61*(1-0.045*A[i]**0.68)*(cos(sweep_le[i]))**0.15 -3.1 for i in range(3)]
+    
+    CDcruise = [CD0[i] + 1/(pi*A[i]*e[i])*CLdes[i]**2 for i in range(3)]
+    
+    LoverD = [CLdes[i]/CDcruise[i] for i in range(3)]
+    return(CD0, CDcruise, LoverD)
