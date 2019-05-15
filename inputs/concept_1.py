@@ -4,14 +4,16 @@ Created on Fri May  3 09:45:17 2019
 
 @author: Lisa
 """
+import numpy as np
+from modules.initialsizing_cg import *
+from modules.airfoil_calculations import *
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
-from modules.initialsizing_cg import *
-from modules.airfoil_calculations import *
+from modules.initialsizing_undercarriage import*
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
-import numpy as np
+
 
 N_pax = [90,120,120]                                                            # [-]
 R = [4000E3,2000E3,4000E3]                                                      # [m]
@@ -96,6 +98,44 @@ Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                        
 Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                            # [m]
 Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        # [m]
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m]
+
+# Undercarriage
+N_mw = 4                                                                        # [-] number of wheels mlg
+N_nw = 2                                                                        # [-] number of wheels nlg
+N_struts = 2                                                                    # [-] number of struts used
+stroke = 0.3                                                                    # [m] shock absorber stroke
+
+LCN = 45                                                                        # [-] load classification number
+tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
+
+weight_distribution = 0.08                                                      # [-] weight percentage on nose wheel
+
+# Clearance angles
+theta = 15                                                                      # [deg] scrape angle
+beta = 17                                                                       # [deg] tip-back angle
+phi = 5                                                                         # [deg] tip clearance angle
+psi = 55                                                                        # [deg] overturn angle
+theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
+beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
+phi_rad = np.deg2rad(phi)                                                       # [rad] tip clearance angle
+psi_rad = np.deg2rad(psi)                                                       # [rad] overturn angle
+
+
+
+
+
+P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  # [N] static loading on mw
+P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
+
+
+
+
+
+
+
+
+
+
 
 
 #Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
