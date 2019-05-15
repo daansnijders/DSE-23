@@ -64,9 +64,9 @@ t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m]
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
-
+lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]
 
 
 #airfoil design 
 
-Re1, Re2, Re3, Cl_des=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_2_rad, b, taper_ratio)
+Re1, Re2, Re3, CLdes, Cl_des, CL_alpha=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A)
