@@ -1,10 +1,16 @@
+conversion
+go from inch to m				inch_to_m
+go from feet to m				ft_t0_m
+
+
+
 Number of passengers 				N_pax
 Range 						R
 Thurst to weight ratio				T_W
 Wing loading					W_S
 fuel fractions					M_ff
 Fuel mass					M_fuel
-required thrust 					T_req
+required thrust 				T_req
 Payload mass					M_payload
 cabin length					l_cabin
 inner fuselage diameter				d_f_inner
@@ -14,7 +20,7 @@ tailcone length					l_tailcone
 tail lenght					l_tail
 fuselage length					l_f
 Fuselage radius					R_f
-Overhead storage volume			V_os
+Overhead storage volume				V_os
 Total storage volume				V_cc
 Volume for cargo				V_cargo_available
 Mass available for cargo			M_cargo_available
@@ -32,11 +38,106 @@ thickness to chord				c_t
 length of the mean aero chord			MAC
 lateral loc of MAC				y_MAC
 dihedral angle					dihredral_rad
+
+
+
+
 Horizontal tail volume				V_h
 Vertical tail volume				V_v
-Aspect ratio tail					A_h
+Aspect ratio tail				A_h
 taper ratio of V tail				taper_ratio_v
-sweep angle leading edge H tail 			lambda_h_le
+sweep angle leading edge H tail 		lambda_h_le
+
+x location of th CG				x_cg
+y location of the CG				y_cg
+z location of the CG				z_cg
+
+Area horizontal tail				S_h
+area vertical tail				S_v
+
+span of the horizon tail			b_h
+span of the vertic tail				b_v
+Root chord of the horiz tail			Cr_h
+Tip chord of the horiz tail			Ct_h
+Root chord of the vert tail			Cr_v
+Tip chord of the vert tail			Ct_v
+
+Reynolds number					Re
+
+Aerodynamic paramaters
+lift coefficient				Cl
+drag coefficient				CD
+Drag coefficient zero				CD0
+
+Cruise speed					V_cruise	
+approach speed					V_a
+Stall speed					V_s
+climb gradient 					c
+Take off parameter				TOP
+sigma						sigma
+
+
+Parasite drag coefficient			Cfe
+
+Ratio weight TO/landing				f
+
+
+
+density at sea level				rho_0
+density at cruise alt				rho
+
+temp at sea level				T_0
+temp at cruise alt				T
+
+pressure					p
+sea level pressure				p_0
+
+viscosity					mu
+dynamic pressure				q
+gravity constant 				g
+
+
+cruise alt in feet				H_ft
+cruise alt in m 				H_m
+
+speed of sound at cruise alt			a
+Cruise mach					M_cruise
+drag divergende mach				M_dd
+Mach number dead				M_x
+
+
+Gas constant					R
+air specific heat 				gamma
+
+Number of seats abreast				N_sa
+number of aisles				N_aisle
+width of the aisle				aisle_width
+clearance between seat and fus			s_clearance
+pitch of seats					seat_pitch
+width of seats					seat_width
+width of the armrest				armrest
+
+carry on weigth average				W_carry_on
+check in luggage weigth average			W_check_in
+passenger weight average			W_pax
+density luggage					rho_lugg
+density cargo					rho_cargo
+Distance between the center of 			h_max
+the fuselage and the floor
+
+floor height					h_floor
+cockpit lenght					l_cockpit
+
+fuelfraction1					FF1
+fuelfraction2					FF2
+fuelfraction3					FF3
+fuelfraction4					FF4
+fuelfraction5					FF5
+
+
+
+
+
 
 
 
