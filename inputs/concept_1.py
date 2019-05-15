@@ -108,3 +108,11 @@ Cl_max = [1.552, 1.582, 1.584]
 Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
 CD0, CDcruise, LoverD=drag(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, lambda_le_rad, CLdes)
+
+# performance
+
+# update with CL_LO, CD_LO
+# take_off_field_length = get_take_off_field_length(rho_0, g, h_screen, MTOW, thrust_max, 0.85*thrust_max, CD0, CLmax,
+#                                                   S, get_friction_coefficient())
+# landing_field_length = get_landing_field_length(thrust_max, MTOW, g, h_screen, rho, S, CLmax, CD0,
+#                                                 get_friction_coefficient())
