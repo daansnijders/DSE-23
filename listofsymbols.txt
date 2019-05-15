@@ -54,6 +54,10 @@ x location of th CG				x_cg
 y location of the CG				y_cg
 z location of the CG				z_cg
 
+x position of the leading edge Vert tail	x_le_v
+x position of the leading edge Horiz tail	x_le_h
+
+
 Area horizontal tail				S_h
 area vertical tail				S_v
 
