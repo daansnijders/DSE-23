@@ -80,8 +80,8 @@ A_v = [1.9, 1.9, 1.9]                                                           
 taper_ratio_v = [0.375, 0.375, 0.375]                                           # [-]
 lambda_v_le = [np.deg2rad(40) for i in range(3)]                                # [rad]
 
-x_h = get_x_h(l_f)                                                              # [m]
-x_v = x_h                                                                       # [m]
+x_le_h = get_x_h(l_f)                                                              # [m]
+x_le_v = x_h                                                                       # [m]
 
 x_cg = get_x_cg(l_f,MTOW, MAC)                                                  # [m]
 y_cg = get_y_cg()                                                               # [m]

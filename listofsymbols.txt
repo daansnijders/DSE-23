@@ -24,6 +24,8 @@ Overhead storage volume				V_os
 Total storage volume				V_cc
 Volume for cargo				V_cargo_available
 Mass available for cargo			M_cargo_available
+
+
 Aspect ratio					A
 oswald factor 					e
 Wing area					S
@@ -52,6 +54,10 @@ x location of th CG				x_cg
 y location of the CG				y_cg
 z location of the CG				z_cg
 
+x position of the leading edge Vert tail	x_le_v
+x position of the leading edge Horiz tail	x_le_h
+
+
 Area horizontal tail				S_h
 area vertical tail				S_v
 
@@ -66,6 +72,7 @@ Reynolds number					Re
 
 Aerodynamic paramaters
 lift coefficient				Cl
+lift coefficient design				Cl_des
 drag coefficient				CD
 Drag coefficient zero				CD0
 
@@ -99,6 +106,9 @@ gravity constant 				g
 
 cruise alt in feet				H_ft
 cruise alt in m 				H_m
+
+Field length for landing			Sland
+field length for takeoff			Stakeoff
 
 speed of sound at cruise alt			a
 Cruise mach					M_cruise
