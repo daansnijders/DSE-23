@@ -50,6 +50,9 @@ Mtot_carry_on, Mtot_check_in, V_carry_on\
 V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)# [m^3]
 M_cargo_available = get_cargo_mass(N_pax,M_payload)                             # [kg]
 
+#Propulsion
+Dfan = 2.006                                                                    # [m]
+Dnacel = 1.1*Dfan                                                               # [m]
 
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
@@ -104,3 +107,5 @@ Cl_max = [1.552, 1.582, 1.584]
 # CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
 # CL_alpha: Wing CL_alpha for three configurations
 Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
+
+CD0, CDcruise, LoverD=drag2(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, lambda_le_rad, CLdes)

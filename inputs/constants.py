@@ -74,4 +74,3 @@ rho_cargo = 160                 #[kg/m3] Average cargo density
 h_max = 0.9                        #[m] Distance between the center of the fuselage and the floor
 h_floor = 0.2                    #[m] Floor heigth
 l_cockpit = 4                   #[m] Cockpit length
-
