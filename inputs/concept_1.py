@@ -6,15 +6,13 @@ Created on Fri May  3 09:45:17 2019
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from modules.performance import *
 from modules.initialsizing_cg import *
 from modules.airfoil_calculations import *
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
-from modules.initialsizing_cg import *
-from modules.airfoil_calculations import *
-from modules.performance import *
 from modules.initialsizing_undercarriage import*
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
 
@@ -104,6 +102,7 @@ Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                        
 Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                            # [m]
 Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        # [m]
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m]
+
 
 # Undercarriage
 """Inputs that might be better located in constants"""
