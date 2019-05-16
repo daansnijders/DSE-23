@@ -11,6 +11,9 @@ from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
+from modules.initialsizing_cg import *
+from modules.airfoil_calculations import *
+from modules.performance import *
 from modules.initialsizing_undercarriage import*
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
 
@@ -150,8 +153,13 @@ CD0, CDcruise, LoverD=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, 
 
 # performance
 
-# update with CL_LO, CD_LO
-# take_off_field_length = get_take_off_field_length(rho_0, g, h_screen, MTOW, thrust_max, 0.85*thrust_max, CD0, CLmax,
+# update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
+# take_off_field_length = get_take_off_field_length(rho_0, g, h_screen, MTOW, thrust_max, 0.85*thrust_max, CDcruise, CLmax,
 #                                                   S, get_friction_coefficient())
-# landing_field_length = get_landing_field_length(thrust_max, MTOW, g, h_screen, rho, S, CLmax, CD0,
+# landing_field_length = get_landing_field_length(thrust_max, MTOW, g, h_screen, rho, S, CLmax, CDcruise,
 #                                                 get_friction_coefficient())
+
+fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
+
+V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
+climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
