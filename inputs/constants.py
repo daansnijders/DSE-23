@@ -11,6 +11,7 @@ from math import *
 inch_to_m=0.0254
 ft_to_m=0.3048
 inchsq_to_msq=0.00064516
+kts_to_ms = 0.514444444
 
 #FLIGHT PARAMETERS parameters
 H_ft=37000   #[feet]
@@ -26,7 +27,8 @@ T_0=288.15
 p_0=101325
 g=9.80665
 rho_0=1.225
-mu = 0.0000143226    # Dynamic Viscosity [Pa*s]
+mu_37 = 0.0000143226    # Dynamic Viscosity [Pa*s] at 37000ft
+mu_sl = 0.00001789      # Dynamic Viscosity [Pa*s] at sea level
 
 if H_m<11000:
 

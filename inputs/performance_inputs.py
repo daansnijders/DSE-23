@@ -27,6 +27,9 @@ TOP=175*4.8824*9.81         #N/M^2
 sigma=1
 h_screen = 50 * ft_to_m         # [m] Screen height
 
+Vto1 = 135  #Initial guess Vtake-off                                            # [kts]
+VL1 = 172   #Initial guess Vtake-off                                            # [kts]
+
 #statistical input for cd0
 f=0.84
 Swet_S=6

@@ -25,7 +25,6 @@ M_fuel = get_M_fuel(MTOW,M_ff)                                                  
 T_req = get_T_req(T_W, MTOW)                                                    # [N]
 M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      # [kg]
 
-
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m]
 
@@ -108,6 +107,6 @@ Cl_max = [1.552, 1.582, 1.584]
 #airfoil design 
 # CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
 # CL_alpha: Wing CL_alpha for three configurations
-Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
+Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
 CD0, CDcruise, LoverD=drag2(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, Lnacel, lambda_le_rad, CLdes)
