@@ -43,4 +43,4 @@ def get_y_MAC(b, Cr, MAC, Ct):
     return [b[i]/2 * (Cr[i] - MAC[i]) / (Cr[i] - Ct[i]) for i in range(3)]
 
 def get_dihedral_rad(lambda_4_rad):
-    return [3-lambda_4_rad[i]/10 + 2 for i in range(3)]
+    return [np.deg2rad(3-np.rad2deg(lambda_4_rad[i])/10 + 2) for i in range(3)]

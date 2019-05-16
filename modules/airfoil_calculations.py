@@ -12,9 +12,15 @@ from inputs.performance_inputs import *
 #### and calculates Cl design for the airfoils and CL max for the wing
 def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Taper, A, Cl_max):
     avgC = [(Cr[i] + Ct[i])/2   for i in range(3)]   # Average chord [m]
-    Re1 = [(rho*V_cruise*Cr[i])/mu   for i in range(3)]   # Reynolds number at root chord [-]
-    Re2 = [(rho*V_cruise*avgC[i])/mu for i in range(3)]   # Reynolds number at avg chord [-]
-    Re3 = [(rho*V_cruise*Ct[i])/mu   for i in range(3)]   # Reynolds number at tip chord [-]
+    #Re during cruise
+    Re1 = [(rho*V_cruise*Cr[i])/mu_37   for i in range(3)]   # Reynolds number at root chord [-]
+    Re2 = [(rho*V_cruise*avgC[i])/mu_37 for i in range(3)]   # Reynolds number at avg chord [-]
+    Re3 = [(rho*V_cruise*Ct[i])/mu_37   for i in range(3)]   # Reynolds number at tip chord [-]
+    
+    #Re during take-off
+    Reto1 = [(rho_0*Vto1*kts_to_ms*Cr[i])/mu_sl   for i in range(3)]   # Reynolds number at root chord [-]
+    Reto2 = [(rho_0*Vto1*kts_to_ms*avgC[i])/mu_sl   for i in range(3)]   # Reynolds number at root chord [-]
+    Reto3 = [(rho_0*Vto1*kts_to_ms*Ct[i])/mu_sl   for i in range(3)]   # Reynolds number at root chord [-]
     q = 0.5*rho*V_cruise**2        # Dynamic pressure [Pa]
     
     WSbegin = [(MTOW[i]*g*FF1*FF2*FF3*FF4)/S[i]   for i in range(3)]        # Wing Loading begin cruise  
@@ -28,10 +34,11 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Ta
     beta = sqrt(1-M_cruise**2)      # Prandtl-Glauert compressibility correction factor
     CL_alpha = [(2*pi*A[i])/(2 + sqrt(4+(A[i]*beta/0.95)**2*(1+(tan(sweep_c2[i])**2)/beta**2)))  for i in range(3)]
     
-    #Wing CLmax for different Re numbers
+    #Wing CLmax for different Re numbers for cruise
     CLmax = [0.8*Cl_max[i]-0.24 for i in range(3)]
     
-    return(Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax)
+    CLmaxto = [0.8*Cl_max[i] for i in range(3)]
+    return(Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto)
        
 
 #### drag1 calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 1   
@@ -96,4 +103,4 @@ def drag3(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, Lnacel, swe
     CDcruise = [CD0[i] + 1/(pi*A[i]*e[i])*CLdes[i]**2 for i in range(3)]
     
     LoverD = [CLdes[i]/CDcruise[i] for i in range(3)]
-    return(CD0, CDcruise, LoverD, Nacelle)
+    return(CD0, CDcruise, LoverD)
