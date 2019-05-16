@@ -154,3 +154,26 @@ Cl_max = [1.552, 1.582, 1.584]
 Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
 CD0, CDcruise, LoverD=drag2(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, Lnacel, lambda_le_rad, CLdes)
+
+# Performance
+# because Daan is a dirty excel peasant;
+cg_loc = [[15.2179817, 16.08271847], [15.52535795, 15.51072351],[15.5346307, 15.5115315]]
+# cg_loc [landing, takeoff]
+
+# update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
+take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], thrust_max, 0.85*thrust_max,
+                                                   CDcruise[i], CLmax[i], S[i],
+                                                   get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
+                                                                            cg_loc[i][1], z_cg[i] - z_mlg[i]))
+                         for i in range(3)]
+
+landing_field_length = [get_landing_field_length(thrust_max, MTOW[i], g, h_screen, rho, S[i], CLmax[i], CDcruise[i],
+                                                 get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
+                                                                          cg_loc[i][2], z_cg[i] - z_mlg[i]))
+                        for i in range(3)]
+
+fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
+
+V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
+climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
+
