@@ -72,6 +72,7 @@ Root chord of the vert tail			Cr_v
 Tip chord of the vert tail			Ct_v
 
 Reynolds number					Re
+Reynolds number Take-off			Reto
 
 Aerodynamic paramaters
 lift coefficient				Cl
