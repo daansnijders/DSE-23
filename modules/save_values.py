@@ -37,6 +37,8 @@ if safety_check == 'yes':
     output_file.write('y_cg' + str(y_cg) + '\n')
     output_file.write('z_cg' + str(z_cg) + '\n')
     output_file.write('Cl_des'+str(Cl_des) + '\n')
+    output_file.write('CD0'+str(CD0) + '\n')
+    output_file.write('CDcruise'+str(CDcruise) + '\n')
     
     # Closing file
     output_file.close()
