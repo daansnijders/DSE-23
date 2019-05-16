@@ -13,6 +13,29 @@ def get_z_cg(d_f_outer):
 def get_y_cg():
     return [0, 0, 0]
 
+def get_mass_winggroup(MTOW):
+    M_wing = [0.092 * MTOW[i] for i in range(3)]
+    M_eng = [0.083 * MTOW[i] for i in range(3)]
+    M_wing_group = [M_wing[i] + M_eng[i]  for i in range(3)]
+    x_cg_wing_group = [(M_wing[i]*x_cg_wing[i] \
+                        +x_cg_eng[i]*M_eng[i])/M_wing_group[i] for i in range(3)]
+    return M_wing_group, x_cg_wing_group
+
+def get_mass_fuselage(MTOW,l_f):
+    M_fuselage = [0.234 * MTOW[i] for i in range(3)]
+    x_cg_fuselage = [x_f_cg_l_f * l_f[i] for i in range(3)]
+    return M_fuselage, x_cg_fuselage
+
+
+def get_mass_tail(MTOW,l_f):
+    M_tail = [0.024 * MTOW[i] for i in range(3)]
+    x_cg_tail = [0.9 * l_f[i] for i in range(3)]
+    return M_tail,x_cg_tail
+
+def get_mass_fuselagegroup(M_fuselage,M_tail):
+    M_fuselage_group = [M_fuselage[i] + M_tail[i] for i in range(3)]
+    return M_fuselage_group
+    
 
 def get_x_cg(l_f, MTOW, MAC, concept_3 = False):
     x_c_wcg = 0.205
