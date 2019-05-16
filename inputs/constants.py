@@ -11,6 +11,8 @@ from math import *
 inch_to_m=0.0254                                                                # [m/in] inches to metres
 inchsq_to_msq=0.00064516                                                        # [m^2/in^2] inches squared to metres squared
 ft_to_m=0.3048                                                                  # [m/ft] feet to metres
+kts_to_ms = 0.514444444                                                         # [m/s/kts] knots to metres per second
+
 
 #FLIGHT PARAMETERS parameters
 H_ft=37000                                                                      # [ft] cruising altitude in feet
@@ -22,12 +24,14 @@ M_x=0.935                                                                       
 gamma=1.4                                                                       # [-] heat capacity ratio
 R=287.05                                                                        # [J/kg/K] specific gas constant
 
+
 T_0=288.15                                                                      # [K] ISA temperature at sea level
 p_0=101325                                                                      # [Pa] ISA pressure at sea level
 rho_0=1.225                                                                     # [kg/m^3] ISA density at sea level
 g=9.80665                                                                       # [m/s^2] gravitational acceleration
 
-mu = 0.0000143226                                                               # [Pa*s] Dynamic Viscosity 
+mu_37 = 0.0000143226                                                            # [Pa*s] Dynamic Viscosity at 37000ft
+mu_sl = 0.00001789                                                              # [Pa*s] Dynamic Viscosity at sea level
 
 if H_m<11000:
     T=T_0-0.0065*(H_m)                                                          # [K] temperature at cruising altitude

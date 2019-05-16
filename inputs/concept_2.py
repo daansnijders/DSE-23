@@ -22,11 +22,11 @@ R = [4000E3,2000E3,4000E3]                                                      
 T_W    = [0.295,0.295,0.295]                                                    # [-] thrust over weight ratio
 W_S    = [4253, 4253, 4253]                                                     # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
-OEW = [39354.71, 39354.71, 39354.71]                                            # [kg] operational empty weight
-MTOW = get_MTOW(OEW)                                                            # [kg] maximum take-off weight
+OEW = [38329.38,38000.07,39354.71]                                              # [kg] operational empty weight
+MTOW = [63973.23,61806.6,69337.99]                                              # [kg] maximum take-off weight
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
 T_req = get_T_req(T_W, MTOW)                                                    # [N] required thrust
-M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      # [kg] payload mass
+M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
 
 
 # Fuselage parameters
@@ -154,6 +154,30 @@ Cl_max = [1.552, 1.582, 1.584]
 #airfoil design 
 # CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
 # CL_alpha: Wing CL_alpha for three configurations
-Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
+Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
+
 
 CD0, CDcruise, LoverD=drag2(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
+
+# Performance
+# because Daan is a dirty excel peasant;
+cg_loc = [[15.2179817, 16.08271847], [15.52535795, 15.51072351],[15.5346307, 15.5115315]]
+# cg_loc [landing, takeoff]
+
+# update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
+take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], thrust_max, 0.85*thrust_max,
+                                                   CDcruise[i], CLmax[i], S[i],
+                                                   get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
+                                                                            cg_loc[i][1], z_cg[i] - z_mlg[i]))
+                         for i in range(3)]
+
+landing_field_length = [get_landing_field_length(thrust_max, MTOW[i], g, h_screen, rho, S[i], CLmax[i], CDcruise[i],
+                                                 get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
+                                                                          cg_loc[i][0], z_cg[i] - z_mlg[i]))
+                        for i in range(3)]
+
+fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
+
+V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
+climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
+

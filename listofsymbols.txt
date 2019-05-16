@@ -1,7 +1,7 @@
 conversion
 go from inch to m				inch_to_m
 go from feet to m				ft_t0_m
-
+go from inch^2 to m^2				inchsq_to_msq
 
 
 Number of passengers 				N_pax
@@ -27,6 +27,8 @@ Mass available for cargo			M_cargo_available
 
 Diameter fan					Dfan
 Diameter nacelle				Dnacel
+Length fan					Lfan
+Length nacelle					Lnacel
 		
 Aspect ratio					A
 oswald factor 					e
@@ -73,6 +75,7 @@ Root chord of the vert tail			Cr_v
 Tip chord of the vert tail			Ct_v
 
 Reynolds number					Re
+Reynolds number Take-off			Reto
 
 Aerodynamic paramaters
 lift coefficient				Cl

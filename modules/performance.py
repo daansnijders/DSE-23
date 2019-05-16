@@ -43,8 +43,8 @@ def get_friction_coefficient(pressure_nose, weight, x_m, x_n, x_cg, h_cg):
     return mu
 
 
-def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D, C_L_TO,
-                          S, mu_TO): #MTOW in kg
+def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D,
+                              C_L_TO, S, mu_TO): #MTOW in kg
     """
     Ground run
     """
@@ -136,7 +136,7 @@ def get_cruise_thrust(rho, cruise_velocity, S_wing, C_D_cruise):
     return T
 
 
-def get_cruise_fuel(thrust_cruise, cruise_range, cruise_velocity): # todo fuel per kilometer (?)
+def get_cruise_fuel(thrust_cruise, cruise_range, cruise_velocity):
     fuel_flow_cruise = get_fuel_flow(thrust_cruise)
     total_fuel_used_cruise = cruise_range / cruise_velocity * fuel_flow_cruise
     return fuel_flow_cruise, total_fuel_used_cruise
@@ -145,3 +145,4 @@ def get_cruise_fuel(thrust_cruise, cruise_range, cruise_velocity): # todo fuel p
 def get_V_min(W, g, rho, S, C_L):
     V_min = np.sqrt(W * g / .5 / rho / S / C_L)
     return V_min
+

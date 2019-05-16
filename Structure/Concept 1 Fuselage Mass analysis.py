@@ -17,6 +17,12 @@ Assumptions:
 6) Aluminium 7075-T6, yield strength 503MPa
 7) Torsion neglected
 8) Effect of buckling neglected
+9) Calculation all done to meet limit load according the tensile yield strength
+10) Thickness of webframes on each side of joint is a quarter of the length of
+    reinforcement and the height of the web frames is 3 times the height of stringer
+    which is square root of the area.
+11) Length of reinforcement takes into account of the fittings and multiple frames
+    and increased size of stringers near it for reinforcement
     
 Description:
 1) The program begins with plugging in the fixed parameters
@@ -40,6 +46,7 @@ Output:
 1) Number of bolts (joints) needed at front and back of fuselage extension
 2) Max normal stress at the joints
 3) Max Shear stress at the joints
+4) Mass of bolts and web frames
 
 To be done:
 1)Verification
@@ -49,10 +56,11 @@ To be done:
 5)Influence of other failure mode (bearing)
 -------------------------------------------------------------------------------
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from isa import isa
-from mpl_toolkits.mplot3d import Axes3D
+#from mpl_toolkits.mplot3d import Axes3D
 
 """
 Parameters
@@ -67,7 +75,7 @@ MTOW2 = 68264.27835
 # OEW [kg]
 OEW = 38729.81
 # Safety factor
-safety_factor = 1.5
+safety_factor = 2
 # Load Factor
 load_factor = 2.1
 # Gravitation acceleration [m/s^2]
@@ -89,7 +97,7 @@ L_wing = MTOW1*g
 # Wing group mass [kg]
 m_winggroup = 11946.24871
 # Wing group location [m]
-x_wing = 16.1349902
+x_wing = 16.1349902               #16.1349902
 # Fuel mass [kg]
 m_fuel = 16608.69892
 
@@ -97,7 +105,7 @@ m_fuel = 16608.69892
 # Tail mass [kg]
 m_tail = 1638.34268
 # Tail location [m]
-x_tail = 26.4015
+x_tail = 26.4015            #26.4015
 
 
 # Canard mass [kg]
@@ -106,13 +114,19 @@ m_canard = (157.4050988-113.8873926)/157.4050988*6280.313608
 x_canard = 8
 
 """Bolts Details"""
-l_reinforcement = 500           # [mm]
+l_reinforcement = 100           # [mm]
 rho_material = 2810             # [kg/m^3]
+# Tensile Yield Strength [MPa] includes fatigue
+yield_strength = 159
 
 """Pressure at 2438ft [Pa]"""
 P1 = isa(2438/3.281)[1]
 """Pressure at 37000ft [Pa]"""
 P2 = isa(37000/3.281)[1]
+
+""" Fuselage cross-section design"""
+# Fuselage Stringer Area [mm^2]
+stringer_area = 400
 
 """
 Analysis (Step Size)
@@ -121,13 +135,13 @@ Analysis (Step Size)
 
 n = 1000
 step_size = l_fuselage/n
-n = 1000
-step_size = l_fuselage/n
 
 """
+-------------------------------------------------------------------------------
 Adjusting m_fuselage to include main and nose landing gear
 """
 delta_oew = OEW - (m_fuselage+m_winggroup+m_canard+m_tail)
+print("Delta OEW = ", delta_oew, " kg")
 m_fuselage+=delta_oew
 
 
@@ -141,9 +155,12 @@ L_canard = (-delta_M-x_tail*delta_F)/(x_canard-x_tail)
 # Tail lift [N]
 L_tail = delta_F-L_canard
 
-
-
-
+EQ_F = L_wing+L_canard+L_tail-(m_fuselage+m_payload+m_winggroup+m_canard+m_tail+m_fuel)*g
+EQ_M = L_wing*x_wing+L_canard*x_canard+L_tail*x_tail\
+        -(m_fuselage*l_fuselage/2+m_payload*l_fuselage/2+\
+          m_winggroup*x_wing+m_canard*x_canard+m_tail*x_tail+m_fuel*x_wing)*g
+print("Summation Force = ", EQ_F)
+print("Summation Moment = ", EQ_M)
 
 """
 Point Loads: Canard weight, Canard Lift,Fuel Weight, Wing Group weight, Wing Lift, Tail weight, Tail Lift
@@ -151,7 +168,7 @@ Distributed Loads: Fuselage, Payload
 """
 P_loads = np.array([-m_canard*g, L_canard, -m_fuel*g, -m_winggroup*g, L_wing, -m_tail*g, L_tail])*load_factor
 P_x = np.array([x_canard,x_canard,x_wing,x_wing,x_wing,x_tail,x_tail])
-D_loads = np.array([-m_fuselage*g/n, -m_payload*g/n])*load_factor
+D_loads = np.array([-m_fuselage*g/l_fuselage, -m_payload*g/l_fuselage])*load_factor
 D_x = np.linspace(0,l_fuselage,n)
 
 """
@@ -164,11 +181,10 @@ shear_lst = []
 shear = 0
 for i in range(n):
     x += step_size
-    force = 0
     for j in range(len(P_loads)):
         if x-step_size/2<P_x[j]<=x+step_size/2:
             shear += P_loads[j]
-    shear += sum(D_loads)
+    shear += sum(D_loads)*step_size
     x_lst.append(x)
     shear_lst.append(shear)
 
@@ -182,15 +198,21 @@ plt.show()
 
 """
 Internal Moment Diagram
+Macaulay's Step Function
 """
 moment_lst = []
 moment = 0
-for i in range(len(x_lst)):
-    if i < 1:
-        moment += (shear_lst[i] + shear_lst[i+1])/2*step_size
-    else:
-        moment += (shear_lst[i] + shear_lst[i-1])/2*step_size
+for i in range(n):
+    x_loc = i*step_size
+    moment = sum(D_loads)*0.5*x_loc**2
+    number = 0
+    for j in range(len(P_x)):
+        if x_loc>P_x[j]:
+            moment +=  (x_loc-P_x[j])*P_loads[j]
+            number += 1
+
     moment_lst.append(moment)
+print("End internal moment = ", moment_lst[-1])
 
 
 plt.figure("Internal Moment Diagram")
@@ -200,11 +222,7 @@ plt.xlabel("x [m]")
 plt.ylabel("Internal Moment [Nm]")
 plt.show()
 
-""" Fuselage cross-section design"""
-# Fuselage Stringer Area [mm^2]
-stringer_area = 120
-# Tensile Yield Strength [MPa]
-yield_strength = 503
+
 
 """Calculate MMOI of fuselage"""
 def mmoi(stringer_number,radius,stringer_area):   #[-,mm,mm^2]
@@ -251,7 +269,7 @@ plt.show()
 """Number of bolts at the joint"""
 
 x_joint1 = -(l_fuselage-l_fuselage_short)/2+x_canard         #[m]
-x_joint2 = (l_fuselage-l_fuselage_short)/2+x_canard         #[m]
+x_joint2 = (l_fuselage-l_fuselage_short)/2+x_canard          #[m]
 joint1 = min(range(len(x_lst)), key=lambda i: abs(x_lst[i]-x_joint1))
 joint2 = min(range(len(x_lst)), key=lambda i: abs(x_lst[i]-x_joint2))
 n_joint1 = stringer_lst[joint1]
@@ -275,7 +293,7 @@ def shear(shear_lst, stringer_lst,fuselage_radius, stringer_area):
             angle = 2*np.pi/stringer_lst[i]
             y = np.cos(angle*j)*radius
             z = np.sin(angle*j)*radius
-            Q = radius*radius*np.cos(angle*j) #<------ thickness removed
+            Q = -radius*radius*np.cos(angle*j) #<------ thickness removed
             q = - shear_lst[i] * safety_factor*Q/mmoi(stringer_lst[i],radius,stringer_area)[0]
             stringer = [shear_lst[i],x_lst[i],y,z,Q,q]
             shear_stress.append(stringer)
@@ -303,12 +321,28 @@ joint2_maxshear = np.max(joint2_shear[:,:,-1])
 print("")
 print("Joint 1 Forward")
 print("---------------")
-print("Number of joints = ", n_joint1)
+print("Number of bolts = ", n_joint1)
 print("Normal Stress = ", joint1_normal_stress, " MPa")
 print("Shear Stress = ", joint1_maxshear, " MPa")
 
 print("Joint 2 Aft")
 print("---------------")
-print("Number of joints = ", n_joint2)
+print("Number of bolts = ", n_joint2)
 print("Normal Stress = ", joint2_normal_stress, " MPa")
 print("Shear Stress = ", joint2_maxshear, " MPa")
+
+
+bolt_mass = (2*n_joint2)*stringer_area/10**6*l_reinforcement/1000*rho_material
+
+print("Bolt mass =", bolt_mass, " kg")
+
+web_mass = (d_fuselage*np.pi)*(stringer_area**0.5/1000)*3*l_reinforcement/1000*rho_material
+print("Web mass = ", web_mass, " kg")
+
+skin_mass = t_skin*d_fuselage*1000*np.pi*l_reinforcement*10**-6*rho_material
+print("Skin mass = ", skin_mass, " kg")
+
+print("Total mass per joint = ", web_mass+bolt_mass+skin_mass, " kg")
+
+
+
