@@ -12,8 +12,11 @@ from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
+from modules.initialsizing_cg import *
+from modules.airfoil_calculations import *
+from modules.performance import *
 from modules.initialsizing_undercarriage import*
-from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
+from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
 
 
 N_pax = [90,120,120]                                                            # [-]
@@ -54,6 +57,8 @@ M_cargo_available=get_cargo_mass(N_pax,M_payload)                               
 #Propulsion
 Dfan = 2.006                                                                    # [m]
 Dnacel = 1.1*Dfan                                                               # [m]
+Lfan = 3.184                                                                    # [m]
+Lnacel = 1.1*Lfan                                                               # [m]
 
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
@@ -124,13 +129,6 @@ beta_rad = np.deg2rad(beta)                                                     
 phi_rad = np.deg2rad(phi)                                                       # [rad] tip clearance angle
 psi_rad = np.deg2rad(psi)                                                       # [rad] overturn angle
 
-# Clearance angles
-
-
-
-
-
-
 P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  # [N] static loading on mw
 P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
 
@@ -148,20 +146,27 @@ y_nlg = [0,0,0]                                                                 
 z_nlg = z_mlg                                                                   # [m] z-location of nlg
 
 
-#Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
+# Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
+
 Cl_max = [1.552, 1.582, 1.584]
 
-#airfoil design 
+# airfoil design
 # CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
 # CL_alpha: Wing CL_alpha for three configurations
 Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
-CD0, CDcruise, LoverD=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, lambda_le_rad, CLdes)
+CD0, CDcruise, LoverD=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, Lnacel, lambda_le_rad, CLdes)
 
 # performance
 
-# update with CL_LO, CD_LO
-# take_off_field_length = get_take_off_field_length(rho_0, g, h_screen, MTOW, thrust_max, 0.85*thrust_max, CD0, CLmax,
-#                                                   S, get_friction_coefficient())
-# landing_field_length = get_landing_field_length(thrust_max, MTOW, g, h_screen, rho, S, CLmax, CD0,
+# update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
+# take_off_field_length = get_take_off_field_length(rho_0, g, h_screen, MTOW, thrust_max, 0.85*thrust_max, CDcruise,
+#  CLmax, S, get_friction_coefficient())
+# landing_field_length = get_landing_field_length(thrust_max, MTOW, g, h_screen, rho, S, CLmax, CDcruise,
 #                                                 get_friction_coefficient())
+
+fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
+
+V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
+climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
+

@@ -53,6 +53,8 @@ M_cargo_available = get_cargo_mass(N_pax,M_payload)                             
 #Propulsion
 Dfan = 2.006                                                                    # [m]
 Dnacel = 1.1*Dfan                                                               # [m]
+Lfan = 3.184                                                                    # [m]
+Lnacel = 1.1*Lfan                                                               # [m]
 
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
@@ -108,4 +110,4 @@ Cl_max = [1.552, 1.582, 1.584]
 # CL_alpha: Wing CL_alpha for three configurations
 Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
-CD0, CDcruise, LoverD=drag(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, lambda_le_rad, CLdes)
+CD0, CDcruise, LoverD, Nacelle=drag3(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, Lnacel, lambda_le_rad, CLdes)

@@ -10,7 +10,7 @@ from math import *
 #conversion
 inch_to_m=0.0254
 ft_to_m=0.3048
-
+inchsq_to_msq=0.00064516
 
 #FLIGHT PARAMETERS parameters
 H_ft=37000   #[feet]
