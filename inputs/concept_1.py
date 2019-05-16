@@ -4,14 +4,16 @@ Created on Fri May  3 09:45:17 2019
 
 @author: Lisa
 """
+import numpy as np
+from modules.initialsizing_cg import *
+from modules.airfoil_calculations import *
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
-from modules.initialsizing_cg import *
-from modules.airfoil_calculations import *
+from modules.initialsizing_undercarriage import*
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
-import numpy as np
+
 
 N_pax = [90,120,120]                                                            # [-]
 R = [4000E3,2000E3,4000E3]                                                      # [m]
@@ -54,7 +56,7 @@ Dnacel = 1.1*Dfan                                                               
 
 # Wing parameters
 A = [11,11,11]                                                                  # [-]
-e=[0.85,0.85,0.85]                                                              # [-]
+e = [0.85,0.85,0.85]                                                              # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2]
 b = get_b(A,S)                                                                  # [m]
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad]
@@ -67,8 +69,7 @@ t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m]
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m]
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad]
-lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]
-
+lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad]                                                                # [m^2]
 
 # Empennage parameters
 V_h = [1.28, 1.28, 1.28]                                                        # [-]
@@ -98,6 +99,44 @@ Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                            
 Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        # [m]
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m]
 
+# Undercarriage
+N_mw = 4                                                                        # [-] number of wheels mlg
+N_nw = 2                                                                        # [-] number of wheels nlg
+N_struts = 2                                                                    # [-] number of struts used
+stroke = 0.3                                                                    # [m] shock absorber stroke
+
+LCN = 45                                                                        # [-] load classification number
+tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
+
+weight_distribution = 0.08                                                      # [-] weight percentage on nose wheel
+
+# Clearance angles
+theta = 15                                                                      # [deg] scrape angle
+beta = 17                                                                       # [deg] tip-back angle
+phi = 5                                                                         # [deg] tip clearance angle
+psi = 55                                                                        # [deg] overturn angle
+theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
+beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
+phi_rad = np.deg2rad(phi)                                                       # [rad] tip clearance angle
+psi_rad = np.deg2rad(psi)                                                       # [rad] overturn angle
+
+
+
+
+
+P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  # [N] static loading on mw
+P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
+
+
+
+
+
+
+
+
+
+
+
 
 #Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
 Cl_max = [1.552, 1.582, 1.584]
@@ -107,7 +146,7 @@ Cl_max = [1.552, 1.582, 1.584]
 # CL_alpha: Wing CL_alpha for three configurations
 Re1, Re2, Re3, CLdes, Cl_des, CL_alpha, CLmax=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
-CD0, CDcruise, LoverD=drag(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, lambda_le_rad, CLdes)
+CD0, CDcruise, LoverD=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, Dnacel, lambda_le_rad, CLdes)
 
 # performance
 
