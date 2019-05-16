@@ -169,7 +169,7 @@ take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], 
 
 landing_field_length = [get_landing_field_length(thrust_max, MTOW[i], g, h_screen, rho, S[i], CLmax[i], CDcruise[i],
                                                  get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
-                                                                          cg_loc[i][2], z_cg[i] - z_mlg[i]))
+                                                                          cg_loc[i][0], z_cg[i] - z_mlg[i]))
                         for i in range(3)]
 
 fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
