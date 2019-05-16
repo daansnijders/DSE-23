@@ -19,5 +19,5 @@ def get_M_fuel(MTOW,M_ff):
 def get_T_req(T_W, MTOW):
     return [T_W[i] * MTOW[i] * 9.80665 for i in [0,1,2]]                                  # [N]
 
-def get_M_payload_avilable(MTOW, OEW, M_fuel):
+def get_M_payload_available(MTOW, OEW, M_fuel):
     return [MTOW[i] - OEW[i] - M_fuel[i] for i in [0,1,2]]                  # define payload between capacity or only passengers
