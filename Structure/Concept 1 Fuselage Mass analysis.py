@@ -58,10 +58,7 @@ Input:
 16) Wing mass @ 90,4000km           [kg]
 
 Output:
-1) Number of bolts (joints) needed at front and back of fuselage extension
-2) Max normal stress at the joints
-3) Max Shear stress at the joints
-4) Mass of bolts and web frames
+List[Total Mass increase, number of bolts at front joint, number of bolts at aft joints]
 
 To be done:
 1)Verification
@@ -362,7 +359,9 @@ def fuselage1_mass_analysis(MTOW1,MTOW2,OEW2,l_fuselage2,l_fuselage1,d_fuselage2
     skin_mass = t_skin*d_fuselage*1000*np.pi*l_reinforcement*10**-6*rho_material
     print("Skin mass = ", skin_mass, " kg")
     
+    total_mass = web_mass+bolt_mass+skin_mass
     print("Total mass per joint = ", web_mass+bolt_mass+skin_mass, " kg")
     
+    return [total_mass,n_joint1,n_joint2]
     
     
