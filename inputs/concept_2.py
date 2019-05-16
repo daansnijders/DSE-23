@@ -13,7 +13,7 @@ from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
-from modules.initialsizing_undercarriage import*
+from modules.initialsizing_undercarriage import *
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
 
 N_pax = [90,120,120]                                                            # [-]
@@ -135,11 +135,11 @@ P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  
 x_mlg = get_x_mlg(z_cg,theta_rad,beta_rad, x_cg, stroke,l_f)                    # [m] x-location of the mlg
 z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg, l_f)                               # [m] z-location of the mlg
 
-l_w = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
-l_n = get_l_nw(l_w,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
+l_m = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
+l_n = get_l_nw(l_m,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
 
 y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
-                  z_cg,z_mlg,l_n,l_w,y_eng,z_eng,d_eng)                         # [m] y-location of the mlg
+                  z_cg,z_mlg,l_n,l_m,y_eng,z_eng,d_eng)                         # [m] y-location of the mlg
 
 x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
 y_nlg = [0,0,0]                                                                 # [m] y-location of nlg

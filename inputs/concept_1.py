@@ -109,12 +109,12 @@ Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            
 N_mw = 4                                                                        # [-] number of wheels mlg
 N_nw = 2                                                                        # [-] number of wheels nlg
 N_struts = 2                                                                    # [-] number of struts used
-stroke = 0.3                                                                    # [m] shock absorber stroke
+stroke = 0.15                                                                   # [m] shock absorber stroke
 
 LCN = 45                                                                        # [-] load classification number
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
-weight_distribution = 0.08                                                      # [-] weight percentage on nose wheel
+weight_distribution = 0.09                                                       # [-] weight percentage on nose wheel
 y_eng = [0.3*b[i]/2 for i in range(3)]
 d_eng = 2.006                                                                   # [m] diameter of the engine
 z_eng = -d_eng/2                                                                # [m] z-location of lowest part of the engine
@@ -134,11 +134,11 @@ P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  
 x_mlg = get_x_mlg(z_cg,theta_rad,beta_rad, x_cg, stroke,l_f)                    # [m] x-location of the mlg
 z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg, l_f)                               # [m] z-location of the mlg
 
-l_w = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
-l_n = get_l_nw(l_w,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
+l_m = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
+l_n = get_l_nw(l_m,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
 
 y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
-                  z_cg,z_mlg,l_n,l_w,y_eng,z_eng,d_eng)                         # [m] y-location of the mlg
+                  z_cg,z_mlg,l_n,l_m,y_eng,z_eng,d_eng)                         # [m] y-location of the mlg
 
 x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
 y_nlg = [0,0,0]                                                                 # [m] y-location of nlg
