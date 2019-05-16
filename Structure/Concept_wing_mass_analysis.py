@@ -28,6 +28,7 @@ def calc_area(length,C_l, C_s):
     A = C_s * length + 0.5*(C_l - C_s)*length
     return A
 
+
 dy = 200
 lift_distr = np.linspace(0,b/2,dy,retstep=True)                                 # [m]
 A = []

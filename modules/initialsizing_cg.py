@@ -5,11 +5,14 @@ Created on Tue May 14 13:42:00 2019
 @author: Stijn
 """
 
+
 def get_z_cg(d_f_outer):
     return [d_f_outer[i]/2 for i in range(3)]
 
+
 def get_y_cg():
-    return [0,0,0]
+    return [0, 0, 0]
+
 
 def get_x_cg(l_f, MTOW, MAC, concept_3 = False):
     x_c_wcg = 0.205
