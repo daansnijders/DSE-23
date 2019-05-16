@@ -52,7 +52,7 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     V_liftoff = 1.05 * V_min
     V_average = V_liftoff / np.sqrt(2)
     drag_ground_run_air = 0.5 * rho * V_average**2 * C_D * S
-    average_lift = 0.5 * rho * V_average**2 * C_L_TO * S
+    average_lift = 0.5 * rho * V_liftoff**2 * C_L_TO * S / np.sqrt(2)
     drag_ground_run_friction = mu_TO * (MTOW * g - average_lift)
     acceleration = (thrust_takeoff_one_engine - drag_ground_run_air - drag_ground_run_friction) / MTOW
 
@@ -62,7 +62,7 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     Transition distance
     """
     drag_air = 0.5 * rho * V_liftoff ** 2 * C_D * S
-    climb_angle = climb_gradient(thrust_takeoff_one_engine, drag_air, MTOW, g)
+    climb_angle = get_climb_gradient(thrust_takeoff_one_engine, drag_air, MTOW, g)
     # yamma = 0.9 * 0.295 - 0.3 / np.sqrt(AR)
     # same answer but we take climb_angle instead of yamma because why approximate if you can find it more exactly?
 
@@ -89,7 +89,7 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
 
 def get_landing_field_length(maximum_thrust, MTOW, g, h_screen, rho, S, C_L_LA, C_D, mu_LA):
     minimum_time_before_landing = 10*60 # s
-    m_landing = MTOW - fuel_flow(0.7 * maximum_thrust) * minimum_time_before_landing
+    m_landing = MTOW - get_fuel_flow(0.7 * maximum_thrust) * minimum_time_before_landing
     V_min = np.sqrt(m_landing * g / .5 / rho / S / C_L_LA)
     V_approach = 1.3 * V_min
     delta_n = 0.10*g
@@ -137,6 +137,11 @@ def get_cruise_thrust(rho, cruise_velocity, S_wing, C_D_cruise):
 
 
 def get_cruise_fuel(thrust_cruise, cruise_range, cruise_velocity): # todo fuel per kilometer (?)
-    fuel_flow_cruise = fuel_flow(thrust_cruise)
+    fuel_flow_cruise = get_fuel_flow(thrust_cruise)
     total_fuel_used_cruise = cruise_range / cruise_velocity * fuel_flow_cruise
     return fuel_flow_cruise, total_fuel_used_cruise
+
+
+def get_V_min(W, g, rho, S, C_L):
+    V_min = np.sqrt(W * g / .5 / rho / S / C_L)
+    return V_min
