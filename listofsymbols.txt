@@ -24,6 +24,10 @@ Overhead storage volume				V_os
 Total storage volume				V_cc
 Volume for cargo				V_cargo_available
 Mass available for cargo			M_cargo_available
+Mass of the wing group				M_wing_group
+
+
+
 
 Diameter fan					Dfan
 Diameter nacelle				Dnacel
