@@ -13,10 +13,10 @@ S = 162.8666896
 Cr = 5.877498919
 Ct = 1.818230465
 L_total = 35000*9.80665*2.1
-lambda_2_deg = 23.70581453 
-
-sigma_ult = 159E6                                                               # [Pa]
-thickness = 0.2                                                                 # [m]
+#lambda_2_deg = 23.70581453 
+#
+#sigma_ult = 159E6                                                              # [Pa]
+#thickness = 0.2                                                                # [m]
 M_eng = 2177                                                                    # [kg]
 y_eng = 6.3                                                                     # [m]
 
