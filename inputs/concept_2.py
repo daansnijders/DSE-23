@@ -26,7 +26,7 @@ OEW = [39354.71, 39354.71, 39354.71]                                            
 MTOW = get_MTOW(OEW)                                                            # [kg]
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg]
 T_req = get_T_req(T_W, MTOW)                                                    # [N]
-M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      # [kg]
+M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                                      # [kg]
 
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m]

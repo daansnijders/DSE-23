@@ -23,10 +23,10 @@ T_W    = [0.295,0.295,0.295]                                                    
 W_S    = [4253, 4253, 4253]                                                     # [N/m^2]
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg]
 OEW = [36689.95, 39579.53, 40108.34]                                            # [-]
-MTOW = get_MTOW(OEW)                                                            # [kg]
+MTOW = get_MTOW(OEW)                   #make this an input or change the definition                                         # [kg]
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg]
 T_req = get_T_req(T_W, MTOW)                                                    # [N]
-M_payload = get_M_payload(MTOW,OEW,M_fuel)                                      # [kg]
+M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                                      # [kg]
 
 
 # Fuselage parameters
