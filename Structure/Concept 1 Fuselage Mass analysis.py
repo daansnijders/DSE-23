@@ -84,7 +84,7 @@ from isa import isa
 #-------------------------------------------------------------------------------
 #"""
 
-def fuselage_mass_analysis(MTOW1,MTOW2,OEW2,l_fuselage2,l_fuselage1,d_fuselage2,\
+def fuselage1_mass_analysis(MTOW1,MTOW2,OEW2,l_fuselage2,l_fuselage1,d_fuselage2,\
                            m_fuselage2,m_payload2,m_winggroup2,x_wing2,m_fuel2,\
                            m_tail2,x_tail2,x_canard2,m_wing2,m_wing1):
     print("********** FUSELAGE MASS ANALYSIS CONCEPT 1 **********")
