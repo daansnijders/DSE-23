@@ -5,15 +5,14 @@ Created on Fri May  3 09:45:17 2019
 @author: Lisa
 """
 import numpy as np
+import matplotlib.pyplot as plt
+from modules.performance import *
 from modules.initialsizing_cg import *
 from modules.airfoil_calculations import *
 from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
-from modules.initialsizing_cg import *
-from modules.airfoil_calculations import *
-from modules.performance import *
 from modules.initialsizing_undercarriage import*
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit
 
@@ -103,7 +102,9 @@ Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                            
 Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        # [m]
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m]
 
+
 # Undercarriage
+"""Inputs that might be better located in constants"""
 N_mw = 4                                                                        # [-] number of wheels mlg
 N_nw = 2                                                                        # [-] number of wheels nlg
 N_struts = 2                                                                    # [-] number of struts used
@@ -113,8 +114,10 @@ LCN = 45                                                                        
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
 weight_distribution = 0.08                                                      # [-] weight percentage on nose wheel
+y_eng = [0.3*b[i]/2 for i in range(3)]
+d_eng = 2.006                                                                   # [m] diameter of the engine
+z_eng = -d_eng/2                                                                # [m] z-location of lowest part of the engine
 
-# Clearance angles
 theta = 15                                                                      # [deg] scrape angle
 beta = 17                                                                       # [deg] tip-back angle
 phi = 5                                                                         # [deg] tip clearance angle
@@ -127,7 +130,22 @@ psi_rad = np.deg2rad(psi)                                                       
 P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  # [N] static loading on mw
 P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
 
+x_mlg = get_x_mlg(z_cg,theta_rad,beta_rad, x_cg, stroke,l_f)                    # [m] x-location of the mlg
+z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg, l_f)                               # [m] z-location of the mlg
+
+l_w = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
+l_n = get_l_nw(l_w,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
+
+y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
+                  z_cg,z_mlg,l_n,l_w,y_eng,z_eng,d_eng)                         # [m] y-location of the mlg
+
+x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
+y_nlg = [0,0,0]                                                                 # [m] y-location of nlg
+z_nlg = z_mlg                                                                   # [m] z-location of nlg
+
+
 # Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
+
 Cl_max = [1.552, 1.582, 1.584]
 
 # airfoil design
