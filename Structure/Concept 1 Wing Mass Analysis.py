@@ -15,6 +15,12 @@ S = 162.8666896
 Cr = 5.877498919
 Ct = 1.818230465
 L_total = 35000*9.80665*2.1
+<<<<<<< HEAD:Structure/Concept_wing_mass_analysis.py
+#lambda_2_deg = 23.70581453 
+#
+#sigma_ult = 159E6                                                              # [Pa]
+#thickness = 0.2                                                                # [m]
+=======
 lambda_2_deg = 23.70581453 
 
 
@@ -22,6 +28,7 @@ lambda_2_deg = 23.70581453
 
 sigma_ult = 159E6                                                               # [Pa]
 thickness = 0.2                                                                 # [m]
+>>>>>>> 27bbbb10e479ee7590f1c572667491d239672cf5:Structure/Concept 1 Wing Mass Analysis.py
 M_eng = 2177                                                                    # [kg]
 y_eng = 6.3                                                                     # [m]
 

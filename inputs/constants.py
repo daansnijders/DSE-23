@@ -8,71 +8,69 @@ Created on Tue May 14 09:27:30 2019
 from math import * 
 
 #conversion
-inch_to_m=0.0254
-ft_to_m=0.3048
-inchsq_to_msq=0.00064516
-kts_to_ms = 0.514444444
+inch_to_m=0.0254                                                                # [m/in] inches to metres
+inchsq_to_msq=0.00064516                                                        # [m^2/in^2] inches squared to metres squared
+ft_to_m=0.3048                                                                  # [m/ft] feet to metres
+kts_to_ms = 0.514444444                                                         # [m/s/kts] knots to metres per second
+
 
 #FLIGHT PARAMETERS parameters
-H_ft=37000   #[feet]
-H_m=H_ft*ft_to_m      #[m]
-M_cruise=0.75
-M_x=0.935
+H_ft=37000                                                                      # [ft] cruising altitude in feet
+H_m=H_ft*ft_to_m                                                                # [m] cruising altitude in metres
+M_cruise=0.75                                                                   # [-] cruising mach number
+M_x=0.935                                                                       # [-] technology factor
 
 #air constants
-gamma=1.4
-R=287.05
-T_0=288.15
+gamma=1.4                                                                       # [-] heat capacity ratio
+R=287.05                                                                        # [J/kg/K] specific gas constant
 
-p_0=101325
-g=9.80665
-rho_0=1.225
-mu_37 = 0.0000143226    # Dynamic Viscosity [Pa*s] at 37000ft
-mu_sl = 0.00001789      # Dynamic Viscosity [Pa*s] at sea level
+
+T_0=288.15                                                                      # [K] ISA temperature at sea level
+p_0=101325                                                                      # [Pa] ISA pressure at sea level
+rho_0=1.225                                                                     # [kg/m^3] ISA density at sea level
+g=9.80665                                                                       # [m/s^2] gravitational acceleration
+
+mu_37 = 0.0000143226                                                            # [Pa*s] Dynamic Viscosity at 37000ft
+mu_sl = 0.00001789                                                              # [Pa*s] Dynamic Viscosity at sea level
 
 if H_m<11000:
-
-    T=T_0-0.0065*(H_m)
-
-    p=p_0*(T/T_0)**(-g/(R*-0.0065))
-
-    rho= rho_0*(T/T_0)**(-g/(R*-0.0065)-1)
+    T=T_0-0.0065*(H_m)                                                          # [K] temperature at cruising altitude
+    p=p_0*(T/T_0)**(-g/(R*-0.0065))                                             # [Pa] pressure at cruising altitude
+    rho= rho_0*(T/T_0)**(-g/(R*-0.0065)-1)                                      # [kg/m^3] density at cruising altitude
 
 elif H_m<20000:
     T1=216.65
     a1=0
     p1=22631.7
 
-    T=T1+a1*(H_m)
-    p=p1*e**(-g/(R*T)*(H_m-11000))
-    rho= rho_0*(T1/T_0)**(-g/(R*-0.0065)-1)*p/p1
+    T=T1+a1*(H_m)                                                               # [K] temperature at cruising altitude
+    p=p1*e**(-g/(R*T)*(H_m-11000))                                              # [Pa] pressure at cruising altitude
+    rho= rho_0*(T1/T_0)**(-g/(R*-0.0065)-1)*p/p1                                # [kg/m^3] density at cruising altitude
     
-
-
 #get cruise velocities and speed of sound
-a=(gamma*R*T)**0.5
-V_cruise=M_cruise*a
+a=(gamma*R*T)**0.5                                                              # [m/s] speed of sound
+V_cruise=M_cruise*a                                                             # [m/s] true airspeed speed cruise
 
 
 
 #FUSELAGE
 #data on the interior
-N_sa = 5                        # Number of seats abreast
-N_aisle = 1                     # Number of aisles
-aisle_width = 0.51              #[m]
-s_clearance = 0.02              #[m] Clearance between seat and fuselage
-seat_pitch = 32*inch_to_m       #[m]
-seat_width = 20*inch_to_m       #[m]
-armrest = 2*inch_to_m           #[m] Armrest width
+N_sa = 5                                                                        # [-] Number of seats abreast
+N_aisle = 1                                                                     # [-] Number of aisles
+aisle_width = 0.51                                                              # [m] width of aisles
+s_clearance = 0.02                                                              # [m] clearance between seat and fuselage
+seat_pitch = 32*inch_to_m                                                       # [m] seat pitch length
+seat_width = 20*inch_to_m                                                       # [m] seat width length
+armrest = 2*inch_to_m                                                           # [m] Armrest width
 
 #average masses on passengers and payload
-M_carry_on = 6.1                #[kg] Average carry-on luggage weight
-M_check_in  = 16.7              #[kg] Average check-in luggage weight
-M_pax = 83.8 - M_carry_on       #[kg] Average passenger weight
-rho_lugg = 170                  #[kg/m3] Average luggage density
-rho_cargo = 160                 #[kg/m3] Average cargo density
+M_carry_on = 6.1                                                                # [kg] average carry-on luggage weight
+M_check_in  = 16.7                                                              # [kg] average check-in luggage weight
+M_pax = 83.8 - M_carry_on                                                       # [kg] average passenger weight
+rho_lugg = 170                                                                  # [kg/m3] average luggage density
+rho_cargo = 160                                                                 # [kg/m3] average cargo density
 
 #constant dimensions in the aircraft
-h_max = 0.9                        #[m] Distance between the center of the fuselage and the floor
-h_floor = 0.2                    #[m] Floor heigth
-l_cockpit = 4                   #[m] Cockpit length
+h_max = 0.9                                                                     # [m] distance between the center of the fuselage and the floor
+h_floor = 0.2                                                                   # [m] floor heigth
+l_cockpit = 4                                                                   # [m] cockpit length

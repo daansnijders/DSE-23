@@ -49,11 +49,14 @@ dihedral angle					dihredral_rad
 
 Horizontal tail volume				V_h
 Vertical tail volume				V_v
-Aspect ratio tail				A_h
-taper ratio of V tail				taper_ratio_v
+Aspect ratio horizontal tail			A_h
+Aspect ratio vertical tail			A_v
+taper ratio of horizontal tail			taper_ratio_h
+taper ratio of vertical tail			taper_ratio_v
 sweep angle leading edge H tail 		lambda_h_le
+sweep angle leading edge V tail 		lambda_v_le
 
-x location of th CG				x_cg
+x location of the CG				x_cg
 y location of the CG				y_cg
 z location of the CG				z_cg
 
