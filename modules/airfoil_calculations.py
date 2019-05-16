@@ -69,12 +69,20 @@ def drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, Lnacel, swe
 
 #### drag calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 2  
 def drag2(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, Lnacel, sweep_le, CLdes):
-    Wing = [1.07*2*S[i]*0.003 for i in range(3)]  
+    Wing = []
+    for i in range(3):
+        if i == 0:
+            Wing.append(1.07*2*147.5107162*0.003)
+        if i == 1:
+            Wing.append(1.07*2*S[i]*0.003)
+        if i == 2:
+            Wing.append(1.07*2*S[i]*0.003 + (((45*inch_to_m)/2)**2*pi*2 + (45*inch_to_m*pi*308.4*inch_to_m))*0.006)
+        
     l2 = [l_fuselage[i] - l_nose[i] - l_tailcone[i] for i in range(3)]
     Fuselage = [0.0024*(pi*D[i]/4)*(1/(3*l_nose[i]**2)*((4*l_nose[i]**2+D[i]**2/4)**(1.5)-D[i]**3/8)-D[i]+4*l2[i]+2*sqrt(l_tailcone[i]**2+D[i]**2/4)) for i in range(3)]
     Nacelle = (2*(Dnacel/2)**2*pi + Dnacel*pi*Lnacel)*0.0060
     Tailplane = [1.05*2*(S_h[i] + S_v[i])*0.0025  for i in range(3)]
-    CD0 = [1/S[i]*(Wing[i] + Fuselage[i] + Nacelle + Tailplane[i])*1.1  for i in range(3)]
+    CD0 = [1/147.5107162*(Wing[i] + Fuselage[i] + Nacelle + Tailplane[i])*1.1  for i in range(3)]
     
     e = [4.61*(1-0.045*A[i]**0.68)*(cos(sweep_le[i]))**0.15 -3.1 for i in range(3)]
     
