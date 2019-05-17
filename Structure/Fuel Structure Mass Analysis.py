@@ -40,7 +40,7 @@ def calc_struc_mass(fuel_mass):
     pylon_mass = fuel_mass/fuel_mass_ref*(pylon_mass_ref)
     return [pylon_mass,structure_mass]
 
-pylon_mass1 = calc_struc_mass(fuel_mass3-fuel_mass1)[0]
+pylon_mass1 = calc_struc_mass(fuel_mass3-fuel_mass2)[0]
 
 
 structure_mass1 = calc_struc_mass(fuel_mass1-fuel_mass2)[1]
