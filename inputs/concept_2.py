@@ -165,19 +165,22 @@ cg_loc = [[15.2179817, 16.08271847], [15.52535795, 15.51072351],[15.5346307, 15.
 # cg_loc [landing, takeoff]
 
 # update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
-take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], thrust_max, 0.85*thrust_max,
-                                                   CDcruise[i], CLmax[i], S[i],
+take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], 2*thrust_max, 2*0.85*thrust_max,
+                                                   CDcruise[i], CLmaxto[i], S[i],
                                                    get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
-                                                                            cg_loc[i][1], z_cg[i] - z_mlg[i]))
+                                                                            cg_loc[i][1], z_cg[i] - z_mlg[i], g))
                          for i in range(3)]
 
-landing_field_length = [get_landing_field_length(thrust_max, MTOW[i], g, h_screen, rho, S[i], CLmax[i], CDcruise[i],
-                                                 get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
-                                                                          cg_loc[i][0], z_cg[i] - z_mlg[i]))
+landing_field_length = [get_landing_field_length(2*thrust_max, get_m_landing(MTOW[i], 2*thrust_max), g, h_screen,
+                                                 rho_0, S[i], CLmaxto[i], CDcruise[i],
+                                                 get_friction_coefficient(P_nw[i], get_m_landing(MTOW[i], 2*thrust_max),
+                                                                          x_mlg[i], x_nlg[i], cg_loc[i][0], z_cg[i]
+                                                                          - z_mlg[i], g)+.4)
                         for i in range(3)]
 
-fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
+fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
 
 V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
 climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
 
+print(fuel_cruise)

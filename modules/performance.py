@@ -2,23 +2,6 @@ import numpy as np
 
 # requirement; take-off run 2000 meters @ sea level
 
-# """
-# Constants
-# """
-# rho = 1.225
-# g = 9.81
-# h_screen = 15.24
-#
-# """
-# Variables
-# """
-# MTOW = 49391.28866 # kg
-# thrust_takeoff_one_engine = 108.54E3 # N
-# thrust_climb_out_one_engine = 108.54E3 * .85
-# C_D = 0.04
-# C_L_max = 1.4
-# S = 113.8873926
-
 
 def get_climb_gradient(T, D, m, g):
     y = (T-D)/m/g
@@ -37,10 +20,11 @@ def get_stall_speed(W, T, alpha_C_L_max, rho, C_L_max, S):
     return V_stall
 
 
-def get_friction_coefficient(pressure_nose, weight, x_m, x_n, x_cg, h_cg):
-    mu = ((pressure_nose / weight - 1) * (x_m - x_cg) + pressure_nose / weight * (x_cg - x_n))\
-         / (h_cg * (1 - pressure_nose / weight))
-    return mu
+def get_friction_coefficient(force_nose, mass, x_m, x_n, x_cg, h_cg, g):
+    weight = mass * g
+    mu = ((force_nose / weight - 1) * (x_m - x_cg) + force_nose / weight * (x_cg - x_n))\
+         / (h_cg * (1 - force_nose / weight))
+    return abs(mu)
 
 
 def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D,
@@ -62,7 +46,9 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     Transition distance
     """
     drag_air = 0.5 * rho * V_liftoff ** 2 * C_D * S
-    climb_angle = get_climb_gradient(thrust_takeoff_one_engine, drag_air, MTOW, g)
+    climb_angle = 8/180*np.pi
+    # climb_angle = get_climb_gradient(thrust_takeoff_one_engine, drag_air, MTOW, g)
+    #
     # yamma = 0.9 * 0.295 - 0.3 / np.sqrt(AR)
     # same answer but we take climb_angle instead of yamma because why approximate if you can find it more exactly?
 
@@ -73,34 +59,33 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     Climb out distance
     """
     x_climb = 0
+    x_total_airborne = x_transition
     if h_transition < h_screen:
-        climb_out_angle = climb_gradient(thrust_climb_out_one_engine, drag_air, MTOW, g)
+        climb_out_angle = get_climb_gradient(thrust_climb_out_one_engine, drag_air, MTOW, g)
         x_climb = (h_screen - h_transition) / np.tan(climb_out_angle)
-    x_total_airborne = x_transition + x_climb
+        x_total_airborne = x_transition + x_climb
     x_total = distance_ground + x_total_airborne
     # print(x_total)
     return x_total
 
 
-# x_total = take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D,
-#                                 C_L_max, S, 0.05)
-# print('x_total', x_total)
-
-
-def get_landing_field_length(maximum_thrust, MTOW, g, h_screen, rho, S, C_L_LA, C_D, mu_LA):
-    minimum_time_before_landing = 10*60 # s
+def get_m_landing(MTOW, maximum_thrust):
+    minimum_time_before_landing = 20 * 60  # s
     m_landing = MTOW - get_fuel_flow(0.7 * maximum_thrust) * minimum_time_before_landing
+    return m_landing
+
+
+def get_landing_field_length(maximum_thrust, m_landing, g, h_screen, rho, S, C_L_LA, C_D, mu_LA):
     V_min = np.sqrt(m_landing * g / .5 / rho / S / C_L_LA)
     V_approach = 1.3 * V_min
     delta_n = 0.10*g
-    gamma_approach = 3/180*np.pi
+    gamma_approach = 3./180*np.pi
 
     """
     Airborne distance
     """
     R = 1.3**2 * V_approach**2 / delta_n / g
     x_total_airborne = R * np.sin(gamma_approach) + (h_screen - (1 - np.cos(gamma_approach)) * R) / np.tan(gamma_approach)
-
     """
     Rotation distance
     """
@@ -116,8 +101,8 @@ def get_landing_field_length(maximum_thrust, MTOW, g, h_screen, rho, S, C_L_LA, 
     average_drag_air = 0.5 * rho * V_average ** 2 * C_D * S
     average_lift = 0.5 * rho * V_average ** 2 * C_L_LA * S
     drag_braking_friction = mu_LA * (m_landing * g - average_lift)
-    x_brake = (m_landing*g)**2/g/S/rho*1.3**2/C_L_LA/(reverse_thrust+average_drag_air+drag_braking_friction)
-
+    a_brake = -1/m_landing*(reverse_thrust+average_drag_air+drag_braking_friction)
+    x_brake = -V_approach**2/2/a_brake
     x_total = x_total_airborne + x_tr + x_brake
     return x_total
 
