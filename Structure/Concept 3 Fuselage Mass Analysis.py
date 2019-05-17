@@ -408,7 +408,7 @@ def mmoi1(t,fuselage_diameter,cabin_height):                 #[mm,m,m]
     z_beam = (fuselage_diameter/2-(fuselage_diameter-cabin_height))*1000 #[mm]
     area_beam = beam_width*t #[mm^2]
     mmoi_beam = (1/12)*beam_width*t**3         #[mm^4]
-    z_neutral = area_beam*z_beam/(area_beam*area_fuselage)     #[mm]
+    z_neutral = (area_beam*z_beam)/(area_beam+area_fuselage)     #[mm]
     area = area_beam+area_fuselage
     mmoi = mmoi_beam + mmoi_fuselage + area_fuselage*z_neutral**2 + area_beam*(z_beam-z_neutral)**2
     max_z = fuselage_diameter/2*1000-z_neutral #[mm]
@@ -421,26 +421,24 @@ Moment of Inertia of one section of fuselage
 def mmoi2(t,fuselage_diameter,cabin_height):            #[mm,m,m]
     alpha = np.arccos((fuselage_diameter/2-(fuselage_diameter-cabin_height))/(fuselage_diameter/2))
     beam_width = 2*1000*(fuselage_diameter/2)*np.sin(alpha) #[mm]
-#    z_beam = 0 #[mm]
+    z_beam = (fuselage_diameter/2-(fuselage_diameter-cabin_height))*1000 #[mm]
     area_beam = beam_width*t #[mm^2]
     mmoi_beam = (1/12)*beam_width*t**3         #[mm^4]
-    
     """Discretise the arc and obtain moment of inertia"""
     arc_length = fuselage_diameter*1000/2*2*alpha       #[mm]
     arc_area = arc_length*t                             #[mm^2]
     dis_n = 1000
     angle = np.linspace(-alpha,alpha,dis_n)
-#    arc_y = fuselage_diameter/2*1000*np.sin(angle)      #[mm]
-    arc_z = fuselage_diameter/2*1000*np.cos(angle) - (fuselage_diameter/2-(fuselage_diameter-cabin_height))*1000 #[mm]
+    arc_z = fuselage_diameter/2*1000*np.cos(angle)  #[mm]
     disc_area = arc_area/dis_n #[mm^2]
-#    mmoi_arc = sum(disc_area*arc_z**2) #[mm^2]
-    
     """Area and mmoi of entire structure except cabin"""
-    z_neutral = sum(disc_area*arc_z)/(arc_area+area_beam)   #[mm]
+    z_neutral = (area_beam*z_beam + sum(disc_area*arc_z))/(arc_area+area_beam)   #[mm]
     area = arc_area+area_beam       #[mm^2]
-    mmoi = sum(disc_area*(arc_z-z_neutral)**2) + mmoi_beam+area_beam*(z_neutral)**2 #[mm^2]
-    max_z = (fuselage_diameter/2-(fuselage_diameter-cabin_height))*1000 - z_neutral #[mm]
+    mmoi = sum(disc_area*(arc_z-z_neutral)**2) + mmoi_beam+area_beam*(z_beam-z_neutral)**2 #[mm^2]
+    max_z = (fuselage_diameter/2)*1000 - z_neutral #[mm]
     return [max_z,z_neutral,area,mmoi]
+
+
 
 """
 Analysis of required thickness
@@ -453,36 +451,36 @@ without_module_t = []
 """
 Thickness at the flight without module
 """
-t = 0.05
+t = 0.1
 j = 0
 while j < len(moment1_lst):
     I = mmoi2(t,fuselage_diameter,cabin_height)
     moment = moment1_lst[j]*1000        #[Nmm]
     stress = abs(moment*I[0])*safety_factor/I[3]
     if strength<stress:
-        t += 0.01
+        t += 0.1
     else:
         without_module.append([I[0],I[1],I[2],I[3],t,stress])
         without_module_t.append(t)
-        t=0.05
+        t=0.1
         j+=1
 
 without_module = np.array(without_module)
 """
 Thickness at the flight with module
 """
-T = 0.05
+T = 0.1
 j = 0
 while j < len(moment1_lst):
     I = mmoi1(t,fuselage_diameter,cabin_height)
     moment = moment1_lst[j]*1000        #[Nmm]
     stress = abs(moment*I[0])*safety_factor/I[3]
     if strength<stress:
-        t += 0.051
+        t += 0.1
     else:
         with_module.append([I[0],I[1],I[2],I[3],t,stress])
         with_module_t.append(t)
-        t=0.05
+        t=0.1
         j+=1
 
 with_module = np.array(with_module)

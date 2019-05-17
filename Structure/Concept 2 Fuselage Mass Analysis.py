@@ -46,7 +46,7 @@ Current update time: 13/5/2019, 12:11PM
 m_luggage = 6.1*30/2
 
 """ Length of modules [m]"""
-l_modules = 6.48
+l_modules = 25.92-19.44
 
 """ Width of modules [m]"""
 w_modules = 3.446

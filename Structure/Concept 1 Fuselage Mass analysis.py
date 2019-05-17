@@ -58,7 +58,7 @@ Input:
 16) Wing mass @ 90,4000km           [kg]
 
 Output:
-List[Total Mass increase, number of bolts at front joint, number of bolts at aft joints]
+List[ Mass increase per joint, number of bolts at front joint, number of bolts at aft joints]
 
 To be done:
 1)Verification
