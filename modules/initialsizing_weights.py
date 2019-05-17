@@ -21,3 +21,8 @@ def get_T_req(T_W, MTOW):
 
 def get_M_payload_available(MTOW, OEW, M_fuel):
     return [MTOW[i] - OEW[i] - M_fuel[i] for i in [0,1,2]]                  # define payload between capacity or only passengers
+
+def get_mass_efficiency(OEW):
+    D_OEW1=(OEW[2]-OEW[0])/OEW[2] *100
+    D_OEW2=(OEW[2]-OEW[1])/OEW[2] * 100
+    return D_OEW1,D_OEW2
