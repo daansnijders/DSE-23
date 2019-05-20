@@ -182,5 +182,3 @@ fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise
 
 V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
 climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
-
-print(fuel_cruise)
