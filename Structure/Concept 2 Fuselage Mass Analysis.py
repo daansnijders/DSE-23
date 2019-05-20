@@ -43,7 +43,7 @@ Current update time: 13/5/2019, 12:11PM
 """
 
 """ Total mass of overhead luggage at modules [kg]"""
-m_luggage = 6.1*30/2
+m_luggage = 6.1*30
 
 """ Length of modules [m]"""
 l_modules = 25.92-19.44
@@ -76,15 +76,15 @@ Analysis
 angle = np.arcsin(y/r_modules)
 
 # Vertical Reaction Force [N] distributed across the module length
-R_y = m_luggage/l_modules*g
+R_y = m_luggage*g
 a = w_modules/2-y
 c = 2*y
 # Reaction Bending Moment [Nm]
 R_M = R_y*a*(a+c)/(2*w_modules)
-R_M1 = R_y*a
+
 
 # Thickness required [mm]
-t = ((6 * R_M *safety_factor*load_factor*1000)/(1000*strength))**0.5
+t = ((6 * R_M *safety_factor*load_factor)/(l_modules*10**6*strength))**0.5*1000
 
 # Mass of module
 mass = (w_modules + np.pi*w_modules/2)*t/1000*l_modules*density
