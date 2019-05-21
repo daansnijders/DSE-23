@@ -64,7 +64,7 @@ def drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, Lnacel, swe
     CDcruise = [CD0[i] + 1/(pi*A[i]*e[i])*CLdes[i]**2 for i in range(3)]
     
     LoverD = [CLdes[i]/CDcruise[i] for i in range(3)]
-    return(CD0, CDcruise, LoverD)
+    return(CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane)
     
 
 #### drag calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 2  
