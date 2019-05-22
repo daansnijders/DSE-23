@@ -53,7 +53,7 @@ def get_WSrange(WSstart,WSend,D_WS):
 
 
     
-def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart,WSend,D_Ws):
+def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0,WSstart,WSend,D_Ws):
     
     CD_climb=4*CD0
     Cl_climb=(3*CD0*pi*A*e)**0.5
@@ -62,7 +62,6 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
     
     V_s=stallspeedlanding(Sland)
 
-    V_climb=300/3.6
     WS_L=wingloading_landing(Cl_land, V_s)
     WS_TO=wingloading_takeoff(Sland,Cl_land,f)
     

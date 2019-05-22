@@ -215,4 +215,4 @@ rate_of_climb = [get_rate_of_climb(V_climb[i],climb_gradient[i]) for i in range(
 #create loading diagram with new Cl and Cd
 CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
 for i in range(3):
-    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0_roskam,100,7100,100)
+    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
