@@ -24,7 +24,7 @@ if safety_check == 'yes':
     output_file.write('MISSION PROFILE' + '\n')
     output_file.write('N_pax = ' + str(N_pax) + '\n')
     output_file.write('R = ' + str(R) + '\n')
-    output_file.write('MISSION PROFILE' + '\n')
+   
     output_file.write('WING LOADING/ THRUST LOADING' + '\n')
     output_file.write('T_W = ' + str(T_W) + '\n')
     output_file.write('W_S = ' + str(W_S) + '\n')
@@ -99,6 +99,22 @@ if safety_check == 'yes':
     output_file.write('Cr_v =' + str(Cr_v) + '\n')
     output_file.write('Ct_v =' + str(Ct_v) + '\n')
     
+    output_file.write('COMPONENT CG AND MASSES' + '\n')
+    output_file.write('M_wing =' + str(M_wing) + '\n')
+    output_file.write('M_eng=' + str(M_eng) + '\n')
+    output_file.write('M_wing_group =' + str(M_wing_group) + '\n')
+    output_file.write('M_fuselage =' + str(M_fuselage) + '\n')
+    output_file.write('M_tail =' + str(M_tail) + '\n')
+    output_file.write('M_fuselage_group =' + str(M_fuselage_group) + '\n')
+    output_file.write(' x_cg_fuselage=' + str( x_cg_fuselage) + '\n')
+    output_file.write('x_cg_tail =' + str(x_cg_tail) + '\n')
+    output_file.write('x_cg_wing =' + str(x_cg_wing) + '\n')
+    output_file.write('x_cg_eng =' + str(x_cg_eng) + '\n')
+    output_file.write('x_cg_wing_group =' + str(x_cg_wing_group) + '\n')
+    output_file.write('x_le_MAC =' + str(x_le_MAC) + '\n')
+    
+    
+    
     output_file.write('CG LOCATIONS' + '\n')
     output_file.write('x_cg =' + str(x_cg) + '\n')
     output_file.write('y_cg = ' + str(y_cg) + '\n')
@@ -136,9 +152,14 @@ if safety_check == 'yes':
     
 
 # Opening files
-exec(open("./output.csv").read())
+if concept==1:
+    exec(open("./output_concept1.csv").read())
 
-
+if concept==2:
+    exec(open("./output_concept2.csv").read())
+    
+if concept==3:
+    exec(open("./output_concept3.csv").read())
 
 
 
