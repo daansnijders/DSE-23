@@ -14,6 +14,7 @@ from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
+from modules.initialsizing_loading import *
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
 
 N_pax = [90,120,120]                                                            # [-] number of passengers
@@ -79,22 +80,18 @@ V_h = [1.28, 1.28, 1.28]                                                        
 A_h = [4.95, 4.95, 4.95]                                                        # [-] aspect ratio horizontal tail
 taper_ratio_h = [0.39, 0.39, 0.39]                                              # [-] taper ratio horizontal tail
 lambda_h_le = [np.deg2rad(34) for i in range(3)]                                # [rad] leading edge sweep angle horizontal tail
-
 V_v = [0.1, 0.1, 0.1]                                                           # [-] volume vertical tail
 A_v = [1.9, 1.9, 1.9]                                                           # [-] aspect ratio vertical tail
-taper_ratio_v = [0.375, 0.375, 0.375]                                           # [-] taper ratio vertical tail
+taper_ratio_v = [0.375, 0.375, 0.375]     
+                                      # [-] taper ratio vertical tail
 lambda_v_le = [np.deg2rad(40) for i in range(3)]                                # [rad] leading edge sweep angle vertical tail
-
 x_le_h = get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
-
 x_cg = get_x_cg(l_f,MTOW, MAC)                                                  # [m] x-location of the centre of mass aircraft
 y_cg = get_y_cg()                                                               # [m] y-location of the centre of mass aircraft
 z_cg = get_z_cg(d_f_outer)                                                      # [m] z-location of the centre of mass aircraft
-
 S_h = get_S_h(S, MAC, x_cg, V_h, x_le_h)                                        # [m^2] surface area horizontal tail
 S_v = get_S_v(S, b, x_cg, V_v, x_le_v)                                          # [m^2] surface area vertical tail
-
 b_h = get_b_h(S_h, A_h)                                                         # [m] span horizontal tail
 b_v = get_b_v(S_v, A_v)                                                         # [m] span vertical tail
 Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                        # [m] root chord length horizontal tail
@@ -155,12 +152,22 @@ Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTO
 
 CD0, CDcruise, LoverD=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
+
+#loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 # Performance
 # because Daan is a dirty excel peasant;
 cg_loc = [[12.80353534, 12.76158237], [16.92946042, 17.3060118], [16.93525685, 17.46464004]]
 # cg_loc [landing, takeoff]
 
+
+
+
+
+
+
 # update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
+#needs revision
+
 take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], 2*thrust_max, 2*0.85*thrust_max,
                                                    CDcruise[i], CLmaxto[i], S[i],
                                                    get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
@@ -177,4 +184,8 @@ landing_field_length = [get_landing_field_length(2*thrust_max, get_m_landing(MTO
 fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
 
 V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
+
+
 climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
+
+rate_of_climb=(get_rate_of_climb(V_climb[i]) for i in range(3))
