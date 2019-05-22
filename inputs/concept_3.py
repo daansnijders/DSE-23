@@ -27,8 +27,10 @@ MTOW = [61064.99,62883.99,70632.89]                                             
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
 T_req = get_T_req(T_W, MTOW)                                                    # [N] required thrust
 M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                                      # [kg] payload mass
-
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
+
+
+
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
 

@@ -89,9 +89,9 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
     return TW_cruise,TW_climb,WSrange,WS_L
 
 
-CD0, CD0_TO, CD0_land=dragcoefficient(Cfe,Swet_S)
-#
-loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,100,7100,100)
+CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
+loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0_roskam,100,7100,100)
+
 #WS=np.arange(100,7100,100)
 #
 #WS_landing=0.5*rho_0*V_s**2*CL_land_max
