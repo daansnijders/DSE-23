@@ -28,7 +28,7 @@ def get_friction_coefficient(force_nose, mass, x_m, x_n, x_cg, h_cg, g):
     return abs(mu)
 
 
-def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine, thrust_climb_out_one_engine, C_D,
+def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff, thrust_climb_out, C_D,
                               C_L_TO, S, mu_TO): #MTOW in kg
     """
     Ground run
@@ -39,7 +39,7 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     drag_ground_run_air = 0.5 * rho * V_average**2 * C_D * S
     average_lift = 0.5 * rho * V_average**2 * C_L_TO * S
     drag_ground_run_friction = mu_TO * (MTOW * g - average_lift)
-    acceleration = (thrust_takeoff_one_engine - drag_ground_run_air - drag_ground_run_friction) / MTOW
+    acceleration = (thrust_takeoff - drag_ground_run_air - drag_ground_run_friction) / MTOW
 
     distance_ground = V_liftoff**2 / 2 / acceleration
 
@@ -48,7 +48,7 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     """
     drag_air = 0.5 * rho * V_liftoff ** 2 * C_D * S
     # climb_angle = 8/180*np.pi
-    climb_angle = get_climb_gradient(2*0.8*thrust_takeoff_one_engine, drag_air, MTOW, g)
+    climb_angle = get_climb_gradient(2 * 0.8 * thrust_takeoff, drag_air, MTOW, g)
     #
     # yamma = 0.9 * 0.295 - 0.3 / np.sqrt(AR)
     # same answer but we take climb_angle instead of yamma because why approximate if you can find it more exactly?
@@ -61,7 +61,7 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     """
     x_total_airborne = x_transition
     if h_transition < h_screen:
-        climb_out_angle = get_climb_gradient(thrust_climb_out_one_engine, drag_air, MTOW, g)
+        climb_out_angle = get_climb_gradient(thrust_climb_out, drag_air, MTOW, g)
         x_climb = (h_screen - h_transition) / np.tan(climb_out_angle)
         x_total_airborne = x_transition + x_climb
     x_total = distance_ground + x_total_airborne
