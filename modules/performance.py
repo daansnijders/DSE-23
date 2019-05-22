@@ -36,7 +36,7 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     V_liftoff = 1.05 * V_min
     V_average = V_liftoff / np.sqrt(2)
     drag_ground_run_air = 0.5 * rho * V_average**2 * C_D * S
-    average_lift = 0.5 * rho * V_liftoff**2 * C_L_TO * S / np.sqrt(2)
+    average_lift = 0.5 * rho * V_average**2 * C_L_TO * S
     drag_ground_run_friction = mu_TO * (MTOW * g - average_lift)
     acceleration = (thrust_takeoff_one_engine - drag_ground_run_air - drag_ground_run_friction) / MTOW
 
@@ -46,8 +46,8 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     Transition distance
     """
     drag_air = 0.5 * rho * V_liftoff ** 2 * C_D * S
-    climb_angle = 8/180*np.pi
-    # climb_angle = get_climb_gradient(thrust_takeoff_one_engine, drag_air, MTOW, g)
+    # climb_angle = 8/180*np.pi
+    climb_angle = get_climb_gradient(2*0.8*thrust_takeoff_one_engine, drag_air, MTOW, g)
     #
     # yamma = 0.9 * 0.295 - 0.3 / np.sqrt(AR)
     # same answer but we take climb_angle instead of yamma because why approximate if you can find it more exactly?
@@ -58,7 +58,6 @@ def get_take_off_field_length(rho, g, h_screen, MTOW, thrust_takeoff_one_engine,
     """
     Climb out distance
     """
-    x_climb = 0
     x_total_airborne = x_transition
     if h_transition < h_screen:
         climb_out_angle = get_climb_gradient(thrust_climb_out_one_engine, drag_air, MTOW, g)
@@ -130,4 +129,14 @@ def get_cruise_fuel(thrust_cruise, cruise_range, cruise_velocity):
 def get_V_min(W, g, rho, S, C_L):
     V_min = np.sqrt(W * g / .5 / rho / S / C_L)
     return V_min
+
+
+def specific_fuel_consumption(thrust, fuel_flow):
+    poundforce = thrust * 0.224809
+    fuel_flow_pound_per_hour = fuel_flow * 2.20462 / 3600
+    fuel_flow_pound_per_second = fuel_flow * 2.20462
+    cj_si = fuel_flow / thrust
+    cj_lbhour = fuel_flow_pound_per_hour/poundforce
+    cj_lbsec = fuel_flow_pound_per_second/poundforce
+    return cj_si, cj_lbhour, cj_lbsec
 

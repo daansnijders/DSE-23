@@ -150,7 +150,7 @@ Cl_max = [1.552, 1.582, 1.584]
 # CL_alpha: Wing CL_alpha for three configurations
 Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
-CD0, CDcruise, LoverD=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
+CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
 
 #loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
@@ -186,6 +186,11 @@ fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise
 V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
 
 
+
 climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
 
 rate_of_climb=(get_rate_of_climb(V_climb[i]) for i in range(3))
+
+climb_gradient = [get_climb_gradient(thrust_max, 0.5 * rho_0 * V_climb[i]**2 * 3*CDcruise[i] * S[i], MTOW[i], g) for i in range(3)]
+rate_of_climb = [get_rate_of_climb(thrust_max, 0.5 * rho_0 * V_climb[i]**2 * 3*CDcruise[i] * S[i], V_cruise, MTOW[i], g) for i in range(3)]
+
