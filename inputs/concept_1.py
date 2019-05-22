@@ -15,7 +15,7 @@ from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
-from modules.initialsizing_loading import *
+# from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
 
 N_pax = [90,120,120]                                                            # [-] number of passengers
@@ -154,7 +154,7 @@ Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTO
 CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
 
-#loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
+# loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 
 """
 ---
