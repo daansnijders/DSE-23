@@ -11,6 +11,7 @@ Wing loading					W_S
 fuel fractions					M_ff
 Fuel mass					M_fuel
 required thrust 				T_req
+required thust take off				T_req_TO
 Payload mass					M_payload
 cabin length					l_cabin
 inner fuselage diameter				d_f_inner
@@ -25,6 +26,10 @@ Total storage volume				V_cc
 Volume for cargo				V_cargo_available
 Mass available for cargo			M_cargo_available
 Mass of the wing group				M_wing_group
+mass of the fuselage group			M_fuselage_group
+mass of the tail				M_tail
+mass of the wing				M_wing
+mass of the fuselage				M_fuselage
 
 
 
