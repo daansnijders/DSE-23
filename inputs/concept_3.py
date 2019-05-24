@@ -79,6 +79,18 @@ dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
 
+#cg and masses of components
+M_wing, M_eng, M_wing_group=get_mass_winggroup(MTOW)
+M_fuselage, x_cg_fuselage=get_mass_fuselage(MTOW,l_f)
+M_tail,x_cg_tail=get_mass_tail(MTOW,l_f)
+M_fuselage_group, x_cg_fuselage_group=get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail)
+x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group, concept_3=False)
+x_cg_wing,x_cg_eng,x_cg_wing_group=get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )
+
+x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group, x_cg_fuselage_group)      # [m] x-location of the centre of mass aircraft
+y_cg = get_y_cg()                                                                       # [m] y-location of the centre of mass aircraft
+z_cg = get_z_cg(d_f_outer)                                                              # [m] z-location of the centre of mass aircraft
+
 # Empennage parameters
 V_h = [1.28, 1.28, 1.28]                                                        # [-] volume horizontal tail
 A_h = [4.95, 4.95, 4.95]                                                        # [-] aspect ratio horizontal tail

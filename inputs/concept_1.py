@@ -21,15 +21,15 @@ from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inch
 N_pax = [90,120,120]                                                            # [-] number of passengers
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
 
-T_W    = [0.295,0.295,0.295]                                                    # [-] thrust over weight ratio
-W_S    = [4253, 4253, 4253]                                                     # [N/m^2] weight over wing surface area
+T_W    = [0.29,0.29,0.29]                                                    # [-] thrust over weight ratio
+W_S    = [4405, 4405 , 4405]                                                     # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
 OEW = [34631.92,38223.31,38729.81]                                              # [kg] operational empty weight
 MTOW = [58722.6,67394,68264.27]                                                 # [kg] maximum take-off weight
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
 T_req = get_T_req(T_W, MTOW)                                                    # [N] required thrust
 M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
-
+M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
@@ -76,6 +76,21 @@ y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
+
+
+
+#cg and masses of components
+M_wing, M_eng, M_wing_group=get_mass_winggroup(MTOW)
+M_fuselage, x_cg_fuselage=get_mass_fuselage(MTOW,l_f)
+M_tail,x_cg_tail=get_mass_tail(MTOW,l_f)
+M_fuselage_group, x_cg_fuselage_group=get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail)
+x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group, concept_3=False)
+x_cg_wing,x_cg_eng,x_cg_wing_group=get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )
+
+x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group)      # [m] x-location of the centre of mass aircraft
+y_cg = get_y_cg()                                                                       # [m] y-location of the centre of mass aircraft
+z_cg = get_z_cg(d_f_outer)                                                              # [m] z-location of the centre of mass aircraft
+
 # Empennage parameters
 V_h = [1.28, 1.28, 1.28]                                                        # [-] volume horizontal tail
 A_h = [4.95, 4.95, 4.95]                                                        # [-] aspect ratio horizontal tail
@@ -83,14 +98,12 @@ taper_ratio_h = [0.39, 0.39, 0.39]                                              
 lambda_h_le = [np.deg2rad(34) for i in range(3)]                                # [rad] leading edge sweep angle horizontal tail
 V_v = [0.1, 0.1, 0.1]                                                           # [-] volume vertical tail
 A_v = [1.9, 1.9, 1.9]                                                           # [-] aspect ratio vertical tail
-taper_ratio_v = [0.375, 0.375, 0.375]
-                                      # [-] taper ratio vertical tail
+taper_ratio_v = [0.375, 0.375, 0.375]                                          # [-] taper ratio vertical tail
 lambda_v_le = [np.deg2rad(40) for i in range(3)]                                # [rad] leading edge sweep angle vertical tail
+
 x_le_h = get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
-x_cg = get_x_cg(l_f,MTOW, MAC)                                                  # [m] x-location of the centre of mass aircraft
-y_cg = get_y_cg()                                                               # [m] y-location of the centre of mass aircraft
-z_cg = get_z_cg(d_f_outer)                                                      # [m] z-location of the centre of mass aircraft
+
 S_h = get_S_h(S, MAC, x_cg, V_h, x_le_h)                                        # [m^2] surface area horizontal tail
 S_v = get_S_v(S, b, x_cg, V_v, x_le_v)                                          # [m^2] surface area vertical tail
 b_h = get_b_h(S_h, A_h)                                                         # [m] span horizontal tail
@@ -149,7 +162,7 @@ Cl_max = [1.552, 1.582, 1.584]
 # airfoil design
 # CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
 # CL_alpha: Wing CL_alpha for three configurations
-Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
+Reto1, Re1, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
 CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
@@ -208,3 +221,8 @@ Mass/payload-range diagram
 """
 # [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i)
 #  for i in range(3)]
+
+#create loading diagram with new Cl and Cd
+CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
+for i in range(3):
+    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)

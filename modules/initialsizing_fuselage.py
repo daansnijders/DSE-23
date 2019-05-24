@@ -54,3 +54,6 @@ def get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in):
 def get_cargo_mass(N_pax,M_payload):
     M_cargo =[ M_payload[i]-N_pax[i]*(M_pax+M_carry_on+M_check_in)  for i in range(3)]               #[kg] Total cargo weight
     return M_cargo
+
+def get_passenger_luggage_mass(N_pax):
+    return[N_pax[i]*(M_pax+M_carry_on+M_check_in) for i in range(3)]
