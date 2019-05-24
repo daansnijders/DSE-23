@@ -95,6 +95,7 @@ Lift-over-drag ratio				LoverD
 
 Cruise speed					V_cruise	
 approach speed					V_a
+dive speed					V_dive 
 Stall speed					V_s
 climb gradient 					c
 Take off parameter				TOP
