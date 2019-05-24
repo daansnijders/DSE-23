@@ -105,6 +105,10 @@ lambda_v_le = [np.deg2rad(40) for i in range(3)]                                
 x_le_h = get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
 
+x_cg = get_x_cg(l_f,MTOW, MAC, concept_3 = True)                                # [m] x-location of the centre of mass aircraft
+y_cg = get_y_cg()                                                               # [m] y-location of the centre of mass aircraft
+z_cg = get_z_cg(d_f_outer)                                                      # [m] z-location of the centre of mass aircraft
+
 S_h = get_S_h(S, MAC, x_cg, V_h, x_le_h)                                        # [m^2] surface area horizontal tail
 S_v = get_S_v(S, b, x_cg, V_v, x_le_v)                                          # [m^2] surface area vertical tail
 
@@ -167,27 +171,53 @@ Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTO
 
 CD0, CDcruise, LoverD=drag3(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
-# Performance
-# because Daan is a dirty excel peasant;
-cg_loc = [[13.77959501, 14.18196565], [15.61658861, 15.58711579], [15.63183016, 15.59763311]]
-# cg_loc [landing, takeoff]
 
-# update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
-take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], 2*thrust_max, 2*0.85*thrust_max,
-                                                   CDcruise[i], CLmaxto[i], S[i],
-                                                   get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
-                                                                            cg_loc[i][1], z_cg[i] - z_mlg[i], g))
+"""
+---
+~~~ Performance
+---
+"""
+
+cg_loc = [[13.77959501, 14.18196565], [15.61658861, 15.58711579], [15.63183016, 15.59763311]]  # c.g. location [m]
+#  because Daan uses excel
+
+"""
+Airport performance
+"""
+
+# take-off
+take_off_thrust = 2 * thrust_max
+climb_out_thrust = 2 * 0.85 * thrust_max
+take_off_friction_coefficient = [get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i], cg_loc[i][1], z_cg[i] -
+                                                          z_mlg[i], g) for i in range(3)]
+
+take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], take_off_thrust, climb_out_thrust,
+                                                   CDcruise[i], CLmaxto[i], S[i], take_off_friction_coefficient[i])
                          for i in range(3)]
 
-landing_field_length = [get_landing_field_length(2*thrust_max, get_m_landing(MTOW[i], 2*thrust_max), g, h_screen,
-                                                 rho_0, S[i], CLmaxto[i], CDcruise[i],
-                                                 get_friction_coefficient(P_nw[i], get_m_landing(MTOW[i], 2*thrust_max),
-                                                                          x_mlg[i], x_nlg[i], cg_loc[i][0], z_cg[i]
-                                                                          - z_mlg[i], g)+.4)
+# landing
+landing_thrust = 2 * thrust_max  # for thrust reversal
+landing_mass = [get_m_landing(MTOW[i], 2 * thrust_max) for i in range(3)]
+landing_friction_coefficient = [get_friction_coefficient(P_nw[i], landing_mass[i], x_mlg[i], x_nlg[i], cg_loc[i][0],
+                                                         z_cg[i] - z_mlg[i], g) for i in range(3)]
+
+landing_field_length = [get_landing_field_length(landing_thrust, landing_mass[i], g, h_screen, rho_0, S[i], CLmaxto[i],
+                                                 CDcruise[i], landing_friction_coefficient[i])
                         for i in range(3)]
 
+"""
+Cruise fuel economy
+"""
 fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
 
-V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
-climb_gradient = [get_climb_gradient(thrust_max, 0.5 * rho_0 * V_climb[i]**2 * 3*CDcruise[i] * S[i], MTOW[i], g) for i in range(3)]
-rate_of_climb = [get_rate_of_climb(V_climb[i],climb_gradient[i]) for i in range(3)]
+"""
+Climb performance
+"""
+V_to = [1.05 * get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range(3)]  # horizontal velocity during TO climb
+V_approach = [1.3 * get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in
+              range(3)]  # horizontal velocity during landing
+CDto = drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLmaxto)[1]
+climb_gradient = [get_climb_gradient(2 * thrust_max, 0.5 * rho_0 * V_approach[i] ** 2 * CDto[i] * S[i], MTOW[i], g)
+                  for i in range(3)]
+rate_of_climb = [get_rate_of_climb(2 * thrust_max, 0.5 * rho_0 * V_approach[i] ** 2 * CDto[i] * S[i], V_cruise, MTOW[i],
+                                   g) for i in range(3)]

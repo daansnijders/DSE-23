@@ -14,7 +14,8 @@ from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
-from modules.initialsizing_loading import *
+from modules.payload_range import *
+# from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
 
 N_pax = [90,120,120]                                                            # [-] number of passengers
@@ -113,9 +114,6 @@ Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m] tip chord length vertical tail
 
 
-
-
-
 # Undercarriage
 """Inputs that might be better located in constants"""
 N_mw = 4                                                                        # [-] number of wheels mlg
@@ -169,48 +167,60 @@ Reto1, Re1, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW,
 CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
 
-#loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
-# Performance
-# because Daan is a dirty excel peasant;
-cg_loc = [[12.80353534, 12.76158237], [16.92946042, 17.3060118], [16.93525685, 17.46464004]]
-# cg_loc [landing, takeoff]
+# loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 
+"""
+---
+~~~ Performance
+---
+"""
+cg_loc = [[12.80353534, 12.76158237], [16.92946042, 17.3060118], [16.93525685, 17.46464004]]  # c.g. location [m],
+#  because Daan uses excel
 
+"""
+Airport performance
+"""
 
+# take-off
+take_off_thrust = 2*thrust_max
+climb_out_thrust = 2*0.85*thrust_max
+take_off_friction_coefficient = [get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i], cg_loc[i][1], z_cg[i] -
+                                                          z_mlg[i], g) for i in range(3)]
 
-
-
-
-# update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
-#needs revision
-
-take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], 2*thrust_max, 2*0.85*thrust_max,
-                                                   CDcruise[i], CLmaxto[i], S[i],
-                                                   get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
-                                                                            cg_loc[i][1], z_cg[i] - z_mlg[i], g))
+take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], take_off_thrust, climb_out_thrust,
+                                                   CDcruise[i], CLmaxto[i], S[i], take_off_friction_coefficient[i])
                          for i in range(3)]
 
-landing_field_length = [get_landing_field_length(2*thrust_max, get_m_landing(MTOW[i], 2*thrust_max), g, h_screen,
-                                                 rho_0, S[i], CLmaxto[i], CDcruise[i],
-                                                 get_friction_coefficient(P_nw[i], get_m_landing(MTOW[i], 2*thrust_max),
-                                                                          x_mlg[i], x_nlg[i], cg_loc[i][0], z_cg[i]
-                                                                          - z_mlg[i], g)+.4)
+# landing
+landing_thrust = 2*thrust_max  # for thrust reversal
+landing_mass = [get_m_landing(MTOW[i], 2*thrust_max) for i in range(3)]
+landing_friction_coefficient = [get_friction_coefficient(P_nw[i], landing_mass[i], x_mlg[i], x_nlg[i], cg_loc[i][0],
+                                                         z_cg[i] - z_mlg[i], g) for i in range(3)]
+
+landing_field_length = [get_landing_field_length(landing_thrust, landing_mass[i], g, h_screen, rho_0, S[i], CLmaxto[i],
+                                                 CDcruise[i], landing_friction_coefficient[i])
                         for i in range(3)]
 
+"""
+Cruise fuel economy
+"""
 fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
 
-V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
+"""
+Climb performance
+"""
+V_to = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]  # horizontal velocity during TO climb
+V_approach = [1.3*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]  # horizontal velocity during landing
+CDto = drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLmaxto)[1]
+climb_gradient = [get_climb_gradient(2*thrust_max, 0.5 * rho_0 * V_approach[i]**2 * CDto[i] * S[i], MTOW[i], g)
+                  for i in range(3)]
+rate_of_climb = [get_rate_of_climb(V_to[i], climb_gradient[i]) for i in range(3)]
 
-
-
-climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
-
-rate_of_climb=[get_rate_of_climb(V_climb[i], climb_gradient[i]) for i in range(3)]
-
-climb_gradient = [get_climb_gradient(thrust_max, 0.5 * rho_0 * V_climb[i]**2 * 3*CDcruise[i] * S[i], MTOW[i], g) for i in range(3)]
-rate_of_climb = [get_rate_of_climb(V_climb[i],climb_gradient[i]) for i in range(3)]
-
-
+"""
+Mass/payload-range diagram
+"""
+# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i)
+#  for i in range(3)]
 
 #create loading diagram with new Cl and Cd
 CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
