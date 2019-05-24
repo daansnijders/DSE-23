@@ -72,9 +72,18 @@ ax.scatter(points[:,0],points[:,1])
 pos_curve_fn = np.poly1d(np.polyfit([0, V_S, V_A], [0, 1.0, n_lim_pos], 2))
 pos_curve_x1 = np.linspace(0, V_S,50)
 pos_curve_y1 = pos_curve_fn(pos_curve_x1)
-
 pos_curve_x2 = np.linspace(V_S, V_A,50)
 pos_curve_y2 = pos_curve_fn(pos_curve_x2)
 
 ax.plot(pos_curve_x1, pos_curve_y1, color = 'C0', linestyle = ':')
 ax.plot(pos_curve_x2, pos_curve_y2, color = 'C0')
+
+# negative Cn_max polynomial fit
+neg_curve_fn = np.poly1d(np.polyfit([0, V_S_neg, V_A], [0, -1.0, -n_lim_neg], 2))
+neg_curve_x1 = np.linspace(0, V_S_neg, 50)
+neg_curve_y1 = neg_curve_fn(neg_curve_x1)
+neg_curve_x2 = np.linspace(V_S_neg, V_A, 50)
+neg_curve_y2 = neg_curve_fn(neg_curve_x2)
+
+ax.plot(neg_curve_x1, neg_curve_y1, color = 'C1', linestyle = ':')
+ax.plot(neg_curve_x2, neg_curve_y2, color = 'C1')
