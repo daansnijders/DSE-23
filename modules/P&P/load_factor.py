@@ -7,7 +7,7 @@ Created on Fri May 24 09:16:35 2019
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
-from inputs.concept_1 import * 
+from inputs.concept_1 import *
 
 # inputs:
 C_L_max = 1.5                                                                   # [-]
@@ -66,4 +66,10 @@ points = np.array([[0,0],
 fig = plt.figure(figsize = (12,5))
 ax = fig.add_subplot(111)
 ax.scatter(points[:,0],points[:,1])
+ax.plot()
 
+# positive Cn_max polynomial fit
+pos_curve_fn = np.poly1d(np.polyfit([0, V_S, V_A], [0, 1.0, n_lim_pos], 2))
+pos_curve_x = np.arange(0, V_A)
+pos_curve_y = pos_curve_fn(pos_curve_x)
+ax.plot(pos_curve_x, pos_curve_y)
