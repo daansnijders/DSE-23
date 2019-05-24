@@ -59,6 +59,8 @@ taper ratio of horizontal tail			taper_ratio_h
 taper ratio of vertical tail			taper_ratio_v
 sweep angle leading edge H tail 		lambda_h_le_rad
 sweep angle leading edge V tail 		lambda_v_le_rad
+sweep angle half chord V tail			lambda_v_2_rad
+sweep angle half chord H tail			lambda_h_2_rad
 horizontal tail length				l_h
 
 
