@@ -58,6 +58,25 @@ V_D = calc_V_D(V_C)                                                             
 V_A = calc_V_A(V_S,V_C,n_lim_pos)                                               # [m/s]
 V_S_neg = calc_V_S_neg(MTOW,C_L_min,S,rho)                                      # [m/s]
 
+
+def calc_gust_lf(W_S,MAC,rho,H_ft,C_L_alpha,g):
+    W_S_psf = W_S / 47.88026                                                    # [psf]
+    mu_g = 2 * W_S_psf / (rho * MAC * g * C_L_alpha)
+    K_g = 0.88 * mu_g / (5.3 + mu_g)
+    U_de_C = 66.67 - 0.000833 * H_ft
+    U_de_D = 33.34 - 0.000417 * H_ft
+    
+    n_lim_C = 1 + (K_g * U_de_C * V * C_L_alpha)/(498 * W_S_psf)
+    n_lim_D = 1 + (K_g * U_de_D * V * C_L_alpha)/(498 * W_S_psf)
+
+
+
+
+
+
+
+
+
 points = np.array([[0,0],
                   [0,1],
                   [V_S,1],
