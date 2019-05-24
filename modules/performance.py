@@ -8,7 +8,7 @@ def get_climb_gradient(T, D, m, g):
     return y
 
 
-def get_rate_of_climb( V, climb_gradient):
+def get_rate_of_climb(V, climb_gradient):
     # from Lan, C.E. and Roskam, J., Airplane Aerodynamics & Performance, page 384
     RC = climb_gradient * V
     return RC

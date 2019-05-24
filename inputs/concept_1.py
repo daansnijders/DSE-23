@@ -201,11 +201,10 @@ V_approach = [1.3*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3
 CDto = drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLmaxto)[1]
 climb_gradient = [get_climb_gradient(2*thrust_max, 0.5 * rho_0 * V_approach[i]**2 * CDto[i] * S[i], MTOW[i], g)
                   for i in range(3)]
-rate_of_climb = [get_rate_of_climb(2 * thrust_max, 0.5 * rho_0 * V_approach[i]**2 * CDto[i] * S[i], V_cruise, MTOW[i],
-                                   g) for i in range(3)]
+rate_of_climb = [get_rate_of_climb(V_to[i], climb_gradient[i]) for i in range(3)]
 
 """
 Mass/payload-range diagram
 """
-# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i])
+# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i)
 #  for i in range(3)]
