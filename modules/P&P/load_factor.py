@@ -66,10 +66,15 @@ points = np.array([[0,0],
 fig = plt.figure(figsize = (12,5))
 ax = fig.add_subplot(111)
 ax.scatter(points[:,0],points[:,1])
-ax.plot()
+
 
 # positive Cn_max polynomial fit
 pos_curve_fn = np.poly1d(np.polyfit([0, V_S, V_A], [0, 1.0, n_lim_pos], 2))
-pos_curve_x = np.arange(0, V_A)
-pos_curve_y = pos_curve_fn(pos_curve_x)
-ax.plot(pos_curve_x, pos_curve_y)
+pos_curve_x1 = np.linspace(0, V_S,50)
+pos_curve_y1 = pos_curve_fn(pos_curve_x1)
+
+pos_curve_x2 = np.linspace(V_S, V_A,50)
+pos_curve_y2 = pos_curve_fn(pos_curve_x2)
+
+ax.plot(pos_curve_x1, pos_curve_y1, color = 'C0', linestyle = ':')
+ax.plot(pos_curve_x2, pos_curve_y2, color = 'C0')
