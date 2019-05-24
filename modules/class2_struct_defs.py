@@ -26,4 +26,3 @@ def get_landinggear_mass():
 def get_engine_mass():
     return 'ok'
 
-def get
