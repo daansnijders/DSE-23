@@ -14,19 +14,18 @@ class Class2_weight:
         self.n_ult=1.5*loadfactor
     def structural_mass(self):
         M_wing=get_wing_mass(self.MTOW)
-        return M_wing
-#        M_fuselage=get_fuselage_mass()
-#        M_nacelle= get_nacelle_mass()
-#        M_empennage=get_empennage_mass()
-#        M_landinggear=get_landinggear_mass()
-#        
-#        M_structure=M_wing +M_fuselage+M_nacelle+M_empennage+M_landinggear
-#        
-#        
+        M_fuselage=get_fuselage_mass()
+        M_nacelle= get_nacelle_mass()
+        M_empennage=get_empennage_mass()
+        M_landinggear=get_landinggear_mass()
+        
+        M_structure=M_wing +M_fuselage+M_nacelle+M_empennage+M_landinggear
+        
+        
     
 #    def powerplant_mass():
 #        M_engine=get_engine_mass()
-#        M_airinduction=get_airinductuin_mass()
+#        M_airinduction=get_airinduction_mass()
 #        M_fuelsystem=get_fuelsystem_mass()
 #        M_propulsionsystem=get_propulsionsystem_mass()
 #         
