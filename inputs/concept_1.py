@@ -103,12 +103,9 @@ z_cg = get_z_cg(d_f_outer)                                                      
 V_h = [1.28, 1.28, 1.28]                                                        # [-] volume horizontal tail
 A_h = [4.95, 4.95, 4.95]                                                        # [-] aspect ratio horizontal tail
 taper_ratio_h = [0.39, 0.39, 0.39]                                              # [-] taper ratio horizontal tail
-lambda_h_le_rad = [np.deg2rad(34) for i in range(3)]                            # [rad] leading edge sweep angle horizontal tail
 V_v = [0.1, 0.1, 0.1]                                                           # [-] volume vertical tail
 A_v = [1.9, 1.9, 1.9]                                                           # [-] aspect ratio vertical tail
 taper_ratio_v = [0.375, 0.375, 0.375]                                           # [-] taper ratio vertical tail
-lambda_v_le_rad = [np.deg2rad(40) for i in range(3)]                            # [rad] leading edge sweep angle vertical tail
-
 x_le_h = get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
 
@@ -120,6 +117,15 @@ Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                        
 Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                            # [m] tip chord length horizontal tail
 Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        # [m] root chord lengh vertical tail
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m] tip chord length vertical tail
+
+lambda_h_le_rad = [np.deg2rad(34) for i in range(3)]                            # [rad] leading edge sweep angle horizontal tail
+lambda_h_4_rad= get_lambda_4_rad_from_lambda_le(lambda_h_le_rad,Cr_h,b_h,taper_ratio_h)
+lambda_h_2_rad=get_lambda_2_rad(lambda_h_4_rad,A_h,taper_ratio_h)
+
+
+lambda_v_le_rad = [np.deg2rad(40) for i in range(3)]                            # [rad] leading edge sweep angle vertical tail
+lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
+lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
 
 
 #undercarriage

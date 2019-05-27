@@ -15,6 +15,10 @@ def get_b(A,S):
 def get_lambda_4_rad(M_cr, M_x):
     return [np.arccos((0.75 * M_x)/(M_cr + 0.03)) for i in range(3)]
 
+def get_lambda_4_rad_from_lambda_le(lambda_le_rad,Cr,b,taper_ratio):
+    lambda_4_rad=[np.arctan(np.tan(lambda_le_rad[i])+Cr[i]/(2*b[i])*(taper_ratio[i]-1)) for i in range(3)]
+    return lambda_4_rad
+
 def get_taper_ratio(lambda_4_rad):
     return [0.2*(2-lambda_4_rad[i]) for i in range(3)]
 

@@ -15,6 +15,7 @@ kts_to_ms = 0.514444444                                                         
 ms_to_kts=1/(kts_to_ms)
 m_to_ft = 1/(ft_to_m)
 kg_to_lbs = 2.20462262 
+lbs_to_kg=1/(kg_to_lbs)
 
 
 #FLIGHT PARAMETERS parameters
@@ -79,9 +80,9 @@ h_floor = 0.2                                                                   
 l_cockpit = 4                                                                   # [m] cockpit length
 
 #engine properties
-M_engine = 4800                                                              # [lbs] mass of a single engine
-n_engines = 2                                                                   # [-] number of engines used
-n_fueltanks  = 4                                                                   # [-] number of integral fuel tanks  
+M_engine = 4800.                                                              # [lbs] mass of a single engine
+n_engines = 2.                                                                   # [-] number of engines used
+n_fueltanks  = 4.                                                                  # [-] number of integral fuel tanks  
 d_eng = 2.006                                                                       # [m] diameter of the engine
 d_fan=2.006                                                                       #[m] diameter of the fan
 l_eng = 3.184                                                                   # [m] length of the engine
@@ -103,7 +104,8 @@ psi = 55                                                                        
 K_fsp = 6.55                                                                    # [lbs/gal] see page 91 from torenbeek V
 K_fc = 0.64     
 K_h=1.1                                                                             # for movable incidence stabilizers
-K_v= 1                                                                                  # is for fuselage mounted H tail
+K_v= 1                                                                              # is for fuselage mounted H tail
+K_f=1.08                                                                             # pressurized fuselage
 
 K_gr=1                                                                                  #depends on the low wing or high wing
 Ag_main=40                                                                      #torenbeek landinggear main and nose (both retractable)
