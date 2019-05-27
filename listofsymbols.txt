@@ -11,6 +11,7 @@ Wing loading					W_S
 fuel fractions					M_ff
 Fuel mass					M_fuel
 required thrust 				T_req
+required thust take off				T_req_TO
 Payload mass					M_payload
 cabin length					l_cabin
 inner fuselage diameter				d_f_inner
@@ -25,6 +26,10 @@ Total storage volume				V_cc
 Volume for cargo				V_cargo_available
 Mass available for cargo			M_cargo_available
 Mass of the wing group				M_wing_group
+mass of the fuselage group			M_fuselage_group
+mass of the tail				M_tail
+mass of the wing				M_wing
+mass of the fuselage				M_fuselage
 
 
 
@@ -55,10 +60,17 @@ Horizontal tail volume				V_h
 Vertical tail volume				V_v
 Aspect ratio horizontal tail			A_h
 Aspect ratio vertical tail			A_v
+area of H tail					S_h
+area of V tail					S_v
+
 taper ratio of horizontal tail			taper_ratio_h
 taper ratio of vertical tail			taper_ratio_v
-sweep angle leading edge H tail 		lambda_h_le
-sweep angle leading edge V tail 		lambda_v_le
+sweep angle leading edge H tail 		lambda_h_le_rad
+sweep angle leading edge V tail 		lambda_v_le_rad
+sweep angle half chord V tail			lambda_v_2_rad
+sweep angle half chord H tail			lambda_h_2_rad
+horizontal tail length				l_h
+
 
 x location of the CG				x_cg
 y location of the CG				y_cg
@@ -95,6 +107,7 @@ Lift-over-drag ratio				LoverD
 
 Cruise speed					V_cruise	
 approach speed					V_a
+dive speed					V_dive 
 Stall speed					V_s
 climb gradient 					c
 Take off parameter				TOP

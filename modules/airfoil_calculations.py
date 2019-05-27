@@ -38,7 +38,7 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Ta
     CLmax = [0.8*Cl_max[i]-0.24 for i in range(3)]
     
     CLmaxto = [0.8*Cl_max[i] for i in range(3)]
-    return(Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto)
+    return(Reto1, Re1, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto)
        
 
 #### drag1 calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 1   
@@ -64,7 +64,7 @@ def drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_fuselage, D, Dnacel, Lnacel, swe
     CDcruise = [CD0[i] + 1/(pi*A[i]*e[i])*CLdes[i]**2 for i in range(3)]
     
     LoverD = [CLdes[i]/CDcruise[i] for i in range(3)]
-    return(CD0, CDcruise, LoverD)
+    return(CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane)
     
 
 #### drag calculates CD0 for each concept and configuration as well as CDcruise FOR CONCEPT 2  

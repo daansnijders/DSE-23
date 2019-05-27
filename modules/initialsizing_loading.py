@@ -49,11 +49,11 @@ def thrustloading_climbgradient(c,V,CD0):
     return TW_cV
 
 def get_WSrange(WSstart,WSend,D_WS):
-    return np.arange(WSstart,WSend,D_WS)
+    return np.linspace(WSstart,WSend,D_WS)
 
 
     
-def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart,WSend,D_Ws):
+def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0,WSstart,WSend,D_Ws):
     
     CD_climb=4*CD0
     Cl_climb=(3*CD0*pi*A*e)**0.5
@@ -62,7 +62,6 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
     
     V_s=stallspeedlanding(Sland)
 
-    V_climb=300/3.6
     WS_L=wingloading_landing(Cl_land, V_s)
     WS_TO=wingloading_takeoff(Sland,Cl_land,f)
     
@@ -72,23 +71,26 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,WSstart
     TW_climb=thrustloading_climbrate(c,Cl_climb,CD_climb,WSrange)
     TW_cV= thrustloading_climbgradient(c,V_climb,CD0)
     
-    plt.figure()
-    plt.plot(WSrange,TW_cruise, label='Cruise condition ')      
-    plt.plot(WSrange,TW_climb,label='Climb rate condition' ) 
-    plt.axhline(TW_cV,label='Climb gradient condition' ) 
-    plt.axvline(WS_TO, label='Take off W/S',color='r')
-    plt.axvline(WS_L, label='Landing W/S')
-    plt.plot(WSrange,TW_TO,label='Take-off condition ')
-    plt.title('Wing/Thrust Loading Diagram')
-    plt.xlabel('W/S[-]',size=16)
-    plt.ylabel('T/W[-]',size=16)
-    plt.legend()
-    plt.show()
+    fig = plt.figure(figsize = (12,5))
+    ax = fig.add_subplot(111)
+    ax.plot(WSrange,TW_cruise, label='Cruise condition ')      
+    ax.plot(WSrange,TW_climb,label='Climb rate condition' ) 
+    ax.axhline(TW_cV,label='Climb gradient condition' ) 
+    ax.axvline(WS_TO, label='Take off W/S',color='r')
+    ax.axvline(WS_L, label='Landing W/S')
+    ax.plot(WSrange,TW_TO,label='Take-off condition ')
+    ax.fill_between(WSrange, TW_climb, 2, where = (TW_cruise <= TW_climb) * (WSrange < WS_L), facecolor='green', interpolate=False)
+    ax.fill_between(WSrange, TW_cruise, 2, where = (TW_cruise >= TW_climb) * (WSrange < WS_L), facecolor='green', interpolate=False)
+    ax.scatter(4359,0.33, color = 'r',linewidths=5, label = 'Design point')
+    ax.set(title = 'Wing/Thrust Loading Diagram', xlabel = 'W/S[-]', ylabel = 'T/W[-]', ylim = (0,max(TW_climb)), xlim = (0,5500))
+    ax.legend(loc='upper right')
+    plt.savefig('./Output/loading_diagram.pdf')
+    return TW_cruise,TW_climb,WSrange,WS_L
 
 
-CD0, CD0_TO, CD0_land=dragcoefficient(Cfe,Swet_S)
-#
-#loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0,100,7100,100)
+#CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
+#loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,c,f,sigma, TOP, CD0_roskam,100,7100,100)
+
 #WS=np.arange(100,7100,100)
 #
 #WS_landing=0.5*rho_0*V_s**2*CL_land_max

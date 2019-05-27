@@ -12,6 +12,8 @@ inch_to_m=0.0254                                                                
 inchsq_to_msq=0.00064516                                                        # [m^2/in^2] inches squared to metres squared
 ft_to_m=0.3048                                                                  # [m/ft] feet to metres
 kts_to_ms = 0.514444444                                                         # [m/s/kts] knots to metres per second
+m_to_ft = 1/(ft_to_m)
+kg_to_lbs = 2.20462262 
 
 
 #FLIGHT PARAMETERS parameters

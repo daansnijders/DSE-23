@@ -14,20 +14,22 @@ from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
+from modules.payload_range import *
+# from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
 
 N_pax = [90,120,120]                                                            # [-] number of passengers
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
 
-T_W    = [0.295,0.295,0.295]                                                    # [-] thrust over weight ratio
-W_S    = [4253, 4253, 4253]                                                     # [N/m^2] weight over wing surface area
+T_W    = [0.29,0.29,0.29]                                                    # [-] thrust over weight ratio
+W_S    = [4405, 4405 , 4405]                                                     # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
 OEW = [34631.92,38223.31,38729.81]                                              # [kg] operational empty weight
 MTOW = [58722.6,67394,68264.27]                                                 # [kg] maximum take-off weight
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
 T_req = get_T_req(T_W, MTOW)                                                    # [N] required thrust
 M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
-
+M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
@@ -74,27 +76,36 @@ y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
+
+
+
+#cg and masses of components
+M_wing, M_eng, M_wing_group=get_mass_winggroup(MTOW)
+M_fuselage, x_cg_fuselage=get_mass_fuselage(MTOW,l_f)
+M_tail,x_cg_tail=get_mass_tail(MTOW,l_f)
+M_fuselage_group, x_cg_fuselage_group=get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail)
+x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group, concept_3=False)
+x_cg_wing,x_cg_eng,x_cg_wing_group=get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )
+
+x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group)      # [m] x-location of the centre of mass aircraft
+y_cg = get_y_cg()                                                                       # [m] y-location of the centre of mass aircraft
+z_cg = get_z_cg(d_f_outer)                                                              # [m] z-location of the centre of mass aircraft
+
 # Empennage parameters
 V_h = [1.28, 1.28, 1.28]                                                        # [-] volume horizontal tail
 A_h = [4.95, 4.95, 4.95]                                                        # [-] aspect ratio horizontal tail
 taper_ratio_h = [0.39, 0.39, 0.39]                                              # [-] taper ratio horizontal tail
-lambda_h_le = [np.deg2rad(34) for i in range(3)]                                # [rad] leading edge sweep angle horizontal tail
-
+lambda_h_le_rad = [np.deg2rad(34) for i in range(3)]                                # [rad] leading edge sweep angle horizontal tail
 V_v = [0.1, 0.1, 0.1]                                                           # [-] volume vertical tail
 A_v = [1.9, 1.9, 1.9]                                                           # [-] aspect ratio vertical tail
-taper_ratio_v = [0.375, 0.375, 0.375]                                           # [-] taper ratio vertical tail
-lambda_v_le = [np.deg2rad(40) for i in range(3)]                                # [rad] leading edge sweep angle vertical tail
+taper_ratio_v = [0.375, 0.375, 0.375]                                          # [-] taper ratio vertical tail
+lambda_v_le_rad = [np.deg2rad(40) for i in range(3)]                                # [rad] leading edge sweep angle vertical tail
 
 x_le_h = get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
 
-x_cg = get_x_cg(l_f,MTOW, MAC)                                                  # [m] x-location of the centre of mass aircraft
-y_cg = get_y_cg()                                                               # [m] y-location of the centre of mass aircraft
-z_cg = get_z_cg(d_f_outer)                                                      # [m] z-location of the centre of mass aircraft
-
 S_h = get_S_h(S, MAC, x_cg, V_h, x_le_h)                                        # [m^2] surface area horizontal tail
 S_v = get_S_v(S, b, x_cg, V_v, x_le_v)                                          # [m^2] surface area vertical tail
-
 b_h = get_b_h(S_h, A_h)                                                         # [m] span horizontal tail
 b_v = get_b_v(S_v, A_v)                                                         # [m] span vertical tail
 Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                        # [m] root chord length horizontal tail
@@ -151,32 +162,67 @@ Cl_max = [1.552, 1.582, 1.584]
 # airfoil design
 # CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
 # CL_alpha: Wing CL_alpha for three configurations
-Reto1, Reto2, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
+Reto1, Re1, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 
-CD0, CDcruise, LoverD=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
+CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
-# Performance
-# because Daan is a dirty excel peasant;
-cg_loc = [[12.80353534, 12.76158237], [16.92946042, 17.3060118], [16.93525685, 17.46464004]]
-# cg_loc [landing, takeoff]
 
-# update with correct CL, CD once available. Adapt to 1 or 2 engines depending on requirement.
-take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], 2*thrust_max, 2*0.85*thrust_max,
-                                                   CDcruise[i], CLmaxto[i], S[i],
-                                                   get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i],
-                                                                            cg_loc[i][1], z_cg[i] - z_mlg[i], g))
+# loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
+
+"""
+---
+~~~ Performance
+---
+"""
+cg_loc = [[12.80353534, 12.76158237], [16.92946042, 17.3060118], [16.93525685, 17.46464004]]  # c.g. location [m],
+#  because Daan uses excel
+
+"""
+Airport performance
+"""
+
+# take-off
+take_off_thrust = 2*thrust_max
+climb_out_thrust = 2*0.85*thrust_max
+take_off_friction_coefficient = [get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i], cg_loc[i][1], z_cg[i] -
+                                                          z_mlg[i], g) for i in range(3)]
+
+take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], take_off_thrust, climb_out_thrust,
+                                                   CDcruise[i], CLmaxto[i], S[i], take_off_friction_coefficient[i])
                          for i in range(3)]
 
-landing_field_length = [get_landing_field_length(2*thrust_max, get_m_landing(MTOW[i], 2*thrust_max), g, h_screen,
-                                                 rho_0, S[i], CLmaxto[i], CDcruise[i],
-                                                 get_friction_coefficient(P_nw[i], get_m_landing(MTOW[i], 2*thrust_max),
-                                                                          x_mlg[i], x_nlg[i], cg_loc[i][0], z_cg[i]
-                                                                          - z_mlg[i], g)+.4)
+# landing
+landing_thrust = 2*thrust_max  # for thrust reversal
+landing_mass = [get_m_landing(MTOW[i], 2*thrust_max) for i in range(3)]
+landing_friction_coefficient = [get_friction_coefficient(P_nw[i], landing_mass[i], x_mlg[i], x_nlg[i], cg_loc[i][0],
+                                                         z_cg[i] - z_mlg[i], g) for i in range(3)]
+
+landing_field_length = [get_landing_field_length(landing_thrust, landing_mass[i], g, h_screen, rho_0, S[i], CLmaxto[i],
+                                                 CDcruise[i], landing_friction_coefficient[i])
                         for i in range(3)]
 
+"""
+Cruise fuel economy
+"""
 fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
 
-V_climb = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]
-climb_gradient = [get_climb_gradient(thrust_max*.3, 0.5 * rho_0 * V_climb[i]**2, MTOW[i], g) for i in range(3)]
+"""
+Climb performance
+"""
+V_to = [1.05*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]  # horizontal velocity during TO climb
+V_approach = [1.3*get_V_min(MTOW[i], g, rho_0, S[i], CLmax[i]) for i in range (3)]  # horizontal velocity during landing
+CDto = drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLmaxto)[1]
+climb_gradient = [get_climb_gradient(2*thrust_max, 0.5 * rho_0 * V_approach[i]**2 * CDto[i] * S[i], MTOW[i], g)
+                  for i in range(3)]
+rate_of_climb = [get_rate_of_climb(V_to[i], climb_gradient[i]) for i in range(3)]
 
-print(fuel_cruise)
+"""
+Mass/payload-range diagram
+"""
+# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i)
+#  for i in range(3)]
+
+#create loading diagram with new Cl and Cd
+#CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
+#for i in range(3):
+#    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
