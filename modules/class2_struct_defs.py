@@ -31,7 +31,7 @@ Dg_nose=2E-6
 
 
 def get_wing_mass(WMZF,b,S,Cr_t,lambda_2_rad,n_ult):
-    return 0.0017*WMZF*kg_to_lbs*(b*m_to_ft/cos(lambda_2_rad))**0.75*(1+(6.3*cos(lambda_2_rad)/b*m_to_ft)**0.5)*n_ult**0.55*(b*m_to_ft*S*m_to_ft**2/(Cr_t*m_to_kg)*WMZF*kg_to_lbs*cos(lambda_2_rad))**0.3
+    return 0.0017*M_MZF*kg_to_lbs*(b*m_to_ft/cos(lambda_2_rad))**0.75*(1+(6.3*cos(lambda_2_rad)/b*m_to_ft)**0.5)*n_ult**0.55*(b*m_to_ft*S*m_to_ft**2/(Cr_t*m_to_kg)*WMZF*kg_to_lbs*cos(lambda_2_rad))**0.3
 
 def get_fuselage_mass(V_dive, l_h, w_fus, h_fus, S_fus):
     return 0.021*1.08*(V_dive*l_h*m_to_ft/(w_fus*m_to_ft+h_fus*m_to_ft))**0.5*(S_fus*m_to_ft**2)**1.2
@@ -46,7 +46,7 @@ def get_nacelle_mass(T_req_TO):
     return 0.065*T_req_TO # this is total weight of ALL nacelles
 
 def get_landinggear_mass(K_gr,Ag,Bg,Cg,Dg,TOW):
-    return K_gr*(Ag+Bg*(TOW*kg_to_lbs)**0.75+Cg*TOW*kg_to_lbs+Dg*(TOW*kg_to_lbs)**1.5)
+    return K_gr*(Ag+Bg*(M_TO*kg_to_lbs)**0.75+Cg*TOW*kg_to_lbs+Dg*(TOW*kg_to_lbs)**1.5)
 
 
 

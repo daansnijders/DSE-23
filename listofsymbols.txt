@@ -3,6 +3,11 @@ go from inch to m				inch_to_m
 go from feet to m				ft_t0_m
 go from inch^2 to m^2				inchsq_to_msq
 
+Empty operational mass				OEW
+Maximum take-off mass				MTOW
+Maximum zero fuel mass				M_MZF
+Mass at take-off				M_TO
+								
 
 Number of passengers 				N_pax
 Range 						R
@@ -11,7 +16,7 @@ Wing loading					W_S
 fuel fractions					M_ff
 Fuel mass					M_fuel
 required thrust 				T_req
-required thust take off				T_req_TO
+required thust take-off				T_req_TO
 Payload mass					M_payload
 cabin length					l_cabin
 inner fuselage diameter				d_f_inner
@@ -21,6 +26,11 @@ tailcone length					l_tailcone
 tail lenght					l_tail
 fuselage length					l_f
 Fuselage radius					R_f
+width of the fuselage				w_fus
+height of the fuselage				h_fus
+Gross shell area of the fuselage		S_fus
+
+
 Overhead storage volume				V_os
 Total storage volume				V_cc
 Volume for cargo				V_cargo_available
@@ -51,6 +61,7 @@ taper ratio					taper_ratio
 Chord at root 					Cr
 chord at tip 					Ct
 thickness to chord				c_t
+mas thickness at the root chord			Cr_t
 length of the mean aero chord			MAC
 lateral loc of MAC				y_MAC
 dihedral angle					dihredral_rad
@@ -69,8 +80,8 @@ sweep angle leading edge H tail 		lambda_h_le_rad
 sweep angle leading edge V tail 		lambda_v_le_rad
 sweep angle half chord V tail			lambda_v_2_rad
 sweep angle half chord H tail			lambda_h_2_rad
-horizontal tail length				l_h
-
+horizontal tail length(c/4 wing to c/4 tail)	l_h
+vertical tail length(c/4 wing to c/4 tail)	l_v
 
 x location of the CG				x_cg
 y location of the CG				y_cg
