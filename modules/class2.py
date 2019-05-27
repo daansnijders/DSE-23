@@ -18,24 +18,40 @@ class Class2_weight:
         M_nacelle= get_nacelle_mass()
         M_empennage=get_empennage_mass()
         M_landinggear=get_landinggear_mass()
-        
-        M_structure=M_wing +M_fuselage+M_nacelle+M_empennage+M_landinggear
+    
+        M_structure=get_structural_mass(M_wing,M_fuselage,M_nacelle,M_empennage,M_landinggear)
         
         
     
-#    def powerplant_mass():
-#        M_engine=get_engine_mass()
-#        M_airinduction=get_airinduction_mass()
-#        M_fuelsystem=get_fuelsystem_mass()
-#        M_propulsionsystem=get_propulsionsystem_mass()
-#         
+    def powerplant_mass():
+        M_engine_total = get_engine_mass(M_engine)
+        M_airinduction = get_airinduction_mass()
+        M_fuelsystem = get_fuelsystem_mass(M_fuel,K_fsp)
+        M_propulsionsystem = get_propulsionsystem_mass(l_f,b)
+        M_powerplant      = get_totalpowerplant_mass(M_engine_total,M_airinduction,M_fuelsystem, M_propsystem)
+         
         
     def fixed_equipment_mass(self):
-        M_fc=get_flightcontrolsystem_mass():
-       M_fixedequipment=(self.n_ult*1000)
+        M_fc    = get_flightcontrolsystem_mass(M_TO)
+        M_hydr  = get_hydraulic_pneumatic_mass(M_TO)
+        M_els   = get_electricalsystem_mass(d_f_inner, l_cabin)
+        M_avion = get_avioncis_mass(M_TO)
+        M_environ= get_environmentsystem_mass(l_cabin)
+        M_oxygen  = get_oxygensystem_mass(N_pax)
+        M_apu   = get_apu_mass(M_TO)
+        M_furnish = get_furnish_mass(M_TO, M_fuel)
+        M_cargohand = get_cargohandling_mass(S_ff)
+        M_operations= get_operationitems_mass()
+        M_flighttest= get_flighttestinstrumentation_mass()
+        M_paint     = get_paint_mass(M_TO)
+        
+        M_fixedequipment= get_fixedequipment_mass(M_fc,M_hydr,M_els,M_avion,M_environ,M_oxygen,M_apu,M_furnish,M_cargohand,M_operation,M_flighttest,M_paint)
        return M_fixedequipment
+   def OEW(self):
+       return M_structure+M_powerplant+M_fixedequipment
    
-    
+
+
     
     
         

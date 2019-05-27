@@ -78,9 +78,25 @@ h_floor = 0.2                                                                   
 l_cockpit = 4                                                                   # [m] cockpit length
 
 #engine properties
-engine_mass = 4800                                                              # [lbs] mass of a single engine
+M_engine = 4800                                                              # [lbs] mass of a single engine
 n_engines = 2                                                                   # [-] number of engines used
-n_fueltanks  = 4                                                                # [-] number of integral fuel tanks      
+n_fueltanks  = 4                                                                   # [-] number of integral fuel tanks  
+d_eng = 2.006                                                                       # [m] diameter of the engine
+d_fan=2.006                                                                       #[m] diameter of the fan
+l_eng = 3.184                                                                   # [m] length of the engine
+
+# Undercarriage
+N_mw = 4                                                                        # [-] number of wheels mlg
+N_nw = 2                                                                        # [-] number of wheels nlg
+N_struts = 2                                                                    # [-] number of struts used
+stroke = 0.3                                                                    # [m] shock absorber stroke
+
+LCN = 45                                                                        # [-] load classification number    
+ #angles clearance
+theta = 15                                                                      # [deg] scrape angle
+beta = 17                                                                       # [deg] tip-back angle
+phi = 5                                                                         # [deg] tip clearance angle
+psi = 55                                                                        # [deg] overturn angle
 
 #constants used for Class-II                     
 K_fsp = 6.55                                                                    # [lbs/gal] see page 91 from torenbeek V
