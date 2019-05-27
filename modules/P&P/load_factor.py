@@ -61,13 +61,18 @@ V_S_neg = calc_V_S_neg(MTOW,C_L_min,S,rho)                                      
 
 def calc_gust_lf(W_S,MAC,rho,H_ft,V,C_L_alpha,g):
     W_S_psf = W_S / 47.88026                                                    # [psf]
-    mu_g = 2 * W_S_psf / (rho * MAC * g * C_L_alpha)                            # [-]
-    K_g = 0.88 * mu_g / (5.3 + mu_g)                                            # [-]
-    U_de_C = 66.67 - 0.000833 * H_ft                                            # [-]
-    U_de_D = 33.34 - 0.000417 * H_ft                                            # [-]
+    rho_sl = rho * 0.0019403203                                                 # [slug/ft^3]
+    MAC_ft = MAC * m_to_ft                                                      # [ft]
+    g_ft = g * 3.28084                                                          # [ft/s^2]
+    V_ft = V * 3.280839895013123                                                # [ft/s]
     
-    n_lim_C = 1 + (K_g * U_de_C * V * C_L_alpha)/(498 * W_S_psf)                # [-]
-    n_lim_D = 1 + (K_g * U_de_D * V * C_L_alpha)/(498 * W_S_psf)                # [-]
+    mu_g = 2 * W_S_psf / (rho_sl * MAC_ft * g_ft * C_L_alpha)                   # [-]
+    K_g = 0.88 * mu_g / (5.3 + mu_g)                                            # [-]
+    U_de_C = 66.67 - 0.000833 * H_ft                                            # [ft/s]
+    U_de_D = 33.34 - 0.000417 * H_ft                                            # [ft/s]
+    print(U_de_C,U_de_D)
+    n_lim_C = 1 + (K_g * U_de_C * V_ft * C_L_alpha)/(498 * W_S_psf)             # [-]
+    n_lim_D = 1 + (K_g * U_de_D * V_ft * C_L_alpha)/(498 * W_S_psf)             # [-]
     return n_lim_D
     
 print(calc_gust_lf(W_S[0],max(MAC),rho,H_ft,V_cruise,CL_alpha[0],g))
