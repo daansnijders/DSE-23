@@ -59,7 +59,7 @@ V_A = calc_V_A(V_S,V_C,n_lim_pos)                                               
 V_S_neg = calc_V_S_neg(MTOW,C_L_min,S,rho)                                      # [m/s]
 
 
-def calc_gust_lf(W_S,MAC,rho,H_ft,C_L_alpha,g):
+def calc_gust_lf(W_S,MAC,rho,H_ft,V,C_L_alpha,g):
     W_S_psf = W_S / 47.88026                                                    # [psf]
     mu_g = 2 * W_S_psf / (rho * MAC * g * C_L_alpha)                            # [-]
     K_g = 0.88 * mu_g / (5.3 + mu_g)                                            # [-]
@@ -68,18 +68,9 @@ def calc_gust_lf(W_S,MAC,rho,H_ft,C_L_alpha,g):
     
     n_lim_C = 1 + (K_g * U_de_C * V * C_L_alpha)/(498 * W_S_psf)                # [-]
     n_lim_D = 1 + (K_g * U_de_D * V * C_L_alpha)/(498 * W_S_psf)                # [-]
-
-
-points = np.array([[0,0],
-                  [0,1],
-                  [V_S,1],
-                  [V_A,n_lim_pos],
-                  [V_D, n_lim_pos]])
-
-fig = plt.figure(figsize = (12,5))
-ax = fig.add_subplot(111)
-ax.scatter(points[:,0],points[:,1])
-
+    return n_lim_D
+    
+print(calc_gust_lf(W_S[0],max(MAC),rho,H_ft,V_cruise,CL_alpha[0],g))
 
 # positive Cn_max polynomial fit
 pos_curve_fn = np.poly1d(np.polyfit([0, V_S, V_A], [0, 1.0, n_lim_pos], 2))
@@ -88,13 +79,7 @@ pos_curve_y1 = pos_curve_fn(pos_curve_x1)
 pos_curve_x2 = np.linspace(V_S, V_A,50)
 pos_curve_y2 = pos_curve_fn(pos_curve_x2)
 
-ax.plot(pos_curve_x1, pos_curve_y1, color = 'C0', linestyle = ':')
-ax.plot(pos_curve_x2, pos_curve_y2, color = 'C0')
-
-
 # negative Cn_max polynomial fit
-
-
 if n_lim_neg > 1:
     neg_curve_x1 = np.linspace(0, V_S_neg, 50)
     neg_curve_x2 = np.linspace(V_S_neg, V_A, 50)
@@ -106,6 +91,21 @@ else:
     neg_curve_x2 = np.linspace(V_S, V_A, 50)
     neg_curve_y1 = pos_curve_fn(neg_curve_x1) *-1
     neg_curve_y2 = np.ones(len(neg_curve_x2)) * -1
+    
+points = np.array([[0,0],
+                  [0,1],
+                  [V_S,1],
+                  [V_A,n_lim_pos],
+                  [V_D, n_lim_pos],
+                  [V_S,-n_lim_neg]])
 
-ax.plot(neg_curve_x1, neg_curve_y1, color = 'C1', linestyle = ':')
-ax.plot(neg_curve_x2, neg_curve_y2, color = 'C1')
+fig = plt.figure(figsize = (12,5))
+ax = fig.add_subplot(111)
+ax.scatter(points[:,0],points[:,1])
+
+ax.plot(neg_curve_x1, neg_curve_y1, color = 'C0', linestyle = ':')
+ax.plot(neg_curve_x2, neg_curve_y2, color = 'C0')
+
+
+ax.plot(pos_curve_x1, pos_curve_y1, color = 'C0', linestyle = ':')
+ax.plot(pos_curve_x2, pos_curve_y2, color = 'C0')

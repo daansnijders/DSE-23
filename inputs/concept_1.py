@@ -15,14 +15,14 @@ from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
-# from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
+from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
 
 N_pax = [90,120,120]                                                            # [-] number of passengers
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
 
-T_W    = [0.29,0.29,0.29]                                                    # [-] thrust over weight ratio
-W_S    = [4405, 4405 , 4405]                                                     # [N/m^2] weight over wing surface area
+T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
+W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
 OEW = [34631.92,38223.31,38729.81]                                              # [kg] operational empty weight
 MTOW = [58722.6,67394,68264.27]                                                 # [kg] maximum take-off weight
@@ -86,7 +86,7 @@ M_fuselage_group, x_cg_fuselage_group=get_mass_fuselagegroup(M_fuselage,M_tail,x
 x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group, concept_3=False)
 x_cg_wing,x_cg_eng,x_cg_wing_group=get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )
 
-x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group)      # [m] x-location of the centre of mass aircraft
+x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group)       # [m] x-location of the centre of mass aircraft
 y_cg = get_y_cg()                                                                       # [m] y-location of the centre of mass aircraft
 z_cg = get_z_cg(d_f_outer)                                                              # [m] z-location of the centre of mass aircraft
 
@@ -94,11 +94,11 @@ z_cg = get_z_cg(d_f_outer)                                                      
 V_h = [1.28, 1.28, 1.28]                                                        # [-] volume horizontal tail
 A_h = [4.95, 4.95, 4.95]                                                        # [-] aspect ratio horizontal tail
 taper_ratio_h = [0.39, 0.39, 0.39]                                              # [-] taper ratio horizontal tail
-lambda_h_le_rad = [np.deg2rad(34) for i in range(3)]                                # [rad] leading edge sweep angle horizontal tail
+lambda_h_le_rad = [np.deg2rad(34) for i in range(3)]                            # [rad] leading edge sweep angle horizontal tail
 V_v = [0.1, 0.1, 0.1]                                                           # [-] volume vertical tail
 A_v = [1.9, 1.9, 1.9]                                                           # [-] aspect ratio vertical tail
-taper_ratio_v = [0.375, 0.375, 0.375]                                          # [-] taper ratio vertical tail
-lambda_v_le_rad = [np.deg2rad(40) for i in range(3)]                                # [rad] leading edge sweep angle vertical tail
+taper_ratio_v = [0.375, 0.375, 0.375]                                           # [-] taper ratio vertical tail
+lambda_v_le_rad = [np.deg2rad(40) for i in range(3)]                            # [rad] leading edge sweep angle vertical tail
 
 x_le_h = get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
