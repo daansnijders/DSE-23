@@ -18,62 +18,40 @@ class Class2_weight:
         M_nacelle= get_nacelle_mass()
         M_empennage=get_empennage_mass()
         M_landinggear=get_landinggear_mass()
-        
-        M_structure=M_wing +M_fuselage+M_nacelle+M_empennage+M_landinggear
+    
+        M_structure=get_structural_mass(M_wing,M_fuselage,M_nacelle,M_empennage,M_landinggear)
         
         
     
-#    def powerplant_mass():
-#        M_engine=get_engine_mass()
-#        M_airinduction=get_airinduction_mass()
-#        M_fuelsystem=get_fuelsystem_mass()
-#        M_propulsionsystem=get_propulsionsystem_mass()
-#         
+    def powerplant_mass():
+        M_engine_total = get_engine_mass(M_engine)
+        M_airinduction = get_airinduction_mass()
+        M_fuelsystem = get_fuelsystem_mass(M_fuel,K_fsp)
+        M_propulsionsystem = get_propulsionsystem_mass(l_f,b)
+        M_powerplant      = get_totalpowerplant_mass(M_engine_total,M_airinduction,M_fuelsystem, M_propsystem)
+         
         
     def fixed_equipment_mass(self):
-        M_fc=get_flightcontrolsystem_mass(M_TO):
-       M_fixedequipment=(self.n_ult*1000)
+        M_fc    = get_flightcontrolsystem_mass(M_TO)
+        M_hydr  = get_hydraulic_pneumatic_mass(M_TO)
+        M_els   = get_electricalsystem_mass(d_f_inner, l_cabin)
+        M_avion = get_avioncis_mass(M_TO)
+        M_environ= get_environmentsystem_mass(l_cabin)
+        M_oxygen  = get_oxygensystem_mass(N_pax)
+        M_apu   = get_apu_mass(M_TO)
+        M_furnish = get_furnish_mass(M_TO, M_fuel)
+        M_cargohand = get_cargohandling_mass(S_ff)
+        M_operations= get_operationitems_mass()
+        M_flighttest= get_flighttestinstrumentation_mass()
+        M_paint     = get_paint_mass(M_TO)
+        
+        M_fixedequipment= get_fixedequipment_mass(M_fc,M_hydr,M_els,M_avion,M_environ,M_oxygen,M_apu,M_furnish,M_cargohand,M_operation,M_flighttest,M_paint)
        return M_fixedequipment
+   def OEW(self):
+       return M_structure+M_powerplant+M_fixedequipment
    
-   def get_flightcontrolsystem_mass(W_TO):
-    M_fc = K_fc*M_TO*kg_to_lbs**(2/3)
-    return M_fc
-def get_hydraulic_pneumatic_mass(W_TO):
-    return 0.009*W_TO*kg_to_lbs
-def get_electricalsystem_mass(d_f_inner, l_cabin):
-    V_pax =  0.25*pi*d_f_inner**2*l_cabin*m_to_ft**2
-    M_els=10.8*V_pax**0.7*(1-0.018*V_pax**0.35)
-    return M_els 
-def get_avioncis_mass(W_TO):
-    return 120+20*n_engines + 0.006*W_TO*kg_to_lbs
-def get_environmentsystem_mass(l_cabin):
-    return 6.75*l_cabin**1.28*m_to_ft
 
-def get_oxygensystem_mass(N_pax):
-    return 40+2.4*N_pax
 
-def get_apu_mass(W_TO):
-    return 0.0085*W_TO*kg_to_lbs
-
-def get_furnish_mass(W_TO, M_fuel):
-    return 0.211*(W_TO*kg_to_lbs - M_fuel*kg_to_lbs)**0.91
-
-def get_cargohandling_mass(S_ff):
-    return 3*S_ff
-
-def get_operationitems_mass():
-    return 0
-
-def get_flighttestinstrumentation_mass():
-    return 0
-
-def get_paint_mass(W_TO):
-    return 0.0045*W_TO
-
-def get_fixedequipment_mass(M_fc,M_hydr,M_els,M_avion,M_environ,M_oxygen,M_apu,M_furnish,M_cargohand,M_operation,M_flightest,M_paint):
-    M_fixedequipment=M_fc+M_hydr+M_els+M_avion+M_environ+M_oxygen+M_apu+M_furnish+M_cargohand+M_operation+M_flightest+M_paint
-    
-    return  M_fixedequipment # should be the total mass of the aformentioned 
     
     
         

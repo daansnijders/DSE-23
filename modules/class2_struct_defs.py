@@ -5,8 +5,8 @@ Created on Fri May 24 09:30:42 2019
 @author: Lisa
 """
 
-n_ult
-WMZF=MTOW-Mf
+n_ult=3.3
+WMZF=M_TO-M_fuel
 Cr_t
 
 S_fus  #area of the fuselage gross shell area inft ^2
@@ -48,5 +48,6 @@ def get_nacelle_mass(T_req_TO):
 def get_landinggear_mass(K_gr,Ag,Bg,Cg,Dg,TOW):
     return K_gr*(Ag+Bg*(M_TO*kg_to_lbs)**0.75+Cg*TOW*kg_to_lbs+Dg*(TOW*kg_to_lbs)**1.5)
 
-
+def get_structural_mass(M_wing,M_fuselage,M_nacelle,M_empennage,M_landinggear):
+    return M_wing+M_fuselage+M_nacelle+M_empennage+M_landinggear
 
