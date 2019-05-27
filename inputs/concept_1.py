@@ -43,6 +43,7 @@ l_tailcone = get_l_tailcone(d_f_outer)                                          
 l_tail = get_l_tail(d_f_outer)                                                  # [m] tail length
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m] length fuselage
 R_f = [d_f_outer[i]/2 for i in range(3)]                                        # [m] radius fuselage
+S_fus=[d_f_outer[i]**2/4*pi*l_f[i] for i in range(3)]                           #[m^2] gross shell fuselage area
 
 V_os = get_overhead_volume(l_cabin)                                             # [m^3] overhead storage volume
 V_cc = get_cargo_volume(R_f,l_cabin)                                            # [m^3] total storage volume

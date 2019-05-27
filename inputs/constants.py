@@ -12,6 +12,7 @@ inch_to_m=0.0254                                                                
 inchsq_to_msq=0.00064516                                                        # [m^2/in^2] inches squared to metres squared
 ft_to_m=0.3048                                                                  # [m/ft] feet to metres
 kts_to_ms = 0.514444444                                                         # [m/s/kts] knots to metres per second
+ms_to_kts=1/(kts_to_ms)
 m_to_ft = 1/(ft_to_m)
 kg_to_lbs = 2.20462262 
 
@@ -100,4 +101,17 @@ psi = 55                                                                        
 
 #constants used for Class-II                     
 K_fsp = 6.55                                                                    # [lbs/gal] see page 91 from torenbeek V
-K_fc = 0.64                                                                     # [-] 
+K_fc = 0.64     
+K_h=1.1                                                                             # for movable incidence stabilizers
+K_v= 1                                                                                  # is for fuselage mounted H tail
+
+K_gr=1                                                                                  #depends on the low wing or high wing
+Ag_main=40                                                                      #torenbeek landinggear main and nose (both retractable)
+Bg_main=0.16
+Cg_main=0.019
+Dg_main=1.5E-5
+
+Ag_nose=20
+Bg_nose=0.1
+Cg_nose=0
+Dg_nose=2E-6                                                                
