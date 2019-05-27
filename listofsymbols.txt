@@ -186,6 +186,14 @@ fuelfraction4					FF4
 fuelfraction5					FF5
 
 
+Mass of the engine				M_engine
+diameter of the fan				d_fan 
+length of the engine				l_eng
+number of engines				n_engines
+number of fueltanks				n_fueltanks
+
+
+
 
 
 
