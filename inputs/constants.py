@@ -76,3 +76,12 @@ rho_cargo = 160                                                                 
 h_max = 0.9                                                                     # [m] distance between the center of the fuselage and the floor
 h_floor = 0.2                                                                   # [m] floor heigth
 l_cockpit = 4                                                                   # [m] cockpit length
+
+#engine properties
+engine_mass = 4800                                                              # [lbs] mass of a single engine
+n_engines = 2                                                                   # [-] number of engines used
+n_fueltanks  = 4                                                                # [-] number of integral fuel tanks      
+
+#constants used for Class-II                     
+K_fsp = 6.55                                                                    # [lbs/gal] see page 91 from torenbeek V
+K_fc = 0.64                                                                     # [-] 

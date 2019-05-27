@@ -5,11 +5,8 @@ Created on Fri May 24 11:20:12 2019
 @author: Lisa
 """
 from inputs.constants import *
-engine_mass = 4800                                                              # [lbs] mass of a single engine
-n_engines = 2                                                                   # [-] number of engines used
-n_fueltanks  = 4                                                                # [-] number of integral fuel tanks                           
-K_fsp = 6.55                                                                    # [lbs/gal] see page 91 from torenbeek V
-                                                        # [lbs] mission fuel weight, IDK THIS ONE
+
+                                                                                
                                                     
 def get_engine_mass():                                                          #[lbs] Total engine mass (6.1, page 83 torenbeek V)
     total_engine_mass = engine_mass * n_engines
