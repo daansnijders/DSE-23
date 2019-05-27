@@ -7,6 +7,28 @@ Created on Wed Mar  6 22:27:28 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
+from inputs.concept1 import *
+from inputs.constants import *
+
+class Loading_diagram:
+    def __init__(self, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, MTOW, M_MZF, M_TO, N_rows, x_cg, y_cg, z_cg, MAC, S, b, A):
+        self.l_f=l_f
+        self.l_cabin=l_cabin
+        self.seat_pitch=seat_pitch
+        self.N_pax=N_pax
+        self.N_sa=N_sa
+        self.OEW=OEW
+        self.MTOW=MTOW
+        self.M_MZF=M_MZF
+        self.M_TO=M_TO
+        self.N_rows=N_rows
+        self.x_cg=x_cg
+        self.y_cg=y_cg
+        self.z_cg=z_cg
+        self.MAC=MAC
+        self.S=S
+        self.b=b
+        self.A=A
 
 fuselage_length=32.5
 cabin_lenght=21.19
