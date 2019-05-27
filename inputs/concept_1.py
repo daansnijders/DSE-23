@@ -54,9 +54,8 @@ V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)
 M_cargo_available = get_cargo_mass(N_pax,M_payload)                             # [kg] available cargo mass
 
 #Propulsion
-d_fan = 2.006                                                                   # [m] diameter of engine fan
+
 d_nacel = 1.1*d_fan                                                             # [m] diameter of engine nacelle
-l_eng = 3.184                                                                   # [m] length of the engine
 l_nacel = 1.1*l_eng                                                             # [m] length of the engine nacelle
 
 # Wing parameters
@@ -114,25 +113,14 @@ Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m] tip chord length vertical tail
 
 
-# Undercarriage
-"""Inputs that might be better located in constants"""
-N_mw = 4                                                                        # [-] number of wheels mlg
-N_nw = 2                                                                        # [-] number of wheels nlg
-N_struts = 2                                                                    # [-] number of struts used
-stroke = 0.3                                                                    # [m] shock absorber stroke
-
-LCN = 45                                                                        # [-] load classification number
+#undercarriage
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
 weight_distribution = 0.08                                                      # [-] weight percentage on nose wheel
 y_eng = [0.3*b[i]/2 for i in range(3)]
-d_eng = 2.006                                                                   # [m] diameter of the engine
 z_eng = -d_eng/2                                                                # [m] z-location of lowest part of the engine
 
-theta = 15                                                                      # [deg] scrape angle
-beta = 17                                                                       # [deg] tip-back angle
-phi = 5                                                                         # [deg] tip clearance angle
-psi = 55                                                                        # [deg] overturn angle
+
 theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
 beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
 phi_rad = np.deg2rad(phi)                                                       # [rad] tip clearance angle
