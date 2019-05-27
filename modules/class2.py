@@ -118,3 +118,5 @@ OEW_1=config1.OEW(struct_1,power_1,fixedeq_1)
 
 print(struct_1,power_1,fixedeq_1,'oew',OEW_1)
 
+print(struct_2,power_2,fixedeq_2,'oew',OEW_2)
+print(struct_3,power_3,fixedeq_3,'oew',OEW_3)
