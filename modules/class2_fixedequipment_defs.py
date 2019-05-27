@@ -32,7 +32,9 @@ def get_apu_mass(W_TO):
 def get_furnish_mass(W_TO, M_fuel):
     return 0.211*(W_TO*kg_to_lbs - M_fuel*kg_to_lbs)**0.91
 
-def get_cargohandling_mass(S_ff):
+def get_cargohandling_mass(l_cabin):
+    uspace = 3.68 * 0.75 / 3.18
+    S_ff = uspace * l_cabin
     return 3*S_ff
 
 def get_operationitems_mass():
