@@ -32,8 +32,8 @@ def get_furnish_mass(M_TO, M_fuel):
     return 0.211*(M_TO*kg_to_lbs - M_fuel*kg_to_lbs)**0.91
 
 def get_cargohandling_mass(l_cabin):
-    uspace = 3.68 * 0.75 / 3.18
-    S_ff = uspace * l_cabin
+    uspace = 3.68 * 0.75 / 3.18 *m_to_ft
+    S_ff = uspace * l_cabin *m_to*ft
     return 3*S_ff
 
 def get_operationitems_mass():
