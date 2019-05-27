@@ -32,3 +32,4 @@ def get_Cr_v(S_v, taper_ratio_v, b_v):
 
 def get_Ct_v(Cr_v, taper_ratio_v):
     return [Cr_v[i] * taper_ratio_v[i] for i in range(3)]
+

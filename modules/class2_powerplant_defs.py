@@ -6,14 +6,7 @@ Created on Fri May 24 11:20:12 2019
 """
 from inputs.constants import *
 
-n_engines 
-M_engine     
-M_fuel
-n_fueltanks
-K_fsp
-l_f
-b
-                                                                  
+                                                      
                                                     
 def get_engine_mass():                                                          #[lbs] Total engine mass (6.1, page 83 torenbeek V)
     M_engine_total = M_engine * n_engines
@@ -28,7 +21,7 @@ def get_fuelsystem_mass(M_fuel,K_fsp):                                          
     return M_fuelsystem
 
 def get_propulsionsystem_mass(l_f,b):                                           # [lbs] mass of propulsion system (6.5, page 83 torenbeek V)
-    M_ec = 88.46*((m_to_ft*l_f + m_to_ft*b)*n_engines/100)**0.294            # [lbs] engine control        
+    M_ec = 88.46*((m_to_ft*l_f + m_to_ft*b)*n_engines/100.)**0.294            # [lbs] engine control        
     M_ess = 9.33 * (get_engine_mass()/1000)**1.078                           # [lbs] engine startup system
     M_propsystem=M_ec+M_ess
     return M_propsystem

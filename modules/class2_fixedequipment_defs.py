@@ -9,7 +9,7 @@ from inputs.constants import *
                                                                        # [lbs] take-off weight
 
 def get_flightcontrolsystem_mass(M_TO):
-    M_fc = K_fc*M_TO*kg_to_lbs**(2/3)
+    M_fc = K_fc*(M_TO*kg_to_lbs)**(2/3)
     return M_fc
 def get_hydraulic_pneumatic_mass(M_TO):
     return 0.009*M_TO*kg_to_lbs
@@ -33,7 +33,7 @@ def get_furnish_mass(M_TO, M_fuel):
 
 def get_cargohandling_mass(l_cabin):
     uspace = 3.68 * 0.75 / 3.18 *m_to_ft
-    S_ff = uspace * l_cabin *m_to*ft
+    S_ff = uspace * l_cabin *m_to_ft
     return 3*S_ff
 
 def get_operationitems_mass():
