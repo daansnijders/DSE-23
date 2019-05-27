@@ -12,7 +12,7 @@ from inputs.concept_1 import *
 from inputs.constants import *
 from inputs.performance_inputs import *
 
-loadfactor=[2.5,3,3.2]
+loadfactor=[1.5,3,3.2]
 V_dive=[80,85,88]
 class Class2_weight:
     def __init__(self,N_pax, MTOW, loadfactor,V_dive, M_fuel ,T_req,l_f,d_f_inner,d_f_outer,l_cabin,l_h,S, b, S_v,S_h,Cr_t,lambda_2_rad,lambda_h_2_rad, lambda_v_2_rad, S_fus):
@@ -55,7 +55,7 @@ class Class2_weight:
         M_landinggear           =M_landinggear_nose+M_landinggear_main
         
         M_structure =get_structural_mass(M_wing,M_fuselage,M_nacelle,M_horizontaltail,M_verticaltail,M_landinggear)
-        return M_structure * lbs_to_kg
+        return M_wing* lbs_to_kg,M_fuselage* lbs_to_kg,M_nacelle* lbs_to_kg,M_horizontaltail* lbs_to_kg,M_verticaltail* lbs_to_kg,M_landinggear* lbs_to_kg, M_structure * lbs_to_kg
         
     
     def powerplant_mass(self):
