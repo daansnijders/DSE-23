@@ -53,10 +53,10 @@ module_mass = (cabin_length+tail_length)/fuselage_length*fuselage_mass
 g = 9.81
 
 # Safety factor 
-safety_factor = 2
+safety_factor = 1.5
 
 # Load factor
-load_factor = 2.1
+load_factor = 2.5
 
 # Density of material [kg/m^3]
 rho = 2810
@@ -516,3 +516,11 @@ print("[ANS]   Fuselage mass= ",mass_reinforcement, " kg")
 #
 #print(mmoi2(1,fuselage_diameter,cabin_height))
 #print(mmoi1(1,fuselage_diameter,cabin_height))
+plt.figure("Fuselage Thickness")
+plt.plot(x_lst,without_module_t,label="Remaining Fuselage")
+plt.plot(x_lst,with_module_t,label="Fuselage with Cabin")
+plt.title("Fuselage Skin Thickness")
+plt.legend()
+plt.xlabel("x [m]")
+plt.ylabel("Skin Thickness [mm]")
+plt.show()
