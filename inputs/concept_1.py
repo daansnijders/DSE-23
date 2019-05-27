@@ -16,7 +16,10 @@ from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
-from inputs.constants import M_cruise, M_x, rho, V_cruise, N_sa, l_cockpit, inchsq_to_msq
+from inputs.constants import *
+
+
+#initial sizing 
 
 N_pax = [90,120,120]                                                            # [-] number of passengers
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
@@ -43,6 +46,7 @@ l_tailcone = get_l_tailcone(d_f_outer)                                          
 l_tail = get_l_tail(d_f_outer)                                                  # [m] tail length
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m] length fuselage
 R_f = [d_f_outer[i]/2 for i in range(3)]                                        # [m] radius fuselage
+S_fus=[d_f_outer[i]**2/4*pi*l_f[i] for i in range(3)]                           #[m^2] gross shell fuselage area
 
 V_os = get_overhead_volume(l_cabin)                                             # [m^3] overhead storage volume
 V_cc = get_cargo_volume(R_f,l_cabin)                                            # [m^3] total storage volume
@@ -70,6 +74,7 @@ Cr = get_Cr(S,taper_ratio,b)                                                    
 Ct = get_Ct(Cr, taper_ratio)                                                    # [m] tip chord length main wing
 CL = get_CL(MTOW,rho,V_cruise,S)                                                # [-] lift coefficient aircraft
 t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   # [-] thickness over chord main wing
+Cr_t= [t_c[i]*Cr[i] for i in range(3)]                                            #thinkness at the root chord [m]
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m] mean aerodynamic chord main wing
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m] y-location of the MAC of the main wing
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
@@ -85,6 +90,10 @@ M_tail,x_cg_tail=get_mass_tail(MTOW,l_f)
 M_fuselage_group, x_cg_fuselage_group=get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail)
 x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group, concept_3=False)
 x_cg_wing,x_cg_eng,x_cg_wing_group=get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )
+
+l_h=[x_cg_tail[i]-x_cg_wing[i] for i in range(3)]
+
+
 
 x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group)       # [m] x-location of the centre of mass aircraft
 y_cg = get_y_cg()                                                                       # [m] y-location of the centre of mass aircraft
