@@ -92,9 +92,9 @@ def fuselage1_mass_analysis(MTOW1,MTOW2,OEW2,l_fuselage2,l_fuselage1,d_fuselage2
     # OEW [kg] @ 90,4000km
     OEW = OEW2 #38729.81
     # Safety factor
-    safety_factor = 2
+    safety_factor = 1.5
     # Load Factor
-    load_factor = 2.1
+    load_factor = 2.5
     # Gravitation acceleration [m/s^2]
     g = 9.81
     

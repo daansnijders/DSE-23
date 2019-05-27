@@ -27,6 +27,7 @@ y_eng = 6.3                                                                     
 
 def calc_chord_length(y, b, Cr, Ct):
     a = (Ct-Cr) / (b/2)
+    c = a*y+C
     return a*y+Cr
 
 def calc_area(length,C_l, C_s):

@@ -59,10 +59,10 @@ y = w_modules/6
 g = 9.81
 
 """ Safety Factor """
-safety_factor = 2
+safety_factor = 1.5
 
 """ Load Factor """
-load_factor = 2.1
+load_factor = 2.5
 
 """ Tensile Yield Strength [MPa] """
 strength = 503
