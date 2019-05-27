@@ -111,13 +111,26 @@ else:
     neg_curve_y1 = pos_curve_fn(neg_curve_x1) *-1
     neg_curve_y2 = np.ones(len(neg_curve_x2)) * -1
 
+# line 0,1 to Vc
+vc_gust_line_fn = np.polyfit([0, V_C], [1, n_lim_C], 1)
+vc_gust_line_intersect = (n_lim_pos - 1)/vc_gust_line_fn[0]
+vc_gust_line_x_1 = np.linspace(0, vc_gust_line_intersect, 50)
+vc_gust_line_y_1 = np.linspace(1, n_lim_pos, 50)
+vc_gust_line_x_2 = np.linspace(vc_gust_line_intersect, V_C, 50)
+vc_gust_line_y_2 = np.linspace(n_lim_pos, n_lim_C, 50)
+
+# line Vc,NlimC to Vd,NlimD
+vc_vd = np.polyfit([V_C, V_D], [n_lim_C, n_lim_D], 1)
+# print(vc_vd)
 
 points = np.array([[0,0],
                   [0,1],
                   [V_S,1],
                   [V_A,n_lim_pos],
                   [V_D, n_lim_pos],
-                  [V_S,-n_lim_neg]])
+                  [V_S,-n_lim_neg],
+                   [V_C, n_lim_C],
+                   [V_D, n_lim_D]])
 
 fig = plt.figure(figsize = (12,5))
 ax = fig.add_subplot(111)
@@ -128,3 +141,6 @@ ax.plot(neg_curve_x2, neg_curve_y2, color = 'C0')
 
 ax.plot(pos_curve_x1, pos_curve_y1, color = 'C0', linestyle = ':')
 ax.plot(pos_curve_x2, pos_curve_y2, color = 'C0')
+
+ax.plot(vc_gust_line_x_1, vc_gust_line_y_1, color = 'C0', linestyle = ':')
+ax.plot(vc_gust_line_x_2, vc_gust_line_y_2, color = 'C0')
