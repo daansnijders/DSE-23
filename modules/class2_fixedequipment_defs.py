@@ -9,7 +9,7 @@ from inputs.constants import *
                                                                        # [lbs] take-off weight
 
 def get_flightcontrolsystem_mass(M_TO):
-    M_fc = K_fc*M_TO*kg_to_lbs**(2/3)
+    M_fc = K_fc*(M_TO*kg_to_lbs)**(2/3)
     return M_fc
 def get_hydraulic_pneumatic_mass(M_TO):
     return 0.009*M_TO*kg_to_lbs

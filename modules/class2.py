@@ -84,6 +84,8 @@ class Class2_weight:
         
         M_fixedequipment= get_fixedequipment_mass(M_fc,M_hydr,M_els,M_avion,M_environ,M_oxygen,M_apu,M_furnish,M_cargohand,M_operation,M_flighttest,M_paint)
         return M_fixedequipment* lbs_to_kg
+        #return M_fc, M_hydr, M_els, M_avion, M_environ, M_oxygen, M_apu, M_cargohand, M_operation, M_flighttest, M_paint
+
    
     def OEW(self,M_structure,M_powerplant,M_fixedequipment):
        return M_structure+M_powerplant+M_fixedequipment
@@ -115,3 +117,4 @@ OEW_1=config1.OEW(struct_1,power_1,fixedeq_1)
 #OEW_3=config3.OEW()
 
 print(struct_1,power_1,fixedeq_1,OEW_1)
+#print (fixedeq_1)
