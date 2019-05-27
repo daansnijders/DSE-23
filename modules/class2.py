@@ -31,8 +31,13 @@ class Class2_weight:
 #         
         
     def fixed_equipment_mass(self):
-       M_fixed_equipment=int(self.n_ult*1000)
-       return fixed_equipment
+        M_fc=get_flightcontrolsystem_mass():
+       M_fixedequipment=(self.n_ult*1000)
+       return M_fixedequipment
+   
+    
+    
+    
         
 MTOW=80000
 OEW=40000
