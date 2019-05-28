@@ -162,7 +162,6 @@ air specific heat 				gamma
 
 Number of seats abreast				N_sa
 number of aisles				N_aisle
-Number of rows					N_rows
 width of the aisle				aisle_width
 clearance between seat and fus			s_clearance
 pitch of seats					seat_pitch
