@@ -66,6 +66,10 @@ length of the mean aero chord			MAC
 lateral loc of MAC				y_MAC
 dihedral angle					dihredral_rad
 
+surface of the canard				S_c
+aspect ratio of the canard			A_c
+span of canard					b_c
+
 
 Horizontal tail volume				V_h
 Vertical tail volume				V_v
