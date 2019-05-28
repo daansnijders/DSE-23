@@ -55,8 +55,9 @@ class Class2_weight:
         M_landinggear           =M_landinggear_nose+M_landinggear_main
         
         M_structure =get_structural_mass(M_wing,M_fuselage,M_nacelle,M_horizontaltail,M_verticaltail,M_landinggear)
+
         return  M_structure * lbs_to_kg #,M_wing* lbs_to_kg,M_fuselage* lbs_to_kg,M_nacelle* lbs_to_kg,M_horizontaltail* lbs_to_kg,M_verticaltail* lbs_to_kg,M_landinggear* lbs_to_kg,
-        
+
     
     def powerplant_mass(self):
         M_engine_total          = get_engine_mass()
@@ -115,6 +116,7 @@ fixedeq_3=config3.fixed_equipment_mass()
 config1.class2=config1.OEW(struct_1,power_1,fixedeq_1)
 config2.class2=config2.OEW(struct_2,power_2,fixedeq_2)
 config3.class2=config3.OEW(struct_3,power_3,fixedeq_3)
+
 
 
 print(config1.class2,config2.class2,config3.class2)
