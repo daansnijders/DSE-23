@@ -84,18 +84,19 @@ dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
 #canard parameters
-A_c=[0,4.95,4.95]
+A_c=[0,6,6]           
 b_c=get_b(A_c,S_c)
 lambda_c_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad] quarter chord sweep angle canard
 lambda_c_4_rad[0]=0
 taper_ratio_c = get_taper_ratio(lambda_c_4_rad)
 taper_ratio_c[0]=0                                    # [-] taper ratio canard
-#lambda_c_2_rad = [0,get_lambda_2_rad(lambda_c_4_rad,A_c,taper_ratio_c)[1]                    # [rad] half chord sweep angle canard
-Cr_c = get_Cr(S_c,taper_ratio_c,b_c)                                                    # [m] root chord length canard
-Ct_c = get_Ct(Cr_c, taper_ratio_c)                                                    # [m] tip chord length canard
+lambda_c_2_rad = [0]+ get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c)                    # [rad] half chord sweep angle canard
+Cr_c = [0]+get_Cr_canard(S_c,taper_ratio_c,b_c)                                                    # [m] root chord length canard
+Ct_c = [0]+get_Ct_canard(Cr_c, taper_ratio_c)                                                    # [m] tip chord length canard
 
-MAC_c = get_MAC(Cr_c, taper_ratio_c)                                                  # [m] mean aerodynamic chord canard
-y_MAC_c = get_y_MAC(b_c, Cr_c, MAC_c, Ct_c)                                               # [m] y-location of the MAC of the canard
+
+MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                                  # [m] mean aerodynamic chord canard
+y_MAC_c = [0]+get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                                               # [m] y-location of the MAC of the canard
 
 
 #cg and masses of components
