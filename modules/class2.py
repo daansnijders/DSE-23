@@ -16,31 +16,29 @@ loadfactor=[2.5,2.8,2.8]
 V_dive=[300,300,300]
 class Class2_weight:
     def __init__(self,N_pax, MTOW, loadfactor,V_dive, M_fuel ,T_req,l_f,d_f_inner,d_f_outer,l_cabin,l_h,S, b, S_v,S_h,Cr_t,lambda_2_rad,lambda_h_2_rad, lambda_v_2_rad, S_fus):
-        self.M_TO=MTOW
-        self.n_ult=1.5*loadfactor
-        self.V_dive=V_dive
-        self.M_fuel=M_fuel
-        self.T_req_TO=T_req
-        self.l_f=l_f
-        self.l_h=l_h
-        self.S=S
-        self.b=b
-        self.Cr_t=Cr_t
-        self.S_v=S_v
-        self.S_h=S_h
-        self.S_fus=S_fus
-        self.N_pax=N_pax
-        self.S_fus=S_fus
-        self.lambda_2_rad=lambda_2_rad
-        self.lambda_h_2_rad=lambda_h_2_rad
-        self.lambda_v_2_rad=lambda_v_2_rad
-        self.l_h=l_h
-        self.d_f_inner=d_f_inner
-        self.d_f_outer=d_f_outer
-        self.l_cabin=l_cabin
-        self.w_fus=self.d_f_outer/2
-        self.h_fus=self.d_f_outer/2
-        self.M_MZF=self.M_TO-self.M_fuel
+        self.M_TO           = MTOW                                              # [kg]?
+        self.n_ult          = 1.5*loadfactor                                    # [-]
+        self.V_dive         = V_dive                                            # []?
+        self.M_fuel         = M_fuel                                            # []?
+        self.T_req_TO       = T_req                                             # [N]?
+        self.l_f            = l_f                                               # [m]
+        self.l_h            = l_h                                               # []?
+        self.S              = S                                                 # [m^2]
+        self.b              = b                                                 # [m]
+        self.Cr_t           = Cr_t                                              # [m]
+        self.S_v            = S_v                                               # [m^2]
+        self.S_h            = S_h                                               # [m^2]
+        self.S_fus          = S_fus                                             # [m^2]?
+        self.N_pax          = N_pax                                             # [-]
+        self.lambda_2_rad   = lambda_2_rad                                      # [rad]
+        self.lambda_h_2_rad = lambda_h_2_rad                                    # [rad]
+        self.lambda_v_2_rad = lambda_v_2_rad                                    # [rad]
+        self.d_f_inner      = d_f_inner                                         # [m]
+        self.d_f_outer      = d_f_outer                                         # [m]
+        self.l_cabin        = l_cabin                                           # [m]
+        self.w_fus          = self.d_f_outer/2                                  # [m]
+        self.h_fus          = self.d_f_outer/2                                  # [m]
+        self.M_MZF          = self.M_TO-self.M_fuel                             # []?
         #print(self.M_MZF)
     def structural_mass(self):
         M_wing          =get_wing_mass(self.M_MZF,self.b,self.S,self.Cr_t,self.lambda_2_rad,self.n_ult)*0.95
@@ -80,7 +78,7 @@ class Class2_weight:
         M_apu        = get_apu_mass(self.M_TO)
         M_furnish    = get_furnish_mass(self.M_TO, self.M_fuel)
         M_cargohand  = get_cargohandling_mass(self.l_cabin)
-        M_operation = get_operationitems_mass()
+        M_operation  = get_operationitems_mass()
         M_flighttest = get_flighttestinstrumentation_mass()
         M_paint      = get_paint_mass(self.M_TO)
         
@@ -88,7 +86,7 @@ class Class2_weight:
 
         #return  M_fixedequipment* lbs_to_kg
         #return M_fc* lbs_to_kg, M_hydr* lbs_to_kg, M_els* lbs_to_kg, M_avion* lbs_to_kg, M_environ* lbs_to_kg, M_oxygen* lbs_to_kg, M_apu* lbs_to_kg, M_cargohand* lbs_to_kg, M_operation* lbs_to_kg, M_flighttest* lbs_to_kg, M_paint* lbs_to_kg
-        return M_fc* lbs_to_kg+ M_hydr* lbs_to_kg+ M_els* lbs_to_kg+ M_avion* lbs_to_kg+ M_environ* lbs_to_kg+ M_oxygen* lbs_to_kg+ M_apu* lbs_to_kg+ M_cargohand* lbs_to_kg+ M_operation* lbs_to_kg+ M_flighttest* lbs_to_kg+ M_paint* lbs_to_kg,M_fixedequipment* lbs_to_kg 
+        #return M_fc* lbs_to_kg+ M_hydr* lbs_to_kg+ M_els* lbs_to_kg+ M_avion* lbs_to_kg+ M_environ* lbs_to_kg+ M_oxygen* lbs_to_kg+ M_apu* lbs_to_kg+ M_cargohand* lbs_to_kg+ M_operation* lbs_to_kg+ M_flighttest* lbs_to_kg+ M_paint* lbs_to_kg,M_fixedequipment* lbs_to_kg 
 
         return  M_fixedequipment* lbs_to_kg
         #return M_fc, M_hydr, M_els, M_avion, M_environ, M_oxygen, M_apu, M_furnish, M_cargohand, M_operation, M_flighttest, M_paint, M_fixedequipment
@@ -120,9 +118,9 @@ fixedeq_1=config1.fixed_equipment_mass()
 fixedeq_2=config2.fixed_equipment_mass()
 fixedeq_3=config3.fixed_equipment_mass()
 
-config1.class2=config1.OEW(struct_1,power_1,fixedeq_1)
-config2.class2=config2.OEW(struct_2,power_2,fixedeq_2)
-config3.class2=config3.OEW(struct_3,power_3,fixedeq_3)
+config1_class2=config1.OEW(struct_1,power_1,fixedeq_1)
+config2_class2=config2.OEW(struct_2,power_2,fixedeq_2)
+config3_class2=config3.OEW(struct_3,power_3,fixedeq_3)
 
 
 #print(struct_1,power_1,fixedeq_1,OEW_1)
@@ -133,4 +131,4 @@ print(fixedeq_1)
 
 
 
-print(config1.class2,config2.class2,config3.class2)
+print(config1_class2,config2_class2,config3_class2)
