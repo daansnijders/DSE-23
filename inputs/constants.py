@@ -80,11 +80,11 @@ h_floor = 0.2                                                                   
 l_cockpit = 4                                                                   # [m] cockpit length
 
 #engine properties
-M_engine = 4800.                                                              # [lbs] mass of a single engine
-n_engines = 2.                                                                   # [-] number of engines used
-n_fueltanks  = 4.                                                                  # [-] number of integral fuel tanks  
-d_eng = 2.006                                                                       # [m] diameter of the engine
-d_fan=2.006                                                                       #[m] diameter of the fan
+M_engine = 4800                                                                 # [lbs] mass of a single engine
+n_engines = 2                                                                   # [-] number of engines used
+n_fueltanks  = 4                                                                # [-] number of integral fuel tanks  
+d_eng = 2.006                                                                   # [m] diameter of the engine
+d_fan = 2.006                                                                   # [m] diameter of the fan
 l_eng = 3.184                                                                   # [m] length of the engine
 
 # Undercarriage
