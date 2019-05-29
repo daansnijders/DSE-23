@@ -25,8 +25,14 @@ def get_taper_ratio(lambda_4_rad):
 def get_lambda_2_rad(lambda_4_rad,A,taper_ratio):
     return [np.arctan(np.tan(lambda_4_rad[i])-1/A[i]*(1-taper_ratio[i])/(1+taper_ratio[i])) for i in range(3)]
 
+def get_lambda_2_rad_canard(lambda_4_rad,A,taper_ratio):
+    return [np.arctan(np.tan(lambda_4_rad[i])-1/A[i]*(1-taper_ratio[i])/(1+taper_ratio[i])) for i in range(1,3)]
+
 def get_Cr(S,taper_ratio,b):
     return [2*S[i]/((1+taper_ratio[i])*b[i]) for i in range(3)]
+
+def get_Cr_canard(S,taper_ratio,b):
+    return [2*S[i]/((1+taper_ratio[i])*b[i]) for i in range(1,3)]
 
 def get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio):
     return [np.arctan(np.tan(lambda_4_rad[i])-(Cr[i]/(2*b[i]))*(taper_ratio[i]-1)) for i in range(3)]
@@ -40,11 +46,21 @@ def get_t_c(lambda_2_rad,M_x, M_cr,CL):
 def get_MAC(Cr, taper_ratio):
     return [Cr[i] * 2/3 * (1+taper_ratio[i] + taper_ratio[i]**2) / (1 + taper_ratio[i]) for i in range(3)]
 
+
+def get_MAC_canard(Cr, taper_ratio):
+    return [Cr[i] * 2/3 * (1+taper_ratio[i] + taper_ratio[i]**2) / (1 + taper_ratio[i]) for i in range(1,3)]
+
 def get_Ct(Cr, taper_ratio):
     return [Cr[i] * taper_ratio[i] for i in range(3)]
 
+def get_Ct_canard(Cr, taper_ratio):
+    return [Cr[i] * taper_ratio[i] for i in range(1,3)]
+
 def get_y_MAC(b, Cr, MAC, Ct):
     return [b[i]/2 * (Cr[i] - MAC[i]) / (Cr[i] - Ct[i]) for i in range(3)]
+
+def get_y_MAC_canard(b, Cr, MAC, Ct):
+    return [b[i]/2 * (Cr[i] - MAC[i]) / (Cr[i] - Ct[i]) for i in range(1,3)]
 
 def get_dihedral_rad(lambda_4_rad):
     return [np.deg2rad(3-np.rad2deg(lambda_4_rad[i])/10 + 2) for i in range(3)]
