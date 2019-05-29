@@ -127,8 +127,5 @@ config3_class2=config3.OEW(struct_3,power_3,fixedeq_3)
 #print (fixedeq_1)
 #print (struct_1)
 
-print(fixedeq_1)
-
-
-
 print(config1_class2,config2_class2,config3_class2)
+
