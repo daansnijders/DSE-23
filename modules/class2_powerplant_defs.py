@@ -6,8 +6,6 @@ Created on Fri May 24 11:20:12 2019
 """
 from inputs.constants import *
 
-                                                      
-                                                    
 def get_engine_mass():                                                          #[lbs] Total engine mass (6.1, page 83 torenbeek V)
     M_engine_total = M_engine * n_engines
     return M_engine_total

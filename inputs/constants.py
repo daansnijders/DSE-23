@@ -80,11 +80,11 @@ h_floor = 0.2                                                                   
 l_cockpit = 4                                                                   # [m] cockpit length
 
 #engine properties
-M_engine = 4800.                                                              # [lbs] mass of a single engine
-n_engines = 2.                                                                   # [-] number of engines used
-n_fueltanks  = 4.                                                                  # [-] number of integral fuel tanks  
-d_eng = 2.006                                                                       # [m] diameter of the engine
-d_fan=2.006                                                                       #[m] diameter of the fan
+M_engine = 4800                                                                 # [lbs] mass of a single engine
+n_engines = 2                                                                   # [-] number of engines used
+n_fueltanks  = 4                                                                # [-] number of integral fuel tanks  
+d_eng = 2.006                                                                   # [m] diameter of the engine
+d_fan = 2.006                                                                   # [m] diameter of the fan
 l_eng = 3.184                                                                   # [m] length of the engine
 
 # Undercarriage
@@ -116,4 +116,9 @@ Dg_main=1.5E-5
 Ag_nose=20
 Bg_nose=0.1
 Cg_nose=0
-Dg_nose=2E-6                                                                
+Dg_nose=2E-6      
+
+# Structures constants
+loc_front_spar = 0.25                                                           # [-] percentage of the chord for front spar location
+loc_rear_spar = 0.75                                                            # [-] percentage of the chord for rear spar location
+                                                          

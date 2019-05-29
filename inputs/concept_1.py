@@ -63,7 +63,7 @@ d_nacel = 1.1*d_fan                                                             
 l_nacel = 1.1*l_eng                                                             # [m] length of the engine nacelle
 
 # Wing parameters
-A = [11,11,11]                                                                  # [-] aspect ration main wing
+A = [9.5,9.5,9.5]                                                                  # [-] aspect ration main wing
 e = [0.85,0.85,0.85]                                                            # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2] surface area main wing
 #take canard into account
