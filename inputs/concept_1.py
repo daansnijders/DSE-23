@@ -90,7 +90,7 @@ lambda_c_4_rad = get_lambda_4_rad(M_cruise,M_x)                                 
 lambda_c_4_rad[0]=0
 taper_ratio_c = get_taper_ratio(lambda_c_4_rad)
 taper_ratio_c[0]=0                                    # [-] taper ratio canard
-lambda_c_2_rad = [0,get_lambda_2_rad(lambda_c_4_rad,A_c,taper_ratio_c)[1]                    # [rad] half chord sweep angle canard
+#lambda_c_2_rad = [0,get_lambda_2_rad(lambda_c_4_rad,A_c,taper_ratio_c)[1]                    # [rad] half chord sweep angle canard
 Cr_c = get_Cr(S_c,taper_ratio_c,b_c)                                                    # [m] root chord length canard
 Ct_c = get_Ct(Cr_c, taper_ratio_c)                                                    # [m] tip chord length canard
 
