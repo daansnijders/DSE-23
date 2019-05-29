@@ -5,6 +5,7 @@ Created on Wed May 29 15:09:22 2019
 @author: Stijn
 """
 from inputs.constants import *
+from inputs.concept_1 import *
 
 class get_cg(object):
     def __init__(self,x_cg = None,y_cg = None,z_cg = None):
@@ -13,7 +14,7 @@ class get_cg(object):
         self.z_cg = z_cg                                                        # [m]
         
     def calc_fuselage(self):
-        pass
+        return b
     
     def calc_wing(self):
         pass
@@ -33,4 +34,4 @@ class get_cg(object):
     def get_z_cg(self):
         return self.z_cg
 
-cg = get_cg()
+cg = get_cg(1,3,4)

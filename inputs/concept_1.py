@@ -94,6 +94,7 @@ lambda_c_2_rad = [0]+ get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c) 
 Cr_c = [0]+get_Cr_canard(S_c,taper_ratio_c,b_c)                                                    # [m] root chord length canard
 Ct_c = [0]+get_Ct_canard(Cr_c, taper_ratio_c)                                                    # [m] tip chord length canard
 
+
 MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                                  # [m] mean aerodynamic chord canard
 y_MAC_c = [0]+get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                                               # [m] y-location of the MAC of the canard
 
