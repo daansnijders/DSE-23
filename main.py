@@ -34,23 +34,23 @@ config3     = Class2_weight(N_pax[2],MTOW[2], loadfactor[2],V_dive[2],M_fuel[2],
 
 #get a while loop which results in a percentage difference less than 1 percent
 #get structural weight
-config1.M_structural=config1.structural_mass()
-config2.M_structural=config2.structural_mass()
-config3.M_structural=config3.structural_mass()
+config1_M_structural=config1.structural_mass()
+config2_M_structural=config2.structural_mass()
+config3_M_structural=config3.structural_mass()
 #get powerplant mass
-config1.M_powerplant=config1.powerplant_mass()
-config2.M_powerplant=config2.powerplant_mass()
-config3.M_powerplant=config3.powerplant_mass()
+config1_M_powerplant=config1.powerplant_mass()
+config2_M_powerplant=config2.powerplant_mass()
+config3_M_powerplant=config3.powerplant_mass()
 #get fixed equipment mass
-config1.M_fixedeq=config1.fixed_equipment_mass()
-config2.M_fixedeq=config2.fixed_equipment_mass()
-config3.M_fixedeq=config3.fixed_equipment_mass()
+config1_M_fixedeq=config1.fixed_equipment_mass()
+config2_M_fixedeq=config2.fixed_equipment_mass()
+config3_M_fixedeq=config3.fixed_equipment_mass()
 #get OEW total
-config1.class2_OEW=config1.OEW(config1.M_structural,config1.M_powerplant,config1.M_fixedeq)
-config2.class2_OEW=config2.OEW(config2.M_structural,config2.M_powerplant,config2.M_fixedeq)
-config3.class2_OEW=config3.OEW(config3.M_structural,config3.M_powerplant,config3.M_fixedeq)
+config1_class2_OEW=config1.OEW(config1_M_structural,config1_M_powerplant,config1_M_fixedeq)
+config2_class2_OEW=config2.OEW(config2_M_structural,config2_M_powerplant,config2_M_fixedeq)
+config3_class2_OEW=config3.OEW(config3_M_structural,config3_M_powerplant,config3_M_fixedeq)
 
 #update MTOW with class 1 and perform iteration
-config1.MTOW_class1=get_MTOW_class1(config1.class2_OEW)
-config2.MTOW_class1=get_MTOW_class1(config2.class2_OEW)
-config3.MTOW_class1=get_MTOW_class1(config3.class2_OEW)
+config1_MTOW_class1=get_MTOW_class1(config1_class2_OEW)
+config2_MTOW_class1=get_MTOW_class1(config2_class2_OEW)
+config3_MTOW_class1=get_MTOW_class1(config3_class2_OEW)
