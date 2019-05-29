@@ -66,6 +66,9 @@ l_nacel = 1.1*l_eng                                                             
 A = [11,11,11]                                                                  # [-] aspect ration main wing
 e = [0.85,0.85,0.85]                                                            # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2] surface area main wing
+#take canard into account
+S_c=[S[0]-S[0],S[1]-S[0],S[2]-S[0]]
+S=[min(S) for i in range(3)]                                                    #update surface area to be the same for all config
 b = get_b(A,S)                                                                  # [m] span main wing
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad] quarter chord sweep angle main wing
 taper_ratio = get_taper_ratio(lambda_4_rad)                                     # [-] taper ratio main wing
@@ -80,8 +83,9 @@ y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
-
-
+#canard parameters
+A_c=[0,4.95,4.95]
+b_c=get_b(A_c,S_c)
 
 #cg and masses of components
 M_wing, M_eng, M_wing_group=get_mass_winggroup(MTOW)

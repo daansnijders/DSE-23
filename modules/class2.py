@@ -49,18 +49,15 @@ class Class2_weight:
         
         M_horizontaltail   =get_horizontaltail_mass(K_h,self.S_h,self.V_dive,self.lambda_h_2_rad)
         M_verticaltail     =get_verticaltail_mass(K_v,self.S_v,self.V_dive,self.lambda_v_2_rad)
+        #add canard for the configguration 2 and 3 
         
         M_landinggear_nose      =get_landinggear_mass(K_gr,Ag_nose,Bg_nose,Cg_nose,Dg_nose,self.M_TO)
         M_landinggear_main      =get_landinggear_mass(K_gr,Ag_main,Bg_main,Cg_main,Dg_main,self.M_TO)
         M_landinggear           =M_landinggear_nose+M_landinggear_main
         
         M_structure =get_structural_mass(M_wing,M_fuselage,M_nacelle,M_horizontaltail,M_verticaltail,M_landinggear)
-
         
-     
-
-        return  M_structure * lbs_to_kg #M_wing* lbs_to_kg,M_fuselage* lbs_to_kg,M_nacelle* lbs_to_kg,M_horizontaltail* lbs_to_kg,M_verticaltail* lbs_to_kg,M_landinggear* lbs_to_kg,
-        
+        return  M_structure * lbs_to_kg #,M_wing* lbs_to_kg,M_fuselage* lbs_to_kg,M_nacelle* lbs_to_kg,M_horizontaltail* lbs_to_kg,M_verticaltail* lbs_to_kg,M_landinggear* lbs_to_kg,
 
     
     def powerplant_mass(self):
@@ -71,7 +68,7 @@ class Class2_weight:
         
         M_powerplant            = get_totalpowerplant_mass(M_engine_total,M_airinduction,M_fuelsystem, M_propulsionsystem)
         
-        return M_powerplant* lbs_to_kg
+        return M_powerplant* lbs_to_kg# M_engine_total*lbs_to_kg, M_airinduction*lbs_to_kg,M_fuelsystem*lbs_to_kg, M_propulsionsystem*lbs_to_kg
         
     def fixed_equipment_mass(self):
         M_fc         = get_flightcontrolsystem_mass(self.M_TO)
@@ -88,12 +85,18 @@ class Class2_weight:
         M_paint      = get_paint_mass(self.M_TO)
         
         M_fixedequipment= get_fixedequipment_mass(M_fc,M_hydr,M_els,M_avion,M_environ,M_oxygen,M_apu,M_furnish,M_cargohand,M_operation,M_flighttest,M_paint)
+
         #return  M_fixedequipment* lbs_to_kg
         #return M_fc* lbs_to_kg, M_hydr* lbs_to_kg, M_els* lbs_to_kg, M_avion* lbs_to_kg, M_environ* lbs_to_kg, M_oxygen* lbs_to_kg, M_apu* lbs_to_kg, M_cargohand* lbs_to_kg, M_operation* lbs_to_kg, M_flighttest* lbs_to_kg, M_paint* lbs_to_kg
         return M_fc* lbs_to_kg+ M_hydr* lbs_to_kg+ M_els* lbs_to_kg+ M_avion* lbs_to_kg+ M_environ* lbs_to_kg+ M_oxygen* lbs_to_kg+ M_apu* lbs_to_kg+ M_cargohand* lbs_to_kg+ M_operation* lbs_to_kg+ M_flighttest* lbs_to_kg+ M_paint* lbs_to_kg,M_fixedequipment* lbs_to_kg 
+
+        return  M_fixedequipment* lbs_to_kg
+        #return M_fc, M_hydr, M_els, M_avion, M_environ, M_oxygen, M_apu, M_furnish, M_cargohand, M_operation, M_flighttest, M_paint, M_fixedequipment
+
+
    
     def OEW(self,M_structure,M_powerplant,M_fixedequipment):
-       return M_structure+M_powerplant+M_fixedequipment
+      return M_structure+M_powerplant+M_fixedequipment
    
 
 
@@ -129,3 +132,5 @@ config3.class2=config3.OEW(struct_3,power_3,fixedeq_3)
 print(fixedeq_1)
 
 
+
+print(config1.class2,config2.class2,config3.class2)
