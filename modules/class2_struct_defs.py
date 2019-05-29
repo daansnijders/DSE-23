@@ -12,8 +12,6 @@ def get_wing_mass(M_MZF,b,S,Cr_t,lambda_2_rad,n_ult):
 
     return 0.0017*M_MZF*kg_to_lbs*(b*m_to_ft/cos(lambda_2_rad))**0.75*(1+(6.3*cos(lambda_2_rad)/(b*m_to_ft))**0.5)*n_ult**0.55*(b*m_to_ft*S*m_to_ft**2/(M_MZF*kg_to_lbs*cos(lambda_2_rad)*(Cr_t*m_to_ft)))**0.3
     
-
-    
 def get_fuselage_mass(V_dive, l_h, w_fus, h_fus, S_fus):
     return 0.021*K_f*(V_dive*ms_to_kts*l_h*m_to_ft/(w_fus*m_to_ft+h_fus*m_to_ft))**0.5*(S_fus*m_to_ft**2)**1.2
 

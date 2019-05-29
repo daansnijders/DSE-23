@@ -98,38 +98,4 @@ class Class2_weight:
     def OEW(self,M_structure,M_powerplant,M_fixedequipment):
       return M_structure+M_powerplant+M_fixedequipment
    
-
-
     
-#test          
-
-config1     = Class2_weight(N_pax[0], MTOW[0], loadfactor[0],V_dive[0],M_fuel[0], T_req[0],l_f[0],d_f_inner[0],d_f_outer[0],l_cabin[0],l_h[0],S[0], b[0], S_v[0],S_h[0],Cr_t[0],lambda_2_rad[0],lambda_h_2_rad[0], lambda_v_2_rad[0], S_fus[0] )     
-config2     = Class2_weight(N_pax[1],MTOW[1], loadfactor[1],V_dive[1],M_fuel[1], T_req[1], l_f[1],d_f_inner[1],d_f_outer[1],l_cabin[1],l_h[1],S[1], b[1], S_v[1],S_h[1],Cr_t[1],lambda_2_rad[1],lambda_h_2_rad[1], lambda_v_2_rad[1], S_fus[1])
-config3     = Class2_weight(N_pax [2],MTOW[2], loadfactor[2],V_dive[2],M_fuel[2], T_req[2], l_f[2],d_f_inner[2],d_f_outer[2],l_cabin[2],l_h[2],S[2], b[2], S_v[2],S_h[2],Cr_t[2],lambda_2_rad[2],lambda_h_2_rad[2], lambda_v_2_rad[2], S_fus[2])
-
-
-struct_1=config1.structural_mass()
-struct_2=config2.structural_mass()
-struct_3=config3.structural_mass()
-
-power_1=config1.powerplant_mass()
-power_2=config2.powerplant_mass()
-power_3=config3.powerplant_mass()
-
-fixedeq_1=config1.fixed_equipment_mass()
-fixedeq_2=config2.fixed_equipment_mass()
-fixedeq_3=config3.fixed_equipment_mass()
-
-config1.class2=config1.OEW(struct_1,power_1,fixedeq_1)
-config2.class2=config2.OEW(struct_2,power_2,fixedeq_2)
-config3.class2=config3.OEW(struct_3,power_3,fixedeq_3)
-
-
-#print(struct_1,power_1,fixedeq_1,OEW_1)
-#print (fixedeq_1)
-#print (struct_1)
-
-
-
-#print (fixedeq_1)
-print(config1.class2,config2.class2,config3.class2)
