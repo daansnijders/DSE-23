@@ -116,4 +116,9 @@ Dg_main=1.5E-5
 Ag_nose=20
 Bg_nose=0.1
 Cg_nose=0
-Dg_nose=2E-6                                                                
+Dg_nose=2E-6      
+
+# Structures constants
+loc_front_spar = 0.25                                                           # [-] percentage of the chord for front spar location
+loc_rear_spar = 0.75                                                            # [-] percentage of the chord for rear spar location
+                                                          
