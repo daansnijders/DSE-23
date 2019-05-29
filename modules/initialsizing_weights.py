@@ -6,8 +6,8 @@ Created on Tue May 14 09:25:55 2019
 """
 
 
-def get_MTOW(OEW):
-    MTOW = [(OEW[0]+1000)/0.582, (OEW[1]+1000)/0.582, (OEW[2]+1000)/0.582]      # [kg] #delete this one and put every MTOW as an input ?
+def get_MTOW_class1(OEW):
+    MTOW = (OEW+1000)/0.582     # [kg] #delete this one and put every MTOW as an input ?
     return MTOW
 
 
