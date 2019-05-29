@@ -8,11 +8,14 @@ from inputs.constants import *
 from inputs.concept_1 import *
 print (config1.lambda_le_rad)
 
-def get_xcg_wing(b,Ct,Cr):
+def get_cg_wing(b,Ct,Cr):
     y_loc = 0.35
     dis = b/2*0.35*sin(lambda_le_rad)
     location = 0.5*chordlength(y_loc)*0.7 + 0.25 *chordlength(y_loc)
-    location_from_LE = location+dis
+    x_cg_wing = location+dis
+    y_cg_wing = 0
+    z_cg_wing = t_c*Cr/2
+    return x_cg_wing, y_cg_wing, z_cg_wing
     
 
 def chordlength(y_loc):
