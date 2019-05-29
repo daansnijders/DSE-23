@@ -4,16 +4,19 @@ Created on Wed May 29 14:44:46 2019
 
 @author: Niels
 """
+from inputs.constants import *
+from inputs.concept_1 import *
+print (config1.lambda_le_rad)
 
 def get_xcg_wing(b,Ct,Cr):
-    dis = b/2*0.35*sin(lamda_le_rad)
-    spar_front = 0.2* chordlength
+    y_loc = 0.35
+    dis = b/2*0.35*sin(lambda_le_rad)
+    location = 0.5*chordlength(y_loc)*0.7 + 0.25 *chordlength(y_loc)
+    location_from_LE = location+dis
+    
 
-def chordlength(x_loc):
+def chordlength(y_loc):
     decrease = (Cr-Ct)/(b/2)
-    return Cr-decrease*(b/2)*x_loc
+    return Cr-decrease*(b/2)*y_loc
     
-def spar_front(x_loc):
-    chord=chordlength(x_loc) 
-    return chordlength
-    
+#print (get_xcg_wing(10,1,2))
