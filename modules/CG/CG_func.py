@@ -6,7 +6,6 @@ Created on Wed May 29 14:44:46 2019
 """
 from inputs.constants import *
 from inputs.concept_1 import *
-print (config1.lambda_le_rad)
 
 def get_cg_wing(b,Cr,Ct):
     y_loc = 0.35

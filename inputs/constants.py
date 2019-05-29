@@ -121,4 +121,8 @@ Dg_nose=2E-6
 # Structures constants
 loc_front_spar = 0.25                                                           # [-] percentage of the chord for front spar location
 loc_rear_spar = 0.75                                                            # [-] percentage of the chord for rear spar location
-                                                          
+                  
+# class 1 estimations                                        
+x_c_wcg = 0.205
+x_c_oewcg = 0.225
+x_f_cg_l_f = 0.435
