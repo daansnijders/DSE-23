@@ -18,7 +18,7 @@ class HLD:
         self.taper_ratio    = taper_ratio
         
     
-    def __HLD__(self):
+    def HLD(self):
         self.Delta_CLmax = Cl_TO - CLmax
         self.hl = 13/20              # Location hinge line on chord
         self.lambda_hl_rad = np.arctan(np.tan(lambda_4_rad)-4/A*(hl-1/4)(1-taper_ratio)/(1+taper_ratio))
