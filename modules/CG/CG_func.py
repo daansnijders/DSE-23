@@ -16,6 +16,7 @@ def get_cg_wing(b,Cr,Ct):
     y_loc = 0.35
     dis = b/2*y_loc*sin(lambda_le_rad)
     location = 0.5*chordlength(y_loc, Cr, Ct)*0.7 + 0.25 *chordlength(y_loc, Cr, Ct)
+    x_cg_wingstart = x_le_MAC - y_MAC*sin(lambda_le_rad)
     x_cg_wing = location+dis
     y_cg_wing = 0
     z_cg_wing = t_c*Cr/2
@@ -25,7 +26,7 @@ def get_cg_hwing(b_h,Cr_h,Ct_h):
     y_loc = 0.38
     dis = b_h/2*y_loc*sin(lambda_h_le_rad)
     location = 0.42*chordlength(y_loc, Cr_h, Ct_h)
-    x_cg_hwing = location+dis
+    x_cg_hwing = location+dis+x_le_h
     y_cg_hwing = 0
     z_cg_hwing = 0.65*d_f_outer
     return x_cg_hwing, y_cg_hwing, z_cg_hwing
@@ -34,7 +35,7 @@ def get_cg_vwing(b_v,Cr_v,Ct_v):
     z_loc  = 0.38
     dis = b_v/2*z_loc*sin(lambda_v_le_rad)
     location = 0.42*chordlength(z_loc, Cr_v, Ct_v)
-    x_cg_hwing = location+dis
+    x_cg_hwing = location+dis+x_le_v
     y_cg_hwing = 0
     z_cg_hwing = d_f_outer+0.38*(b_v/2)
     return x_cg_vwing, y_cg_vwing, z_cg_vwing
@@ -46,7 +47,7 @@ def get_cg_fuselage():
     return x_cg_fuselage, y_cg_fuselage, z_cg_fuselage
 
 def get_cg_nacelle():
-    x_cg_nacelle = 0.4*l_nacel                                                  #FREFERENCE POINT IS START OF NACELLE
+    x_cg_nacelle = 0.4*l_nacel+x_cg_eng                                                 
     y_cg_nacelle = 0
     z_cg_nacelle = 0
     return x_cg_nacelle, y_cg_nacelle, z_cg_nacelle
