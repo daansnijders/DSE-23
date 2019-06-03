@@ -25,5 +25,5 @@ def get_nacelle_mass(T_req_TO):
 def get_landinggear_mass(K_gr,Ag,Bg,Cg,Dg,M_TO):
     return K_gr*(Ag+Bg*(M_TO*kg_to_lbs)**0.75+Cg*M_TO*kg_to_lbs+Dg*(M_TO*kg_to_lbs)**1.5)
 
-def get_structural_mass(M_wing,M_fuselage,M_horizontaltail,M_verticaltail,M_nacelle,M_landinggear):
-    return M_wing+M_fuselage+M_nacelle+M_horizontaltail+M_verticaltail+M_landinggear
+def get_structural_mass(M_wing,M_fuselage,M_horizontaltail,M_verticaltail,M_nacelle,M_landinggear, M_canard):
+    return M_wing+M_fuselage+M_nacelle+M_horizontaltail+M_verticaltail+M_landinggear+M_canard
