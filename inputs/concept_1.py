@@ -230,7 +230,8 @@ landing_field_length = [get_landing_field_length(landing_thrust, landing_mass[i]
 """
 Cruise fuel economy
 """
-fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise[i]), R[i], V_cruise) for i in range(3)]
+engines_used = 2
+fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S[i], CDcruise[i]), R[i], V_cruise, engines_used) for i in range(3)]
 
 """
 Climb performance
@@ -245,7 +246,8 @@ climb_gradient = [get_climb_gradient(2*thrust_max, 0.5 * rho_0 * V_approach[i]**
 """
 Mass/payload-range diagram
 """
-# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i)
+# y_lim = int(1.1*max(MTOW))
+# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i, y_lim)
 #  for i in range(3)]
 
 #create loading diagram with new Cl and Cd
