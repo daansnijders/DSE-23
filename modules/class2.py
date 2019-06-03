@@ -107,5 +107,6 @@ class Class2_weight:
     
 
          
-
+def get_difference_iteration_MTOW(MTOW_old,MTOW_new):
+    return (MTOW_new-MTOW_old)/MTOW_old *100
 
