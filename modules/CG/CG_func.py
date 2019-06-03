@@ -6,8 +6,7 @@ Created on Wed May 29 14:44:46 2019
 """
 from inputs.constants import *
 from inputs.concept_1 import *
-from numpy import np
-
+import numpy as np
 
 def chordlength(y_loc, Cr, Ct):
     decrease = (Cr-Ct)/(b/2)
