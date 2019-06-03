@@ -34,6 +34,7 @@ T_req = get_T_req(T_W, MTOW)                                                    
 M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
 M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
+M_carried_canard=[MTOW[i]-MTOW[0] for i in range(3)]
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
 
@@ -76,6 +77,7 @@ lambda_2_rad = get_lambda_2_rad(lambda_4_rad,A,taper_ratio)                     
 Cr = get_Cr(S,taper_ratio,b)                                                    # [m] root chord length main wing
 Ct = get_Ct(Cr, taper_ratio)                                                    # [m] tip chord length main wing
 CL = get_CL(MTOW,rho,V_cruise,S)                                                # [-] lift coefficient aircraft
+CL=[CL[0] for i in range(3)]
 t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   # [-] thickness over chord main wing
 Cr_t= [t_c[i]*Cr[i] for i in range(3)]                                            #thinkness at the root chord [m]
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m] mean aerodynamic chord main wing
@@ -93,8 +95,9 @@ taper_ratio_c[0]=0                                    # [-] taper ratio canard
 lambda_c_2_rad = [0]+ get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c)                    # [rad] half chord sweep angle canard
 Cr_c = [0]+get_Cr_canard(S_c,taper_ratio_c,b_c)                                                    # [m] root chord length canard
 Ct_c = [0]+get_Ct_canard(Cr_c, taper_ratio_c)                                                    # [m] tip chord length canard
-
-
+CL_c = [0]+get_CL_canard(M_carried_canard,rho,V_cruise,S_c)                                                # [-] lift coefficient aircraft
+t_c_c =  [0]+get_t_c_canard(lambda_c_2_rad,M_x, M_cruise,CL_c)                                   # [-] thickness over chord main wing
+Cr_t_c= [t_c_c[i]*Cr_c[i] for i in range(3)]                                            #thinkness at the root chord [m]
 MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                                  # [m] mean aerodynamic chord canard
 y_MAC_c = [0]+get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                                               # [m] y-location of the MAC of the canard
 
