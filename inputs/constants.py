@@ -126,3 +126,7 @@ loc_rear_spar = 0.75                                                            
 x_c_wcg = 0.205
 x_c_oewcg = 0.225
 x_f_cg_l_f = 0.435
+
+# V-n loads diagram
+V_dive = [276.62626727779644, 276.62626727779644, 276.62626727779644]           # all the same with current inputs, but might change, so keep as list
+n_max = [2.661047580279859, 2.661047580279859, 2.661047580279859]               # all the same with current inputs, but might change, so keep as list
