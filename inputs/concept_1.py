@@ -17,6 +17,7 @@ from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import *
+from modules.Aerodynamics import *
 
 
 #initial sizing 
@@ -251,3 +252,5 @@ Mass/payload-range diagram
 #CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
 #for i in range(3):
 #    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
+
+
