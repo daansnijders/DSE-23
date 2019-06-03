@@ -67,6 +67,9 @@ seat_pitch = 32*inch_to_m                                                       
 seat_width = 20*inch_to_m                                                       # [m] seat width length
 armrest = 2*inch_to_m                                                           # [m] Armrest width
 Xfirst = 5                                                                      # [m] Distance between the c.g. of the first seat and the nose
+Xcargo1 = 5.
+Xcargo2 = 20.
+
 
 #average masses on passengers and payload
 M_carry_on = 6.1                                                                # [kg] average carry-on luggage weight

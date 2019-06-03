@@ -61,9 +61,11 @@ Mtot_carry_on, Mtot_check_in, V_carry_on\
 
 V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)# [m^3] available cargo volume
 M_cargo_available = get_cargo_mass(N_pax,M_payload)                             # [kg] available cargo mass
+"Change this when correct length of modular part is found"
+x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]\
+           , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]             # [m] place of cargo compartments 1 and 2 from nose
 
 #Propulsion
-
 d_nacel = 1.1*d_fan                                                             # [m] diameter of engine nacelle
 l_nacel = 1.1*l_eng                                                             # [m] length of the engine nacelle
 
