@@ -69,6 +69,12 @@ dihedral angle					dihredral_rad
 surface of the canard				S_c
 aspect ratio of the canard			A_c
 span of canard					b_c
+taper ratio canard				t_c
+sweep canard at c/2				lambda_c_2_rad
+thickness to chord ratio canard			t_c_c
+Thickness at the chord root canard		Cr_t_c	
+lift coeff canard				CL_c
+				
 
 
 Horizontal tail volume				V_h
@@ -171,8 +177,6 @@ clearance between seat and fus			s_clearance
 pitch of seats					seat_pitch
 width of seats					seat_width
 width of the armrest				armrest
-place of first row				Xfirst
-place of last row				Xlast
 
 carry on weigth average				W_carry_on
 check in luggage weigth average			W_check_in
