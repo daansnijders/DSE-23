@@ -12,13 +12,11 @@ from inputs.concept_1 import *
 from inputs.constants import *
 from inputs.performance_inputs import *
 
-loadfactor=2.8
-
 class Class2_weight:
-    def __init__(self,config, N_pax, MTOW,M_carried_canard_MZF,M_MZF, loadfactor,V_dive, M_fuel ,T_req,l_f,d_f_inner,d_f_outer,l_cabin,l_h,S,S_c, b,b_c, S_v,S_h,Cr_t,Cr_t_c,lambda_2_rad,lambda_h_2_rad, lambda_v_2_rad,lambda_c_2_rad, S_fus):
+    def __init__(self,config, N_pax, MTOW,M_carried_canard_MZF,M_MZF, n_max,V_dive, M_fuel ,T_req,l_f,d_f_inner,d_f_outer,l_cabin,l_h,S,S_c, b,b_c, S_v,S_h,Cr_t,Cr_t_c,lambda_2_rad,lambda_h_2_rad, lambda_v_2_rad,lambda_c_2_rad, S_fus):
         self.config         = config - 1
         self.M_TO           = MTOW                                              # [kg] 
-        self.n_ult          = 1.5*loadfactor                                    # [-]
+        self.n_ult          = 1.5*n_max                                    # [-]
         self.V_dive         = V_dive                                            # []?
         self.M_fuel         = M_fuel                                            # []?
         self.T_req_TO       = T_req                                             # [N]?
@@ -59,13 +57,14 @@ class Class2_weight:
         self.M_verticaltail     =get_verticaltail_mass(K_v,self.S_v,self.V_dive,self.lambda_v_2_rad)
         #add canard for the configguration 2 and 3 
         
-        M_landinggear_nose      =get_landinggear_mass(K_gr,Ag_nose,Bg_nose,Cg_nose,Dg_nose,self.M_TO)
-        M_landinggear_main      =get_landinggear_mass(K_gr,Ag_main,Bg_main,Cg_main,Dg_main,self.M_TO)
+        M_landinggear_nose      =get_landinggear_mass(K_gr,Ag_nose,Bg_nose,Cg_nose,Dg_nose,max(MTOW))
+        M_landinggear_main      =get_landinggear_mass(K_gr,Ag_main,Bg_main,Cg_main,Dg_main,max(MTOW))
         M_landinggear           =M_landinggear_nose+M_landinggear_main
         
         M_structure =get_structural_mass(self.M_wing,self.M_fuselage,self.M_nacelle,self.M_horizontaltail,self.M_verticaltail,M_landinggear,self.M_canard)
         
-        return  M_structure * lbs_to_kg, self.M_wing*lbs_to_kg, self.M_canard*lbs_to_kg #,M_wing* lbs_to_kg,M_fuselage* lbs_to_kg,M_nacelle* lbs_to_kg,M_horizontaltail* lbs_to_kg,M_verticaltail* lbs_to_kg,M_landinggear* lbs_to_kg,
+        return  M_structure * lbs_to_kg,# self.M_wing*lbs_to_kg, self.M_canard*lbs_to_kg #,M_wing* lbs_to_kg,M_fuselage* lbs_to_kg,M_nacelle* lbs_to_kg,M_horizontaltail* lbs_to_kg,M_verticaltail* lbs_to_kg,M_landinggear* lbs_to_kg,
+
 
     
     def powerplant_mass(self):
@@ -109,5 +108,6 @@ class Class2_weight:
     
 
          
-
+def get_difference_iteration_MTOW(MTOW_old,MTOW_new):
+    return (MTOW_new-MTOW_old)/MTOW_old *100
 

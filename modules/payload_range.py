@@ -8,7 +8,7 @@ def range_breguet(M_ff, V, cj, LD_cruise, g):
     return range_cruise
 
 
-def generate_payload_range_diagram(payload_mass, fuel_mass, MTOW, design_range, cruise_velocity, cj, LD_cruise, g, OEW, i):
+def generate_payload_range_diagram(payload_mass, fuel_mass, MTOW, design_range, cruise_velocity, cj, LD_cruise, g, OEW, i, y_lim_top):
     """
     determining reserve fuel mass, usable fuel mass, zero payload range
     """
@@ -62,8 +62,8 @@ def generate_payload_range_diagram(payload_mass, fuel_mass, MTOW, design_range, 
     # legend
     plt.legend(fontsize=15)
 
-    plt.xlim(left=0.0)
-    plt.ylim(bottom=0.0)
+    plt.xlim((0))
+    plt.ylim((0, y_lim_top))
     plt.xlabel('Range [km]', fontsize=15)
     plt.ylabel('Mass [kg]', fontsize=15)
     num = i+1

@@ -29,7 +29,6 @@ def get_cg_hwing(b_h,Cr_h,Ct_h,lambda_h_le_rad,x_le_h,d_f_outer):
     z_cg_hwing = 0.65*d_f_outer
     return x_cg_hwing, y_cg_hwing, z_cg_hwing
 
-
 def get_cg_vwing(b_v,Cr_v,Ct_v):
     z_loc  = 0.38
     dis = b_v/2*z_loc*np.sin(lambda_v_le_rad)
@@ -63,4 +62,9 @@ def get_cg_mgear():
     z_cg_mgear = 0.5*z_mlg
     return x_cg_mgear, y_cg_mgear, z_cg_mgear
     
+def get_cg_engines():
+    x_cg_engines = x_cg_eng
+    y_cg_engines = 0
+    z_cg_engines = 0
+    return x_cg_engines, y_cg_engines, z_cg_engines
   

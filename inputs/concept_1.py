@@ -17,6 +17,7 @@ from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import *
+from modules.Aerodynamics import *
 
 
 #initial sizing 
@@ -228,7 +229,9 @@ landing_field_length = [get_landing_field_length(landing_thrust, landing_mass[i]
 """
 Cruise fuel economy
 """
-fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S, CDcruise[i]), R[i], V_cruise) for i in range(3)]
+
+engines_used = 2
+fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S, CDcruise[i]), R[i], V_cruise, engines_used) for i in range(3)]
 
 """
 Climb performance
@@ -243,10 +246,13 @@ climb_gradient = [get_climb_gradient(2*thrust_max, 0.5 * rho_0 * V_approach[i]**
 """
 Mass/payload-range diagram
 """
-# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i)
+# y_lim = int(1.1*max(MTOW))
+# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i, y_lim)
 #  for i in range(3)]
 
 #create loading diagram with new Cl and Cd
 #CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
 #for i in range(3):
 #    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
+
+
