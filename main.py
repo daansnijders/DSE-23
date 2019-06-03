@@ -36,7 +36,7 @@ concept = 1
 config1_iteration_diff=50
 config3_iteration_diff=50
 config2_iteration_diff=50
-#make a complete iteration
+
 
 while config1_iteration_diff>1.:
     config1     = Class2_weight(1,N_pax[0],MTOW[0],M_carried_canard_MZF[0],min(M_MZF), n_max[0],V_dive[0],M_fuel[0], T_req[2], l_f[0],d_f_inner[0],d_f_outer[0],l_cabin[0],l_h[0],S[0],S_c[0], b[0],b_c[0], S_v[0],S_h[0],Cr_t[0],Cr_t_c[0],lambda_2_rad[0],lambda_h_2_rad[0], lambda_v_2_rad[0],lambda_c_2_rad[0], S_fus[0])     
