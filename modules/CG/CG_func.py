@@ -6,6 +6,7 @@ Created on Wed May 29 14:44:46 2019
 """
 from inputs.constants import *
 from inputs.concept_1 import *
+from numpy import np
 
 
 def chordlength(y_loc, Cr, Ct):
@@ -14,7 +15,7 @@ def chordlength(y_loc, Cr, Ct):
 
 def get_cg_wing(b,Cr,Ct):
     y_loc = 0.35
-    dis = b/2*y_loc*sin(lambda_le_rad)
+    dis = b/2*y_loc*np.sin(lambda_le_rad)
     location = 0.5*chordlength(y_loc, Cr, Ct)*0.7 + 0.25 *chordlength(y_loc, Cr, Ct)
     x_cg_wingstart = x_le_MAC - y_MAC*sin(lambda_le_rad)
     x_cg_wing = location+dis
@@ -24,7 +25,7 @@ def get_cg_wing(b,Cr,Ct):
 
 def get_cg_hwing(b_h,Cr_h,Ct_h):
     y_loc = 0.38
-    dis = b_h/2*y_loc*sin(lambda_h_le_rad)
+    dis = b_h/2*y_loc*np.sin(lambda_h_le_rad)
     location = 0.42*chordlength(y_loc, Cr_h, Ct_h)
     x_cg_hwing = location+dis+x_le_h
     y_cg_hwing = 0
@@ -33,7 +34,7 @@ def get_cg_hwing(b_h,Cr_h,Ct_h):
 
 def get_cg_vwing(b_v,Cr_v,Ct_v):
     z_loc  = 0.38
-    dis = b_v/2*z_loc*sin(lambda_v_le_rad)
+    dis = b_v/2*z_loc*np.sin(lambda_v_le_rad)
     location = 0.42*chordlength(z_loc, Cr_v, Ct_v)
     x_cg_hwing = location+dis+x_le_v
     y_cg_hwing = 0
