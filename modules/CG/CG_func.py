@@ -8,19 +8,21 @@ from inputs.constants import *
 from inputs.concept_1 import *
 import numpy as np
 
-def chordlength(y_loc, Cr, Ct):
+def chordlength(y_loc, Cr, Ct,b):
     decrease = (Cr-Ct)/(b/2)
     return Cr-decrease*(b/2)*y_loc
 
-def get_cg_wing(b,Cr,Ct):
+def get_cg_wing(b,Cr,Ct,t_c,lambda_le_rad,y_MAC):
     y_loc = 0.35
     dis = b/2*y_loc*np.sin(lambda_le_rad)
-    location = 0.5*chordlength(y_loc, Cr, Ct)*0.7 + 0.25 *chordlength(y_loc, Cr, Ct)
-    x_cg_wingstart = x_le_MAC - y_MAC*sin(lambda_le_rad)
+    location = 0.5*chordlength(y_loc, Cr, Ct,b)*0.7 + 0.25 *chordlength(y_loc, Cr, Ct,b)
+    x_cg_wingstart = x_le_MAC - y_MAC*np.sin(lambda_le_rad)
     x_cg_wing = location+dis
     y_cg_wing = 0
     z_cg_wing = t_c*Cr/2
     return x_cg_wing, y_cg_wing, z_cg_wing
+
+get_cg_wing(b[0],Cr[0],Ct[0],t_c[0],lambda_le_rad[0],y_MAC[0])
 
 def get_cg_hwing(b_h,Cr_h,Ct_h):
     y_loc = 0.38
