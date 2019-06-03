@@ -41,8 +41,6 @@ d_CD0_landing=0.065
 d_CD0_gear=0.02
 
 #assumed/chosen values
-A=11
-e=0.85
 c=15
 
 #fuel fractions

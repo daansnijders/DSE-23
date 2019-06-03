@@ -12,7 +12,9 @@ from inputs.constants import *
 from inputs.performance_inputs import *
 
 
+
 "Values to input once known"
+
 
 class Loading_diagram:
     def __init__(self, x_cargo, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, MTOW, x_cg, y_cg, z_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel, M_pax, M_carry_on, x_cg_wing, config):
@@ -53,8 +55,6 @@ class Loading_diagram:
         self.weight = [self.OEW]
           
         self.M_payload_cargo_list = []
-        self.M_fuel_list = []
-        
         
         for i in range(len(self.x_cargo)):
             self.M_payload_cargo_list.append(self.M_payload_cargo/len(self.x_cargo))
@@ -81,6 +81,7 @@ class Loading_diagram:
             self.xcg2.append((self.weight[-1]*self.xcg2[-1]+passenger_cg2[i]*self.M_pax_cabin)/(self.M_pax_cabin+self.weight[-1]))        
             self.weight.append(self.M_pax_cabin+self.weight[-1])            
         
+
         "Only considered one fuel tank for now at place of wing"        
         for i in range(len(self.x_fuel)):
             self.xcg1.append((self.weight[-1]*self.xcg1[-1]+self.x_fuel[i]*self.M_fuel)/(self.M_fuel+self.weight[-1]))
@@ -89,14 +90,18 @@ class Loading_diagram:
         
         #print(min(self.xcg1))           
         print(self.N_pax)
+
         
+        self.xcg1.append((self.weight[-1]*self.xcg1[-1]+passenger_cg1[i]*self.M_pax_cabin)/(self.M_pax_cabin+self.weight[-1]))
+        self.weight.append(self.M_fuel+self.weight[-1])      
+    
         plt.figure()   
         plt.plot(self.xcg1, self.weight, color='blue', marker='o')
         plt.plot(self.xcg2, self.weight, color='green', marker='o')
         #plt.hlines(Weight[23],min(xcg), max(xcg),'r')
         #plt.hlines(Weight[45],min(xcg), max(xcg), 'r')
-        #plt.hlines(self.weight[-1],min(self.xcg1), max(self.xcg2), 'r')
-        #plt.hlines(self.weight[-2],min(self.xcg1), max(self.xcg2), 'r')
+        plt.hlines(self.weight[-1],min(self.xcg1), max(self.xcg2), 'r')
+        plt.hlines(self.weight[-2],min(self.xcg1), max(self.xcg2), 'r')
         plt.vlines(min(self.xcg1)-0.02,self.weight[0], self.weight[-1], 'k')
         plt.vlines(max(self.xcg2)+0.02,self.weight[0], self.weight[-1], 'k')
         plt.title('C.g. location for configuration: ',self.config , fontsize=14)
@@ -105,6 +110,3 @@ class Loading_diagram:
         plt.show()
         
         
-        return self.xcg1[-1], self.xcg2[-1], self.weight[-1]
-
-
