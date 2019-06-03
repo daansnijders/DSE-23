@@ -42,7 +42,7 @@ def get_cg_vwing(b_v,Cr_v,Ct_v):
     return x_cg_vwing, y_cg_vwing, z_cg_vwing
     
 def get_cg_fuselage():
-    x_cg_fuselage = 0.435 * l_fuselage
+    x_cg_fuselage = 0.435 * l_f
     y_cg_fuselage = 0
     z_cg_fuselage = 0.5*d_f_outer
     return x_cg_fuselage, y_cg_fuselage, z_cg_fuselage
@@ -62,7 +62,7 @@ def get_cg_ngear():
 def get_cg_mgear():
     x_cg_mgear = x_mlg
     y_cg_mgear = 0
-    z_cg_mgear = 0.5*m_nlg
+    z_cg_mgear = 0.5*z_mlg
     return x_cg_mgear, y_cg_mgear, z_cg_mgear
     
   

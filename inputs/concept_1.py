@@ -34,7 +34,10 @@ T_req = get_T_req(T_W, MTOW)                                                    
 M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
 M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
-M_carried_canard=[MTOW[i]-MTOW[0] for i in range(3)]
+
+M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
+M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
+M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
 
@@ -95,7 +98,7 @@ taper_ratio_c[0]=0                                    # [-] taper ratio canard
 lambda_c_2_rad = [0]+ get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c)                    # [rad] half chord sweep angle canard
 Cr_c = [0]+get_Cr_canard(S_c,taper_ratio_c,b_c)                                                    # [m] root chord length canard
 Ct_c = [0]+get_Ct_canard(Cr_c, taper_ratio_c)                                                    # [m] tip chord length canard
-CL_c = [0]+get_CL_canard(M_carried_canard,rho,V_cruise,S_c)                                                # [-] lift coefficient aircraft
+CL_c = [0]+get_CL_canard(M_carried_canard_MTOW,rho,V_cruise,S_c)                                                # [-] lift coefficient aircraft
 t_c_c =  [0]+get_t_c_canard(lambda_c_2_rad,M_x, M_cruise,CL_c)                                   # [-] thickness over chord main wing
 Cr_t_c= [t_c_c[i]*Cr_c[i] for i in range(3)]                                            #thinkness at the root chord [m]
 MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                                  # [m] mean aerodynamic chord canard
