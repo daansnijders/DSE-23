@@ -63,7 +63,7 @@ class Loading_diagram:
         
         passenger_cg1= np.arange(self.Xfirst, self.Xlast+self.seat_pitch,self.seat_pitch)
         passenger_cg2= np.arange(self.Xlast, self.Xfirst-self.seat_pitch,-self.seat_pitch)
-        print(passenger_cg1)
+        #print(passenger_cg1)
         
         for i in range(len(passenger_cg1)):
             self.xcg1.append((self.weight[-1]*self.xcg1[-1]+passenger_cg1[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))
@@ -87,7 +87,7 @@ class Loading_diagram:
             self.xcg2.append((self.weight[-1]*self.xcg2[-1]+self.x_fuel[i]*self.M_fuel)/(self.M_fuel+self.weight[-1]))
             self.weight.append(self.M_fuel+self.weight[-1])      
             
-    
+            
         plt.figure()   
         plt.plot(self.xcg1, self.weight, color='blue', marker='o')
         plt.plot(self.xcg2, self.weight, color='green', marker='o')
@@ -97,7 +97,7 @@ class Loading_diagram:
         #plt.hlines(self.weight[-2],min(self.xcg1), max(self.xcg2), 'r')
         plt.vlines(min(self.xcg1)-0.02,self.weight[0], self.weight[-1], 'k')
         plt.vlines(max(self.xcg2)+0.02,self.weight[0], self.weight[-1], 'k')
-        plt.title('C.g. location for configuration:', fontsize=14)
+        plt.title('C.g. location for configuration: %i' %self.config, fontsize=14)
         plt.xlabel('Center of gravity location from nose [m]', fontsize=12)
         plt.ylabel('Mass[kg]', fontsize=12)
         plt.show()
