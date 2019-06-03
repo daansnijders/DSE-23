@@ -27,5 +27,3 @@ def get_propulsionsystem_mass(l_f,b):                                           
 def get_totalpowerplant_mass(M_engine_total,M_airinduction,M_fuelsystem, M_propsystem):
     M_powerplant=M_engine_total+M_airinduction+M_fuelsystem+M_propsystem
     return M_powerplant 
-
-print (get_fuelsystem_mass(M_fuel[0],K_fsp))

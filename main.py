@@ -46,8 +46,9 @@ config2_M_powerplant=config2.powerplant_mass()
 config3_M_powerplant=config3.powerplant_mass()
 #get fixed equipment mass
 config1_M_fixedeq=config1.fixed_equipment_mass()
-config2_M_fixedeq=config2.fixed_equipment_mass()
+#config2_M_fixedeq=config2.fixed_equipment_mass()
 config3_M_fixedeq=config3.fixed_equipment_mass()
+config2_M_fixedeq=config3_M_fixedeq                                                 #needed as the fixed equipment needs to be the same for both
 #get OEW total
 config1_class2_OEW=config1.OEW(config1_M_structural,config1_M_powerplant,config1_M_fixedeq)
 config2_class2_OEW=config2.OEW(config2_M_structural,config2_M_powerplant,config2_M_fixedeq)
