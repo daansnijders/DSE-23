@@ -35,6 +35,7 @@ M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            
 M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
 M_carried_canard=[MTOW[i]-MTOW[0] for i in range(3)]
+M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
 

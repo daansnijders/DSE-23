@@ -12,11 +12,13 @@ from inputs.concept_1 import *
 from inputs.constants import *
 from inputs.performance_inputs import *
 
-loadfactor=[2.5,2.8,2.8]
+loadfactor=[2.8,2.8,2.8]
 V_dive=[300,300,300]
 class Class2_weight:
-    def __init__(self,N_pax, MTOW, loadfactor,V_dive, M_fuel ,T_req,l_f,d_f_inner,d_f_outer,l_cabin,l_h,S,S_c, b,b_c, S_v,S_h,Cr_t,Cr_t_c,lambda_2_rad,lambda_h_2_rad, lambda_v_2_rad,lambda_c_2_rad, S_fus):
-        self.M_TO           = MTOW                                              # [kg]?
+    def __init__(self,config, N_pax, MTOW,M_carried_canard,M_MZF, loadfactor,V_dive, M_fuel ,T_req,l_f,d_f_inner,d_f_outer,l_cabin,l_h,S,S_c, b,b_c, S_v,S_h,Cr_t,Cr_t_c,lambda_2_rad,lambda_h_2_rad, lambda_v_2_rad,lambda_c_2_rad, S_fus):
+        self.config         = config
+        self.M_TO           = MTOW                                              # [kg]
+        self.M_carried_canard=M_carried_canard                                  # [KG]    
         self.n_ult          = 1.5*loadfactor                                    # [-]
         self.V_dive         = V_dive                                            # []?
         self.M_fuel         = M_fuel                                            # []?
@@ -42,13 +44,16 @@ class Class2_weight:
         self.lambda_c_2_rad  =lambda_c_2_rad                                       #[rad]
         self.w_fus          = self.d_f_outer/2                                  # [m]
         self.h_fus          = self.d_f_outer/2                                  # [m]
-        self.M_MZF          = self.M_TO-self.M_fuel                             # []?
-        #print(self.M_MZF)
+        self.M_MZF          = M_MZF                                             # [kg]?
+        
     def structural_mass(self):
         M_wing          =get_wing_mass(self.M_MZF,self.b,self.S,self.Cr_t,self.lambda_2_rad,self.n_ult)*0.95
         M_fuselage      =get_fuselage_mass(self.V_dive, self.l_h, self.w_fus, self.h_fus, self.S_fus)
         M_nacelle       = get_nacelle_mass(self.T_req_TO)
-        M_canard         =get_wing_mass(self.M_MZF,self.b_c,self.S_c,self.Cr_t_c,self.lambda_c_2_rad,self.n_ult)
+        if self.config==1:
+            M_canard    =0
+        else:
+            M_canard         =get_wing_mass(self.M_MZF,self.b_c,self.S_c,self.Cr_t_c,self.lambda_c_2_rad,self.n_ult)
         
         M_horizontaltail   =get_horizontaltail_mass(K_h,self.S_h,self.V_dive,self.lambda_h_2_rad)
         M_verticaltail     =get_verticaltail_mass(K_v,self.S_v,self.V_dive,self.lambda_v_2_rad)
@@ -60,7 +65,7 @@ class Class2_weight:
         
         M_structure =get_structural_mass(M_wing,M_fuselage,M_nacelle,M_horizontaltail,M_verticaltail,M_landinggear, M_canard)
         
-        return  M_structure * lbs_to_kg #,M_wing* lbs_to_kg,M_fuselage* lbs_to_kg,M_nacelle* lbs_to_kg,M_horizontaltail* lbs_to_kg,M_verticaltail* lbs_to_kg,M_landinggear* lbs_to_kg,
+        return  M_structure * lbs_to_kg, M_wing*lbs_to_kg, M_canard*lbs_to_kg #,M_wing* lbs_to_kg,M_fuselage* lbs_to_kg,M_nacelle* lbs_to_kg,M_horizontaltail* lbs_to_kg,M_verticaltail* lbs_to_kg,M_landinggear* lbs_to_kg,
 
     
     def powerplant_mass(self):
