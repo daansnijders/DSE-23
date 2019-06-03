@@ -101,5 +101,5 @@ class Loading_diagram:
         plt.xlabel('Center of gravity location from nose [m]', fontsize=12)
         plt.ylabel('Mass[kg]', fontsize=12)
         plt.show()
-        
-        
+
+        return self.xcg1[-1], self.xcg2[-1], self.weight[-1]
