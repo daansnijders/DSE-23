@@ -18,7 +18,7 @@ def get_cg_wing(b,Cr,Ct):
     dis = b/2*y_loc*np.sin(lambda_le_rad)
     location = 0.5*chordlength(y_loc, Cr, Ct)*0.7 + 0.25 *chordlength(y_loc, Cr, Ct)
     x_cg_wingstart = x_le_MAC - y_MAC*sin(lambda_le_rad)
-    x_cg_wing = location+dis
+    x_cg_wing = x_cg_wingstart + (location+dis)
     y_cg_wing = 0
     z_cg_wing = t_c*Cr/2
     return x_cg_wing, y_cg_wing, z_cg_wing
