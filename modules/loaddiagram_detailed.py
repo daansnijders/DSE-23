@@ -11,7 +11,7 @@ from inputs.concept1 import *
 from inputs.constants import *
 
 class Loading_diagram:
-    def __init__(self, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, MTOW, M_MZF, M_TO, N_rows, x_cg, y_cg, z_cg, MAC, S, b, A):
+    def __init__(self, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, MTOW, M_MZF, M_TO, N_rows, x_cg, y_cg, z_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel):
         self.l_f=l_f
         self.l_cabin=l_cabin
         self.seat_pitch=seat_pitch
@@ -29,27 +29,18 @@ class Loading_diagram:
         self.S=S
         self.b=b
         self.A=A
+        self.Xfirst=Xfirst
+        self.M_payload=M_payload
+        self.M_cargo_available=M_cargo_available
+        self.M_fuel=M_fuel
 
 
-
-
-    
-    Xlast=Xfirst+seatpitch*(n_rows-1)
-        
-    volume_cargo_front=9.5
-    volume_cargo_aft=7.2
-    volume_cargo=volume_cargo_front+volume_cargo_aft
-    
+    Xlast=Xfirst+seat_pitch*(N_rows-1)
     
     OEW_F100=24747
     OEW_F120=24747+0.1*6766.137
-    
-    MTOW=45810
-    W_fuel=9070
-    
-    W_payload_total_F100=11993 # bagagge and cargo
-    W_payload_total_F120=MTOW-OEW_F120-W_fuel
-    
+     
+  
     W_passenger=88
     W_pass_total=W_passenger*n_pax
     

@@ -39,9 +39,15 @@ def get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio):
 
 def get_CL(MTOW,rho,V,S):
     return [MTOW[i]*9.80665/(0.5*rho*V**2*S[i]) for i in range(3)]
+def get_CL_canard(MTOW,rho,V,S):
+    return [MTOW[i]*9.80665/(0.5*rho*V**2*S[i]) for i in range(1,3)]
 
 def get_t_c(lambda_2_rad,M_x, M_cr,CL):
     return [(np.cos(lambda_2_rad[i])**3*(M_x-(M_cr + 0.03)*np.cos(lambda_2_rad[i]))-0.115*CL[i]**1.5)/(np.cos(lambda_2_rad[i])**2) for i in range(3)]
+
+def get_t_c_canard(lambda_2_rad,M_x, M_cr,CL):
+    return [(np.cos(lambda_2_rad[i])**3*(M_x-(M_cr + 0.03)*np.cos(lambda_2_rad[i]))-0.115*CL[i]**1.5)/(np.cos(lambda_2_rad[i])**2) for i in range(1,3)]
+
 
 def get_MAC(Cr, taper_ratio):
     return [Cr[i] * 2/3 * (1+taper_ratio[i] + taper_ratio[i]**2) / (1 + taper_ratio[i]) for i in range(3)]
