@@ -4,8 +4,6 @@ Created on Wed May 29 14:44:46 2019
 
 @author: Niels
 """
-#from inputs.constants import *
-from inputs.concept_1 import *
 import numpy as np
 
 def chordlength(y_loc, Cr, Ct,b):
@@ -41,7 +39,7 @@ def get_cg_vwing(b_v,Cr_v,Ct_v):
     z_cg_hwing = d_f_outer+0.38*(b_v/2)
     return x_cg_vwing, y_cg_vwing, z_cg_vwing
     
-def get_cg_fuselage():
+def get_cg_fuselage(l_f,d_f_outer):
     x_cg_fuselage = 0.435 * l_f
     y_cg_fuselage = 0
     z_cg_fuselage = 0.5*d_f_outer
