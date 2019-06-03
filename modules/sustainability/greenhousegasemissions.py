@@ -30,6 +30,12 @@ bypass_ratio=11.05
 T_max=108.53            #[kN]
 
 
+
+
+#check with the requirements
+
+CO_2_reduction=30.8
+
 Dp_Foo_NOx_caep6=-1.04+2*pressure_ratio
 Dp_Foo_NOx_caep8=-9.88+2*pressure_ratio
 
@@ -44,4 +50,6 @@ def get_CO2_emissions(M_fuel_burnt):
 
 def get_NOx_reduction(Dp_Foo_NOx_caep,Dp_Foo_flight):
     return (Dp_Foo_NOx_caep-Dp_Foo_flight)/Dp_Foo_NOx_caep*100
+
+werk=get_NOx_reduction(Dp_Foo_NOx_caep6,Dp_Foo_NOx_av)
 
