@@ -16,6 +16,7 @@ ms_to_kts=1/(kts_to_ms)
 m_to_ft = 1/(ft_to_m)
 kg_to_lbs = 2.20462262 
 lbs_to_kg=1/(kg_to_lbs)
+nm_to_m=1852
 
 
 #FLIGHT PARAMETERS parameters
@@ -66,7 +67,7 @@ s_clearance = 0.02                                                              
 seat_pitch = 32*inch_to_m                                                       # [m] seat pitch length
 seat_width = 20*inch_to_m                                                       # [m] seat width length
 armrest = 2*inch_to_m                                                           # [m] Armrest width
-Xfirst = 5                                                                      # [m] Distance between the c.g. of the first seat and the nose
+Xfirst = 5.                                                                     # [m] Distance between the c.g. of the first seat and the nose
 Xcargo1 = 5.
 Xcargo2 = 20.
 
@@ -98,7 +99,8 @@ N_struts = 2                                                                    
 stroke = 0.3                                                                    # [m] shock absorber stroke
 
 LCN = 45                                                                        # [-] load classification number    
- #angles clearance
+ 
+#angles clearance
 theta = 15                                                                      # [deg] scrape angle
 beta = 17                                                                       # [deg] tip-back angle
 phi = 5                                                                         # [deg] tip clearance angle
@@ -111,6 +113,7 @@ K_h=1.1                                                                         
 K_v= 1                                                                              # is for fuselage mounted H tail
 K_f=1.08                                                                             # pressurized fuselage
 
+#landing gear retreactable 
 K_gr=1                                                                                  #depends on the low wing or high wing
 Ag_main=40                                                                      #torenbeek landinggear main and nose (both retractable)
 Bg_main=0.16
