@@ -16,8 +16,8 @@ Cl_clean=1.5
 Cl_TO=1.9
 
 #CL_land_min=1.8
-Cl_land=2.8
-#CL_land_av=2.8
+Cl_land=2.4
+#CL_land_max=2.8
 
 
 #take off and landing performance
