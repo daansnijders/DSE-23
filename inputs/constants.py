@@ -65,7 +65,7 @@ N_sa = 5                                                                        
 N_aisle = 1                                                                     # [-] Number of aisles
 aisle_width = 0.51                                                              # [m] width of aisles
 s_clearance = 0.02                                                              # [m] clearance between seat and fuselage
-seat_pitch = 30*inch_to_m                                                       # [m] seat pitch length
+seat_pitch = 32*inch_to_m                                                       # [m] seat pitch length
 seat_width = 20*inch_to_m                                                       # [m] seat width length
 armrest = 2*inch_to_m                                                           # [m] Armrest width
 Xfirst = 5                                                                      # [m] Distance between the c.g. of the first seat and the nose
@@ -139,5 +139,5 @@ x_c_oewcg = 0.225
 x_f_cg_l_f = 0.435
 
 # V-n loads diagram
-V_dive = [276.62626727779644, 276.62626727779644, 276.62626727779644]           # all the same with current inputs, but might change, so keep as list
+V_dive = [276.62626727779644, 276.62626727779644, 276.62626727779644]           # [m/s]all the same with current inputs, but might change, so keep as list
 n_max = [2.661047580279859, 2.661047580279859, 2.661047580279859]               # all the same with current inputs, but might change, so keep as list

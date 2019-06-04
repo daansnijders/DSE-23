@@ -66,7 +66,7 @@ def get_Dp_Foo_NOx_specific(NOx_total,T):
 def get_CO2_emissions(M_fuel_burnt):
     return 3.15*M_fuel_burnt
 
-def get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_flight):
+def get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_flight):  #should come to 45%
     return (Dp_Foo_NOx_caep-Dp_Foo_flight)/Dp_Foo_NOx_caep*100
 
 def get_requirement_CO2_check(M_fuel_burnt):
