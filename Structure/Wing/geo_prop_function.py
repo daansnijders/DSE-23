@@ -82,8 +82,8 @@ wing box area,full area,fuel area,moment of inertia,mass at cross section,limit 
 
 def get_cross_sec_prop(chord,y_loc,span):
     front_spar = 0.25*chord
-    rear_spar = 0.75*chord
-    N = 10000
+    rear_spar = 0.6*chord
+    N = 500
     step_size = (rear_spar-front_spar)/N
     
     x_lst = []
