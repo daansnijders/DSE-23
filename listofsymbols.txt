@@ -177,8 +177,6 @@ clearance between seat and fus			s_clearance
 pitch of seats					seat_pitch
 width of seats					seat_width
 width of the armrest				armrest
-place of first row				Xfirst
-place of last row				Xlast
 
 carry on weigth average				W_carry_on
 check in luggage weigth average			W_check_in
