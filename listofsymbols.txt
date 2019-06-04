@@ -204,6 +204,9 @@ number of fueltanks				n_fueltanks
 density of the fuel				rho_fuel
 
 
+TE reference wing flapped surface		SWF
+LE reference wing flapped surface		SWF_LE
+
 
 
 
