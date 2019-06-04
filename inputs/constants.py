@@ -17,6 +17,7 @@ m_to_ft = 1/(ft_to_m)
 kg_to_lbs = 2.20462262 
 lbs_to_kg=1/(kg_to_lbs)
 nm_to_m=1852
+gallons_to_l=3.78541178
 
 
 #FLIGHT PARAMETERS parameters

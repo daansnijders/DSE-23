@@ -9,7 +9,7 @@ from math import *
 import numpy as np
 
 class HLD_class:
-    def __init__(self, Cl_land, Cl_clean, S, A, lambda_4_rad, taper_ratio, CL_alpha):
+    def __init__(self, Cl_land, Cl_clean, S, A, lambda_4_rad, taper_ratio, CL_alpha, lambda_le_rad):
         self.Cl_land        = Cl_land
         self.Cl_clean       = Cl_clean
         self.S              = S
@@ -17,7 +17,7 @@ class HLD_class:
         self.lambda_4_rad   = lambda_4_rad
         self.taper_ratio    = taper_ratio
         self.CL_alpha_clean = CL_alpha
-        
+        self.lambda_le_rad  = lambda_le_rad
     
     def HLD(self):
         Delta_CLmax = self.Cl_land - self.Cl_clean    #[-i + self.Cl_land for i in self.Cl_clean]
@@ -37,6 +37,7 @@ class HLD_class:
         
         HLD_clearance = 0.5     #Clearance between fuselage and the HLD's 
         
+<<<<<<< HEAD
         return(SWF)
         
 class Drag:
@@ -47,3 +48,8 @@ class Drag:
         
     def wing_drag(self):
         
+=======
+        
+        SWF_LE = (0.1*self.S)/(0.9*0.3*self.lambda_le_rad)
+        return(SWF, SWF_LE)
+>>>>>>> 14001a986ceb09e214c006c49be8d9ebf510ce21
