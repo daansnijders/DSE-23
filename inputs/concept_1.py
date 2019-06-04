@@ -19,7 +19,6 @@ from modules.initialsizing_loading import *     # commented out because this imp
 from inputs.constants import *
 
 
-
 #initial sizing 
 
 N_pax = [90,120,120]                                                            # [-] number of passengers
