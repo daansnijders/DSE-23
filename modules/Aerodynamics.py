@@ -40,7 +40,12 @@ class HLD_class:
         return(SWF, SWF_LE)
         
 class Drag:
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def __init__(self,S,A,rho,l_f,V_cruise,mu_37,MAC,Cr,Ct,b,taper_ratio,d_f_outer, lambda_le_rad):
+=======
     def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer):
+>>>>>>> 644b41ed0b61d31d66d66c0e5a2ac7a1a22bd520
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -54,8 +59,13 @@ class Drag:
         self.b              = b
         self.taper_ratio    = taper_ratio
         self.d_f_outer      = d_f_outer
+<<<<<<< HEAD
+        self.lambda_le_rad  = lambda_le_rad
+
+=======
         self.V_TO           = V_TO
         self.mu_sl          = mu_sl
+>>>>>>> 644b41ed0b61d31d66d66c0e5a2ac7a1a22bd520
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -82,6 +92,11 @@ class Drag:
         S_wet = 2*(2*((Ct + c_fuselage_wing) / 2 * (self.b/2 - self.d_f_outer/2)))
         
         C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
+        
+        """ C_D_L_w """
+        RE_LER = rho * V_cruise * 
+        
+        
                         
     def fuse_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
