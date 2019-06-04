@@ -201,7 +201,7 @@ diameter of the fan				d_fan
 length of the engine				l_eng
 number of engines				n_engines
 number of fueltanks				n_fueltanks
-
+density of the fuel				rho_fuel
 
 
 
