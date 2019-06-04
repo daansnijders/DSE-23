@@ -16,7 +16,7 @@ class Class2_weight:
     def __init__(self,config, N_pax, MTOW,M_carried_canard_MZF,M_MZF, n_max,V_dive, M_fuel ,T_req,l_f,d_f_inner,d_f_outer,l_cabin,l_h,S,S_c, b,b_c, S_v,S_h,Cr_t,Cr_t_c,lambda_2_rad,lambda_h_2_rad, lambda_v_2_rad,lambda_c_2_rad, S_fus):
         self.config         = config
         self.M_TO           = MTOW                                              # [kg] 
-        self.n_ult          = 1.5*n_max                                    # [-]
+        self.n_ult          = 1.5*n_max                                         # [-]
         self.V_dive         = V_dive                                            # []?
         self.M_fuel         = M_fuel                                            # []?
         self.T_req_TO       = T_req                                             # [N]?
@@ -36,9 +36,9 @@ class Class2_weight:
         self.d_f_outer      = d_f_outer                                         # [m]
         self.l_cabin        = l_cabin                                           # [m]
         self.b_c            =b_c                                                # [m]
-        self.S_c            =S_c                                                 #[m^2]
-        self.Cr_t_c          =Cr_t_c                                             #[m]
-        self.lambda_c_2_rad  =lambda_c_2_rad                                       #[rad]
+        self.S_c            =S_c                                                # [m^2]
+        self.Cr_t_c          =Cr_t_c                                            # [m]
+        self.lambda_c_2_rad  =lambda_c_2_rad                                    # [rad]
         self.w_fus          = self.d_f_outer/2                                  # [m]
         self.h_fus          = self.d_f_outer/2                                  # [m]
         self.M_MZF          = M_MZF                                             # [kg]?

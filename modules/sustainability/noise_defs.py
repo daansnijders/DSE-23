@@ -25,8 +25,8 @@ def get_effective_pressure(rho,a,P,D,F,r_observer,M,theta):
     p_e_squared=rho*a*P*D*F/(4*pi*r_observer**2*(1-M*cos(theta))**4) #(pa^2)
     return p_e_squared
 
-def get_sound_pressure_level(p_e_squared):
-    SPL=10*log(p_e_squared/(2E-5))
+def get_sound_pressure_level(p_e_squared):   #[dB]
+    SPL=10*log(p_e_squared/(2E-5)**2)
 
 #noise constants
 G_wing=0.37*S/b**2*((rho*M*a*S)/(mu*b))**-0.2

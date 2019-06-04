@@ -74,5 +74,5 @@ def get_requirement_CO2_check(M_fuel_burnt):
 
 
 
-werk=get_NOx_reduction(Dp_Foo_NOx_caep6,Dp_Foo_NOx_av)
+werk=get_NOx_reduction_CAEP(Dp_Foo_NOx_caep6,Dp_Foo_NOx_av)
 
