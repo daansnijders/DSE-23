@@ -44,7 +44,3 @@ class get_cg(object):
     
     def get_z_cg(self):
         return self.z_cg
-
-cg = get_cg(b[0],Cr[0],Ct[0],t_c[0],lambda_le_rad[0],y_MAC[0],x_le_MAC[0])
-
-print(cg.calc_wing())
