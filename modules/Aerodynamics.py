@@ -40,11 +40,11 @@ class HLD_class:
         return(SWF, SWF_LE)
         
 class Drag:
-<<<<<<< HEAD
-    def __init__(self,S,A,rho,l_f,V_cruise,mu_37,MAC,Cr,Ct,b,taper_ratio,d_f_outer):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer):
         self.S              = S
         self.A              = A
         self.rho            = rho
+        self.rho_0          = rho_0
         self.l_f            = l_f
         self.V_cruise       = V_cruise
         self.mu_37          = mu_37
@@ -54,7 +54,8 @@ class Drag:
         self.b              = b
         self.taper_ratio    = taper_ratio
         self.d_f_outer      = d_f_outer
-
+        self.V_TO           = V_TO
+        self.mu_sl          = mu_sl
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -83,12 +84,14 @@ class Drag:
         C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
                         
     def fuse_drag(self):
-        Re_f  = rho   * V_cruise * l_f / mu_37
-        Re_f0 = rho_0 * V_TO     * l_f / mu_sl
+        Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
+        Re_f0 = self.rho_0 * self.V_TO     * self.l_f / self.mu_sl
         #RE at service ceiling results in (same for all configurations)
         Rwf = 1.01          #Figure 4.1
         Cf_fus = 0.0019     #Figure 4.3
-        ratio = l_f/d_f_outer
-        Swet_fus = pi()*d_f_outer*l_f*(1-2/ratio)**(2/3)*(1+1/(ratio)**2)
+        ratio = self.l_f/self.d_f_outer
+        Swet_fus = pi*self.d_f_outer*self.l_f*(1-2/ratio)**(2/3)*(1+1/(ratio)**2)
         
+        CD0_fus = Rwf*Cf_fus*(1+60/(self.l_f/self.d_f_outer)**3 + 0.0025*(self.l_f/self.d_f_outer))*Swet_fus/self.S
+        return(CD0_fus)
 

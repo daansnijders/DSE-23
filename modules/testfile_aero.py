@@ -16,3 +16,8 @@ config1_HLD = HLD_class(Cl_land, Cl_clean, S, A, lambda_4_rad, taper_ratio, CL_a
 SWF, SWF_LE = config1_HLD.HLD()
 print(SWF, SWF_LE)
 
+
+""" Drag classII estimations """
+config1_Drag = Drag(S,A,rho,rho_0,l_f[0],V_cruise,V_to[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer)
+CD0_fus = config1_Drag.fuse_drag()
+print(CD0_fus)
