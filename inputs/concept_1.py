@@ -19,7 +19,6 @@ from modules.initialsizing_loading import *     # commented out because this imp
 from inputs.constants import *
 
 
-
 #initial sizing 
 
 N_pax = [90,120,120]                                                            # [-] number of passengers
@@ -233,8 +232,8 @@ landing_field_length = [get_landing_field_length(landing_thrust, landing_mass[i]
 Cruise fuel economy
 """
 
-engines_used = 2
-#fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S, CDcruise[i]), R[i], V_cruise, engines_used) for i in range(3)]
+
+#fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S, CDcruise[i]), R[i], V_cruise, n_engines) for i in range(3)]
 
 """
 Climb performance

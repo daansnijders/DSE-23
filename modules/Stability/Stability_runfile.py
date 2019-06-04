@@ -36,3 +36,7 @@ cg1_fuel[2], cg2_fuel[2], weight_fuel[2] = config3.loading_diagrams_fuel()
 
 
 config1     = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg[0], x_mlg[0])     
+config2     = Stability_check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg[1], x_mlg[1])     
+config3     = Stability_check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg[2], x_mlg[2])     
+
+frac_min, frac_max, frac = config1.check_equilibrium()
