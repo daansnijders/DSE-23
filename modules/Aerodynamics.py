@@ -38,3 +38,12 @@ class HLD_class:
         HLD_clearance = 0.5     #Clearance between fuselage and the HLD's 
         
         return(SWF)
+        
+class Drag:
+    def __init__(self,S,A):
+        self.S          = S
+        self.A          = A
+        
+        
+    def wing_drag(self):
+        
