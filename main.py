@@ -86,8 +86,8 @@ while config2_iteration_diff>1:
 
 
 
-#config3_class2_OEW              =config3.OEW(config3_M_structural,config3_M_powerplant,config3_M_fixedeq)
 #
+<<<<<<< HEAD
 ##update MTOW with class 1 and perform iteration
 #config1_MTOW_class1             =get_MTOW_class1(config1_class2_OEW)
 #config2_MTOW_class1             =get_MTOW_class1(config2_class2_OEW)
@@ -100,3 +100,6 @@ while config2_iteration_diff>1:
 #config1_stability.loading_diagrams()
 #config2_stability.loading_diagrams()
 #config3_stability.loading_diagrams()
+=======
+
+>>>>>>> 92eeb8a5ba1d71a2d16437666985a387fa5f1aca

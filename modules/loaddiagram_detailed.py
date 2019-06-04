@@ -102,4 +102,8 @@ class Loading_diagram:
         plt.ylabel('Mass[kg]', fontsize=12)
         plt.show()
 
+<<<<<<< HEAD
         return min(self.xcg1), max(self.xcg2), max(self.weight)
+=======
+        return self.xcg1[-1], self.xcg2[-1], self.weight[-1]
+>>>>>>> 92eeb8a5ba1d71a2d16437666985a387fa5f1aca
