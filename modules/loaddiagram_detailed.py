@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 from inputs.concept_1 import *
 from inputs.constants import *
-from inputs.performance_inputs import *
+
 
 
 "Values to input once known"
