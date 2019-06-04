@@ -63,22 +63,20 @@ class Stability_check_ground:
             self.b_n.append(self.cg2_fuel[i] - self.x_nlg)
             self.b_m.append(self.x_mlg - self.cg2_fuel[i])
                 
+        for i in range(len(self.weight_fuel)):
+            self.F_n.append((self.weight_fuel[i]*self.b_m[(2*len(self.weight_pass)+i)])/(self.b_m[(2*len(self.weight_pass)+i)]+self.b_n[(2*len(self.weight_pass)+i)]))
+        for i in range(len(self.weight_fuel)):
+            self.F_n.append((self.weight_fuel[i]*self.b_m[(i+len(self.weight_fuel)+2*len(self.weight_pass))])/(self.b_m[(i+len(self.weight_fuel)+2*len(self.weight_pass))]+self.b_n[(i+len(self.weight_fuel)+2*len(self.weight_pass))]))
         
         for i in range(len(self.weight_fuel)):
-            self.F_n.append((self.weight_fuel[i]*self.b_m[i])/(self.b_m[i]+self.b_n[i]))
+            self.F_m.append((self.weight_fuel[i]-self.F_n[(2*len(self.weight_pass)+i)])/2)
         for i in range(len(self.weight_fuel)):
-            self.F_n.append((self.weight_fuel[i]*self.b_m[(i+len(self.weight_fuel))])/(self.b_m[i]+self.b_n[i]))
-        
-        for i in range(len(self.weight_fuel)):
-            self.F_m.append((self.weight_fuel[i]-self.F_n[i])/2)
-        for i in range(len(self.weight_fuel)):
-            self.F_m.append((self.weight_fuel[i]-self.F_n[(i+len(self.weight_fuel))])/2)
-        
+            self.F_m.append((self.weight_fuel[i]-self.F_n[(i+len(self.weight_fuel)+2*len(self.weight_pass))])/2)
         
         for i in range(len(self.weight_fuel)):
             self.frac.append(self.F_n[(2*len(self.weight_pass)+i)]/self.weight_fuel[i])
         for i in range(len(self.weight_fuel)):
             self.frac.append(self.F_n[(i+len(self.weight_fuel)+2*len(self.weight_pass))]/self.weight_fuel[i])
         
-        
+                
         return min(self.frac), max(self.frac), self.frac

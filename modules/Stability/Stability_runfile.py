@@ -39,4 +39,8 @@ config1     = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], c
 config2     = Stability_check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg[1], x_mlg[1])     
 config3     = Stability_check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg[2], x_mlg[2])     
 
-frac_min, frac_max, frac = config1.check_equilibrium()
+frac_min = [0,0,0]
+frac_max = [0,0,0]
+frac_min[0], frac_max[0], frac1 = config1.check_equilibrium()
+frac_min[1], frac_max[1], frac2 = config2.check_equilibrium()
+frac_min[2], frac_max[2], frac2 = config3.check_equilibrium()
