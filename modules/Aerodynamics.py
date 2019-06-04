@@ -40,24 +40,45 @@ class HLD_class:
         return(SWF, SWF_LE)
         
 class Drag:
-    def __init__(self,S,A,rho,l_f,V_cruise,mu_37):
-        self.S          = S
-        self.A          = A
-        self.rho        = rho
-        self.l_f        = l_f
-        self.V_cruise   = V_cruise
-        self.mu_37      = mu_37
-        
+    def __init__(self,S,A,rho,l_f,V_cruise,mu_37,MAC,Cr,Ct,b,taper_ratio,d_f_outer):
+        self.S              = S
+        self.A              = A
+        self.rho            = rho
+        self.l_f            = l_f
+        self.V_cruise       = V_cruise
+        self.mu_37          = mu_37
+        self.MAC            = MAC
+        self.Ct             = Ct
+        self.Cr             = Cr
+        self.b              = b
+        self.taper_ratio    = taper_ratio
+        self.d_f_outer      = d_f_outer
         
     def wing_drag(self):
-        Re_f  = rho   * V_cruise * l_f / mu_37
-        Re_f0 = rho_0 * V_TO     * l_f / mu_sl
+        Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
+        Re_f0 = self.rho_0 * self.V_TO     * self.l_f / self.mu_sl
         #These result in
-        Rwf =           #(Figure 4.1)
+        R_wf = 1.01         #(Figure 4.1) 
+        
+        cos_lambda_2_rad   = cos(lambda_2_rad)
         cos_lambda_c_2_rad = cos(lambda_c_2_rad)
         #This results in
-        R_LS =          #(Figure 4.2)
+        R_LS   = 1.21        #(Figure 4.2)
+        R_LS_c = 1.21        #(Figure 4.2)
         
-
-    def fuse_drag(self):
+        L_prime = 2.0
+        C_f_w = .00265
+        t_c = 0.15
+        
+        """ Calculate chord at fuselage-wing intersection """
+        x = self.taper_ratio * self.b/2 / (1 - self.taper_ratio)
+        h2 = self.b / 2 + x
+        h1 = h2 - self.d_f_outer/2
+        c_fuselage_wing = h1/h2*self.Cr
+        
+        S_wet = 2*(2*((Ct + c_fuselage_wing) / 2 * (self.b/2 - self.d_f_outer/2)))
+        
+        C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
+                        
+    #def fuse_drag(self):
         
