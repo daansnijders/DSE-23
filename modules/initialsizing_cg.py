@@ -7,7 +7,7 @@ Created on Tue May 14 13:42:00 2019
 from inputs.constants import *
 
 def get_z_cg(d_f_outer):
-    return [d_f_outer[i]/2 for i in range(3)]
+    return d_f_outer/2
 
 
 def get_y_cg():
@@ -37,18 +37,17 @@ def get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail):
     return M_fuselage_group, x_cg_fuselage_group
 
 
-def get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group, concept_3=False):
-    x_le_MAC_org = [x_f_cg_l_f * l_f[i] + MAC[i] * (x_c_wcg*(M_wing_group[i]/M_fuselage_group[i])\
+def get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group):
+    x_le_MAC_org = [x_f_cg_l_f * l_f[i] + MAC * (x_c_wcg*(M_wing_group[i]/M_fuselage_group[i])\
                     -x_c_oewcg * (1+M_wing_group[i]/M_fuselage_group[i])) for i in range(3)]
     
     x_le_MAC = [x_le_MAC_org[0], x_le_MAC_org[0] \
                 + (l_f[1] - l_f[0]), x_le_MAC_org[0] + (l_f[2] - l_f[0])]
-    if concept_3:
-        x_le_MAC = [max(x_le_MAC_org) for i in range(3)]
+
     return x_le_MAC
 
 def get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group ):
-    x_cg_wing = [x_le_MAC[i] + x_c_wcg * MAC[i] for i in range(3)]
+    x_cg_wing = [x_le_MAC[i] + x_c_wcg * MAC for i in range(3)]
     x_cg_eng = [x_le_MAC[i]-0.6*l_eng for i in range(3)]
     
     x_cg_wing_group = [(M_wing[i]*x_cg_wing[i] \
