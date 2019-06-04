@@ -60,4 +60,6 @@ class Drag:
         
 
     def fuse_drag(self):
-        
+        Re_f  = rho   * V_cruise * l_f / mu_37
+        Re_f0 = rho_0 * V_TO     * l_f / mu_sl
+        Cf_fus = 0.0026
