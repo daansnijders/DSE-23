@@ -17,6 +17,7 @@ from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import *
+from modules.Aerodynamics import *
 
 
 #initial sizing 
@@ -34,7 +35,10 @@ T_req = get_T_req(T_W, MTOW)                                                    
 M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
 M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
-M_carried_canard=[MTOW[i]-MTOW[0] for i in range(3)]
+
+M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
+M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
+M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
 
@@ -57,9 +61,11 @@ Mtot_carry_on, Mtot_check_in, V_carry_on\
 
 V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)# [m^3] available cargo volume
 M_cargo_available = get_cargo_mass(N_pax,M_payload)                             # [kg] available cargo mass
+"Change this when correct length of modular part is found"
+x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]\
+           , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]             # [m] place of cargo compartments 1 and 2 from nose
 
 #Propulsion
-
 d_nacel = 1.1*d_fan                                                             # [m] diameter of engine nacelle
 l_nacel = 1.1*l_eng                                                             # [m] length of the engine nacelle
 
@@ -95,7 +101,7 @@ taper_ratio_c[0]=0                                    # [-] taper ratio canard
 lambda_c_2_rad = [0]+ get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c)                    # [rad] half chord sweep angle canard
 Cr_c = [0]+get_Cr_canard(S_c,taper_ratio_c,b_c)                                                    # [m] root chord length canard
 Ct_c = [0]+get_Ct_canard(Cr_c, taper_ratio_c)                                                    # [m] tip chord length canard
-CL_c = [0]+get_CL_canard(M_carried_canard,rho,V_cruise,S_c)                                                # [-] lift coefficient aircraft
+CL_c = [0]+get_CL_canard(M_carried_canard_MTOW,rho,V_cruise,S_c)                                                # [-] lift coefficient aircraft
 t_c_c =  [0]+get_t_c_canard(lambda_c_2_rad,M_x, M_cruise,CL_c)                                   # [-] thickness over chord main wing
 Cr_t_c= [t_c_c[i]*Cr_c[i] for i in range(3)]                                            #thinkness at the root chord [m]
 MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                                  # [m] mean aerodynamic chord canard
@@ -248,3 +254,5 @@ Mass/payload-range diagram
 #CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
 #for i in range(3):
 #    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
+
+

@@ -66,6 +66,10 @@ s_clearance = 0.02                                                              
 seat_pitch = 32*inch_to_m                                                       # [m] seat pitch length
 seat_width = 20*inch_to_m                                                       # [m] seat width length
 armrest = 2*inch_to_m                                                           # [m] Armrest width
+Xfirst = 5                                                                      # [m] Distance between the c.g. of the first seat and the nose
+Xcargo1 = 5.
+Xcargo2 = 20.
+
 
 #average masses on passengers and payload
 M_carry_on = 6.1                                                                # [kg] average carry-on luggage weight
@@ -126,3 +130,7 @@ loc_rear_spar = 0.75                                                            
 x_c_wcg = 0.205
 x_c_oewcg = 0.225
 x_f_cg_l_f = 0.435
+
+# V-n loads diagram
+V_dive = [276.62626727779644, 276.62626727779644, 276.62626727779644]           # all the same with current inputs, but might change, so keep as list
+n_max = [2.661047580279859, 2.661047580279859, 2.661047580279859]               # all the same with current inputs, but might change, so keep as list
