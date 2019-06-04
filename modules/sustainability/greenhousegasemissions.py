@@ -47,6 +47,9 @@ power_idle=7
 
 #check with the requirements 
 CO_2_reduction=30.8             #in percentage
+E175_E1_1500=1727               #fuel used in E1 for 1500 nm
+E190_E1_1500=2133
+
 
 Dp_Foo_NOx_caep6=-1.04+2*pressure_ratio
 Dp_Foo_NOx_caep8=-9.88+2*pressure_ratio
