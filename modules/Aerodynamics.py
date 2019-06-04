@@ -9,14 +9,15 @@ from math import *
 import numpy as np
 
 class HLD_class:
-    def __init__(self, Cl_land, Cl_clean, S, A, lambda_4_rad, taper_ratio):
+    def __init__(self, Cl_land, Cl_clean, S, A, lambda_4_rad, taper_ratio, CL_alpha, lambda_le_rad):
         self.Cl_land        = Cl_land
         self.Cl_clean       = Cl_clean
-        self.S              = S[0]
-        self.A              = A[0]
-        self.lambda_4_rad   = lambda_4_rad[0]
-        self.taper_ratio    = taper_ratio[0]
-        
+        self.S              = S
+        self.A              = A
+        self.lambda_4_rad   = lambda_4_rad
+        self.taper_ratio    = taper_ratio
+        self.CL_alpha_clean = CL_alpha
+        self.lambda_le_rad  = lambda_le_rad
     
     def HLD(self):
         Delta_CLmax = self.Cl_land - self.Cl_clean    #[-i + self.Cl_land for i in self.Cl_clean]
@@ -28,8 +29,14 @@ class HLD_class:
         #[(x *self.S)/(0.9*Delta_cl*np.cos(lambda_hl_rad)) for x in Delta_CLmax]
         SWF_S = SWF/self.S
         delta_alpha = np.deg2rad(-15) * SWF_S * np.cos(lambda_hl_rad)
-        print(SWF_S)
+        
+        Sprime_S = 1 + SWF_S * (c_prime - 1)
+        
+        CL_alpha_flapped = Sprime_S * self.CL_alpha_clean
+        
         
         HLD_clearance = 0.5     #Clearance between fuselage and the HLD's 
         
-        return(SWF)
+        
+        SWF_LE = (0.1*self.S)/(0.9*0.3*self.lambda_le_rad)
+        return(SWF, SWF_LE)
