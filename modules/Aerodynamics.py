@@ -21,12 +21,6 @@ class HLD_class:
     def HLD(self):
         Delta_CLmax = [-i + self.Cl_TO for i in self.CLmax]
         hl = 0.65              # Location hinge line on chord
-        self.Delta_CLmax = Cl_TO - CLmax
-        self.hl = 13/20              # Location hinge line on chord
-        self.lambda_hl_rad = np.arctan(np.tan(lambda_4_rad)-4/A*(hl-1/4)(1-taper_ratio)/(1+taper_ratio))
-        self.c_prime = 1 + 0.57*(1-hl)
-        self.Delta_cl = 1.3*(c_prime)
-        
         lambda_hl_rad = np.arctan(np.tan(self.lambda_4_rad)-(4/self.A)*(hl-1/4)*(1-self.taper_ratio)/(1+self.taper_ratio))
         c_prime = 1 + 0.57*(1-hl)
         Delta_cl = 1.6*(c_prime)
