@@ -17,7 +17,7 @@ from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import *
-from modules.Aerodynamics import *
+
 
 
 #initial sizing 
