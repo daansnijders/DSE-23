@@ -44,3 +44,4 @@ frac_max = [0,0,0]
 frac_min[0], frac_max[0], frac1 = config1.check_equilibrium()
 frac_min[1], frac_max[1], frac2 = config2.check_equilibrium()
 frac_min[2], frac_max[2], frac2 = config3.check_equilibrium()
+
