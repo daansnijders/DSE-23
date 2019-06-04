@@ -8,6 +8,7 @@ Created on Tue Jun  4 09:32:22 2019
 from inputs.constants import *
 from inputs.performance_inputs import *
 from inputs.concept_1 import *
+from modules.Aerodynamics import *
 
 
 """ HLD design """

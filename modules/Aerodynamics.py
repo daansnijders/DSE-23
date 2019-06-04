@@ -40,11 +40,12 @@ class HLD_class:
         return(SWF, SWF_LE)
         
 class Drag:
-    def __init__(self,S,A,rho,l_f,V_cruise,mu_37):
+    def __init__(self,S,A,rho,l_f,d_f,V_cruise,mu_37):
         self.S          = S
         self.A          = A
         self.rho        = rho
         self.l_f        = l_f
+        self.d_f        = d_f
         self.V_cruise   = V_cruise
         self.mu_37      = mu_37
         
@@ -62,4 +63,8 @@ class Drag:
     def fuse_drag(self):
         Re_f  = rho   * V_cruise * l_f / mu_37
         Re_f0 = rho_0 * V_TO     * l_f / mu_sl
-        Cf_fus = 0.0026
+        #RE at service ceiling results in (same for all configurations)
+        Rwf = 1.01          #Figure 4.1
+        Cf_fus = 0.0019     #Figure 4.3
+        
+        
