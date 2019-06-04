@@ -7,14 +7,10 @@ Created on Mon Jun  3 12:43:09 2019
 
 
 
-from modules.class2_struct_defs import *
-from modules.class2_powerplant_defs import *
-from modules.class2_fixedequipment_defs import *
-from modules.class2 import *
+
 
 from inputs.concept_1 import *
 from inputs.constants import *
-from inputs.performance_inputs import *
 
 from modules.loaddiagram_detailed import *
 from modules.Stability.Check_ground import *
