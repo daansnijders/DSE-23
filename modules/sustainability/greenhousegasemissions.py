@@ -48,9 +48,9 @@ power_idle=7
 #check with the requirements 
 #co2
 CO_2_reduction=30.8             #in percentage
-E175_E1_1500=1727               #fuel used in E1 for 1500 nm
-E190_E1_1500=2133
-fuel_target_1500=2133*(1-CO_2_reduction/100) #for 1500 nm fuel consumption
+E175_E1_1500=1727 *gallons_to_l *rho_fuel/1000            #fuel used in E1 for 1500 nm
+E190_E1_1500=2133 *gallons_to_l *rho_fuel/1000
+fuel_target_1500=E190_E1_1500*(1-CO_2_reduction/100) #for 1500 nm fuel consumption
 #NOx
 Dp_Foo_NOx_caep6=-1.04+2*pressure_ratio
 Dp_Foo_NOx_caep8=-9.88+2*pressure_ratio
@@ -66,11 +66,13 @@ def get_Dp_Foo_NOx_specific(NOx_total,T):
 def get_CO2_emissions(M_fuel_burnt):
     return 3.15*M_fuel_burnt
 
-def get_NOx_reduction(Dp_Foo_NOx_caep,Dp_Foo_flight):
+def get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_flight):
     return (Dp_Foo_NOx_caep-Dp_Foo_flight)/Dp_Foo_NOx_caep*100
 
-def get_requirement_CO2(M_fuel_burnt):
-    return (M_fuel_burnt-fuel_target_1500)/fuel_target_1500
+def get_requirement_CO2_check(M_fuel_burnt):
+    return (M_fuel_burnt-fuel_target_1500)/fuel_target_1500*100
+
+
 
 werk=get_NOx_reduction(Dp_Foo_NOx_caep6,Dp_Foo_NOx_av)
 

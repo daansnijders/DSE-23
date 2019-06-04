@@ -6,16 +6,14 @@ Created on Mon Jun  3 12:43:09 2019
 """
 
 
-from modules.class2_struct_defs import *
-from modules.class2_powerplant_defs import *
-from modules.class2_fixedequipment_defs import *
-from modules.class2 import *
+
+
 
 from inputs.concept_1 import *
 from inputs.constants import *
-from inputs.performance_inputs import *
 
 from modules.loaddiagram_detailed import *
+from modules.Stability.Check_ground import *
 
 
 config1     = Loading_diagram(x_cargo[0], l_f[0], l_cabin[0], seat_pitch, N_pax[0], N_sa, OEW[0], MTOW[0], x_cg[0], y_cg[0], z_cg, MAC, S, b, A, Xfirst, M_payload[0], M_cargo_available[0], M_fuel[0], M_pax, M_carry_on, x_cg_wing[0], 1)     
@@ -35,3 +33,6 @@ weight_fuel = [0, 0, 0]
 cg1_fuel[0], cg2_fuel[0], weight_fuel[0] = config1.loading_diagrams_fuel()
 cg1_fuel[1], cg2_fuel[1], weight_fuel[1] = config2.loading_diagrams_fuel()
 cg1_fuel[2], cg2_fuel[2], weight_fuel[2] = config3.loading_diagrams_fuel()
+
+
+config1     = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg[0], x_mlg[0])     

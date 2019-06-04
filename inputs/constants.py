@@ -95,7 +95,7 @@ n_fueltanks  = 4                                                                
 d_eng = 2.006                                                                   # [m] diameter of the engine
 d_fan = 2.006                                                                   # [m] diameter of the fan
 l_eng = 3.184                                                                   # [m] length of the engine
-
+rho_fuel=810                                                                  #[kg/m*3] wikipedia? at 15 degrees
 # Undercarriage
 N_mw = 4                                                                        # [-] number of wheels mlg
 N_nw = 2                                                                        # [-] number of wheels nlg
