@@ -66,5 +66,6 @@ class Drag:
         #RE at service ceiling results in (same for all configurations)
         Rwf = 1.01          #Figure 4.1
         Cf_fus = 0.0019     #Figure 4.3
-        
+        ratio = l_f/d_f_outer
+        Swet_fus = pi()*d_f_outer*l_f*(1-2/ratio)**(2/3)*(1+1/(ratio)**2)
         
