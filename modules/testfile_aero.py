@@ -11,7 +11,7 @@ from inputs.concept_1 import *
 
 
 """ HLD design """
-config1_HLD = HLD_class(Cl_land, Cl_clean, S, A, lambda_4_rad, taper_ratio,CL_alpha)
-SWF = HLD_class.HLD(config1_HLD)
-print(SWF)
+config1_HLD = HLD_class(Cl_land, Cl_clean, S, A, lambda_4_rad, taper_ratio,CL_alpha, lambda_le_rad)
+SWF, SWF_LE = HLD_class.HLD(config1_HLD)
+print(SWF, SWF_LE)
 
