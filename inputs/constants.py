@@ -17,6 +17,7 @@ m_to_ft = 1/(ft_to_m)
 kg_to_lbs = 2.20462262 
 lbs_to_kg=1/(kg_to_lbs)
 nm_to_m=1852
+gallons_to_l=3.78541178
 
 
 #FLIGHT PARAMETERS parameters
@@ -94,7 +95,7 @@ n_fueltanks  = 4                                                                
 d_eng = 2.006                                                                   # [m] diameter of the engine
 d_fan = 2.006                                                                   # [m] diameter of the fan
 l_eng = 3.184                                                                   # [m] length of the engine
-
+rho_fuel=810                                                                  #[kg/m*3] wikipedia? at 15 degrees
 # Undercarriage
 N_mw = 4                                                                        # [-] number of wheels mlg
 N_nw = 2                                                                        # [-] number of wheels nlg
@@ -138,5 +139,5 @@ x_c_oewcg = 0.225
 x_f_cg_l_f = 0.435
 
 # V-n loads diagram
-V_dive = [276.62626727779644, 276.62626727779644, 276.62626727779644]           # all the same with current inputs, but might change, so keep as list
+V_dive = [276.62626727779644, 276.62626727779644, 276.62626727779644]           # [m/s]all the same with current inputs, but might change, so keep as list
 n_max = [2.661047580279859, 2.661047580279859, 2.661047580279859]               # all the same with current inputs, but might change, so keep as list

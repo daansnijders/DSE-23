@@ -13,7 +13,6 @@ Assumptions:
 ------------------------------------------------------------------------------
 """
 import lift_surface_function as lsf
-import geo_prop_function as gpf
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -38,7 +37,7 @@ chord_tip = 1.657860
 wing_area = 135.403711
 
 # Discretisation number [-]
-N = 1000
+N = 500
 
 # Lift Coefficient [-]
 coeff_lift = 1.584
@@ -101,19 +100,4 @@ plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,7])
 plt.show()
 
 """
-Form list of cross-section
-"""
-cross_section_lst = []
-for i in range(len(internal_loads_lst)):
-    cross_section = gpf.get_cross_sec_prop(internal_loads_lst[i,1],internal_loads_lst[i,0],wing_span)
-    cross_section_lst.append(cross_section)
-cross_section_lst = np.array(cross_section_lst)
-
-"""
-Calculate amount of fuel it can carry
-"""
-fuel_volume = 0
-for i in range(len(cross_section_lst)):
-    if internal_loads_lst[i,0]<0.6*wing_span/2:
-        fuel_volume += cross_section_lst[i,2]*(wing_span/2)/N
-fuel_mass = 2*fuel_volume*804
+Form list of stress 
