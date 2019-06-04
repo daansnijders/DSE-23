@@ -5,7 +5,7 @@ Created on Mon Jun  3 15:00:22 2019
 @author: Lisa
 """
 #engine inputs from easa database
-#EINOx from emission database, PW1525G [g/kg]
+#EINOx from emission database, PW1525G, 16PW110  [g/kg]
 
 EI_NOx_TO=28.1 
 EI_NOx_cruise=21.2
@@ -46,11 +46,12 @@ power_idle=7
 
 
 #check with the requirements 
+#co2
 CO_2_reduction=30.8             #in percentage
 E175_E1_1500=1727               #fuel used in E1 for 1500 nm
 E190_E1_1500=2133
-
-
+fuel_target=2133*(1-CO_2_reduction/100) #for 1500 nm
+#NOx
 Dp_Foo_NOx_caep6=-1.04+2*pressure_ratio
 Dp_Foo_NOx_caep8=-9.88+2*pressure_ratio
 
