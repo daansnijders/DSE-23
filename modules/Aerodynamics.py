@@ -54,17 +54,7 @@ class Drag:
         self.b              = b
         self.taper_ratio    = taper_ratio
         self.d_f_outer      = d_f_outer
-=======
-    def __init__(self,S,A,rho,l_f,d_f,V_cruise,mu_37):
-        self.S          = S
-        self.A          = A
-        self.rho        = rho
-        self.l_f        = l_f
-        self.d_f        = d_f
-        self.V_cruise   = V_cruise
-        self.mu_37      = mu_37
-        
->>>>>>> 3a24efc386f4b69850048310b542bc2ace2c0d4e
+
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -78,7 +68,6 @@ class Drag:
         R_LS   = 1.21        #(Figure 4.2)
         R_LS_c = 1.21        #(Figure 4.2)
         
-<<<<<<< HEAD
         L_prime = 2.0
         C_f_w = .00265
         t_c = 0.15
@@ -93,10 +82,6 @@ class Drag:
         
         C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
                         
-    #def fuse_drag(self):
-        
-=======
-
     def fuse_drag(self):
         Re_f  = rho   * V_cruise * l_f / mu_37
         Re_f0 = rho_0 * V_TO     * l_f / mu_sl
@@ -106,4 +91,4 @@ class Drag:
         ratio = l_f/d_f_outer
         Swet_fus = pi()*d_f_outer*l_f*(1-2/ratio)**(2/3)*(1+1/(ratio)**2)
         
->>>>>>> 3a24efc386f4b69850048310b542bc2ace2c0d4e
+
