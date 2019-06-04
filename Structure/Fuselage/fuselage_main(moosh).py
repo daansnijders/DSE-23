@@ -97,4 +97,4 @@ Lift_mainwing, Lift_tail):
     for i in range(n):
         stress_long_max[i] = abs(stress_bending_max[i])+stress_pressure_long[i]
         
-        return max(stress_bending_max)
+    return max(stress_bending_max)
