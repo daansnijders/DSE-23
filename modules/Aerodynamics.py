@@ -9,7 +9,7 @@ from math import *
 import numpy as np
 
 class HLD_class:
-    def __init__(self, Cl_land, Cl_clean, S, A, lambda_4_rad, taper_ratio, CL_alpha, lambda_le_rad):
+    def __init__(self,Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer):
         self.Cl_land        = Cl_land
         self.Cl_clean       = Cl_clean
         self.S              = S
@@ -18,6 +18,9 @@ class HLD_class:
         self.taper_ratio    = taper_ratio
         self.CL_alpha_clean = CL_alpha
         self.lambda_le_rad  = lambda_le_rad
+        self.b              = sqrt(A*S)
+        self.Cr             = Cr
+        self.d_f_outer      = d_f_outer
     
     def HLD(self):
         Delta_CLmax = self.Cl_land - self.Cl_clean    #[-i + self.Cl_land for i in self.Cl_clean]
@@ -36,8 +39,39 @@ class HLD_class:
         
         
         HLD_clearance = 0.5     #Clearance between fuselage and the HLD's 
+        
+        """ Calculate span of the flap """
+        #x, h1, h2, and h3 are only used for calculation purposes
+        x = self.taper_ratio * self.b/2 / (1 - self.taper_ratio)
+        h2 = self.b / 2 + x
+        S_wet = 0
+        h1 = h2 - self.d_f_outer/2 - HLD_clearance
+        c_flap_start = h1/h2*self.Cr
+        i = 1
+        while S_wet <= SWF :
+            h3 = h1 - i*0.001
+            c_flap_end = h3/h2*self.Cr
+            S_wet = 2*((c_flap_start + c_flap_end) / 2 * (i*0.001))
+            i += 1
+        b_flap = h1 - h3
+        
         SWF_LE = (0.1*self.S)/(0.9*0.3*self.lambda_le_rad)
-        return(SWF, SWF_LE)
+        """ Calculate span of the slat """
+        #x, h1, h2, and h3 are only used for calculation purposes
+        x = self.taper_ratio * self.b/2 / (1 - self.taper_ratio)
+        h2 = self.b / 2 + x
+        S_wet = 0
+        h1 = h2 - self.d_f_outer/2 - HLD_clearance
+        c_slat_start = h1/h2*self.Cr
+        i = 1
+        while S_wet <= SWF_LE :
+            h3 = h1 - i*0.001
+            c_slat_end = h3/h2*self.Cr
+            S_wet = 2*((c_slat_start + c_slat_end) / 2 * (i*0.001))
+            i += 1
+        b_slat = h1 - h3
+        
+        return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
     def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad):
@@ -57,6 +91,7 @@ class Drag:
         self.lambda_le_rad  = lambda_le_rad
         self.V_TO           = V_TO
         self.mu_sl          = mu_sl
+        self.M              = 0.75
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -85,7 +120,15 @@ class Drag:
         C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
         
         """ C_D_L_w """
-        RE_LER = rho * V_cruise * 
+        r_LE = 0.687                  #Leading Edge radius
+        RE_LER = self.rho * self.V_cruise * r_LE / self.mu_37
+        R_par = RE_LER * 1/(tan(self.lambda_le_rad)) * sqrt(1 - (self.M*cos(self.lambda_le_rad))**2)
+        R_par2 = self.A * self.taper_ratio / cos(self.lambda_le_rad) 
+        #This results in 
+        R = 0.95
+        
+        
+        
         
         
                         
