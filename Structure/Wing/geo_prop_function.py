@@ -24,7 +24,7 @@ t_skin = 0.005
 spar_front = 0.25
 
 # Rear spar location/chord [-]
-spar_rear = 0.75
+spar_rear = 0.6
 
 # Chord [m] example
 chord = 5
