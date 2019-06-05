@@ -209,7 +209,10 @@ LE reference wing flapped surface		SWF_LE
 
 
 
-
+Zero lift drag fuselage				CD0_fus
+Lift induced drag fuselage			CDL_fus
+Subsonic total drag fuselage			CD_fus_sub
+Transonic total drag fuselage			CD_fus_trans
 
 
 									

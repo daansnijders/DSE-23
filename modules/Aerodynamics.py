@@ -74,7 +74,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -91,7 +91,15 @@ class Drag:
         self.lambda_le_rad  = lambda_le_rad
         self.V_TO           = V_TO
         self.mu_sl          = mu_sl
+<<<<<<< HEAD
         self.M              = 0.75
+=======
+        self.CLdes          = CLdes
+        self.CL_alpha       = CL_alpha
+        self.l_cockpit      = l_cockpit
+        self.l_cabin        = l_cabin
+        self.l_tail         = l_tail
+>>>>>>> d74e35ad67a005be595c0f0b904a6718a5fec142
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -120,6 +128,7 @@ class Drag:
         C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
         
         """ C_D_L_w """
+<<<<<<< HEAD
         r_LE = 0.687                  #Leading Edge radius
         RE_LER = self.rho * self.V_cruise * r_LE / self.mu_37
         R_par = RE_LER * 1/(tan(self.lambda_le_rad)) * sqrt(1 - (self.M*cos(self.lambda_le_rad))**2)
@@ -129,6 +138,9 @@ class Drag:
         
         
         
+=======
+#        RE_LER = rho * V_cruise * 
+>>>>>>> d74e35ad67a005be595c0f0b904a6718a5fec142
         
         
                         
@@ -142,5 +154,27 @@ class Drag:
         Swet_fus = pi*self.d_f_outer*self.l_f*(1-2/ratio)**(2/3)*(1+1/(ratio)**2)
         
         CD0_fus = Rwf*Cf_fus*(1+60/(self.l_f/self.d_f_outer)**3 + 0.0025*(self.l_f/self.d_f_outer))*Swet_fus/self.S
-        return(CD0_fus)
-
+        
+        CL0 = self.CL_alpha*(pi/180)*5.5
+        alpha = (self.CLdes -CL0)/self.CL_alpha
+        
+        eta1 = 0.66         #Figure 4.19
+        eta2 = 0.68         #Figure 4.19
+        cdc = 1.2           #Figure 4.20
+        Splf = 0.5*self.d_f_outer*(self.l_tail+self.l_cockpit) + self.d_f_outer*self.l_cabin
+        
+        if self.l_cabin == 19.44:
+            CDL_fus = eta1*cdc*alpha**3*(Splf/self.S)
+        else:
+            CDL_fus = eta2*cdc*alpha**3*(Splf/self.S)
+        
+        CD_fus_sub = CD0_fus + CDL_fus
+        
+        
+        CDf_fus = Cf_fus*(Swet_fus/self.S)
+        CDp_fus = Cf_fus*(60/(self.l_f/self.d_f_outer)**3 + 0.0025*(self.l_f/self.d_f_outer))*Swet_fus/self.S
+        CD_wave = 0.005
+        
+        CD_fus_trans = Rwf*(CDf_fus + CDp_fus) +CD_wave*(pi*(self.d_f_outer/2)**2)/self.S
+        
+        return(CD0_fus, CDL_fus, CD_fus_sub, CD_fus_trans)

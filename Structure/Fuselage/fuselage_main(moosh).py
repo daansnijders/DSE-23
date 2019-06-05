@@ -21,17 +21,83 @@ Assumptions:
 
 -------------------------------------------------------------------------------
 """
+#import sys
+#sys.path.insert(0,'/Users/thong/Documents/TU Delft DSE/DSE-23')
+#import inputs.concept_1 as c1
+#import modules.CG.CG_func as cgfunc
+#import modules.CG.class2_CG as cl2cg
+#l_fuselage = c1.l_f[2]
+#x_cg_hwing = cl2cg.get_cg_hwing
+
+#def fuselage_stress_max(l_fuselage, x_cg_hwing, x_cg_vwing, x_cg_ngear, x_cg_mgear, x_cg_wing_group, Xfirst, Xlast, X_wingbox_start,\
+#X_wingbox_end, M_payload, M_fuselage, M_fittings, M_horizontaltail, M_verticaltail, M_landinggear_nose, M_landinggear_main, M_wing_group,\
+#Lift_mainwing, Lift_tail):
+
+import numpy as np
+import matplotlib.pyplot as plt
+from isa import isa
+import sys
+sys.path.insert(0,'/Users/thong/Documents/TU Delft DSE/DSE-23')
+import inputs.concept_1 as c1
+import modules.CG.CG_func as cgfunc
+import modules.CG.class2_CG as cl2cg
+
+from modules.weight_class2.class2_weight import *
+from main import *
+
+<<<<<<< HEAD
+import numpy as np
+import matplotlib.pyplot as plt
+from isa import isa
+=======
 
 
+x_cg_wing_group = 16
+X_wingbox_start = 15
+X_wingbox_end = 17.5
+M_payload = 12500
+M_fuselage = 9000
+M_fittings = 9000
+M_verticaltail = 1000
+M_landinggear_nose = 200
+M_landinggear_main = 1500
+M_wing_group = 12000
+Lift_mainwing = 500000
+Lift_tail = -10000
+>>>>>>> 80e00d543e8c5467dbda0a04fe53a987c0a4b090
+
+l_fuselage = config1_class2.l_f
+x_cg_hwing = c1.x_cg_tail
+x_cg_vwing = c1.x_cg_tail
+x_cg_ngear = c1.x_nlg
+x_cg_mgear = c1.x_mlg
+Xfirst = c1.l_cockpit
+<<<<<<< HEAD
+Xlast = Xfirst+c1.l_cabin[0]
+X_wingbox_start = c1.x_le_MAC-c1.y_MAC*np.tan(c1.lambda_le_rad)
+X_wingbox_end = X_wingbox_start + c1.Cr
+M_payload = c1.M_payload[0]
+M_fuselage = c1.M_fuselage
+M_fittings = config1_class2.M_fixedequipment
+=======
+Xlast = Xfirst+c1.l_cabin
+>>>>>>> 80e00d543e8c5467dbda0a04fe53a987c0a4b090
+M_horizontal_tail = config1_class2.M_horizontaltail
+
+
+n= 1000
+step_size = float(l_fuselage)/n
+x = np.linspace(0,l_fuselage,n)
+
+<<<<<<< HEAD
 def fueslage_stress_max(l_fuselage, x_cg_hwing, x_cg_vwing, x_cg_ngear, x_cg_mgear, x_cg_wing_group, Xstart, Xlast, X_wingbox_start,\
 X_wingbox_end, M_payload, M_fuselage, M_fittings, M_horizontal_tail, M_vertical_tail, M_landinggear_nose, M_landinggear_main, M_wing_group,\
 Lift_mainwing, Lift_tail):
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from isa import isa
+
     
     n= 1000
     step_size = l_fuselage/n
+    x = np.linspace(0,l_fuselage,n)
     stringer_area = 0.0004
     stringer_no = [0] *n
     for i in range(n):
@@ -67,34 +133,73 @@ Lift_mainwing, Lift_tail):
         lift_forces[i]=Lift_mainwing/(int((X_wingbox_end/lfuselage)*n)-int((X_wingbox_start/lfuselage)*n))
         
     lift_forces[int((x_cg_hwing/lfuselage)*n)]=Lift_tail
+=======
+stringer_area = 0.0004
+stringer_no = [0] *n
+for i in range(n):
+    stringer_no[i]=60
+
+radius = [0] *n
+for i in range(n):
+    radius[i]=3.685
+
+MOI = [0] *n
+for i in range(n):
+    MOI[i] = stringer_no[i]*(radius[i])**2 *stringer_area * 0.5
+
+payload_w = [0] *n
+for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
+    payload_w[i]=-M_payload*9.80665/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
+>>>>>>> 80e00d543e8c5467dbda0a04fe53a987c0a4b090
     
-    forces_sum =  [0] *n 
-    for i in range(n):
-        foces_sum[i]= payload_w[i]+fuselage_w[i]+component_w[i]+lift_forces[i]
+fuselage_w = [0] *n
+for i in range(n):
+    fuselage_w[i]=-(M_fuselage+M_fittings)*9.80665/n
     
-    V =  [0] *n 
-    for i in range(n):
-        if i == 0:
-            V[i]=forces_sum[i]
-        else:
-            V[i]=V[i-1]+forces_sum[i]
+component_w = [0] *n 
+component_w[int((x_cg_hwing/l_fuselage)*n)]=-M_horizontaltail*9.80665
+component_w[int((x_cg_vwing/l_fuselage)*n)]=-M_verticaltail*9.80665
+component_w[int((x_cg_ngear/l_fuselage)*n)]=-M_landinggear_nose*9.80665
+component_w[int((x_cg_mgear/l_fuselage)*n)]=-M_landinggear_main*9.80665
+component_w[int((x_cg_wing_group/l_fuselage)*n)]=-M_wing_group*9.80665
+   
+
+
+lift_forces = [0] *n 
+for i in range(int((X_wingbox_start/l_fuselage)*n),int((X_wingbox_end/l_fuselage)*n)):
+    lift_forces[i]=Lift_mainwing/(int((X_wingbox_end/l_fuselage)*n)-int((X_wingbox_start/l_fuselage)*n))
     
-    M =  [0] *n 
-    for i in range(n):
-        for j in range(i):
-            M[i]+=forces_sum[j]*step_size*j
+lift_forces[int((x_cg_hwing/l_fuselage)*n)]=Lift_tail
+
+forces_sum =  [0] *n 
+for i in range(n):
+    forces_sum[i]= payload_w[i]+fuselage_w[i]+component_w[i]+lift_forces[i]
+
+V =  [0] *n 
+for i in range(n):
+    if i == 0:
+        V[i]=0
+    else:
+        V[i]=V[i-1]+forces_sum[i-1]
+
+M =  [0] *n 
+for i in range(n):
+    for j in range(i):
+        M[i]+=forces_sum[j]*step_size*j
+
+p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
+stress_pressure_long =  [0] *n
+for i in range(n):
+    stress_pressure_long[i]=(p_diff*np.pi*(radius[i])**2)/(stringer_area*stringer_no[i])
     
-    p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
-    stress_pressure_long =  [0] *n
-    for i in range(n):
-        stress_pressure_long[i]=(p_diff*np.pi*(radius[i])**2)/(stringer_area*stringer_no[i])
-        
-    stress_bending_max = [0] *n
-    for i in range(n):
-        stress_bending_max[i] = M[i]*radius[i]/MOI[i]
-        
-    stress_long_max = [0] *n
-    for i in range(n):
-        stress_long_max[i] = abs(stress_bending_max[i])+stress_pressure_long[i]
-        
-    return max(stress_bending_max)
+stress_bending_max = [0] *n
+for i in range(n):
+    stress_bending_max[i] = M[i]*radius[i]/MOI[i]
+    
+stress_long_max = [0] *n
+for i in range(n):
+    stress_long_max[i] = abs(stress_bending_max[i])+stress_pressure_long[i]
+
+plt.figure()
+plt.plot(x,V)
+plt.show()
