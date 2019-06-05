@@ -67,3 +67,45 @@ V_c = ?
 theta/aoa = aerodynamic guys -> alpha cruise
 we need cl/alpha in order to determine the lift produced.
 """
+
+class empennage2:
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, V_h, V, x_lemac):   
+        self.config = config
+        self.x_ac=x_ac #from nose in [m]
+        self.CL_a_h = CL_a_h
+        self.CL_a_ah = CL_a_ah
+        self.de_da = de_da
+        self.S_h = S_h
+        self.l_h = l_h
+        self.S = S
+        self.c = c
+        self.V_h = V_h
+        self.V = V
+        self.x_lemac = x_lemac
+
+        self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
+
+    
+    def calc_xnp(self):
+        self.x_np = (self.x_ac + self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.hortail_vol * (self.V_h / self.V)**2)*self.c
+        return self.x_np
+    
+    def calc_xcg(self):
+        self.x_cg = self.calc_xnp() - 0.05*self.c
+        return self.x_cg
+    
+    def plot_stability(self):
+        a = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        b = (self.x_ac - 0.05*self.c) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        
+        l = np.arange(self.x_lemac, (self.x_lemac+self.c+0.01), 0.01)
+        self.Sh_S = []
+        for i in range (len(l)):
+            Sh_S.append(a*l[i]+b)
+        
+        return self.Sh_S
+
+e2 = empennage2(1, 11.78, 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78)
+
+r = e2.calc_xnp()    
+    

@@ -45,7 +45,7 @@ frac_min[1], frac_max[1], frac2 = config2_ground.check_equilibrium()
 frac_min[2], frac_max[2], frac2 = config3_ground.check_equilibrium()
 
 
-x_cg_max = max(xcg_max[0], xcg_max[3])
+x_cg_max = max(xcg_max[0], xcg_max[3]) + 0.05*MAC
 x_cg_min = min(xcg_min[0], xcg_min[3])
 #print ("The most aft CG position from the nose for configuration 1 during flight is: ", max(xcg_max[0], xcg_max[3]))
 #print("Including a 0,05 m stability margin we get", max(xcg_max)+0.05)
