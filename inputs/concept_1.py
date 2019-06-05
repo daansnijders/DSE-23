@@ -31,6 +31,7 @@ OEW = [34631.92,38223.31-360,38729.81]                                          
 MTOW = [58722.6,67394-360,68264.27]                                             # [kg] maximum take-off weight
 
 M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
+#MTOW=get_TOW(OEW,M_pax_and_lugg,V_cargo_available,M_ff,rho_lugg)
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
 T_req = get_T_req(T_W, MTOW)                                                    # [N] required thrust
 M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
@@ -56,7 +57,7 @@ l_tailcone = get_l_tailcone(d_f_outer)                                          
 l_tail = get_l_tail(d_f_outer)                                                  # [m] tail length
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m] length fuselage
 R_f = d_f_outer/2                                                               # [m] radius fuselage
-S_fus=[d_f_outer**2/4*pi*l_f[i] for i in range(3)]                              # [m^2] gross shell fuselage area
+S_fus=[R_f*2*pi*l_f[i] for i in range(3)]                              # [m^2] gross shell fuselage area
 
 V_os = get_overhead_volume(l_cabin)                                             # [m^3] overhead storage volume
 V_cc = get_cargo_volume(R_f,l_cabin)                                            # [m^3] total storage volume
