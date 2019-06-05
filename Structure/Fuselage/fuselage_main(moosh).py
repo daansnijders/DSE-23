@@ -42,7 +42,9 @@ import inputs.concept_1 as c1
 import modules.CG.CG_func as cgfunc
 import modules.CG.class2_CG as cl2cg
 
-<<<<<<< HEAD
+from modules.class2 import *
+from main import *
+
 
 
 x_cg_wing_group = 16
@@ -71,61 +73,12 @@ M_horizontal_tail = config1_class2.M_horizontaltail
 n= 1000
 step_size = float(l_fuselage)/n
 x = np.linspace(0,l_fuselage,n)
+
 stringer_area = 0.0004
 stringer_no = [0] *n
 for i in range(n):
     stringer_no[i]=60
-=======
-from modules.class2 import *
-from main import *
 
-l_fuselage = config1_class2.l_f
-x_cg_hwing = c1.x_cg_tail
-M_horizontal_tail = config1_class2.M_horizontaltail
-
-
-
-def fueslage_stress_max(l_fuselage, x_cg_hwing, x_cg_vwing, x_cg_ngear, x_cg_mgear, x_cg_wing_group, Xstart, Xlast, X_wingbox_start,\
-X_wingbox_end, M_payload, M_fuselage, M_fittings, M_horizontal_tail, M_vertical_tail, M_landinggear_nose, M_landinggear_main, M_wing_group,\
-Lift_mainwing, Lift_tail):
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from isa import isa
-    
-    n= 1000
-    step_size = l_fuselage/n
-    x = np.linspace(0,l_fuselage,n)
-    stringer_area = 0.0004
-    stringer_no = [0] *n
-    for i in range(n):
-        stringer_no[i]=60
-        
-    radius = [0] *n
-    for i in range(n):
-        radius[i]=3.685
-    
-    MOI = [0] *n
-    for i in range(n):
-        MOI = stringer_no[i]*(radius[i])**2 *stringer_area * 0.5
-    
-    payload_w = [0] *n
-    for i in range(int((Xfirst/lfuselage)*n),int((Xlast/lfuselage)*n)):
-        payload_w[i]=-M_payload*9.80665/(int((Xlast/lfuselage)*n)-int((Xfirst/lfuselage)*n)) 
-        
-    fuselage_w = [0] *n
-    for i in range(n):
-        fuselage_w[i]=-(M_fuselage+M_fittings)*9.80665/n
-        
-    component_w = [0] *n 
-    component_w[int((x_cg_hwing/lfuselage)*n)]=-M_horizontaltail*9.80665
-    component_w[int((x_cg_vwing/lfuselage)*n)]=-M_verticaltail*9.80665
-    component_w[int((x_cg_ngear/lfuselage)*n)]=-M_landinggear_nose*9.80665
-    component_w[int((x_cg_mgear/lfuselage)*n)]=-M_landinggear_main*9.80665
-    component_w[int((x_cg_wing_group/lfuselage)*n)]=-M_wing_group*9.80665
-       
-    
->>>>>>> 5a2ce19089aa2c4f4db8e15095066cf04d108d80
-    
 radius = [0] *n
 for i in range(n):
     radius[i]=3.685
