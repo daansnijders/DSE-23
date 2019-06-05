@@ -26,8 +26,15 @@ sys.path.insert(0,'/Users/thong/Documents/TU Delft DSE/DSE-23')
 import inputs.concept_1 as c1
 import modules.CG.CG_func as cgfunc
 import modules.CG.class2_CG as cl2cg
-l_fuselage = c1.l_f[2]
-x_cg_hwing = cl2cg.get_cg_hwing
+
+from modules.class2 import *
+from main import *
+
+l_fuselage = config1_class2.l_f
+x_cg_hwing = c1.x_cg_tail
+M_horizontal_tail = config1_class2.M_horizontaltail
+
+
 
 def fueslage_stress_max(l_fuselage, x_cg_hwing, x_cg_vwing, x_cg_ngear, x_cg_mgear, x_cg_wing_group, Xstart, Xlast, X_wingbox_start,\
 X_wingbox_end, M_payload, M_fuselage, M_fittings, M_horizontal_tail, M_vertical_tail, M_landinggear_nose, M_landinggear_main, M_wing_group,\
