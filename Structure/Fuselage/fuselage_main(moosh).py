@@ -27,11 +27,25 @@ import inputs.concept_1 as c1
 import modules.CG.CG_func as cgfunc
 import modules.CG.class2_CG as cl2cg
 
-from modules.class2 import *
+from modules.weight_class2.class2_weight import *
 from main import *
+
+import numpy as np
+import matplotlib.pyplot as plt
+from isa import isa
 
 l_fuselage = config1_class2.l_f
 x_cg_hwing = c1.x_cg_tail
+x_cg_vwing = c1.x_cg_tail
+x_cg_ngear = c1.x_nlg
+x_cg_mgear = c1.x_mlg
+Xfirst = c1.l_cockpit
+Xlast = Xfirst+c1.l_cabin[0]
+X_wingbox_start = c1.x_le_MAC-c1.y_MAC*np.tan(c1.lambda_le_rad)
+X_wingbox_end = X_wingbox_start + c1.Cr
+M_payload = c1.M_payload[0]
+M_fuselage = c1.M_fuselage
+M_fittings = config1_class2.M_fixedequipment
 M_horizontal_tail = config1_class2.M_horizontaltail
 
 
@@ -39,9 +53,7 @@ M_horizontal_tail = config1_class2.M_horizontaltail
 def fueslage_stress_max(l_fuselage, x_cg_hwing, x_cg_vwing, x_cg_ngear, x_cg_mgear, x_cg_wing_group, Xstart, Xlast, X_wingbox_start,\
 X_wingbox_end, M_payload, M_fuselage, M_fittings, M_horizontal_tail, M_vertical_tail, M_landinggear_nose, M_landinggear_main, M_wing_group,\
 Lift_mainwing, Lift_tail):
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from isa import isa
+
     
     n= 1000
     step_size = l_fuselage/n
