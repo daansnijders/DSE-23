@@ -118,12 +118,12 @@ class Drag:
         #These result in
         R_wf = 1.01         #(Figure 4.1) 
         
-        cos_lambda_2_rad   = cos(lambda_2_rad)
+        cos_lambda_2_rad   = cos(self.lambda_2_rad)
         #This results in
         R_LS   = 1.21        #(Figure 4.2)
         R_LS_c = 1.21        #(Figure 4.2)
         
-        L_prime = 2.0
+        L_prime = 1.2
         C_f_w = .00265
         t_c = 0.15
         
@@ -133,7 +133,7 @@ class Drag:
         h1 = h2 - self.d_f_outer/2
         c_fuselage_wing = h1/h2*self.Cr
         
-        S_wet = 2*(2*((Ct + c_fuselage_wing) / 2 * (self.b/2 - self.d_f_outer/2)))
+        S_wet = 2*(2*((self.Ct + c_fuselage_wing) / 2 * (self.b/2 - self.d_f_outer/2)))
         
         C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
         
@@ -155,7 +155,7 @@ class Drag:
         C_L_w = 1.05 * self.CLdes
         C_D_L_w = C_L_w**2 / (pi * self.A * e)
         
-        C_D_w = C_D_0_w + C_D_L_w
+        C_D_w = C_D_0_W + C_D_L_w
         
         return (C_D_w)
         
