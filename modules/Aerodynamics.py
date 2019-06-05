@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,x_mlg,z_mlg,D_mlg,b_mlg):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -97,6 +97,14 @@ class Drag:
         self.l_cabin        = l_cabin
         self.l_tail         = l_tail
         self.lambda_2_rad   = lambda_2_rad
+        self.x_nlg          = x_nlg
+        self.z_nlg          = z_nlg
+        self.D_nlg          = D_nlg
+        self.x_mlg          = x_mlg
+        self.z_mlg          = z_mlg
+        self.D_mlg          = D_mlg
+        self.b_mlg          = b_mlg
+        
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -129,7 +137,7 @@ class Drag:
         R_par = RE_LER * 1/(tan(self.lambda_le_rad)) * sqrt(1 - (self.M*cos(self.lambda_le_rad))**2)
         R_par2 = self.A * self.taper_ratio / cos(self.lambda_le_rad) 
         #This results in 
-        R = 0.95
+        R = 0.95    #Figure 4.7
         
         beta = sqrt(1-self.M**2)
         c_l_alpha = np.deg2rad((1.3 + 0.5)/(7+9))
@@ -181,19 +189,27 @@ class Drag:
         
         return(CD0_fus, CDL_fus, CD_fus_sub, CD_fus_trans)
         
-    def empennage_drag(self):
-        
-
-        
-    def nacelle_drag(self):
-        
-        
-        
-    def flaps_drag(self):
-        
-        
+#    def empennage_drag(self):
+#        
+#
+#        
+#    def nacelle_drag(self):
+#        
+#        
+#        
+#    def flaps_drag(self):
+#        
+#        
     
     def landinggear_drag(self):
+        drag_par1 = self.x_nlg / self.D_nlg
+        drag_par2 = self.z_nlg / self.D_nlg
+        #From this follows
+        C_D_nlg = 0.5   #Figure 4.58
         
         
+        frontal_area = self.D_mlg * self.b_mlg * 2
+        m = frontal_area / (a * self.z_mlg)
+        
+#        C_D_gear = 
         
