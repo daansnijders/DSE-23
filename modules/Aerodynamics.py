@@ -183,3 +183,17 @@ class Drag:
         
     def empennage_drag(self):
         
+
+        
+    def nacelle_drag(self):
+        
+        
+        
+    def flaps_drag(self):
+        
+        
+    
+    def landinggear_drag(self):
+        
+        
+        
