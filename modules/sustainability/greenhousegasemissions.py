@@ -4,6 +4,7 @@ Created on Mon Jun  3 15:00:22 2019
 
 @author: Lisa
 """
+from inputs.constants import *
 #engine inputs from easa database
 #EINOx from emission database, PW1525G, 16PW110  [g/kg]
 
@@ -39,10 +40,10 @@ fuel_flow_app=0.23
 fuel_flow_idle=0.08
 
 #power setting in percentage 
-power_TO=100
-power_climb=85
-power_app=30
-power_idle=7
+power_TO=100        #[%]
+power_climb=85      #[%]
+power_app=30        #[%]
+power_idle=7        #[%]
 
 
 #check with the requirements 
