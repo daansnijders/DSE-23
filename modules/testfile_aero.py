@@ -58,8 +58,3 @@ Re_h_sub3, Re_h_trans3, Re_v_sub3, Re_v_trans3, Re_c_sub3, Re_c_trans3 = config3
 print(CDW3)
 print(CD0_fus3, CDL_fus3,CD_fus_sub3, CD_fus_trans3)
 print(Re_h_sub3, Re_h_trans3, Re_v_sub3, Re_v_trans3, Re_c_sub3, Re_c_trans3)
-<<<<<<< HEAD
-
-
-=======
->>>>>>> d5acd02d4f6950532f30a42136adfa94d6c46c3c

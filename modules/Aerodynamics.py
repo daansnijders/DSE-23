@@ -100,10 +100,12 @@ class Drag:
         self.x_nlg          = x_nlg
         self.z_nlg          = z_nlg
         self.D_nlg          = D_nlg
+        self.D_strutt_nlg   = D_strutt_nlg
         self.x_mlg          = x_mlg
         self.z_mlg          = z_mlg
-        self.D_mlg          = D_mlg
         self.b_mlg          = b_mlg
+        self.D_mlg          = D_mlg
+        self.D_strutt_mlg   = D_strutt_mlg
         self.lambda_h_2_rad = lambda_h_2_rad
         self.lambda_v_2_rad = lambda_v_2_rad
         self.MAC_c          = MAC_c
@@ -249,12 +251,15 @@ class Drag:
     def landinggear_drag(self):
         drag_par1 = self.x_nlg / self.D_nlg
         drag_par2 = self.z_nlg / self.D_nlg
+        S_mlg = self.D_nlg * self.b_nlg * 2 + self.D_strutt_nlg * self.z_nlg
         #From this follows
         C_D_nlg = 0.5   #Figure 4.58
         
+        S_mlg = self.D_mlg * self.b_mlg * 2 + self.D_strutt_mlg * self.z_mlg
+        a = 2* self.b_mlg + self.D_strutt_mlg
+        m = S_mlg / (a * self.z_mlg)
+        #From this follows:
+        C_D_mlg = 1.4   #Figure 4.59
         
-        frontal_area = self.D_mlg * self.b_mlg * 2
-        m = frontal_area / (a * self.z_mlg)
-        
-#        C_D_gear = 
+        C_D_gear = (C_D_nlg ) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mld) * m / self.S)
         
