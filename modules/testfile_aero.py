@@ -28,4 +28,3 @@ print(CD0_fus2, CDL_fus2,CD_fus_sub2, CD_fus_trans2)
 config3_Drag = Drag(S,A,rho,rho_0,l_f[2],V_cruise,V_to[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[2],CL_alpha,l_cockpit, l_cabin[2], l_tail)
 CD0_fus3, CDL_fus3,  CD_fus_sub3, CD_fus_trans3 = config3_Drag.fuse_drag()
 print(CD0_fus3, CDL_fus3,CD_fus_sub3, CD_fus_trans3)
->>>>>>> d74e35ad67a005be595c0f0b904a6718a5fec142

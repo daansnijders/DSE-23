@@ -25,7 +25,7 @@ class get_cg(object):
         h_tail = self.weights.M_horizontaltail *  self.x_cg_htail
         v_tail = self.weights.M_verticaltail *  self.x_cg_vtail
         engine = (self.weights.M_nacelle + M_engine) * self.x_cg_engines
-        
+
         # [m] returning location of cg 
         return sum([wing,fuselage,h_tail,v_tail,engine])/(sum([self.weights.M_wing, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + M_engine]))
     
@@ -35,6 +35,7 @@ class get_cg(object):
         h_tail = self.weights.M_horizontaltail * self.y_cg_htail
         v_tail = self.weights.M_verticaltail *self.y_cg_vtail
         engine = (self.weights.M_nacelle + M_engine) *self.y_cg_engines
+        
         # [m] returning location of cg
         return sum([wing,fuselage,h_tail,v_tail,engine])/(sum([self.weights.M_wing, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + M_engine]))
     
