@@ -18,7 +18,6 @@ b_mlg = 0.35
 D_strutt_nlg = 0.15
 D_strutt_mlg = 0.2
 
-
 """ HLD design """
 config1_HLD = HLD_class(Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer)
 SWF, b_flap, SWF_LE, b_slat = config1_HLD.HLD()
@@ -34,7 +33,7 @@ Re_h_sub1, Re_h_trans1, Re_v_sub1, Re_v_trans1, Re_c_sub1, Re_c_trans1 = config1
 
 print(CDW1)
 print(CD0_fus1, CDL_fus1,CD_fus_sub1, CD_fus_trans1)
-print(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
+print(Re_h_sub1, Re_h_trans1, Re_v_sub1, Re_v_trans1, Re_c_sub1, Re_c_trans1)
 
 #Configuration 2
 config2_Drag = Drag(S,A,rho,rho_0,l_f[1],V_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[1],CL_alpha,l_cockpit, l_cabin[1], l_tail, lambda_2_rad, x_nlg[1], z_nlg[1], D_nlg, b_nlg, D_strutt_nlg, x_mlg[1], z_mlg[1], D_mlg, b_mlg, D_strutt_mlg, lambda_h_2_rad[1], lambda_v_2_rad[1], MAC_c[1], Cr_v[1], Ct_v[1], Cr_h[1], Ct_h[1])
