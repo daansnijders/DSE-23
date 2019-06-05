@@ -10,7 +10,7 @@ from modules.Stability.Stability_runfile import x_cg_min
 import numpy as np
 
 class empennage(object):
-    def __init__(self,config,C_L_w,C_D_w,C_M_ac_w , aoa_rad):
+    def __init__(self,config,C_L_w,C_D_w,C_M_ac_w , aoa_rad,x_cg):
         self.N_engine = T_req[config] * np.sin(i_e_rad)
         self.T_engine = T_req[config] * np.cos(i_e_rad)
         self.C_M_ac_w = C_M_ac_w
@@ -19,6 +19,7 @@ class empennage(object):
         self.config = config
         self.x_w = x_le_MAC + 0.25*MAC # 0.25?
         self.z_w = t_c * MAC /2
+        self.x_cg = x_cg
         
     def calc_C_N(self): 
         self.C_N = MTOW[self.config]/(0.5*rho*V_cruise**2 * S)*np.cos(theta_rad)
@@ -28,19 +29,11 @@ class empennage(object):
         if self.config == 1:
             A = (self.calc_C_N() - self.C_N_w - self.N_engine/(0.5*rho*V_cruise**2*S)*np.cos(i_e_rad) - self.T_engine/(0.5*rho*V_cruise**2*S)*np.sin(i_e_rad))
             
-            x_h = x_cg + self.C_M_ac_w *MAC/A + self.C_N_w * (x_cg[self.config] - self.x_w)/A - self.C_T_w * (z_cg - self.z_w) + (self.T_engine * np.cos(i_e_rad) - self.N_engine * np.sin(i_e_rad)) / (0.5*rho*V_cruise**2*S*MAC) * (z_cg - z_engine) + (self.N_engine * np.cos(i_e_rad) + self.T_engine * np.sin(i_e_rad)) / (0.5*rho*V_cruise**2*S*MAC) * (x_cg[self.config] - x_engine)
+            x_h = self.x_cg + self.C_M_ac_w *MAC/A + self.C_N_w * (self.x_cg - self.x_w)/A - self.C_T_w * (z_cg - self.z_w) + (self.T_engine * np.cos(i_e_rad) - self.N_engine * np.sin(i_e_rad)) / (0.5*rho*V_cruise**2*S*MAC) * (z_cg - z_engine) + (self.N_engine * np.cos(i_e_rad) + self.T_engine * np.sin(i_e_rad)) / (0.5*rho*V_cruise**2*S*MAC) * (self.x_cg - x_engine)
         return x_h
     
     
-
-#
-#    
-#    
-#    0 = C_m_ac_w + C_N_w * (x_cg - x_w)/MAC - C_T_w * (z_cg - z_w)/MAC + calc_C_N_h() * S_h/S * (V_h/V)**2 * (x_cg - x_h)/MAC + 
-#    C_N_h_times_S_h_S
-#        
-        
-e = empennage(1,1.2,0.1,0,np.deg2rad(0.0))
+e = empennage(1,1.0,0.02,0,np.deg2rad(1.0),x_cg_min)
 print(e.calc_x_h())
 
 """
@@ -72,4 +65,5 @@ V_cruise = concept 1
 V_h = ?
 V_c = ?
 theta/aoa = aerodynamic guys -> alpha cruise
+we need cl/alpha in order to determine the lift produced.
 """
