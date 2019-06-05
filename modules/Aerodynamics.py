@@ -91,15 +91,12 @@ class Drag:
         self.lambda_le_rad  = lambda_le_rad
         self.V_TO           = V_TO
         self.mu_sl          = mu_sl
-<<<<<<< HEAD
         self.M              = 0.75
-=======
         self.CLdes          = CLdes
         self.CL_alpha       = CL_alpha
         self.l_cockpit      = l_cockpit
         self.l_cabin        = l_cabin
         self.l_tail         = l_tail
->>>>>>> d74e35ad67a005be595c0f0b904a6718a5fec142
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -128,20 +125,12 @@ class Drag:
         C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
         
         """ C_D_L_w """
-<<<<<<< HEAD
         r_LE = 0.687                  #Leading Edge radius
         RE_LER = self.rho * self.V_cruise * r_LE / self.mu_37
         R_par = RE_LER * 1/(tan(self.lambda_le_rad)) * sqrt(1 - (self.M*cos(self.lambda_le_rad))**2)
         R_par2 = self.A * self.taper_ratio / cos(self.lambda_le_rad) 
         #This results in 
         R = 0.95
-        
-        
-        
-=======
-#        RE_LER = rho * V_cruise * 
->>>>>>> d74e35ad67a005be595c0f0b904a6718a5fec142
-        
         
                         
     def fuse_drag(self):
