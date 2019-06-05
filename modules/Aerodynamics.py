@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,x_mlg,z_mlg,D_mlg,b_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,x_mlg,z_mlg,D_mlg,b_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -111,6 +111,9 @@ class Drag:
         self.Ct_h           = Ct_h                                 
         self.Cr_v           = Cr_v                            
         self.Ct_v           = Ct_v
+        self.S_h            = S_h
+        self.S_v            = S_v
+        self.S_c            = S_c
 
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -219,6 +222,14 @@ class Drag:
         Cf_emp_v_trans = 0.0026 #Figure 4.3
         Cf_emp_c_sub = 0        #Figure 4.3
         Cf_emp_c_trans = 0.0029 #Figure 4.3
+        
+        L_prime = 1.2           #Figure 4.4
+        
+        t_over_c = 0.15         #TO BE UPDATED AFTER AIRFOIL SELECTION EMPENNAGE AND CANARD
+        
+        Swet_h = 2*S_h
+        Swet_v = 2*S_v
+        Swet_c = 2*S_c
         
         return(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
         
