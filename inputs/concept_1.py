@@ -19,25 +19,31 @@ from modules.initialsizing_loading import *     # commented out because this imp
 from inputs.constants import *
 
 
-#initial sizing 
-
+ 
+#should move to constants
 N_pax = [90,120,120]                                                            # [-] number of passengers
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
-
+#inputs to this file 
 T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
 W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
 OEW = [34631.92,38223.31-360,38729.81]                                              # [kg] operational empty weight
 MTOW = [58722.6,67394-360,68264.27]                                                 # [kg] maximum take-off weight
+
+M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
 T_req = get_T_req(T_W, MTOW)                                                    # [N] required thrust
 M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
-M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
+
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
 
 M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
 M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
 M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]
+
+
+#START SIZING 
+
 # Fuselage parameters
 l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
 
@@ -64,12 +70,15 @@ M_cargo_available = get_cargo_mass(N_pax,M_payload)                             
 "Change this when correct length of modular part is found"
 x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]\
            , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]     
-#Propulsion
 
+
+
+
+#Propulsion
 d_nacel = 1.1*d_fan                                                             # [m] diameter of engine nacelle
 l_nacel = 1.1*l_eng                                                             # [m] length of the engine nacelle
 
-# Wing parameters
+# Wing parameters MOVE TO CONSTANTS
 A = 9.5                                                                  # [-] aspect ration main wing
 e = 0.85                                                            # [-]
 S = get_S(MTOW,W_S)                                                             # [m^2] surface area main wing
@@ -182,6 +191,7 @@ y_nlg = [0,0,0]                                                                 
 z_nlg = z_mlg                                                                   # [m] z-location of nlg
 
 
+#MAKE THIS ITERABLE WITH THE LOADING DIAGRAM
 # Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
 
 Cl_max = [1.552, 1.582, 1.584]
