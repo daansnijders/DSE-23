@@ -149,9 +149,10 @@ class Drag:
         R = 0.95    #Figure 4.7
         
         beta = sqrt(1-self.M**2)
-        c_l_alpha = np.deg2rad((1.3 + 0.5)/(7+9))
+        c_l_alpha = np.rad2deg((1.3 + 0.5)/(7+9))
         k = c_l_alpha/(2*pi / beta)
-        C_L_a_w = (2*pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (tan(self.lambda_2_rad)))))
+        C_L_a_w = (2*pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (tan(self.lambda_2_rad) / beta) ) + 4)**(1/2) )
+        print (C_L_a_w)
         
         e = 1.1*(C_L_a_w / self.A)*(R * (C_L_a_w / self.A) + (1-R)*pi)
         
@@ -160,7 +161,7 @@ class Drag:
         
         C_D_w = C_D_0_W + C_D_L_w
         
-        return (C_D_w)
+        return (C_D_w, C_D_0_W, C_D_L_w)
         
                         
     def fuse_drag(self):
