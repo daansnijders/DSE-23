@@ -6,10 +6,8 @@ Created on Fri May  3 09:45:17 2019
 @author: Lisa
 """
 
-from modules.class2_struct_defs import *
-from modules.class2_powerplant_defs import *
-from modules.class2_fixedequipment_defs import *
-from modules.class2 import *
+
+from modules.weight_class2.class2_weight import *
 from modules.CG.class2_CG import *
 
 from inputs.concept_1 import *
