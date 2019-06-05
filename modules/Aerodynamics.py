@@ -247,5 +247,5 @@ class Drag:
         #From this follows:
         C_D_mlg = 1.4   #Figure 4.59
         
-        C_D_gear = (C_D_nlg + p_nlg * something) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mld + p_mlg * something) * m / self.S)
+        C_D_gear = (C_D_nlg ) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mld) * m / self.S)
         
