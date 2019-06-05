@@ -4,6 +4,7 @@ Created on Mon Jun  3 15:00:22 2019
 
 @author: Lisa
 """
+from inputs.constants import *
 #engine inputs from easa database
 #EINOx from emission database, PW1525G, 16PW110  [g/kg]
 
@@ -39,10 +40,10 @@ fuel_flow_app=0.23
 fuel_flow_idle=0.08
 
 #power setting in percentage 
-power_TO=100
-power_climb=85
-power_app=30
-power_idle=7
+power_TO=100        #[%]
+power_climb=85      #[%]
+power_app=30        #[%]
+power_idle=7        #[%]
 
 
 #check with the requirements 
@@ -66,7 +67,7 @@ def get_Dp_Foo_NOx_specific(NOx_total,T):
 def get_CO2_emissions(M_fuel_burnt):
     return 3.15*M_fuel_burnt
 
-def get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_flight):
+def get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_flight):  #should come to 45%
     return (Dp_Foo_NOx_caep-Dp_Foo_flight)/Dp_Foo_NOx_caep*100
 
 def get_requirement_CO2_check(M_fuel_burnt):
@@ -74,5 +75,5 @@ def get_requirement_CO2_check(M_fuel_burnt):
 
 
 
-werk=get_NOx_reduction(Dp_Foo_NOx_caep6,Dp_Foo_NOx_av)
+werk=get_NOx_reduction_CAEP(Dp_Foo_NOx_caep6,Dp_Foo_NOx_av)
 
