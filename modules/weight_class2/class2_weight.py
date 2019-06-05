@@ -4,9 +4,9 @@ Created on Fri May 24 09:06:58 2019
 
 @author: Lisa
 """
-from modules.class2_struct_defs import *
-from modules.class2_powerplant_defs import *
-from modules.class2_fixedequipment_defs import *
+from modules.weight_class2.class2_struct_defs import *
+from modules.weight_class2.class2_powerplant_defs import *
+from modules.weight_class2.class2_fixedequipment_defs import *
 
 from inputs.concept_1 import *
 from inputs.constants import *
