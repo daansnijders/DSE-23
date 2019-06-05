@@ -15,7 +15,8 @@ class get_cg(object):
         self.config        = self.weights.config-1                              # [-]
     
     def calc_x_cg(self):                                                        # [kg*m] mass times c.g distance of the different groups. 
-        wing = self.weights.M_wing * get_cg_wing(b,Cr,Ct,t_c,lambda_le_rad,y_MAC,self.x_le_MAC[self.config])[0]
+        self.cg_wing = get_cg_wing(b,Cr,Ct,t_c,lambda_le_rad,y_MAC,self.x_le_MAC[self.config])[0]
+        wing = self.weights.M_wing * self.cg_wing
         fuselage = self.weights.M_fuselage * get_cg_fuselage(l_f[self.config],d_f_outer)[0]
         h_tail = self.weights.M_horizontaltail * get_cg_hwing(b_h[self.config],Cr_h[self.config],Ct_h[self.config],lambda_h_le_rad,x_le_h[self.config],d_f_outer)[0]
         v_tail = self.weights.M_verticaltail * get_cg_vwing(b_v[self.config],Cr_v[self.config],Ct_v[self.config],lambda_v_le_rad,x_le_v[self.config],d_f_outer)[0]
