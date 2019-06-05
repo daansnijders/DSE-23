@@ -196,62 +196,6 @@ CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, 
 
 # loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 
-"""
----
-~~~ Performance
----
-"""
-cg_loc = [[12.80353534, 12.76158237], [16.92946042, 17.3060118], [16.93525685, 17.46464004]]  # c.g. location [m],
-#  because Daan uses excel
-
-"""
-Airport performance
-"""
-
-# take-off
-take_off_thrust = 2*thrust_max
-climb_out_thrust = 2*0.85*thrust_max
-take_off_friction_coefficient = [get_friction_coefficient(P_nw[i], MTOW[i], x_mlg[i], x_nlg[i], cg_loc[i][1], z_cg -
-                                                          z_mlg[i], g) for i in range(3)]
-
-take_off_field_length = [get_take_off_field_length(rho_0, g, h_screen, MTOW[i], take_off_thrust, climb_out_thrust,
-                                                   CDcruise[i], CLmaxto[i], S, take_off_friction_coefficient[i])
-                         for i in range(3)]
-
-# landing
-landing_thrust = 2*thrust_max  # for thrust reversal
-landing_mass = [get_m_landing(MTOW[i], 2*thrust_max) for i in range(3)]
-landing_friction_coefficient = [get_friction_coefficient(P_nw[i], landing_mass[i], x_mlg[i], x_nlg[i], cg_loc[i][0],
-                                                         z_cg - z_mlg[i], g) for i in range(3)]
-
-landing_field_length = [get_landing_field_length(landing_thrust, landing_mass[i], g, h_screen, rho_0, S, CLmaxto[i],
-                                                 CDcruise[i], landing_friction_coefficient[i])
-                        for i in range(3)]
-
-"""
-Cruise fuel economy
-"""
-
-
-#fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S, CDcruise[i]), R[i], V_cruise, n_engines) for i in range(3)]
-
-"""
-Climb performance
-"""
-V_to = [1.05*get_V_min(MTOW[i], g, rho_0, S, CLmax[i]) for i in range (3)]  # horizontal velocity during TO climb
-V_approach = [1.3*get_V_min(MTOW[i], g, rho_0, S, CLmax[i]) for i in range (3)]  # horizontal velocity during landing
-CDto = drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLmaxto)[1]
-climb_gradient = [get_climb_gradient(2*thrust_max, 0.5 * rho_0 * V_approach[i]**2 * CDto[i] * S, MTOW[i], g)
-                  for i in range(3)]
-#rate_of_climb = [get_rate_of_climb(V_to[i], climb_gradient[i]) for i in range(3)]
-
-"""
-Mass/payload-range diagram
-"""
-# y_lim = int(1.1*max(MTOW))
-# [generate_payload_range_diagram(M_payload[i], M_fuel[i], MTOW[i], R[i], V_cruise, 0.5*2.832545035E-5, 14, g, OEW[i], i, y_lim)
-#  for i in range(3)]
-
 #create loading diagram with new Cl and Cd
 #CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
 #for i in range(3):
