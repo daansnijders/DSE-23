@@ -6,6 +6,7 @@ Created on Wed Jun  5 09:50:12 2019
 """
 from inputs.constants import *
 from inputs.concept_1 import *
+from modules.Stability.Stability_runfile import x_cg_min
 import numpy as np
 
 class empennage(object):
@@ -26,7 +27,7 @@ class empennage(object):
     def calc_x_h(self):
         if self.config == 1:
             A = (self.calc_C_N() - self.C_N_w - self.N_engine/(0.5*rho*V_cruise**2*S)*np.cos(i_e_rad) - self.T_engine/(0.5*rho*V_cruise**2*S)*np.sin(i_e_rad))
-            print(A)
+            
             x_h = x_cg + self.C_M_ac_w *MAC/A + self.C_N_w * (x_cg[self.config] - self.x_w)/A - self.C_T_w * (z_cg - self.z_w) + (self.T_engine * np.cos(i_e_rad) - self.N_engine * np.sin(i_e_rad)) / (0.5*rho*V_cruise**2*S*MAC) * (z_cg - z_engine) + (self.N_engine * np.cos(i_e_rad) + self.T_engine * np.sin(i_e_rad)) / (0.5*rho*V_cruise**2*S*MAC) * (x_cg[self.config] - x_engine)
         return x_h
     
