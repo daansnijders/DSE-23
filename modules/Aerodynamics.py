@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,x_mlg,z_mlg,D_mlg,b_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -100,10 +100,12 @@ class Drag:
         self.x_nlg          = x_nlg
         self.z_nlg          = z_nlg
         self.D_nlg          = D_nlg
+        self.D_strutt_nlg   = D_strutt_nlg
         self.x_mlg          = x_mlg
         self.z_mlg          = z_mlg
-        self.D_mlg          = D_mlg
         self.b_mlg          = b_mlg
+        self.D_mlg          = D_mlg
+        self.D_strutt_mlg   = D_strutt_mlg
         self.lambda_h_2_rad = lambda_h_2_rad
         self.lambda_v_2_rad = lambda_v_2_rad
         self.MAC_c          = MAC_c
@@ -149,9 +151,10 @@ class Drag:
         R = 0.95    #Figure 4.7
         
         beta = sqrt(1-self.M**2)
-        c_l_alpha = np.deg2rad((1.3 + 0.5)/(7+9))
+        c_l_alpha = np.rad2deg((1.3 + 0.5)/(7+9))
         k = c_l_alpha/(2*pi / beta)
-        C_L_a_w = (2*pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (tan(self.lambda_2_rad)))))
+        C_L_a_w = (2*pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (tan(self.lambda_2_rad) / beta) ) + 4)**(1/2) )
+        print (C_L_a_w)
         
         e = 1.1*(C_L_a_w / self.A)*(R * (C_L_a_w / self.A) + (1-R)*pi)
         
@@ -160,7 +163,7 @@ class Drag:
         
         C_D_w = C_D_0_W + C_D_L_w
         
-        return (C_D_w)
+        return (C_D_w, C_D_0_W, C_D_L_w)
         
                         
     def fuse_drag(self):
@@ -248,12 +251,15 @@ class Drag:
     def landinggear_drag(self):
         drag_par1 = self.x_nlg / self.D_nlg
         drag_par2 = self.z_nlg / self.D_nlg
+        S_mlg = self.D_nlg * self.b_nlg * 2 + self.D_strutt_nlg * self.z_nlg
         #From this follows
         C_D_nlg = 0.5   #Figure 4.58
         
+        S_mlg = self.D_mlg * self.b_mlg * 2 + self.D_strutt_mlg * self.z_mlg
+        a = 2* self.b_mlg + self.D_strutt_mlg
+        m = S_mlg / (a * self.z_mlg)
+        #From this follows:
+        C_D_mlg = 1.4   #Figure 4.59
         
-        frontal_area = self.D_mlg * self.b_mlg * 2
-        m = frontal_area / (a * self.z_mlg)
-        
-#        C_D_gear = 
+        C_D_gear = (C_D_nlg ) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mld) * m / self.S)
         
