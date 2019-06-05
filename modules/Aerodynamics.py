@@ -212,6 +212,13 @@ class Drag:
         Re_v_trans = self.rho * self.V_cruise     * C_v / self.mu_37        
         Re_c_sub = self.rho_0 * self.V_TO     * self.MAC_c / self.mu_sl
         Re_c_trans = self.rho * self.V_cruise     * self.MAC_c / self.mu_37
+        #This results in
+        Cf_emp_h_sub = 0.0028   #Figure 4.3
+        Cf_emp_h_trans = 0.0027 #Figure 4.3
+        Cf_emp_v_sub = 0.0026   #Figure 4.3 
+        Cf_emp_v_trans = 0.0026 #Figure 4.3
+        Cf_emp_c_sub = 0        #Figure 4.3
+        Cf_emp_c_trans = 0.0029 #Figure 4.3
         
         return(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
         
