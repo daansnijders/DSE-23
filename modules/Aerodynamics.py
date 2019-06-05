@@ -206,14 +206,14 @@ class Drag:
         
         C_h = (self.Cr_h + self.Ct_h)/2
         C_v = (self.Cr_v + self.Ct_v)/2
-        Re_h_sub = self.rho_0   * self.V_TO * self.C_h / self.mu_sl
-        Re_h_trans = self.rho   * self.V_cruise * self.C_h / self.mu_37
-        Re_v_sub = self.rho_0 * self.V_TO     * self.C_v / self.mu_sl
-        Re_v_trans = self.rho * self.V_cruise     * self.C_v / self.mu_37        
+        Re_h_sub = self.rho_0   * self.V_TO * C_h / self.mu_sl
+        Re_h_trans = self.rho   * self.V_cruise * C_h / self.mu_37
+        Re_v_sub = self.rho_0 * self.V_TO     * C_v / self.mu_sl
+        Re_v_trans = self.rho * self.V_cruise     * C_v / self.mu_37        
         Re_c_sub = self.rho_0 * self.V_TO     * self.MAC_c / self.mu_sl
         Re_c_trans = self.rho * self.V_cruise     * self.MAC_c / self.mu_37
         
-        
+        return(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
         
 #    def nacelle_drag(self):
         
