@@ -161,14 +161,17 @@ lambda_v_le_rad = np.deg2rad(40)                                                
 lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
 lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
 
+# engine specifics
+x_engine = x_le_MAC                                                             # [m] x-location of the engine
+y_engine = 0.3*b/2                                                              # [m] y-location of the engine
+z_engine = 0                                                                    # [m] z-location of the engine
+i_e_rad = np.deg2rad(i_e)                                                       # [rad] incidence angle of the engine
 
 #undercarriage
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
-weight_distribution = 0.08                                                      # [-] weight percentage on nose wheel
-y_eng = 0.3*b/2 
-z_eng = -d_eng/2                                                                # [m] z-location of lowest part of the engine
-
+weight_distribution = 0.10                                                      # [-] weight percentage on nose wheel
+z_engine_clearance = z_engine - d_eng/2                                         # [m] z-location of lowest part of the engine
 
 theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
 beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
@@ -185,7 +188,7 @@ l_m = get_l_mw(x_mlg,x_cg)                                                      
 l_n = get_l_nw(l_m,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
 
 y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
-                  z_cg,z_mlg,l_n,l_m,y_eng,z_eng,d_eng)                         # [m] y-location of the mlg
+                  z_cg,z_mlg,l_n,l_m,y_engine,z_engine_clearance,d_eng)                         # [m] y-location of the mlg
 
 x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
 y_nlg = [0,0,0]                                                                 # [m] y-location of nlg
@@ -201,8 +204,10 @@ Cl_max = [1.552, 1.582, 1.584]
 # CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
 # CL_alpha: Wing CL_alpha for three configurations
 Reto1, Re1, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
-
 CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
+
+"""Please add this one below"""
+alpha_cruise_rad = np.deg2rad(0)                                                # [rad] angle of attack during cruise
 
 
 # loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
