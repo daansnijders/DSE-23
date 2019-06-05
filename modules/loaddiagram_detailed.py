@@ -91,9 +91,14 @@ class Loading_diagram:
         self.xcg_max = self.xcg1[-1]
         if (self.xcg1[-2]>=self.xcg_max):
             self.xcg_max = self.xcg1[-2]
-        
+
+        self.xcg_min = self.xcg1[-1]
+        if (self.xcg1[-2]<=self.xcg_min):
+           self.xcg_min = self.xcg1[-2]
+
         if (self.config == 2 or self.config == 3):
             self.xcg_max = self.xcg_max - (l_cabin[1]-l_cabin[0])
+            self.xcg_min = self.xcg_min - (l_cabin[1]-l_cabin[0])
         
         plt.figure()   
         plt.plot(self.xcg1, self.weight, color='blue', marker='o')
@@ -109,7 +114,7 @@ class Loading_diagram:
         plt.ylabel('Mass[kg]', fontsize=12)
         plt.show()
 
-        return self.xcg1, self.xcg2, self.weight, self.xcg_max
+        return self.xcg1, self.xcg2, self.weight, self.xcg_max, self.xcg_min
     
     def loading_diagrams_fuel(self):
         self.xcg1 = [self.x_cg]
@@ -126,8 +131,14 @@ class Loading_diagram:
         if (self.xcg1[-2]>=self.xcg_max):
            self.xcg_max = self.xcg1[-2]
         
+        self.xcg_min = self.xcg1[-1]
+        if (self.xcg1[-2]<=self.xcg_min):
+           self.xcg_min = self.xcg1[-2]
+        
         if (self.config == 2 or self.config == 3):
             self.xcg_max = self.xcg_max - (l_cabin[1]-l_cabin[0])
+            self.xcg_min = self.xcg_min - (l_cabin[1]-l_cabin[0])
+
         
         plt.figure()   
         plt.plot(self.xcg1, self.weight, color='blue', marker='o')
@@ -143,4 +154,4 @@ class Loading_diagram:
         plt.ylabel('Mass[kg]', fontsize=12)
         plt.show()
 
-        return self.xcg1, self.xcg2, self.weight, self.xcg_max
+        return self.xcg1, self.xcg2, self.weight, self.xcg_max, self.xcg_min
