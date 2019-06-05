@@ -10,6 +10,12 @@ from inputs.performance_inputs import *
 from inputs.concept_1 import *
 from modules.Aerodynamics import *
 
+""" Yet unknown values needed to start the simulation """
+D_nlg = 0.5
+b_nlg = 0.25
+D_mlg = 1.3
+b_mlg = 0.35
+
 
 """ HLD design """
 config1_HLD = HLD_class(Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer)
@@ -29,6 +35,3 @@ config3_Drag = Drag(S,A,rho,rho_0,l_f[2],V_cruise,V_TO[2],mu_37,mu_sl,MAC,Cr,Ct,
 CD0_fus3, CDL_fus3,  CD_fus_sub3, CD_fus_trans3 = config3_Drag.fuse_drag()
 print(CD0_fus3, CDL_fus3,CD_fus_sub3, CD_fus_trans3)
 
-
-
-S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,x_mlg,z_mlg,D_mlg,b_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h
