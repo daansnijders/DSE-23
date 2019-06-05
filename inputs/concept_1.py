@@ -217,4 +217,9 @@ alpha_cruise_rad = np.deg2rad(0)                                                
 #for i in range(3):
 #    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
 
+#V_TO estimation to get Class-II drag calculation going
+
+V_TO = [sqrt(2* x * 9.80665 /(rho_0 * S * Cl_TO)) for x in MTOW]
+
+
 

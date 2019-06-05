@@ -37,7 +37,6 @@ class HLD_class:
         
         CL_alpha_flapped = Sprime_S * self.CL_alpha_clean
         
-        
         HLD_clearance = 0.5     #Clearance between fuselage and the HLD's 
         
         """ Calculate span of the flap """
@@ -74,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,x_mlg,z_mlg,D_mlg,b_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -97,7 +96,22 @@ class Drag:
         self.l_cockpit      = l_cockpit
         self.l_cabin        = l_cabin
         self.l_tail         = l_tail
-        
+        self.lambda_2_rad   = lambda_2_rad
+        self.x_nlg          = x_nlg
+        self.z_nlg          = z_nlg
+        self.D_nlg          = D_nlg
+        self.x_mlg          = x_mlg
+        self.z_mlg          = z_mlg
+        self.D_mlg          = D_mlg
+        self.b_mlg          = b_mlg
+        self.lambda_h_2_rad = lambda_h_2_rad
+        self.lambda_v_2_rad = lambda_v_2_rad
+        self.MAC_c          = MAC_c
+        self.Cr_h           = Cr_h                                 
+        self.Ct_h           = Ct_h                                 
+        self.Cr_v           = Cr_v                            
+        self.Ct_v           = Ct_v
+
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
         Re_f0 = self.rho_0 * self.V_TO     * self.l_f / self.mu_sl
@@ -105,7 +119,6 @@ class Drag:
         R_wf = 1.01         #(Figure 4.1) 
         
         cos_lambda_2_rad   = cos(lambda_2_rad)
-        cos_lambda_c_2_rad = cos(lambda_c_2_rad)
         #This results in
         R_LS   = 1.21        #(Figure 4.2)
         R_LS_c = 1.21        #(Figure 4.2)
@@ -130,7 +143,21 @@ class Drag:
         R_par = RE_LER * 1/(tan(self.lambda_le_rad)) * sqrt(1 - (self.M*cos(self.lambda_le_rad))**2)
         R_par2 = self.A * self.taper_ratio / cos(self.lambda_le_rad) 
         #This results in 
-        R = 0.95
+        R = 0.95    #Figure 4.7
+        
+        beta = sqrt(1-self.M**2)
+        c_l_alpha = np.deg2rad((1.3 + 0.5)/(7+9))
+        k = c_l_alpha/(2*pi / beta)
+        C_L_a_w = (2*pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (tan(self.lambda_2_rad)))))
+        
+        e = 1.1*(C_L_a_w / self.A)*(R * (C_L_a_w / self.A) + (1-R)*pi)
+        
+        C_L_w = 1.05 * self.CLdes
+        C_D_L_w = C_L_w**2 / (pi * self.A * e)
+        
+        C_D_w = C_D_0_w + C_D_L_w
+        
+        return (C_D_w)
         
                         
     def fuse_drag(self):
@@ -167,6 +194,44 @@ class Drag:
         CD_fus_trans = Rwf*(CDf_fus + CDp_fus) +CD_wave*(pi*(self.d_f_outer/2)**2)/self.S
         
         return(CD0_fus, CDL_fus, CD_fus_sub, CD_fus_trans)
-        
+
     def empennage_drag(self):
+        #Subsonic for horizontal tail(h), vertical tail(v) and canard(c)
+        cos_lambda_v_2_rad   = cos(self.lambda_v_2_rad)
+        cos_lambda_h_2_rad   = cos(self.lambda_h_2_rad)
+        #This results in
+        R_LS_h   = 1.21        #Figure 4.2
+        R_LS_v   = 1.22        #Figure 4.2         
+        R_LS_c   = 1.21        #Figure 4.2 
+        
+        C_h = (self.Cr_h + self.Ct_h)/2
+        C_v = (self.Cr_v + self.Ct_v)/2
+        Re_h_sub = self.rho_0   * self.V_TO * C_h / self.mu_sl
+        Re_h_trans = self.rho   * self.V_cruise * C_h / self.mu_37
+        Re_v_sub = self.rho_0 * self.V_TO     * C_v / self.mu_sl
+        Re_v_trans = self.rho * self.V_cruise     * C_v / self.mu_37        
+        Re_c_sub = self.rho_0 * self.V_TO     * self.MAC_c / self.mu_sl
+        Re_c_trans = self.rho * self.V_cruise     * self.MAC_c / self.mu_37
+        
+        return(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
+        
+#    def nacelle_drag(self):
+        
+        
+        
+#    def flaps_drag(self):
+        
+        
+  
+    def landinggear_drag(self):
+        drag_par1 = self.x_nlg / self.D_nlg
+        drag_par2 = self.z_nlg / self.D_nlg
+        #From this follows
+        C_D_nlg = 0.5   #Figure 4.58
+        
+        
+        frontal_area = self.D_mlg * self.b_mlg * 2
+        m = frontal_area / (a * self.z_mlg)
+        
+#        C_D_gear = 
         
