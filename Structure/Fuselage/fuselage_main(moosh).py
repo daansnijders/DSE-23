@@ -42,7 +42,14 @@ import inputs.concept_1 as c1
 import modules.CG.CG_func as cgfunc
 import modules.CG.class2_CG as cl2cg
 
+from modules.weight_class2.class2_weight import *
+from main import *
+
 <<<<<<< HEAD
+import numpy as np
+import matplotlib.pyplot as plt
+from isa import isa
+=======
 
 
 x_cg_wing_group = 16
@@ -57,6 +64,7 @@ M_landinggear_main = 1500
 M_wing_group = 12000
 Lift_mainwing = 500000
 Lift_tail = -10000
+>>>>>>> 80e00d543e8c5467dbda0a04fe53a987c0a4b090
 
 l_fuselage = config1_class2.l_f
 x_cg_hwing = c1.x_cg_tail
@@ -64,33 +72,28 @@ x_cg_vwing = c1.x_cg_tail
 x_cg_ngear = c1.x_nlg
 x_cg_mgear = c1.x_mlg
 Xfirst = c1.l_cockpit
+<<<<<<< HEAD
+Xlast = Xfirst+c1.l_cabin[0]
+X_wingbox_start = c1.x_le_MAC-c1.y_MAC*np.tan(c1.lambda_le_rad)
+X_wingbox_end = X_wingbox_start + c1.Cr
+M_payload = c1.M_payload[0]
+M_fuselage = c1.M_fuselage
+M_fittings = config1_class2.M_fixedequipment
+=======
 Xlast = Xfirst+c1.l_cabin
+>>>>>>> 80e00d543e8c5467dbda0a04fe53a987c0a4b090
 M_horizontal_tail = config1_class2.M_horizontaltail
 
 
 n= 1000
 step_size = float(l_fuselage)/n
 x = np.linspace(0,l_fuselage,n)
-stringer_area = 0.0004
-stringer_no = [0] *n
-for i in range(n):
-    stringer_no[i]=60
-=======
-from modules.class2 import *
-from main import *
 
-l_fuselage = config1_class2.l_f
-x_cg_hwing = c1.x_cg_tail
-M_horizontal_tail = config1_class2.M_horizontaltail
-
-
-
+<<<<<<< HEAD
 def fueslage_stress_max(l_fuselage, x_cg_hwing, x_cg_vwing, x_cg_ngear, x_cg_mgear, x_cg_wing_group, Xstart, Xlast, X_wingbox_start,\
 X_wingbox_end, M_payload, M_fuselage, M_fittings, M_horizontal_tail, M_vertical_tail, M_landinggear_nose, M_landinggear_main, M_wing_group,\
 Lift_mainwing, Lift_tail):
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from isa import isa
+
     
     n= 1000
     step_size = l_fuselage/n
@@ -124,8 +127,18 @@ Lift_mainwing, Lift_tail):
     component_w[int((x_cg_wing_group/lfuselage)*n)]=-M_wing_group*9.80665
        
     
->>>>>>> 5a2ce19089aa2c4f4db8e15095066cf04d108d80
     
+    lift_forces = [0] *n 
+    for i in range(int((X_wingbox_start/lfuselage)*n),int((X_wingbox_end/lfuselage)*n)):
+        lift_forces[i]=Lift_mainwing/(int((X_wingbox_end/lfuselage)*n)-int((X_wingbox_start/lfuselage)*n))
+        
+    lift_forces[int((x_cg_hwing/lfuselage)*n)]=Lift_tail
+=======
+stringer_area = 0.0004
+stringer_no = [0] *n
+for i in range(n):
+    stringer_no[i]=60
+
 radius = [0] *n
 for i in range(n):
     radius[i]=3.685
@@ -137,6 +150,7 @@ for i in range(n):
 payload_w = [0] *n
 for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
     payload_w[i]=-M_payload*9.80665/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
+>>>>>>> 80e00d543e8c5467dbda0a04fe53a987c0a4b090
     
 fuselage_w = [0] *n
 for i in range(n):

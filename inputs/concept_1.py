@@ -63,7 +63,7 @@ M_cargo_available = get_cargo_mass(N_pax,M_payload)                             
 
 "Change this when correct length of modular part is found"
 x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]\
-           , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]
+           , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]     
 #Propulsion
 
 d_nacel = 1.1*d_fan                                                             # [m] diameter of engine nacelle
@@ -92,7 +92,7 @@ dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
 #canard parameters
-A_c = 6
+A_c = 6  
 b_c = [get_b(A_c,S_c[i]) for i in range(3)]
 lambda_c_4_rad = get_lambda_4_rad(M_cruise,M_x)                                 # [rad] quarter chord sweep angle canard
 taper_ratio_c = get_taper_ratio(lambda_c_4_rad)                                 # [-] taper ratio canard
@@ -156,7 +156,7 @@ lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
 weight_distribution = 0.08                                                      # [-] weight percentage on nose wheel
-y_eng = 0.3*b/2
+y_eng = 0.3*b/2 
 z_eng = -d_eng/2                                                                # [m] z-location of lowest part of the engine
 
 
@@ -193,10 +193,12 @@ Reto1, Re1, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW,
 
 CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
+
+# loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
+
 #create loading diagram with new Cl and Cd
 #CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
 #for i in range(3):
 #    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
-# loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 
 

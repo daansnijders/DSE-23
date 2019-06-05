@@ -54,7 +54,6 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
         distance_climb = (h_screen - h_transition) / np.tan(climb_out_gradient)
         distance_total_airborne = distance_transition + distance_climb
     distance_total = distance_ground + distance_total_airborne
-    print(mu_TO)
     return distance_total
 
 

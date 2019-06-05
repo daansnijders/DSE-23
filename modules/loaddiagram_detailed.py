@@ -61,23 +61,23 @@ class Loading_diagram:
             self.xcg2.append((self.weight[-1]*self.xcg2[-1]+self.x_cargo[len(self.x_cargo)-1-i]*self.M_payload_cargo_list[i])/(self.M_payload_cargo_list[i]+self.weight[-1]))
             self.weight.append(self.M_payload_cargo_list[i]+self.weight[-1])
         
-        passenger_cg1= np.arange(self.Xfirst, self.Xlast+self.seat_pitch,self.seat_pitch)
-        passenger_cg2= np.arange(self.Xlast, self.Xfirst-self.seat_pitch,-self.seat_pitch)
-        #print(passenger_cg1)
+        self.passenger_cg1= np.arange(self.Xfirst, self.Xlast+self.seat_pitch,self.seat_pitch)
+        self.passenger_cg2= np.arange(self.Xlast, self.Xfirst-self.seat_pitch,-self.seat_pitch)
+        #print(self.passenger_cg1)
         
-        for i in range(len(passenger_cg1)):
-            self.xcg1.append((self.weight[-1]*self.xcg1[-1]+passenger_cg1[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))
-            self.xcg2.append((self.weight[-1]*self.xcg2[-1]+passenger_cg2[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))        
+        for i in range(len(self.passenger_cg1)):
+            self.xcg1.append((self.weight[-1]*self.xcg1[-1]+self.passenger_cg1[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))
+            self.xcg2.append((self.weight[-1]*self.xcg2[-1]+self.passenger_cg2[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))        
             self.weight.append(2*self.M_pax_cabin+self.weight[-1])
 
-        for i in range(len(passenger_cg1)):
-            self.xcg1.append((self.weight[-1]*self.xcg1[-1]+passenger_cg1[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))
-            self.xcg2.append((self.weight[-1]*self.xcg2[-1]+passenger_cg2[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))        
+        for i in range(len(self.passenger_cg1)):
+            self.xcg1.append((self.weight[-1]*self.xcg1[-1]+self.passenger_cg1[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))
+            self.xcg2.append((self.weight[-1]*self.xcg2[-1]+self.passenger_cg2[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))        
             self.weight.append(2*self.M_pax_cabin+self.weight[-1])
             
-        for i in range(len(passenger_cg1)):
-            self.xcg1.append((self.weight[-1]*self.xcg1[-1]+passenger_cg1[i]*self.M_pax_cabin)/(self.M_pax_cabin+self.weight[-1]))
-            self.xcg2.append((self.weight[-1]*self.xcg2[-1]+passenger_cg2[i]*self.M_pax_cabin)/(self.M_pax_cabin+self.weight[-1]))        
+        for i in range(len(self.passenger_cg1)):
+            self.xcg1.append((self.weight[-1]*self.xcg1[-1]+self.passenger_cg1[i]*self.M_pax_cabin)/(self.M_pax_cabin+self.weight[-1]))
+            self.xcg2.append((self.weight[-1]*self.xcg2[-1]+self.passenger_cg2[i]*self.M_pax_cabin)/(self.M_pax_cabin+self.weight[-1]))        
             self.weight.append(self.M_pax_cabin+self.weight[-1])            
         
 
@@ -86,8 +86,15 @@ class Loading_diagram:
             self.xcg1.append((self.weight[-1]*self.xcg1[-1]+self.x_fuel[i]*self.M_fuel)/(self.M_fuel+self.weight[-1]))
             self.xcg2.append((self.weight[-1]*self.xcg2[-1]+self.x_fuel[i]*self.M_fuel)/(self.M_fuel+self.weight[-1]))
             self.weight.append(self.M_fuel+self.weight[-1])      
-            
-            
+        
+
+        self.xcg_max = self.xcg1[-1]
+        if (self.xcg1[-2]>=self.xcg_max):
+            self.xcg_max = self.xcg1[-2]
+        
+        if (self.config == 2 or self.config == 3):
+            self.xcg_max = self.xcg_max - (l_cabin[1]-l_cabin[0])
+        
         plt.figure()   
         plt.plot(self.xcg1, self.weight, color='blue', marker='o')
         plt.plot(self.xcg2, self.weight, color='green', marker='o')
@@ -102,7 +109,7 @@ class Loading_diagram:
         plt.ylabel('Mass[kg]', fontsize=12)
         plt.show()
 
-        return self.xcg1, self.xcg2, self.weight
+        return self.xcg1, self.xcg2, self.weight, self.xcg_max
     
     def loading_diagrams_fuel(self):
         self.xcg1 = [self.x_cg]
@@ -115,7 +122,13 @@ class Loading_diagram:
             self.xcg2.append((self.weight[-1]*self.xcg2[-1]+self.x_fuel[i]*self.M_fuel)/(self.M_fuel+self.weight[-1]))
             self.weight.append(self.M_fuel+self.weight[-1])      
             
-            
+        self.xcg_max = self.xcg1[-1]
+        if (self.xcg1[-2]>=self.xcg_max):
+           self.xcg_max = self.xcg1[-2]
+        
+        if (self.config == 2 or self.config == 3):
+            self.xcg_max = self.xcg_max - (l_cabin[1]-l_cabin[0])
+        
         plt.figure()   
         plt.plot(self.xcg1, self.weight, color='blue', marker='o')
         plt.plot(self.xcg2, self.weight, color='green', marker='o')
@@ -130,4 +143,4 @@ class Loading_diagram:
         plt.ylabel('Mass[kg]', fontsize=12)
         plt.show()
 
-        return self.xcg1, self.xcg2, self.weight
+        return self.xcg1, self.xcg2, self.weight, self.xcg_max
