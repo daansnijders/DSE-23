@@ -21,16 +21,17 @@ cg1_pass = [0, 0, 0]
 cg2_pass = [0, 0, 0]
 weight_pass = [0, 0, 0]
 xcg_max = [0, 0, 0, 0, 0, 0]
-cg1_pass[0], cg2_pass[0], weight_pass[0], xcg_max[0] = config1_load.loading_diagrams_pass()
-cg1_pass[1], cg2_pass[1], weight_pass[1], xcg_max[1] = config2_load.loading_diagrams_pass()
-cg1_pass[2], cg2_pass[2], weight_pass[2], xcg_max[2] = config3_load.loading_diagrams_pass()
+xcg_min = [0, 0, 0, 0, 0, 0]
+cg1_pass[0], cg2_pass[0], weight_pass[0], xcg_max[0], xcg_min[0] = config1_load.loading_diagrams_pass()
+cg1_pass[1], cg2_pass[1], weight_pass[1], xcg_max[1], xcg_min[1] = config2_load.loading_diagrams_pass()
+cg1_pass[2], cg2_pass[2], weight_pass[2], xcg_max[2], xcg_min[2] = config3_load.loading_diagrams_pass()
 
 cg1_fuel = [0, 0, 0]
 cg2_fuel = [0, 0, 0]
 weight_fuel = [0, 0, 0]
-cg1_fuel[0], cg2_fuel[0], weight_fuel[0], xcg_max[3] = config1_load.loading_diagrams_fuel()
-cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4] = config2_load.loading_diagrams_fuel()
-cg1_fuel[2], cg2_fuel[2], weight_fuel[2], xcg_max[5] = config3_load.loading_diagrams_fuel()
+cg1_fuel[0], cg2_fuel[0], weight_fuel[0], xcg_max[3], xcg_min[3] = config1_load.loading_diagrams_fuel()
+cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config2_load.loading_diagrams_fuel()
+cg1_fuel[2], cg2_fuel[2], weight_fuel[2], xcg_max[5], xcg_min[5] = config3_load.loading_diagrams_fuel()
 
 
 config1_ground      = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg[0], x_mlg[0])     
@@ -43,6 +44,9 @@ frac_min[0], frac_max[0], frac1 = config1_ground.check_equilibrium()
 frac_min[1], frac_max[1], frac2 = config2_ground.check_equilibrium()
 frac_min[2], frac_max[2], frac2 = config3_ground.check_equilibrium()
 
-print ("The most af CG position from the nose for configuration 1 during flight is: ", max(xcg_max))
+print ("The most aft CG position from the nose for configuration 1 during flight is: ", max(xcg_max[0], xcg_max[3]))
 print("Including a 0,05 m stability margin we get", max(xcg_max)+0.05)
+
+print ("The most forward CG position from the nose for configuration 1 during flight is: ", min(xcg_min[0], xcg_min[3]))
+
 

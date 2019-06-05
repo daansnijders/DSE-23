@@ -119,4 +119,12 @@ class Drag:
             CDL_fus = eta2*cdc*alpha**3*(Splf/self.S)
         
         CD_fus_sub = CD0_fus + CDL_fus
-        return(CD0_fus, CDL_fus, CD_fus_sub)
+        
+        
+        CDf_fus = Cf_fus*(Swet_fus/self.S)
+        CDp_fus = Cf_fus*(60/(self.l_f/self.d_f_outer)**3 + 0.0025*(self.l_f/self.d_f_outer))*Swet_fus/self.S
+        CD_wave = 0.005
+        
+        CD_fus_trans = Rwf*(CDf_fus + CDp_fus) +CD_wave*(pi*(self.d_f_outer/2)**2)/self.S
+        
+        return(CD0_fus, CDL_fus, CD_fus_sub, CD_fus_trans)
