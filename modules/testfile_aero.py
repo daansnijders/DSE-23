@@ -18,14 +18,14 @@ print(SWF, SWF_LE)
 
 
 """ Drag classII estimations """
-config1_Drag = Drag(S,A,rho,rho_0,l_f[0],V_cruise,V_to[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad)
-CD0_fus1 = config1_Drag.fuse_drag()
-print(CD0_fus1)
+config1_Drag = Drag(S,A,rho,rho_0,l_f[0],V_cruise,V_to[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[0],CL_alpha,l_cockpit, l_cabin[0], l_tail)
+CD0_fus1, CDL_fus1, CD_fus_sub1 = config1_Drag.fuse_drag()
+print(CD0_fus1, CDL_fus1,CD_fus_sub1)
 
-config1_Drag = Drag(S,A,rho,rho_0,l_f[1],V_cruise,V_to[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad)
-CD0_fus2 = config1_Drag.fuse_drag()
-print(CD0_fus2)
+config2_Drag = Drag(S,A,rho,rho_0,l_f[1],V_cruise,V_to[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[1],CL_alpha,l_cockpit, l_cabin[1], l_tail)
+CD0_fus2, CDL_fus2,  CD_fus_sub2 = config2_Drag.fuse_drag()
+print(CD0_fus2, CDL_fus2,CD_fus_sub2)
 
-config1_Drag = Drag(S,A,rho,rho_0,l_f[2],V_cruise,V_to[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad)
-CD0_fus3 = config1_Drag.fuse_drag()
-print(CD0_fus3)
+config3_Drag = Drag(S,A,rho,rho_0,l_f[2],V_cruise,V_to[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[2],CL_alpha,l_cockpit, l_cabin[2], l_tail)
+CD0_fus3, CDL_fus3,  CD_fus_sub3 = config3_Drag.fuse_drag()
+print(CD0_fus3, CDL_fus3,CD_fus_sub3)
