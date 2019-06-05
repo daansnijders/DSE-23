@@ -27,8 +27,8 @@ R = [4000E3,2000E3,4000E3]                                                      
 T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
 W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
-OEW = [34631.92,38223.31-360,38729.81]                                              # [kg] operational empty weight
-MTOW = [58722.6,67394-360,68264.27]                                                 # [kg] maximum take-off weight
+OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
+MTOW = [58722.6,67394-360,68264.27]                                             # [kg] maximum take-off weight
 
 M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
@@ -55,8 +55,8 @@ l_nose = get_l_nose(d_f_outer)                                                  
 l_tailcone = get_l_tailcone(d_f_outer)                                          # [m] tailcone length
 l_tail = get_l_tail(d_f_outer)                                                  # [m] tail length
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m] length fuselage
-R_f = d_f_outer/2                                        # [m] radius fuselage
-S_fus=[d_f_outer**2/4*pi*l_f[i] for i in range(3)]                           #[m^2] gross shell fuselage area
+R_f = d_f_outer/2                                                               # [m] radius fuselage
+S_fus=[d_f_outer**2/4*pi*l_f[i] for i in range(3)]                              # [m^2] gross shell fuselage area
 
 V_os = get_overhead_volume(l_cabin)                                             # [m^3] overhead storage volume
 V_cc = get_cargo_volume(R_f,l_cabin)                                            # [m^3] total storage volume
@@ -79,12 +79,12 @@ d_nacel = 1.1*d_fan                                                             
 l_nacel = 1.1*l_eng                                                             # [m] length of the engine nacelle
 
 # Wing parameters MOVE TO CONSTANTS
-A = 9.5                                                                  # [-] aspect ration main wing
-e = 0.85                                                            # [-]
+A = 9.5                                                                         # [-] aspect ration main wing
+e = 0.85                                                                        # [-] 
 S = get_S(MTOW,W_S)                                                             # [m^2] surface area main wing
 #take canard into account
 S_c = [S[0]-S[0],S[1]-S[0],S[2]-S[0]]
-S = min(S)                                                  #update surface area to be the same for all config
+S = min(S)                                                                      # [m] update surface area to be the same for all config
 b = get_b(A,S)                                                                  # [m] span main wing
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad] quarter chord sweep angle main wing
 taper_ratio = get_taper_ratio(lambda_4_rad)                                     # [-] taper ratio main wing
@@ -94,7 +94,7 @@ Ct = get_Ct(Cr, taper_ratio)                                                    
 CL = get_CL(MTOW,rho,V_cruise,S)                                                # [-] lift coefficient aircraft
 CL = CL[0]
 t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   # [-] thickness over chord main wing
-Cr_t= t_c*Cr                                                                    #thinkness at the root chord [m]
+Cr_t= t_c*Cr                                                                    # [m] thinkness at the root chord
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m] mean aerodynamic chord main wing
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m] y-location of the MAC of the main wing
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
@@ -105,15 +105,15 @@ A_c = 6
 b_c = [get_b(A_c,S_c[i]) for i in range(3)]
 lambda_c_4_rad = get_lambda_4_rad(M_cruise,M_x)                                 # [rad] quarter chord sweep angle canard
 taper_ratio_c = get_taper_ratio(lambda_c_4_rad)                                 # [-] taper ratio canard
-lambda_c_2_rad = get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c)                    # [rad] half chord sweep angle canard
+lambda_c_2_rad = get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c)      # [rad] half chord sweep angle canard
 
 Cr_c = [0] + [get_Cr_canard(S_c[i],taper_ratio_c,b_c[i]) for i in range(1,3)]   # [m] root chord length canard
-Ct_c = [0] + [get_Ct_canard(Cr_c[i], taper_ratio_c) for i in range(1,3)]                                                   # [m] tip chord length canard
-CL_c = [0] + get_CL_canard(M_carried_canard_MTOW,rho,V_cruise,S_c)                                                # [-] lift coefficient aircraft
-t_c_c =  [0]+get_t_c_canard(lambda_c_2_rad,M_x, M_cruise,CL_c)                                   # [-] thickness over chord main wing
-Cr_t_c= [t_c_c[i]*Cr_c[i] for i in range(3)]                                            #thinkness at the root chord [m]
-MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                                  # [m] mean aerodynamic chord canard
-y_MAC_c = [0]+get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                                               # [m] y-location of the MAC of the canard
+Ct_c = [0] + [get_Ct_canard(Cr_c[i], taper_ratio_c) for i in range(1,3)]        # [m] tip chord length canard
+CL_c = [0] + get_CL_canard(M_carried_canard_MTOW,rho,V_cruise,S_c)              # [-] lift coefficient aircraft
+t_c_c =  [0]+get_t_c_canard(lambda_c_2_rad,M_x, M_cruise,CL_c)                  # [-] thickness over chord main wing
+Cr_t_c= [t_c_c[i]*Cr_c[i] for i in range(3)]                                    # [m] thinkness at the root chord
+MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                 # [m] mean aerodynamic chord canard
+y_MAC_c = [0]+get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                          # [m] y-location of the MAC of the canard
 
 
 #cg and masses of components
@@ -129,17 +129,17 @@ l_h=[x_cg_tail[i]-x_cg_wing[i] for i in range(3)]
 
 
 
-x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group)       # [m] x-location of the centre of mass aircraft
-y_cg = get_y_cg()                                                                       # [m] y-location of the centre of mass aircraft
-z_cg = get_z_cg(d_f_outer)                                                              # [m] z-location of the centre of mass aircraft
+x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group) # [m] x-location of the centre of mass aircraft
+y_cg = get_y_cg()                                                               # [m] y-location of the centre of mass aircraft
+z_cg = get_z_cg(d_f_outer)                                                      # [m] z-location of the centre of mass aircraft
 
 # Empennage parameters
-V_h = 1.28                                                        # [-] volume horizontal tail
-A_h = 4.95                                                        # [-] aspect ratio horizontal tail
-taper_ratio_h = 0.39                                              # [-] taper ratio horizontal tail
-V_v = 0.1                                                         # [-] volume vertical tail
-A_v = 1.9                                                           # [-] aspect ratio vertical tail
-taper_ratio_v = 0.375                                          # [-] taper ratio vertical tail
+V_h = 1.28                                                                      # [-] volume horizontal tail
+A_h = 4.95                                                                      # [-] aspect ratio horizontal tail
+taper_ratio_h = 0.39                                                            # [-] taper ratio horizontal tail
+V_v = 0.1                                                                       # [-] volume vertical tail
+A_v = 1.9                                                                       # [-] aspect ratio vertical tail
+taper_ratio_v = 0.375                                                           # [-] taper ratio vertical tail
 x_le_h = get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
 
@@ -152,12 +152,12 @@ Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                            
 Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        # [m] root chord lengh vertical tail
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m] tip chord length vertical tail
 
-lambda_h_le_rad = np.deg2rad(34)                          # [rad] leading edge sweep angle horizontal tail
+lambda_h_le_rad = np.deg2rad(34)                                                # [rad] leading edge sweep angle horizontal tail
 lambda_h_4_rad= get_lambda_4_rad_from_lambda_le(lambda_h_le_rad,Cr_h,b_h,taper_ratio_h)
 lambda_h_2_rad=get_lambda_2_rad(lambda_h_4_rad,A_h,taper_ratio_h)
 
 
-lambda_v_le_rad = np.deg2rad(40)                            # [rad] leading edge sweep angle vertical tail
+lambda_v_le_rad = np.deg2rad(40)                                                # [rad] leading edge sweep angle vertical tail
 lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
 lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
 
