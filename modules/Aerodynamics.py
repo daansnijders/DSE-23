@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -99,14 +99,11 @@ class Drag:
         self.lambda_2_rad   = lambda_2_rad
         self.x_nlg          = x_nlg
         self.z_nlg          = z_nlg
-        self.b_nlg          = b_nlg
         self.D_nlg          = D_nlg
-        self.D_strutt_nlg   = D_strutt_nlg
         self.x_mlg          = x_mlg
         self.z_mlg          = z_mlg
-        self.b_mlg          = b_mlg
         self.D_mlg          = D_mlg
-        self.D_strutt_mlg   = D_strutt_mlg
+        self.b_mlg          = b_mlg
         self.lambda_h_2_rad = lambda_h_2_rad
         self.lambda_v_2_rad = lambda_v_2_rad
         self.MAC_c          = MAC_c
@@ -114,6 +111,9 @@ class Drag:
         self.Ct_h           = Ct_h                                 
         self.Cr_v           = Cr_v                            
         self.Ct_v           = Ct_v
+        self.S_h            = S_h
+        self.S_v            = S_v
+        self.S_c            = S_c
 
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -224,6 +224,18 @@ class Drag:
         Cf_emp_c_sub = 0        #Figure 4.3
         Cf_emp_c_trans = 0.0029 #Figure 4.3
         
+        L_prime = 1.2           #Figure 4.4
+        
+        t_over_c = 0.15         #TO BE UPDATED AFTER AIRFOIL SELECTION EMPENNAGE AND CANARD
+        
+        Swet_h = 2*self.S_h
+        Swet_v = 2*self.S_v
+        Swet_c = 2*self.S_c
+        
+        
+        CD0_h_tail_sub = R_LS_h*Cf_emp_h_sub*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_h/self.S
+        CD0_v_tail_sub = R_LS_v*Cf_emp_v_sub*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_v/self.S
+        
         return(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
         
 #    def nacelle_drag(self):
@@ -237,16 +249,12 @@ class Drag:
     def landinggear_drag(self):
         drag_par1 = self.x_nlg / self.D_nlg
         drag_par2 = self.z_nlg / self.D_nlg
-        S_mlg = self.D_nlg * self.b_nlg * 2 + self.D_strutt_nlg * self.z_nlg
         #From this follows
         C_D_nlg = 0.5   #Figure 4.58
         
         
-        S_mlg = self.D_mlg * self.b_mlg * 2 + self.D_strutt_mlg * self.z_mlg
-        a = 2* self.b_mlg + self.D_strutt_mlg
-        m = S_mlg / (a * self.z_mlg)
-        #From this follows:
-        C_D_mlg = 1.4   #Figure 4.59
+        frontal_area = self.D_mlg * self.b_mlg * 2
+        m = frontal_area / (a * self.z_mlg)
         
-        C_D_gear = (C_D_nlg ) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mld) * m / self.S)
+#        C_D_gear = 
         
