@@ -227,9 +227,13 @@ class Drag:
         
         t_over_c = 0.15         #TO BE UPDATED AFTER AIRFOIL SELECTION EMPENNAGE AND CANARD
         
-        Swet_h = 2*S_h
-        Swet_v = 2*S_v
-        Swet_c = 2*S_c
+        Swet_h = 2*self.S_h
+        Swet_v = 2*self.S_v
+        Swet_c = 2*self.S_c
+        
+        
+        CD0_h_tail_sub = R_LS_h*Cf_emp_h_sub*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_h/self.S
+        CD0_v_tail_sub = R_LS_v*Cf_emp_v_sub*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_v/self.S
         
         return(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
         
