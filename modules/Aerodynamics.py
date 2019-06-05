@@ -40,12 +40,7 @@ class HLD_class:
         return(SWF, SWF_LE)
         
 class Drag:
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self,S,A,rho,l_f,V_cruise,mu_37,MAC,Cr,Ct,b,taper_ratio,d_f_outer, lambda_le_rad):
-=======
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer):
->>>>>>> 644b41ed0b61d31d66d66c0e5a2ac7a1a22bd520
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -59,13 +54,9 @@ class Drag:
         self.b              = b
         self.taper_ratio    = taper_ratio
         self.d_f_outer      = d_f_outer
-<<<<<<< HEAD
         self.lambda_le_rad  = lambda_le_rad
-
-=======
         self.V_TO           = V_TO
         self.mu_sl          = mu_sl
->>>>>>> 644b41ed0b61d31d66d66c0e5a2ac7a1a22bd520
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37

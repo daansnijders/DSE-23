@@ -25,16 +25,16 @@ Parameters
 MTOM = 58722.6
 
 # Wing span [m]
-wing_span = 38.593274
+wing_span = 35.24129
 
 # Root chord [m]
-chord_root = 5.359098
+chord_root = 5.666
 
 # Tip Chord [m]
-chord_tip = 1.657860
+chord_tip = 1.753
 
 # Wing surface area [m^2]
-wing_area = 135.403711
+wing_area = 130.7314
 
 # Discretisation number [-]
 N = 500
@@ -51,7 +51,7 @@ load_factor = 3.1
 safety_factor = 1.5
 
 # Leading edge sweep [deg]
-sweep_LE = 15
+sweep_LE = 28.48
 
 # Engine property list[x_loc(m), y_loc(m), z_loc(m), thrust [N], y_force, weight[N]
 engine_thrust = 1000    #[N]
@@ -100,4 +100,19 @@ plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,7])
 plt.show()
 
 """
-Form list of stress 
+Form list of cross-section
+"""
+cross_section_lst = []
+for i in range(len(internal_loads_lst)):
+    cross_section = gpf.get_cross_sec_prop(internal_loads_lst[i,1],internal_loads_lst[i,0],wing_span)
+    cross_section_lst.append(cross_section)
+cross_section_lst = np.array(cross_section_lst)
+
+"""
+Calculate amount of fuel it can carry
+"""
+fuel_volume = 0
+for i in range(len(cross_section_lst)):
+    if internal_loads_lst[i,0]<0.75*wing_span/2:
+        fuel_volume += cross_section_lst[i,2]*(wing_span/2)/N
+fuel_mass = 2*fuel_volume*804
