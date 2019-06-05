@@ -63,11 +63,11 @@ def get_sound_pressure_level(p_e_squared):   #[dB]
 def correction_for_thirdbandwidth(SPL,freq_delta):
     SPL_bandwidth=SPL+10*log10(freq_delta)
     return SPL_bandwidth
-
+#get a noy value from each spl and freq 
+    
 def get_perceived_noise_level(N):
     L_pn=40+33.3*log10(N)
     return L_pn
-
 
 def get_effective_perceived_noise_level(L_pn,delta_t):
     L_epn=10*log10(delta_t/10*sum(10**(L_pn/10)))

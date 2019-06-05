@@ -10,8 +10,7 @@ def get_MTOW_class1(OEW):
     return MTOW
 
 
-def get_TOW(OEW,M_pass,V_cargo, M_ff,rho_cargo):
-    M_payload=[M_pass[i]+V_cargo[i]*rho_cargo for i in range(3)]
+def get_TOW(OEW,M_payload, M_ff):
     return [(M_payload[i]+OEW[i])/M_ff[i] for i in range(3)]
 
 

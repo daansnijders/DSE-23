@@ -28,19 +28,10 @@ T_W    = [0.29,0.29,0.29]                                                       
 W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
 OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
-MTOW = [58722.6,67394-360,68264.27]                                             # [kg] maximum take-off weight
-
-M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
-#MTOW=get_TOW(OEW,M_pax_and_lugg,V_cargo_available,M_ff,rho_lugg)
-M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
-T_req = get_T_req(T_W, MTOW)                                                    # [N] required thrust
-M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
-
+#MTOW = [58722.6,67394-360,68264.27]                                             # [kg] maximum take-off weight
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
 
-M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
-M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
-M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]
+
 
 
 #START SIZING 
@@ -66,12 +57,22 @@ Mtot_carry_on, Mtot_check_in, V_carry_on\
 , V_check_in = get_masses_volumes(N_pax, V_cc, V_os)                            # [kg,kg,m^3,m^3] mass and volume of check-in/carry-on luggage
 
 V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)# [m^3] available cargo volume
-M_cargo_available = get_cargo_mass(N_pax,M_payload)                             # [kg] available cargo mass
+
+M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
+M_cargo_available=[V_cargo_available[i]*rho_cargo for i in range(3)]             # [kg] available cargo mass
+M_payload=[M_cargo_available[i]+M_pax_and_lugg[i] for i in range(3)]
+MTOW=get_TOW(OEW,M_payload,M_ff)
+M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
+T_req = get_T_req(T_W, MTOW)
+
+#needed for class2 estimation
+M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
+M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
+M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]                                                    # [N] required thrust                          
 
 "Change this when correct length of modular part is found"
 x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]\
            , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]     
-
 
 
 
