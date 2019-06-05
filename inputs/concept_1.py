@@ -17,7 +17,6 @@ from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.constants import *
-from modules.Aerodynamics import *
 
 
 #initial sizing 
@@ -233,8 +232,8 @@ landing_field_length = [get_landing_field_length(landing_thrust, landing_mass[i]
 Cruise fuel economy
 """
 
-engines_used = 2
-#fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S, CDcruise[i]), R[i], V_cruise, engines_used) for i in range(3)]
+
+#fuel_cruise = [get_cruise_fuel(get_cruise_thrust(rho_0, V_cruise, S, CDcruise[i]), R[i], V_cruise, n_engines) for i in range(3)]
 
 """
 Climb performance

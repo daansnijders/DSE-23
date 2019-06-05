@@ -14,11 +14,11 @@ Parameters
 ------------------------------------------------------------------------------
 """
 
-# Spar thickness [mm]
+# Spar thickness [m]
 t_spar = 0.005
 
-# Skin thickness [mm]
-t_skin = 0.005
+# Skin thickness [m]
+t_skin = 0.001
 
 # Front spar location/chord [-]
 spar_front = 0.25
@@ -29,9 +29,6 @@ spar_rear = 0.6
 # Chord [m] example
 chord = 5
 
-# Stringer area [m^2]
-stringer_area_upper = 0#314/10**6
-stringer_area_lower = 0#314/10**6
 
 """
 Read airfoil data
@@ -73,6 +70,9 @@ Obtain number of stringers and position of ribs
 ------------------------------------------------------------------------------
 """
 component = pd.read_excel('wing_box_design.xlsx')
+<<<<<<< HEAD
+    
+=======
 
 """
 Obtain cross-section properties
@@ -192,3 +192,4 @@ def get_cross_sec_prop(chord,y_loc,span):
     return [enclosed_area,total_area,fuel_area,neutral_z,min_z,max_z,moi]
 
 stuff = get_cross_sec_prop(5,1,1)
+>>>>>>> 1dd00d6e878e86db89a1148f4a6b61f240311ea7

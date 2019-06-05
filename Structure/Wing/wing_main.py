@@ -13,7 +13,6 @@ Assumptions:
 ------------------------------------------------------------------------------
 """
 import lift_surface_function as lsf
-import geo_prop_function as gpf
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -38,7 +37,7 @@ chord_tip = 1.753
 wing_area = 130.7314
 
 # Discretisation number [-]
-N = 1000
+N = 500
 
 # Lift Coefficient [-]
 coeff_lift = 1.584
