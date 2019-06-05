@@ -21,11 +21,11 @@ Cl_land=2.4
 
 
 #take off and landing performance
-Sland=1500/ft_to_m           #field length in feet
-Stakeoff=2000/ft_to_m        # field length in feet
+Sland=1500                  #field length in meters
+Stakeoff=2000               # field length in meters
 TOP=175*4.8824*9.81         #N/M^2
 sigma=1
-h_screen = 50 * ft_to_m         # [m] Screen height
+h_screen = 35 * ft_to_m         # [m] Screen height
 
 Vto1 = 135  #Initial guess Vtake-off                                            # [kts]
 VL1 = 172   #Initial guess Vtake-off                                            # [kts]
