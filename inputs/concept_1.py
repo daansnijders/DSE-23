@@ -117,6 +117,7 @@ y_MAC_c = [0]+get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                          
 
 
 #cg and masses of components
+#NEED L_H FOR CLASS 2 (DAAAN EN STIJJN)
 M_wing, M_eng, M_wing_group=get_mass_winggroup(MTOW)
 M_fuselage, x_cg_fuselage=get_mass_fuselage(MTOW,l_f)
 M_tail,x_cg_tail=get_mass_tail(MTOW,l_f)
