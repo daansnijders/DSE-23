@@ -21,7 +21,13 @@ Assumptions:
 
 -------------------------------------------------------------------------------
 """
-
+import sys
+sys.path.insert(0,'/Users/thong/Documents/TU Delft DSE/DSE-23')
+import inputs.concept_1 as c1
+import modules.CG.CG_func as cgfunc
+import modules.CG.class2_CG as cl2cg
+l_fuselage = c1.l_f[2]
+x_cg_hwing = cl2cg.get_cg_hwing
 
 def fueslage_stress_max(l_fuselage, x_cg_hwing, x_cg_vwing, x_cg_ngear, x_cg_mgear, x_cg_wing_group, Xstart, Xlast, X_wingbox_start,\
 X_wingbox_end, M_payload, M_fuselage, M_fittings, M_horizontal_tail, M_vertical_tail, M_landinggear_nose, M_landinggear_main, M_wing_group,\
@@ -32,6 +38,7 @@ Lift_mainwing, Lift_tail):
     
     n= 1000
     step_size = l_fuselage/n
+    x = np.linspace(0,l_fuselage,n)
     stringer_area = 0.0004
     stringer_no = [0] *n
     for i in range(n):
@@ -96,5 +103,8 @@ Lift_mainwing, Lift_tail):
     stress_long_max = [0] *n
     for i in range(n):
         stress_long_max[i] = abs(stress_bending_max[i])+stress_pressure_long[i]
-        
+    
+    plt.figure()
+    plt.plot(x,M)
+    plt.show()
     return max(stress_bending_max)
