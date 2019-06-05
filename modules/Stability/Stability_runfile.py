@@ -6,9 +6,6 @@ Created on Mon Jun  3 12:43:09 2019
 """
 
 
-
-
-
 from inputs.concept_1 import *
 from inputs.constants import *
 
