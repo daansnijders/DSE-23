@@ -37,7 +37,6 @@ class HLD_class:
         
         CL_alpha_flapped = Sprime_S * self.CL_alpha_clean
         
-        
         HLD_clearance = 0.5     #Clearance between fuselage and the HLD's 
         
         """ Calculate span of the flap """
@@ -74,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -97,6 +96,7 @@ class Drag:
         self.l_cockpit      = l_cockpit
         self.l_cabin        = l_cabin
         self.l_tail         = l_tail
+        self.lambda_2_rad   = lambda_2_rad
         
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -105,7 +105,6 @@ class Drag:
         R_wf = 1.01         #(Figure 4.1) 
         
         cos_lambda_2_rad   = cos(lambda_2_rad)
-        cos_lambda_c_2_rad = cos(lambda_c_2_rad)
         #This results in
         R_LS   = 1.21        #(Figure 4.2)
         R_LS_c = 1.21        #(Figure 4.2)
@@ -131,6 +130,20 @@ class Drag:
         R_par2 = self.A * self.taper_ratio / cos(self.lambda_le_rad) 
         #This results in 
         R = 0.95
+        
+        beta = sqrt(1-self.M**2)
+        c_l_alpha = np.deg2rad((1.3 + 0.5)/(7+9))
+        k = c_l_alpha/(2*pi / beta)
+        C_L_a_w = (2*pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (tan(self.lambda_2_rad)))))
+        
+        e = 1.1*(C_L_a_w / self.A)*(R * (C_L_a_w / self.A) + (1-R)*pi)
+        
+        C_L_w = 1.05 * self.CLdes
+        C_D_L_w = C_L_w**2 / (pi * self.A * e)
+        
+        C_D_w = C_D_0_w + C_D_L_w
+        
+        return (C_D_w)
         
                         
     def fuse_drag(self):
