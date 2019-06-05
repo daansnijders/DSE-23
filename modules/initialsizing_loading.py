@@ -63,7 +63,7 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0
     V_s=stallspeedlanding(Sland)
 
     WS_L=wingloading_landing(Cl_land, V_s)
-    WS_TO=wingloading_takeoff(Sland,Cl_land,f)
+    WS_TO=wingloading_takeoff(Sland,Cl_land,f)                                  #f is the ratio between Mass at takeoff and landing
     
     TW_TO=thurstloading_takeoff(TOP,sigma,Cl_TO,WSrange)
     TW_cruise=thrustloading_cruise(CD0,WSrange)
@@ -79,11 +79,11 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0
     ax.axvline(WS_TO, label='Take off W/S',color='r')
     ax.axvline(WS_L, label='Landing W/S')
     ax.plot(WSrange,TW_TO,label='Take-off condition ')
-    ax.fill_between(WSrange, TW_climb, 2, where = (TW_cruise <= TW_climb) * (WSrange < WS_L), facecolor='green', interpolate=False)
-    ax.fill_between(WSrange, TW_cruise, 2, where = (TW_cruise >= TW_climb) * (WSrange < WS_L), facecolor='green', interpolate=False)
-    ax.scatter(4359,0.33, color = 'r',linewidths=5, label = 'Design point')
-    ax.set(title = 'Wing/Thrust Loading Diagram', xlabel = 'W/S[-]', ylabel = 'T/W[-]', ylim = (0,max(TW_climb)), xlim = (0,5500))
-    ax.legend(loc='upper right')
+#    ax.fill_between(WSrange, TW_climb, 2, where = (TW_cruise <= TW_climb) * (WSrange < WS_L), facecolor='green', interpolate=False)
+#    ax.fill_between(WSrange, TW_cruise, 2, where = (TW_cruise >= TW_climb) * (WSrange < WS_L), facecolor='green', interpolate=False)
+#    ax.scatter(4359,0.33, color = 'r',linewidths=5, label = 'Design point')
+#    ax.set(title = 'Wing/Thrust Loading Diagram', xlabel = 'W/S[-]', ylabel = 'T/W[-]', ylim = (0,max(TW_climb)), xlim = (0,5500))
+#    ax.legend(loc='upper right')
     plt.savefig('./Output/loading_diagram.pdf')
     return TW_cruise,TW_climb,WSrange,WS_L
 

@@ -57,7 +57,7 @@ def get_sound_pressure_level(p_e_squared):   #[dB]
 
 #noise constants from ANOPP method
 #G_wing=0.37*S/b**2*((rho*M*a*S)/(mu*b))**-0.2
-#L_wing=G*b
+#L_wing=G_wing*b
 #K_wing=4.464E-5 
 #a_wing=5
 #

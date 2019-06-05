@@ -10,7 +10,7 @@ from inputs.concept_1 import *
 
 
 
-#class 2 execution  in terms of weight and cg 
+#CLASS2 WEIGHT AND CG LOCATION
 
 #configuration 1 
 config1_class2     = Class2_weight(1,N_pax[0],MTOW[0],M_carried_canard_MZF[0],min(M_MZF), n_max[0],V_dive[0],M_fuel[0], max(T_req), l_f[0],d_f_inner,d_f_outer,l_cabin[0], l_h[0], S, S_c[0], b, b_c[0], S_v[0],S_h[0],Cr_t,Cr_t_c[0],lambda_2_rad,lambda_h_2_rad[0], lambda_v_2_rad[0],lambda_c_2_rad, S_fus[0])     
@@ -22,6 +22,7 @@ config1_M_fixedeq               =config1_class2.fixed_equipment_mass()
 
 config1_M_winggroup             =config1_class2.get_wing_group_mass()
 config1_M_fuselagegroup         =config1_class2.get_fuselage_group_mass()
+#x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group)
 
 config1_class2_OEW              =config1_class2.OEW(config1_M_structural,config1_M_powerplant,config1_M_fixedeq)
 #cg locations
@@ -29,6 +30,7 @@ config1_cg = get_cg(x_le_MAC,config1_class2)
 config1_cg_x=config1_cg.calc_x_cg()
 config1_cg_y=config1_cg.calc_y_cg()
 config1_cg_z=config1_cg.calc_z_cg()
+
 
 #configuration 3
 #masses
@@ -40,13 +42,14 @@ config3_M_fixedeq               =config3_class2.fixed_equipment_mass()
 
 config3_M_winggroup             =config3_class2.get_wing_group_mass()
 config3_M_fuselagegroup         =config3_class2.get_fuselage_group_mass()
-
+#get x lemac
 config3_class2_OEW              =config3_class2.OEW(config3_M_structural,config3_M_powerplant,config3_M_fixedeq)
 #cg locations
 config3_cg = get_cg(x_le_MAC,config3_class2) 
 config3_cg_x=config3_cg.calc_x_cg()
 config3_cg_y=config3_cg.calc_y_cg()
 config3_cg_z=config3_cg.calc_z_cg()
+
 
 #configuration 2
 config2_class2     = Class2_weight(2,N_pax[1],MTOW[1],M_carried_canard_MZF[1],min(M_MZF), n_max[1],V_dive[1],M_fuel[1], max(T_req), l_f[1],d_f_inner,d_f_outer,l_cabin[1], l_h[1], S, S_c[1], b, b_c[1], S_v[1],S_h[1],Cr_t,Cr_t_c[1],lambda_2_rad,lambda_h_2_rad[1], lambda_v_2_rad[1],lambda_c_2_rad, S_fus[1])
@@ -56,7 +59,7 @@ config2_M_fixedeq               =config3_M_fixedeq                              
    
 config2_M_winggroup             =config2_class2.get_wing_group_mass()
 config2_M_fuselagegroup         =config2_class2.get_fuselage_group_mass()
-                                          
+#get x lemac                                           
 config2_class2_OEW              =config2_class2.OEW(config2_M_structural,config2_M_powerplant,config2_M_fixedeq)
 #cg locations
 config2_cg = get_cg(x_le_MAC,config2_class2)   

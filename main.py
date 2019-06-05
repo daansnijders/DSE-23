@@ -17,6 +17,15 @@ from inputs.performance_inputs import *
 
 
 
+
+#CLASS2 WEIGHT AND CG LOCATION
+
+#configuration 1 
+
+
+
+
+
 #config1_iteration_diff=50
 #config3_iteration_diff=50
 #config2_iteration_diff=50
@@ -45,3 +54,4 @@ from inputs.performance_inputs import *
 #config2_M_fixedeq               =config3_M_fixedeq                                                 #needed as the fixed equipment needs to be the same for both
 #config2_class2_OEW              =config2_class2.OEW(config2_M_structural,config2_M_powerplant,config2_M_fixedeq)
 #cg2 = get_cg(x_le_MAC,config2_class2)   
+
