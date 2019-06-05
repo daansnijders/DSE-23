@@ -7,8 +7,7 @@ Created on Fri May  3 09:45:17 2019
 """
 
 
-from modules.weight_class2.class2_weight import *
-from modules.CG.class2_CG import *
+
 
 from inputs.concept_1 import *
 from inputs.constants import *
