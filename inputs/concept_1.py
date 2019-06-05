@@ -215,3 +215,10 @@ CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, 
 #V_TO estimation to get Class-II drag calculation going
 
 V_TO = [sqrt(2* x * 9.80665 /(rho_0 * S * Cl_TO)) for x in MTOW]
+
+
+D_nlg = 0.5
+b_nlg = 0.25
+D_mlg = 1.3
+b_mlg = 0.35
+

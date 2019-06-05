@@ -73,11 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-<<<<<<< HEAD
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,x_mlg,z_mlg,D_mlg,b_mlg):
-=======
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h):
->>>>>>> 4af2f7c4c7173cd63fda5fec0fb3fb5834eb133c
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,x_mlg,z_mlg,D_mlg,b_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -101,7 +97,6 @@ class Drag:
         self.l_cabin        = l_cabin
         self.l_tail         = l_tail
         self.lambda_2_rad   = lambda_2_rad
-<<<<<<< HEAD
         self.x_nlg          = x_nlg
         self.z_nlg          = z_nlg
         self.D_nlg          = D_nlg
@@ -109,9 +104,6 @@ class Drag:
         self.z_mlg          = z_mlg
         self.D_mlg          = D_mlg
         self.b_mlg          = b_mlg
-        
-        
-=======
         self.lambda_h_2_rad = lambda_h_2_rad
         self.lambda_v_2_rad = lambda_v_2_rad
         self.MAC_c          = MAC_c
@@ -119,7 +111,7 @@ class Drag:
         self.Ct_h           = Ct_h                                 
         self.Cr_v           = Cr_v                            
         self.Ct_v           = Ct_v
->>>>>>> 4af2f7c4c7173cd63fda5fec0fb3fb5834eb133c
+
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
         Re_f0 = self.rho_0 * self.V_TO     * self.l_f / self.mu_sl
@@ -202,20 +194,7 @@ class Drag:
         CD_fus_trans = Rwf*(CDf_fus + CDp_fus) +CD_wave*(pi*(self.d_f_outer/2)**2)/self.S
         
         return(CD0_fus, CDL_fus, CD_fus_sub, CD_fus_trans)
-        
-<<<<<<< HEAD
-#    def empennage_drag(self):
-#        
-#
-#        
-#    def nacelle_drag(self):
-#        
-#        
-#        
-#    def flaps_drag(self):
-#        
-#        
-=======
+
     def empennage_drag(self):
         #Subsonic for horizontal tail(h), vertical tail(v) and canard(c)
         cos_lambda_v_2_rad   = cos(self.lambda_v_2_rad)
@@ -236,15 +215,14 @@ class Drag:
         
         
         
-    def nacelle_drag(self):
+#    def nacelle_drag(self):
         
         
         
-    def flaps_drag(self):
+#    def flaps_drag(self):
         
         
->>>>>>> 4af2f7c4c7173cd63fda5fec0fb3fb5834eb133c
-    
+  
     def landinggear_drag(self):
         drag_par1 = self.x_nlg / self.D_nlg
         drag_par2 = self.z_nlg / self.D_nlg
