@@ -10,6 +10,12 @@ from inputs.performance_inputs import *
 from inputs.concept_1 import *
 from modules.Aerodynamics import *
 
+""" Yet unknown values needed to start the simulation """
+D_nlg = 0.5
+b_nlg = 0.25
+D_mlg = 1.3
+b_mlg = 0.35
+
 
 """ HLD design """
 config1_HLD = HLD_class(Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer)
