@@ -169,7 +169,6 @@ class empennage2:
         ax2.plot(self.l, self.Sh_S1)
         ax2.plot(self.l, self.Sh_S2)
         ax2.plot(self.l, self.Sh_C1)
-        ax2.set( ylim =  (0,0.26))
         plt.show()
         
         """Put this on when iterating"""
@@ -221,3 +220,12 @@ class empennage2:
     
     def get_Ct_v(Cr_v, taper_ratio_v):
         return [Cr_v[i] * taper_ratio_v for i in range(3)]
+    
+
+#N_e = thrust_max/2 * y_engine                                                   # [N*m] moment caused by engine inoperative
+#
+#Y_v =0                                                                          # [N] force exerted by the vertical tail
+#l_v = [0.9*l_f[i] - x_le_MAC[i] - 0.25*MAC for i in range(3)]                   # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
+#N_v = - Y_v * l_v                                                               # [N*m] moment caused by the vertical tail
+
+
