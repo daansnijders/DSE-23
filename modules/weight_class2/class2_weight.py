@@ -47,7 +47,7 @@ class Class2_weight:
     def structural_mass(self):
         self.M_wing          =get_wing_mass(self.M_MZF,self.b,self.S,self.Cr_t,self.lambda_2_rad,self.n_ult)*0.95*lbs_to_kg
         self.M_fuselage      =get_fuselage_mass(self.V_dive, self.l_h, self.w_fus, self.h_fus, self.S_fus)*lbs_to_kg
-        self.M_nacelle       = get_nacelle_mass(self.T_req_TO)*lbs_to_kg
+        self.M_nacelle       = get_nacelle_mass(self.T_req_TO)*lbs_to_kg   #TOTAL NACELLE
         if self.config==1:
             self.M_canard    =0
         else:
@@ -68,17 +68,17 @@ class Class2_weight:
         
     
     def powerplant_mass(self):
-        self.M_engine_total          = get_engine_mass()* lbs_to_kg
+        self.M_engines_total          = get_engine_mass()* lbs_to_kg
         self.M_airinduction          = get_airinduction_mass()* lbs_to_kg
         self.M_fuelsystem            = get_fuelsystem_mass(self.M_fuel,K_fsp)* lbs_to_kg
         self.M_propulsionsystem      = get_propulsionsystem_mass(self.l_f,self.b)* lbs_to_kg
         
-        M_powerplant            = get_totalpowerplant_mass(self.M_engine_total,self.M_airinduction,self.M_fuelsystem, self.M_propulsionsystem)
+        M_powerplant            = get_totalpowerplant_mass(self.M_engines_total,self.M_airinduction,self.M_fuelsystem, self.M_propulsionsystem)
         
         return M_powerplant# M_engine_total*lbs_to_kg, M_airinduction*lbs_to_kg,M_fuelsystem*lbs_to_kg, M_propulsionsystem*lbs_to_kg
     
     def get_wing_group_mass(self):
-        M_wing_group=self.M_wing+self.M_engine_total+self.M_landinggear_main+self.M_nacelle
+        M_wing_group=self.M_wing+self.M_engins_total+self.M_landinggear_main+self.M_nacelle
         return M_wing_group    
         
     def get_fuselage_group_mass(self):
