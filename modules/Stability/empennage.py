@@ -169,7 +169,7 @@ class empennage2:
         ax2.plot(self.l, self.Sh_S1)
         ax2.plot(self.l, self.Sh_S2)
         ax2.plot(self.l, self.Sh_C1)
-        ax2.set( ylim =  (0,0.26))
+        #ax2.set( ylim =  (0,0.26))
         plt.show()
     
         
@@ -178,10 +178,16 @@ class empennage2:
 e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838)
 
 r = e2.calc_Cm()    
-#q = e2.plot_stability()
+q = e2.plot_stability()
 
 # =============================================================================
 # Vertical tail
 # =============================================================================
     
-N_e = 0
+N_e = thrust_max/2 * y_engine                                                   # [N*m] moment caused by engine inoperative
+
+Y_v =0                                                                          # [N] force exerted by the vertical tail
+l_v = [0.9*l_f[i] - x_le_MAC[i] - 0.25*MAC for i in range(3)]                   # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
+N_v = - Y_v * l_v                                                               # [N*m] moment caused by the vertical tail
+
+
