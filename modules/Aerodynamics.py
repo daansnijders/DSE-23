@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -97,6 +97,7 @@ class Drag:
         self.l_cabin        = l_cabin
         self.l_tail         = l_tail
         self.lambda_2_rad   = lambda_2_rad
+        self.lambda_4_rad   = lambda_4_rad
         self.x_nlg          = x_nlg
         self.z_nlg          = z_nlg
         self.b_nlg          = b_nlg
@@ -129,6 +130,9 @@ class Drag:
         self.A_c            = A_c
         self.l_fueltank     = l_fueltank
         self.d_fueltank     = d_fueltank
+        self.delta_C_L_h    = delta_C_L_h
+        self.delta_C_L_c    = delta_C_L_c
+        self.S_ef           = S_ef
 
 
     def wing_drag(self):
@@ -363,17 +367,37 @@ class Drag:
         
         CDL_fueltank = eta*cdc*alpha**3*(Splf/self.S)
         
-        CD_fueltank_sub = CD0_fus + CDL_fus
+        CD_fueltank_sub = CD0_fueltank + CDL_fueltank
         
         
-        CDf_fueltank = Cf_fueltank*(Swet_fus/self.S)
-        CDp_fueltank = Cf_fueltank*(60/(self.l_fueltank/self.d_fueltank)**3 + 0.0025*(self.l_fueltank/self.d_fueltank))*Swet_fus/self.S
+        CDf_fueltank = Cf_fueltank*(Swet_fueltank/self.S)
+        CDp_fueltank = Cf_fueltank*(60/(self.l_fueltank/self.d_fueltank)**3 + 0.0025*(self.l_fueltank/self.d_fueltank))*Swet_fueltank/self.S
         CD_wave = 0.005     #Figure 4.22
         
         CD_fueltank_trans = Rwf*(CDf_fueltank + CDp_fueltank) +CD_wave*(pi*(self.d_fueltank/2)**2)/self.S
         
-        C_D_store = CD0_fueltank + CDL_fueltank + CD_fueltank_sub + CD_fueltank_trans
+        C_D_store = CD_fueltank_sub + CD_fueltank_trans
         
         return(C_D_store)
         
         
+    def trim_drag(self):
+        
+        if self.l_f <= 32 :
+            delta_C_L_c = 0
+        else: 
+            if self.l_fueltank == 0:
+                delta_C_L_c = 0
+            else : 
+                delta_C_L_c = self.delta_C_L_c
+                
+        e_h = 0.5           #if normal tail        
+#        e_h = 0.75         #if T-tail
+        e_c = 0.5
+        
+        delta_C_D_trim_lift = ((self.delta_C_L_h)**2 / (pi * self.A_h * e_h)) * self.S / self.S_h + ((delta_C_L_c)**2 / (pi * self.A_c * e_c)) * self.S / self.S_c
+        
+        #It follows that 
+        delta_C_D_P_lambda_4_0 = 0.015       #Figure 4.44
+        
+        delta_C_D_trim_prof = delta_C_D_P_lambda_4_0 * cos(self.lambda_4_rad) (self.S_ef / self.S_h)*(self.S_h / self.S)
