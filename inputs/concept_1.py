@@ -175,7 +175,7 @@ i_e_rad = np.deg2rad(i_e)                                                       
 #undercarriage
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
-weight_distribution = 0.10                                                      # [-] weight percentage on nose wheel
+weight_distribution = 0.16                                                     # [-] weight percentage on nose wheel
 z_engine_clearance = z_engine - d_eng/2                                         # [m] z-location of lowest part of the engine
 
 theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
@@ -187,15 +187,30 @@ P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  
 P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
 
 x_mlg = get_x_mlg(z_cg,theta_rad,beta_rad, x_cg, stroke,l_f)                    # [m] x-location of the mlg
-z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg, l_f)                               # [m] z-location of the mlg
+x_mlg[1]=min(x_mlg)+l_cutout
+x_mlg[2]=min(x_mlg)+l_cutout
+z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg)                               # [m] z-location of the mlg
+z_mlg=max(z_mlg)
+
 
 l_m = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
 l_n = get_l_nw(l_m,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
 
-y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
-                  z_cg,z_mlg,l_n,l_m,y_engine,z_engine_clearance,d_eng)                         # [m] y-location of the mlg
-
 x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
+x_nlg=min(x_nlg)
+l_n=[x_cg[i]-x_nlg for i in range(3)]
+
+
+new_beta_rad=get_new_beta_config23(z_mlg,z_cg,l_m[1])
+new_beta_deg=new_beta_rad*180/pi
+#new_theta_rad=check_new_scrape_angle(l_f,x_mlg,d_f_outer,z_mlg)
+#new_theta_deg=[new_theta_rad[i]*180/pi for i in range(3)]
+
+y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
+               z_cg,z_mlg,l_n,l_m,y_engine,z_engine_clearance,d_eng)            # [m] y-location of the mlg
+#
+
+
 y_nlg = [0,0,0]                                                                 # [m] y-location of nlg
 z_nlg = z_mlg                                                                   # [m] z-location of nlg
 

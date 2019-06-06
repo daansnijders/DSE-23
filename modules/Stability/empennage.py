@@ -171,23 +171,61 @@ class empennage2:
         ax2.plot(self.l, self.Sh_C1)
         #ax2.set( ylim =  (0,0.26))
         plt.show()
-    
         
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1
+        """Put this on when iterating"""
+#        Sh_S = float(input("Input the optimal Sh/S ratio: "))
+#        x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0]        
+        return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, x_le_MAC
         
-e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838)
+e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
 r = e2.calc_Cm()    
 q = e2.plot_stability()
 
 # =============================================================================
-# Vertical tail
+# Horizontal tail
 # =============================================================================
-    
-N_e = thrust_max/2 * y_engine                                                   # [N*m] moment caused by engine inoperative
 
-Y_v =0                                                                          # [N] force exerted by the vertical tail
-l_v = [0.9*l_f[i] - x_le_MAC[i] - 0.25*MAC for i in range(3)]                   # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
-N_v = - Y_v * l_v                                                               # [N*m] moment caused by the vertical tail
+    A_h = 
+    
+    def get_x_h(l_f):
+        return [0.9* l_f[i] for i in range(3)]
+    
+    def get_S_h(S, MAC, x_cg, V_h, x_h):
+        return [V_h * S * MAC / (x_h[i] - x_cg[i]) for i in range(3)]
+    
+    def get_b_h(S_h, A_h):
+        return [np.sqrt(S_h[i]*A_h) for i in range(3)]
+    
+    def get_Cr_h(S_h, taper_ratio_h, b_h):
+        return [2*S_h[i]/((1+taper_ratio_h)*b_h[i]) for i in range(3)]
+    
+    def get_Ct_h(Cr_h, taper_ratio_h):
+        return [Cr_h[i] * taper_ratio_h for i in range(3)]
+    
+    # =============================================================================
+    # Vertical tail
+    # =============================================================================
+        
+    N_e = 0
+    
+    def get_S_v(S, b, x_cg, V_v, x_v):
+         return [V_v*S* b / (x_v[i] - x_cg[i]) for i in range(3)]
+     
+    def get_b_v(S_v, A_v):
+        return [np.sqrt(S_v[i]*A_v) for i in range(3)]
+    
+    def get_Cr_v(S_v, taper_ratio_v, b_v):
+        return [2*S_v[i]/((1+taper_ratio_v)*b_v[i]) for i in range(3)]
+    
+    def get_Ct_v(Cr_v, taper_ratio_v):
+        return [Cr_v[i] * taper_ratio_v for i in range(3)]
+    
+
+#N_e = thrust_max/2 * y_engine                                                   # [N*m] moment caused by engine inoperative
+#
+#Y_v =0                                                                          # [N] force exerted by the vertical tail
+#l_v = [0.9*l_f[i] - x_le_MAC[i] - 0.25*MAC for i in range(3)]                   # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
+#N_v = - Y_v * l_v                                                               # [N*m] moment caused by the vertical tail
 
 
