@@ -157,19 +157,19 @@ class empennage2:
             self.Sh_S2.append(d*self.l[i]-e)
             self.Sh_C1.append(f*self.l[i]+g)
         
-        fig, ax1 = plt.subplots()
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111)
         ax1.plot(x_cg_min1, x_le_MAC_range_perc)
         ax1.plot(x_cg_max1, x_le_MAC_range_perc)
         ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
         ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
+   
         
         ax2 = ax1.twinx()
         ax2.plot(self.l, self.Sh_S1)
         ax2.plot(self.l, self.Sh_S2)
         ax2.plot(self.l, self.Sh_C1)
-        ax2.ylim(0,0.6)
-        ax2.set_ylim(0,0.6)
-        ax2.xlim(self.x_lemac, (self.x_lemac+2*MAC))
+        ax2.set( ylim =  (0,0.85))
         plt.show()
     
         
