@@ -53,3 +53,5 @@ x_cg_min = min(xcg_min[0], xcg_min[3])
 #print ("The most forward CG position from the nose for configuration 1 during flight is: ", min(xcg_min[0], xcg_min[3]))
 
 
+
+
