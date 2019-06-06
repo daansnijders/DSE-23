@@ -54,17 +54,17 @@ def get_cg_canard(Cr_c,t_c_c,l_cutout,l_cockpit):
     z_cg_canard=Cr_c*t_c_c/2
     return x_cg_canard, y_cg_canard, z_cg_canard
 
-def get_cg_landinggear_main(l_strut,x_mlg):
+def get_cg_landinggear_main(z_mlg,x_mlg):
     x_cg_landinggear_main=x_mlg
     y_cg_landinggear_main=0
-    z_cg_landinggear_main=-l_strut/2
+    z_cg_landinggear_main=z_mlg/2
     
     return x_cg_landinggear_main, y_cg_landinggear_main, z_cg_landinggear_main
 
-def get_cg_landinggear_nose(l_strut,x_nlg):
+def get_cg_landinggear_nose(z_nlg,x_nlg):
     x_cg_landinggear_nose=x_nlg
     y_cg_landinggear_nose=0
-    z_cg_landinggear_nose=-l_strut/2
+    z_cg_landinggear_nose=z_nlg/2
     
     return x_cg_landinggear_nose, y_cg_landinggear_nose, z_cg_landinggear_nose
 """
