@@ -172,8 +172,8 @@ class empennage2:
         plt.show()
         
         """Put this on when iterating"""
-#        Sh_S = float(input("Input the optimal Sh/S ratio: "))
-#        x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0]        
+        Sh_S = float(input("Input the optimal Sh/S ratio: "))
+        x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0]        
         return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, x_le_MAC
         
     e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
@@ -186,16 +186,13 @@ class empennage2:
 # =============================================================================
 
     A_h = 4.95
-    
+    taper_ratio_h = 0.39
     
     def get_x_h(l_f):
-        return [0.9* l_f[i] for i in range(3)]
-    
-    def get_S_h(S, MAC, x_cg, V_h, x_h):
-        return [V_h * S * MAC / (x_h[i] - x_cg[i]) for i in range(3)]
+        return 0.9* l_f[0]
     
     def get_b_h(S_h, A_h):
-        return [np.sqrt(S_h[i]*A_h) for i in range(3)]
+        return np.sqrt(S_h*A_h)
     
     def get_Cr_h(S_h, taper_ratio_h, b_h):
         return [2*S_h[i]/((1+taper_ratio_h)*b_h[i]) for i in range(3)]
