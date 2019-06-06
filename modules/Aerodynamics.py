@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, l_fueltank, d_fueltank):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -99,10 +99,11 @@ class Drag:
         self.lambda_2_rad   = lambda_2_rad
         self.x_nlg          = x_nlg
         self.z_nlg          = z_nlg
+        self.b_nlg          = b_nlg
         self.D_nlg          = D_nlg
         self.D_strutt_nlg   = D_strutt_nlg
         self.x_mlg          = x_mlg
-        self.z_mlg          = z_mlg
+        self.z_mlg          = abs(z_mlg)
         self.b_mlg          = b_mlg
         self.D_mlg          = D_mlg
         self.D_strutt_mlg   = D_strutt_mlg
@@ -116,6 +117,7 @@ class Drag:
         self.S_h            = S_h
         self.S_v            = S_v
         self.S_c            = S_c
+        self.l_fueltank     = l_fueltank
 
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -154,14 +156,14 @@ class Drag:
         c_l_alpha = np.rad2deg((1.3 + 0.5)/(7+9))
         k = c_l_alpha/(2*pi / beta)
         C_L_a_w = (2*pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (tan(self.lambda_2_rad) / beta) ) + 4)**(1/2) )
-        print (C_L_a_w)
-        
+                
         e = 1.1*(C_L_a_w / self.A)*(R * (C_L_a_w / self.A) + (1-R)*pi)
         
         C_L_w = 1.05 * self.CLdes
         C_D_L_w = C_L_w**2 / (pi * self.A * e)
+        C_D_w_wave = 0.002      #Figure 4.11
         
-        C_D_w = C_D_0_W + C_D_L_w
+        C_D_w = C_D_0_W + C_D_L_w + C_D_w_wave
         
         return (C_D_w, C_D_0_W, C_D_L_w)
         
@@ -261,5 +263,51 @@ class Drag:
         #From this follows:
         C_D_mlg = 1.4   #Figure 4.59
         
-        C_D_gear = (C_D_nlg ) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mld) * m / self.S)
+        C_D_gear = (C_D_nlg ) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mlg) * m / self.S)
+        
+        return (C_D_gear)
+    
+    
+    def windshield_drag(self):
+        delta_C_D_ws = 0.002        #Figure 4.68
+        C_D_nosecone = 0.078        #Figure 4.68
+        
+        C_D_ws = delta_C_D_ws * (pi*(self.d_f_outer / 2)**2)/self.S
+        
+        return (C_D_ws)
+    
+    def store_drag(self):
+        """ store_drag only applicable for configuration 3 """
+        Re_f  = self.rho   * self.V_cruise * self.l_fueltank / self.mu_37
+        Re_f0 = self.rho_0 * self.V_TO     * self.l_fueltank / self.mu_sl
+        #RE at service ceiling results in (same for all configurations)
+        Rwf = 1.0               #Figure 4.1
+        Cf_fueltank = 0.0019    #Figure 4.3
+        ratio = self.l_fueltank/self.d_fueltank
+        Swet_fueltank = pi*self.d_fueltank*self.l_fueltank*(1-2/ratio)**(2/3)*(1+1/(ratio)**2)
+        
+        CD0_fueltank = Rwf*Cf_fueltank*(1+60/(self.l_fueltank/self.d_fueltank)**3 + 0.0025*(self.l_fueltank/self.d_fueltank))*Swet_fueltank/self.S
+        
+        CL0 = self.CL_alpha*(pi/180)*5.5
+        alpha = (self.CLdes -CL0)/self.CL_alpha
+        
+        eta = 0.66          #Figure 4.19
+        cdc = 1.2           #Figure 4.20
+        Splf = self.d_fueltank*self.l_fueltank
+        
+        CDL_fueltank = eta*cdc*alpha**3*(Splf/self.S)
+        
+        CD_fueltank_sub = CD0_fus + CDL_fus
+        
+        
+        CDf_fueltank = Cf_fueltank*(Swet_fus/self.S)
+        CDp_fueltank = Cf_fueltank*(60/(self.l_fueltank/self.d_fueltank)**3 + 0.0025*(self.l_fueltank/self.d_fueltank))*Swet_fus/self.S
+        CD_wave = 0.005     #Figure 4.22
+        
+        CD_fueltank_trans = Rwf*(CDf_fueltank + CDp_fueltank) +CD_wave*(pi*(self.d_fueltank/2)**2)/self.S
+        
+        C_D_store = CD0_fueltank + CDL_fueltank + CD_fueltank_sub + CD_fueltank_trans
+        
+        return(C_D_store)
+        
         
