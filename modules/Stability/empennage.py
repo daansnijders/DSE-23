@@ -190,10 +190,10 @@ class empennage2:
         return np.sqrt(S_h*A_h)
     
     def get_Cr_h(S_h, taper_ratio_h, b_h):
-        return [2*S_h[i]/((1+taper_ratio_h)*b_h[i]) for i in range(3)]
+        return 2*S_h/((1+taper_ratio_h)*b_h) 
     
     def get_Ct_h(Cr_h, taper_ratio_h):
-        return [Cr_h[i] * taper_ratio_h for i in range(3)]
+        return Cr_h * taper_ratio_h
     
     # =============================================================================
     # Vertical tail
