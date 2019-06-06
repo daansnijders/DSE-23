@@ -13,8 +13,21 @@ from modules.loaddiagram_detailed import *
 from modules.Stability.Check_ground import *
 from modules.EXECUTE_FILE import *
 
+x_le_MAC1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
+x_le_MAC2 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
+x_le_MAC3 = [x_le_MAC[0] + 0.1 * l_f[0], x_le_MAC[1] + 0.1 * l_f[1], x_le_MAC[2] + 0.1 * l_f[2]]
+
+x_cg_config1_range = [get_cg(x_le_MAC1,config1_class2).calc_x_cg(),get_cg(x_le_MAC2,config1_class2).calc_x_cg(),get_cg(x_le_MAC3,config1_class2).calc_x_cg()]
+x_cg_wing_config1_range = [get_cg(x_le_MAC1,config1_class2).x_cg_wing,get_cg(x_le_MAC2,config1_class2).x_cg_wing,get_cg(x_le_MAC3,config1_class2).x_cg_wing]
+
+x_le_MAC_range = [x_le_MAC1[0], x_le_MAC2[0], x_le_MAC3[0]]
+x_le_MAC_range_perc = [x_le_MAC1[0]/l_f[0], x_le_MAC2[0]/l_f[0], x_le_MAC3[0]/l_f[0]]
+
+#config1_cg_x=config1_cg.calc_x_cg()
+
 x_cg_config1_range = [config1_cg_x - 0.1* l_f[0],config1_cg_x,config1_cg_x + 0.1* l_f[0]]
 x_cg_wing_config1_range = [config1_cg.x_cg_wing - 0.1* l_f[0], config1_cg.x_cg_wing, config1_cg.x_cg_wing + 0.1* l_f[0]]
+
 
 config1_load      = Loading_diagram(x_cargo[0], l_f[0], l_cabin[0], seat_pitch, N_pax[0], N_sa, OEW[0], MTOW[0], x_cg_config1_range[0], MAC, S, b, A, Xfirst, M_payload[0], M_cargo_available[0], M_fuel[0], M_pax, M_carry_on, x_cg_wing_config1_range[0], -1)     
 config1_load2      = Loading_diagram(x_cargo[0], l_f[0], l_cabin[0], seat_pitch, N_pax[0], N_sa, OEW[0], MTOW[0], x_cg_config1_range[1], MAC, S, b, A, Xfirst, M_payload[0], M_cargo_available[0], M_fuel[0], M_pax, M_carry_on, x_cg_wing_config1_range[1], 0)     
@@ -49,9 +62,16 @@ frac_min[0], frac_max[0], frac1 = config1_ground.check_equilibrium()
 frac_min[1], frac_max[1], frac2 = config1_ground2.check_equilibrium()
 frac_min[2], frac_max[2], frac2 = config1_ground3.check_equilibrium()
 
+x_cg_max1 = [0, 0, 0]
+x_cg_min1 = [0, 0, 0]
 
-x_cg_max = max(xcg_max[0], xcg_max[3]) + 0.05*MAC
-x_cg_min = min(xcg_min[0], xcg_min[3]) - 0.05*MAC
+x_cg_max1[0] = max(xcg_max[0], xcg_max[3]) + 0.05*MAC
+x_cg_max1[1] = max(xcg_max[1], xcg_max[4]) + 0.05*MAC
+x_cg_max1[2] = max(xcg_max[2], xcg_max[5]) + 0.05*MAC
+x_cg_min1[0] = min(xcg_min[0], xcg_min[3]) - 0.05*MAC
+x_cg_min1[1] = min(xcg_min[1], xcg_min[4]) - 0.05*MAC
+x_cg_min1[2] = min(xcg_min[2], xcg_min[5]) - 0.05*MAC
+
 #print ("The most aft CG position from the nose for configuration 1 during flight is: ", max(xcg_max[0], xcg_max[3]))
 #print("Including a 0,05 m stability margin we get", max(xcg_max)+0.05)
 #
