@@ -48,9 +48,9 @@ CD_nacel_sub1, CD_nacel_trans1 = config1_Drag.nacelle_drag()
 C_D_gear = config1_Drag.landinggear_drag()
 C_D_ws = config1_Drag.windshield_drag()
 
-#print(CDW1)
-#print(CD0_fus1, CDL_fus1,CD_fus_sub1, CD_fus_trans1)
-#print(CD_h_sub1, CD_v_sub1, CD_c_sub1, CD_h_trans1, CD_v_trans1, CD_c_trans1)
+print(CDW1)
+print(CD0_fus1, CDL_fus1,CD_fus_sub1, CD_fus_trans1)
+print(CD_h_sub1, CD_v_sub1, CD_c_sub1, CD_h_trans1, CD_v_trans1, CD_c_trans1)
 print(CD_nacel_sub1, CD_nacel_trans1)
 print (C_D_gear, C_D_ws)
 
