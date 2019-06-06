@@ -13,6 +13,17 @@ from modules.loaddiagram_detailed import *
 from modules.Stability.Check_ground import *
 from modules.EXECUTE_FILE import *
 
+x_le_MAC1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
+x_le_MAC2 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
+x_le_MAC3 = [x_le_MAC[0] + 0.1 * l_f[0], x_le_MAC[1] + 0.1 * l_f[1], x_le_MAC[2] + 0.1 * l_f[2]]
+
+
+x_cg_config1_range = [get_cg(x_le_MAC1,config1_class2).calc_x_cg(),get_cg(x_le_MAC2,config1_class2).calc_x_cg(),get_cg(x_le_MAC3,config1_class2).calc_x_cg()]
+x_cg_wing_config1_range = [get_cg(x_le_MAC1,config1_class2).x_cg_wing,get_cg(x_le_MAC2,config1_class2).x_cg_wing,get_cg(x_le_MAC3,config1_class2).x_cg_wing]
+#
+
+#config1_cg_x=config1_cg.calc_x_cg()
+
 x_cg_config1_range = [config1_cg_x - 0.1* l_f[0],config1_cg_x,config1_cg_x + 0.1* l_f[0]]
 x_cg_wing_config1_range = [config1_cg.x_cg_wing - 0.1* l_f[0], config1_cg.x_cg_wing, config1_cg.x_cg_wing + 0.1* l_f[0]]
 
