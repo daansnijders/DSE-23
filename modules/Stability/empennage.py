@@ -215,16 +215,16 @@ class empennage2:
         return [V_v*S* b / (x_v[i] - x_cg[i]) for i in range(3)]
      
     def get_b_v(S_v, A_v):
-        return [np.sqrt(S_v[i]*A_v) for i in range(3)]
+        return [np.sqrt(S_v*A_v) for i in range(3)]
     
     def get_Cr_v(S_v, taper_ratio_v, b_v):
-        return [2*S_v[i]/((1+taper_ratio_v)*b_v[i]) for i in range(3)]
+        return [2*S_v/((1+taper_ratio_v)*b_v[i]) for i in range(3)]
     
     def get_Ct_v(Cr_v, taper_ratio_v):
         return [Cr_v[i] * taper_ratio_v for i in range(3)]
     
 
-    S_v = get_S_v(S, b, x_cg, V_v, x_le_v)                                      # [m^2] surface area vertical tail
+    S_v = max(get_S_v(S, b, x_cg, V_v, x_le_v))                                 # [m^2] surface area vertical tail
     b_v = get_b_v(S_v, A_v)                                                     # [m] span vertical tail
     Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                    # [m] root chord lengh vertical tail
     Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                        # [m] tip chord length vertical tail
