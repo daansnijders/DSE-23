@@ -134,7 +134,7 @@ class empennage2:
         self.Cm = self.Cm_lesstail + self.Cm_tail
         return self.Cm    
     
-    def plot_stability(self):
+    def plot_stability_horitail(self):
         """Stability excluding margin"""
         a = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
         b = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
@@ -173,37 +173,38 @@ class empennage2:
         
         """Put this on when iterating"""
         Sh_S = float(input("Input the optimal Sh/S ratio: "))
-        x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0]        
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, x_le_MAC
+        x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0] 
+        S_h = Sh_S * S
         
-# =============================================================================
-# Horizontal tail
-# =============================================================================
+        # =============================================================================
+        # Horizontal tail
+        # =============================================================================
 
-    A_h = 4.95
-    taper_ratio_h = 0.39
-    
-    def get_x_h(l_f):
-        return 0.9* l_f[0]
-    
-    def get_b_h(S_h, A_h):
-        return np.sqrt(S_h*A_h)
-    
-    def get_Cr_h(S_h, taper_ratio_h, b_h):
-        return [2*S_h[i]/((1+taper_ratio_h)*b_h[i]) for i in range(3)]
-    
-    def get_Ct_h(Cr_h, taper_ratio_h):
-        return [Cr_h[i] * taper_ratio_h for i in range(3)]
-    
-#    S_h = get_S_h(S, MAC, x_cg, V_h, x_le_h)                                    # [m^2] surface area horizontal tail
-#    b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
-#    Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
-#    Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
+        A_h = 4.95
+        taper_ratio_h = 0.39
+        
+        def get_x_h(l_f):
+            return 0.9* l_f[0]
+        
+        def get_b_h(S_h, A_h):
+            return np.sqrt(S_h*A_h)
+        
+        def get_Cr_h(S_h, taper_ratio_h, b_h):
+            return 2*S_h/((1+taper_ratio_h)*b_h) 
+        
+        def get_Ct_h(Cr_h, taper_ratio_h):
+            return Cr_h * taper_ratio_h
+        
+        b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
+        Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
+        Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
+        
+        return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, x_le_MAC, S_h
+
     # =============================================================================
     # Vertical tail
     # =============================================================================
-        
-    
+            
     V_h = 1.28                                                                  # [-] volume horizontal tail
     A_h = 4.95                                                                  # [-] aspect ratio horizontal tail
     taper_ratio_h = 0.39                                                        # [-] taper ratio horizontal tail
@@ -231,7 +232,7 @@ class empennage2:
     
 e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
-r = e2.plot_stability()   
+r = e2.plot_stability_horitail()   
 #q = e2.plot_stability()
     
 
