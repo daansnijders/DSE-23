@@ -169,7 +169,7 @@ class empennage2:
         ax2.plot(self.l, self.Sh_S1)
         ax2.plot(self.l, self.Sh_S2)
         ax2.plot(self.l, self.Sh_C1)
-        ax2.set( ylim =  (0,0.85))
+        ax2.set( ylim =  (0,0.26))
         plt.show()
     
         
