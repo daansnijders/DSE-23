@@ -6,7 +6,7 @@ Created on Wed Jun  5 09:50:12 2019
 """
 from inputs.constants import *
 from inputs.concept_1 import *
-from modules.Stability.Stability_runfile_empennage import x_cg_min1, x_cg_max1
+from modules.Stability.Stability_runfile_empennage import x_cg_min1, x_cg_max1, x_le_MAC_range_perc, x_le_MAC_range
 from modules.Stability.Stability_runfile import x_cg_min, x_cg_max
 
 import numpy as np
@@ -147,7 +147,7 @@ class empennage2:
         f = self.CL_ah / (self.CL_h*self.l_h*(self.V_h/self.V)**2)
         g = (self.c*self.Cm_ac-self.CL_ah*self.x_ac)/(self.CL_h*self.l_h*(self.V_h/self.V)**2)
         
-        self.l = np.arange(self.x_lemac, (self.x_lemac+self.c+0.01), 0.01)
+        self.l = np.arange(x_le_MAC_range[0], (x_le_MAC_range[2]+self.c+0.01), 0.01)
         self.Sh_S1 = [] #stability xnp
         self.Sh_S2 = [] #stability xcg
         self.Sh_C1 = [] #controlability xac - Cmac/CL_ah
@@ -156,13 +156,23 @@ class empennage2:
             self.Sh_S1.append(a*self.l[i]-b)
             self.Sh_S2.append(d*self.l[i]-e)
             self.Sh_C1.append(f*self.l[i]+g)
-            
-        plt.plot(self.l, self.Sh_S1)
-        plt.plot(self.l, self.Sh_S2)
-        plt.plot(self.l, self.Sh_C1)
-        plt.ylim(0,0.5)
-        plt.xlim(self.x_lemac, (self.x_lemac+MAC))
+        
+        fig, ax1 = plt.subplots()
+        ax1.plot(x_cg_min1, x_le_MAC_range_perc)
+        ax1.plot(x_cg_max1, x_le_MAC_range_perc)
+        ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
+        ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
+        
+        ax2 = ax1.twinx()
+        ax2.plot(self.l, self.Sh_S1)
+        ax2.plot(self.l, self.Sh_S2)
+        ax2.plot(self.l, self.Sh_C1)
+        ax2.ylim(0,0.6)
+        ax2.set_ylim(0,0.6)
+        ax2.xlim(self.x_lemac, (self.x_lemac+2*MAC))
         plt.show()
+    
+        
         return self.Sh_S1, self.Sh_S2, self.Sh_C1
         
 e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838)
