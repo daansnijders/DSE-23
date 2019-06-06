@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef, l_nacel, d_nacel, i_n):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -130,10 +130,12 @@ class Drag:
         self.A_c            = A_c
         self.l_fueltank     = l_fueltank
         self.d_fueltank     = d_fueltank
+        self.l_nacel        = l_nacel
+        self.d_nacel        = d_nacel
+        self.i_n            = i_n
         self.delta_C_L_h    = delta_C_L_h
         self.delta_C_L_c    = delta_C_L_c
         self.S_ef           = S_ef
-
 
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -312,8 +314,37 @@ class Drag:
         
         return(CD_h_sub, CD_v_sub, CD_c_sub, CD_h_trans, CD_v_trans, CD_c_trans)
         
-#    def nacelle_drag(self):
+    def nacelle_drag(self):
+        Re_f  = self.rho   * self.V_cruise * self.l_nacel / self.mu_37
+        Re_f0 = self.rho_0 * self.V_TO     * self.l_nacel / self.mu_sl
+        #RE at service ceiling results in (same for all configurations)
+        Rwf = 1.0               #Figure 4.1
+        Cf_nacel = 0.00265    #Figure 4.3
+        ratio = self.l_nacel/self.d_nacel
+        Swet_nacel = pi*self.d_nacel*self.l_nacel*abs((1-2/ratio))**(2/3)*(1+1/(ratio)**2)
         
+        CD0_nacel = Rwf*Cf_nacel*(1+60/(self.l_nacel/self.d_nacel)**3 + 0.0025*(self.l_nacel/self.d_nacel))*Swet_nacel/self.S
+        
+        CL0 = self.CL_alpha*(pi/180)*5.5
+        alpha = (self.CLdes - CL0)/self.CL_alpha
+        alpha_n = alpha + self.i_n
+        
+        eta = 0.55          #Figure 4.19
+        cdc = 1.2           #Figure 4.20
+        Splf = self.d_nacel*self.l_nacel
+        
+        CDL_nacel = eta*cdc*alpha_n**3*(Splf/self.S)
+        
+        CD_nacel_sub = CD0_nacel + CDL_nacel
+        
+        
+        CDf_nacel = Cf_nacel*(Swet_nacel/self.S)
+        CDp_nacel = Cf_nacel*(60/(self.l_nacel/self.d_nacel)**3 + 0.0025*(self.l_nacel/self.d_nacel))*Swet_nacel/self.S
+        CD_wave = 0     #Figure 4.22
+        
+        CD_nacel_trans = Rwf*(CDf_nacel + CDp_nacel) +CD_wave*(pi*(self.d_nacel/2)**2)/self.S
+        
+        return(CD_nacel_sub, CD_nacel_trans)
         
         
 #    def flaps_drag(self):
@@ -375,10 +406,8 @@ class Drag:
         CD_wave = 0.005     #Figure 4.22
         
         CD_fueltank_trans = Rwf*(CDf_fueltank + CDp_fueltank) +CD_wave*(pi*(self.d_fueltank/2)**2)/self.S
-        
-        C_D_store = CD_fueltank_sub + CD_fueltank_trans
-        
-        return(C_D_store)
+
+        return(CD_fueltank_sub, CD_fueltank_trans)
         
         
     def trim_drag(self):
