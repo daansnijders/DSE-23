@@ -195,6 +195,10 @@ class empennage2:
     def get_Ct_h(Cr_h, taper_ratio_h):
         return Cr_h * taper_ratio_h
     
+#    S_h = get_S_h(S, MAC, x_cg, V_h, x_le_h)                                    # [m^2] surface area horizontal tail
+#    b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
+#    Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
+#    Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
     # =============================================================================
     # Vertical tail
     # =============================================================================
@@ -208,7 +212,7 @@ class empennage2:
     taper_ratio_v = 0.375                                                       # [-] taper ratio vertical tail
     
     def get_S_v(S, b, x_cg, V_v, x_v):
-         return [V_v*S* b / (x_v[i] - x_cg[i]) for i in range(3)]
+        return [V_v*S* b / (x_v[i] - x_cg[i]) for i in range(3)]
      
     def get_b_v(S_v, A_v):
         return [np.sqrt(S_v[i]*A_v) for i in range(3)]
@@ -218,6 +222,12 @@ class empennage2:
     
     def get_Ct_v(Cr_v, taper_ratio_v):
         return [Cr_v[i] * taper_ratio_v for i in range(3)]
+    
+
+    S_v = get_S_v(S, b, x_cg, V_v, x_le_v)                                      # [m^2] surface area vertical tail
+    b_v = get_b_v(S_v, A_v)                                                     # [m] span vertical tail
+    Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                    # [m] root chord lengh vertical tail
+    Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                        # [m] tip chord length vertical tail
     
 e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
