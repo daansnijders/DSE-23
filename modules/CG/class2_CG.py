@@ -26,32 +26,32 @@ class get_cg(object):
         h_tail = self.weights.M_horizontaltail *  self.x_cg_htail
         v_tail = self.weights.M_verticaltail *  self.x_cg_vtail
         engine = (self.weights.M_nacelle + self.weights.M_engines_total) * self.x_cg_engines
-        self.x_cg_winggroup=sum([wing,engine])/(sum[self.weights.M_wing,self.weigths.M_nacelle + M_engine])
+        self.x_cg_winggroup=sum([wing,engine])/(sum([self.weights.M_wing,self.weights.M_nacelle + self.weights.M_engines_total]))
         self.x_cg_fuselagegroup=sum([fuselage,h_tail,v_tail])/sum([self.weights.M_fuselage,self.weights.M_horizontaltail,self.weights.M_verticaltail])
         # [m] returning location of cg 
-        return sum([wing,fuselage,h_tail,v_tail,engine])/(sum([self.weights.M_wing, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + M_engine]))
+        return sum([wing,fuselage,h_tail,v_tail,engine])/(sum([self.weights.M_wing, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + self.weights.M_engines_total]))
     
     def calc_y_cg(self):                                                        # [kg*m] mass times c.g distance of the different groups. 
         wing = self.weights.M_wing * self.y_cg_wing
         fuselage = self.weights.M_fuselage *  self.y_cg_fuselage
         h_tail = self.weights.M_horizontaltail * self.y_cg_htail
         v_tail = self.weights.M_verticaltail *self.y_cg_vtail
-        engine = (self.weights.M_nacelle + M_engine) *self.y_cg_engines
-        self.y_cg_winggroup=sum([wing,engine])/(sum[self.weights.M_wing,self.weigths.M_nacelle + M_engine])
+        engine = (self.weights.M_nacelle + self.weights.M_engines_total) *self.y_cg_engines
+        self.y_cg_winggroup=sum([wing,engine])/(sum([self.weights.M_wing,self.weights.M_nacelle + self.weights.M_engines_total]))
         self.y_cg_fuselagegroup=sum([fuselage,h_tail,v_tail])/sum([self.weights.M_fuselage,self.weights.M_horizontaltail,self.weights.M_verticaltail])
         # [m] returning location of cg
-        return sum([wing,fuselage,h_tail,v_tail,engine])/(sum([self.weights.M_wing, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + M_engine]))
+        return sum([wing,fuselage,h_tail,v_tail,engine])/(sum([self.weights.M_wing, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle +self.weights.M_engines_total]))
     
     def calc_z_cg(self):                                                        # [kg*m] mass times c.g distance of the different groups. 
         wing = self.weights.M_wing * self.z_cg_wing
         fuselage = self.weights.M_fuselage * self.z_cg_fuselage
         h_tail = self.weights.M_horizontaltail * self.z_cg_htail
         v_tail = self.weights.M_verticaltail * self.z_cg_vtail
-        engine = (self.weights.M_nacelle + M_engine) * self.z_cg_engines
-        self.z_cg_winggroup=sum([wing,engine])/(sum[self.weights.M_wing,self.weigths.M_nacelle + M_engine])
+        engine = (self.weights.M_nacelle + self.weights.M_engines_total) * self.z_cg_engines
+        self.z_cg_winggroup=sum([wing,engine])/(sum([self.weights.M_wing,self.weights.M_nacelle + self.weights.M_engines_total]))
         self.z_cg_fuselagegroup=sum([fuselage,h_tail,v_tail])/sum([self.weights.M_fuselage,self.weights.M_horizontaltail,self.weights.M_verticaltail])
         # [m] returning location of cg
-        return sum([wing,fuselage,h_tail,v_tail,engine])/(sum([self.weights.M_wing, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + M_engine]))
+        return sum([wing,fuselage,h_tail,v_tail,engine])/(sum([self.weights.M_wing, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + self.weights.M_engines_total]))
     
     
    

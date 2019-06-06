@@ -35,13 +35,13 @@ d_OEW1,d_OEW2=get_mass_efficiency(OEW)
 
 
 #START SIZING 
+# Fuselage parameters]
+l_cutout=30/N_sa*seat_pitch + seat_pitch                                        #change with additional safety factors
 
-# Fuselage parameters
-l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
-
+l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length UPDATE THIS TO THE REAL VALUE
+l_cabin = [max(l_cabin)-l_cutout, max(l_cabin), max(l_cabin)]
 d_f_inner = get_d_f_inner(N_sa, seat_width, N_aisle,\
                           armrest, aisle_width, s_clearance)                    # [m] inner diameter fuselage
-
 d_f_outer = get_d_f_outer(d_f_inner)                                            # [m] outer diameter fuselage
 l_nose = get_l_nose(d_f_outer)                                                  # [m] nose length
 l_tailcone = get_l_tailcone(d_f_outer)                                          # [m] tailcone length
@@ -58,6 +58,7 @@ Mtot_carry_on, Mtot_check_in, V_carry_on\
 
 V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)# [m^3] available cargo volume
 
+#CALCULATE MASSES BASED ON THE FUSALGE LAYOUT
 M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
 M_cargo_available=[V_cargo_available[i]*rho_cargo for i in range(3)]             # [kg] available cargo mass
 M_payload=[M_cargo_available[i]+M_pax_and_lugg[i] for i in range(3)]
@@ -70,7 +71,7 @@ M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
 M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
 M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]                                                    # [N] required thrust                          
 
-"Change this when correct length of modular part is found"
+"Change this when correct length of modular part is found, implement the l_cutout here" 
 x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]\
            , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]     
 
