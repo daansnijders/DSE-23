@@ -27,11 +27,8 @@ i_c = 0
 alpha0L_c = 0
 l_fueltank = 1.5
 d_fueltank = 0.3
-<<<<<<< HEAD
 S_ef = 0.75 * S_h[0] 
-=======
 i_n = 0
->>>>>>> 1c2713eb7324c63c60b0762ee13c3cebe468a655
 
 """ HLD design """
 config1_HLD = HLD_class(Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer)
