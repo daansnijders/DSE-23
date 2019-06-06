@@ -171,12 +171,18 @@ class empennage2:
         ax2.plot(self.l, self.Sh_C1)
         ax2.set( ylim =  (0,0.26))
         plt.show()
-    
         
+        Sh_S = float(input("Input the optimal Sh/S ratio: "))
+        print  (Sh_S)
         return self.Sh_S1, self.Sh_S2, self.Sh_C1
         
 e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838)
 
-r = e2.calc_Cm()    
-q = e2.plot_stability()
+r = e2.plot_stability()   
+#q = e2.plot_stability()
+
+# =============================================================================
+# Vertical tail
+# =============================================================================
     
+N_e = 0
