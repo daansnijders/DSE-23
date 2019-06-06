@@ -7,6 +7,7 @@ Created on Wed Jun  5 09:50:12 2019
 from inputs.constants import *
 from inputs.concept_1 import *
 from modules.Stability.Stability_runfile import x_cg_min, x_cg_max
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -57,6 +58,8 @@ class empennage(object):
         
         aoa_cruise = aoa_rad[i]
         y_cruise = np.sum([y1[i],y2[i]])/2
+        
+        
         return np.rad2deg(aoa_cruise),y_cruise
         
 e = empennage(1,1.0,0.02,0,np.deg2rad(1.0),x_cg_min)
