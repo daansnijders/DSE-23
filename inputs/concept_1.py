@@ -126,9 +126,11 @@ M_fuselage, x_cg_fuselage=get_mass_fuselage(MTOW,l_f)
 M_tail,x_cg_tail=get_mass_tail(MTOW,l_f)
 M_fuselage_group, x_cg_fuselage_group=get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail)
 x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group)
+
 x_cg_wing,x_cg_eng,x_cg_wing_group=get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )
 
 l_h=[x_cg_tail[i]-x_cg_wing[i] for i in range(3)]
+
 
 
 
