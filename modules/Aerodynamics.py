@@ -203,7 +203,7 @@ class Drag:
         cdc = 1.2           #Figure 4.20
         Splf = 0.5*self.d_f_outer*(self.l_tail+self.l_cockpit) + self.d_f_outer*self.l_cabin
         
-        if self.l_cabin == 19.44:
+        if self.l_cabin <= 23:
             CDL_fus = eta1*cdc*alpha**3*(Splf/self.S)
         else:
             CDL_fus = eta2*cdc*alpha**3*(Splf/self.S)
