@@ -176,11 +176,6 @@ class empennage2:
 #        x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0]        
         return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, x_le_MAC
         
-    e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
-
-    r = e2.plot_stability()   
-    #q = e2.plot_stability()
-
 # =============================================================================
 # Horizontal tail
 # =============================================================================
@@ -207,7 +202,13 @@ class empennage2:
     # Vertical tail
     # =============================================================================
         
-    N_e = 0
+    
+    V_h = 1.28                                                                  # [-] volume horizontal tail
+    A_h = 4.95                                                                  # [-] aspect ratio horizontal tail
+    taper_ratio_h = 0.39                                                        # [-] taper ratio horizontal tail
+    V_v = 0.1                                                                   # [-] volume vertical tail
+    A_v = 1.9                                                                   # [-] aspect ratio vertical tail
+    taper_ratio_v = 0.375                                                       # [-] taper ratio vertical tail
     
     def get_S_v(S, b, x_cg, V_v, x_v):
          return [V_v*S* b / (x_v[i] - x_cg[i]) for i in range(3)]
@@ -220,6 +221,11 @@ class empennage2:
     
     def get_Ct_v(Cr_v, taper_ratio_v):
         return [Cr_v[i] * taper_ratio_v for i in range(3)]
+    
+e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
+
+r = e2.plot_stability()   
+#q = e2.plot_stability()
     
 
 #N_e = thrust_max/2 * y_engine                                                   # [N*m] moment caused by engine inoperative
