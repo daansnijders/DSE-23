@@ -17,17 +17,17 @@ x_le_MAC1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2]
 x_le_MAC2 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
 x_le_MAC3 = [x_le_MAC[0] + 0.1 * l_f[0], x_le_MAC[1] + 0.1 * l_f[1], x_le_MAC[2] + 0.1 * l_f[2]]
 
-
 x_cg_config1_range = [get_cg(x_le_MAC1,config1_class2).calc_x_cg(),get_cg(x_le_MAC2,config1_class2).calc_x_cg(),get_cg(x_le_MAC3,config1_class2).calc_x_cg()]
 x_cg_wing_config1_range = [get_cg(x_le_MAC1,config1_class2).x_cg_wing,get_cg(x_le_MAC2,config1_class2).x_cg_wing,get_cg(x_le_MAC3,config1_class2).x_cg_wing]
-#
+
+x_le_MAC_range = [x_le_MAC1[0], x_le_MAC2[0], x_le_MAC3[0]]
+x_le_MAC_range_perc = [x_le_MAC1[0]/l_f[0], x_le_MAC2[0]/l_f[0], x_le_MAC3[0]/l_f[0]]
 
 #config1_cg_x=config1_cg.calc_x_cg()
 
 x_cg_config1_range = [config1_cg_x - 0.1* l_f[0],config1_cg_x,config1_cg_x + 0.1* l_f[0]]
 x_cg_wing_config1_range = [config1_cg.x_cg_wing - 0.1* l_f[0], config1_cg.x_cg_wing, config1_cg.x_cg_wing + 0.1* l_f[0]]
-x_lemac_range = [10., 12.13, 14.] #deze volgorde aanhouden, zoals hierboven
-x_lemac_perc_l_f = [] #hier moet het percentage van de x_Lemac tov de lengte van de fuselage komen
+
 
 config1_load      = Loading_diagram(x_cargo[0], l_f[0], l_cabin[0], seat_pitch, N_pax[0], N_sa, OEW[0], MTOW[0], x_cg_config1_range[0], MAC, S, b, A, Xfirst, M_payload[0], M_cargo_available[0], M_fuel[0], M_pax, M_carry_on, x_cg_wing_config1_range[0], -1)     
 config1_load2      = Loading_diagram(x_cargo[0], l_f[0], l_cabin[0], seat_pitch, N_pax[0], N_sa, OEW[0], MTOW[0], x_cg_config1_range[1], MAC, S, b, A, Xfirst, M_payload[0], M_cargo_available[0], M_fuel[0], M_pax, M_carry_on, x_cg_wing_config1_range[1], 0)     
