@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -116,6 +116,16 @@ class Drag:
         self.S_h            = S_h
         self.S_v            = S_v
         self.S_c            = S_c
+        self.CL_alpha_h     = CL_alpha_h
+        self.de_da_h        = de_da_h
+        self.i_h            = i_h
+        self.alpha0L_h      = alpha0L_h
+        self.A_h            = A_h
+        self.CL_alpha_c     = CL_alpha_c
+        self.de_da_c        = de_da_c
+        self.i_c            = i_c
+        self.alpha0L_c      = alpha0L_c
+        self.A_c            = A_c
 
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -203,6 +213,7 @@ class Drag:
 
     def empennage_drag(self):
         #Subsonic for horizontal tail(h), vertical tail(v) and canard(c)
+        #Zero lift drag calculations
         cos_lambda_v_2_rad   = cos(self.lambda_v_2_rad)
         cos_lambda_h_2_rad   = cos(self.lambda_h_2_rad)
         #This results in
@@ -219,12 +230,14 @@ class Drag:
         Re_c_sub = self.rho_0 * self.V_TO     * self.MAC_c / self.mu_sl
         Re_c_trans = self.rho * self.V_cruise     * self.MAC_c / self.mu_37
         #This results in
-        Cf_emp_h_sub = 0.0028   #Figure 4.3
-        Cf_emp_h_trans = 0.0027 #Figure 4.3
-        Cf_emp_v_sub = 0.0026   #Figure 4.3 
-        Cf_emp_v_trans = 0.0026 #Figure 4.3
-        Cf_emp_c_sub = 0        #Figure 4.3
-        Cf_emp_c_trans = 0.0029 #Figure 4.3
+        Cf_emp_h_sub = 0.0028       #Figure 4.3, config 1,2,3
+        Cf_emp_h_trans = 0.0027     #Figure 4.3, config 1,2,3 
+        Cf_emp_v_sub = 0.0026       #Figure 4.3, config 1,2,3 
+        Cf_emp_v_trans = 0.0026     #Figure 4.3, config 1,2,3
+        Cf_emp_c_sub_2 = 0.00325    #Figure 4.3, config 2
+        Cf_emp_c_sub_3 = 0.0029     #Figure 4.3, config 3  
+        Cf_emp_c_trans_2 = 0.00315  #Figure 4.3, config 2
+        Cf_emp_c_trans_3 = 0.00285  #Figure 4.3, config 3 
         
         L_prime = 1.2           #Figure 4.4
         
@@ -238,7 +251,32 @@ class Drag:
         CD0_h_tail_sub = R_LS_h*Cf_emp_h_sub*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_h/self.S
         CD0_v_tail_sub = R_LS_v*Cf_emp_v_sub*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_v/self.S
         
-        return(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
+        if Re_c_sub == 0:
+            CD0_c_sub = 0
+        elif self.MAC_c <= 1.15:
+            CD0_c_sub = R_LS_c*Cf_emp_c_sub_2*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S
+        else:
+            CD0_c_sub = R_LS_c*Cf_emp_c_sub_3*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S
+        
+        
+        #Lift induced drag calculations
+        e_h = 0.5
+        e_c = 0.5
+        CL0 = self.CL_alpha*(pi/180)*5.5
+        alpha = (self.CLdes -CL0)/self.CL_alpha
+        CDL_h_sub = ((self.CL_alpha_h*(alpha*(1-self.de_da_h)+self.i_h - self.alpha0L_h))**2)/(pi*self.A_h*e_h)*(self.S_h/self.S)
+        
+        if Re_c_sub == 0:
+            CDL_c_sub = 0 
+        else:
+            CDL_c_sub = ((self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - self.alpha0L_c))**2)/(pi*self.A_c*e_c)*(self.S_c/self.S)
+        
+        CDL_v_sub = 0
+        
+        CD_h_sub = CD0_h_tail_sub + CDL_h_sub
+        CD_v_sub = CD0_v_tail_sub + CDL_v_sub
+        CD_c_sub = CD0_c_sub + CDL_c_sub
+        return(CD_h_sub, CD_v_sub, CD_c_sub)
         
 #    def nacelle_drag(self):
         
