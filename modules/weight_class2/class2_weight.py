@@ -68,7 +68,7 @@ class Class2_weight:
         
     
     def powerplant_mass(self):
-        self.M_engines_total          = get_engine_mass()
+        self.M_engines_total          = get_engine_mass()*lbs_to_kg
         self.M_airinduction          = get_airinduction_mass()* lbs_to_kg
         self.M_fuelsystem            = get_fuelsystem_mass(self.M_fuel,K_fsp)* lbs_to_kg
         self.M_propulsionsystem      = get_propulsionsystem_mass(self.l_f,self.b)* lbs_to_kg
