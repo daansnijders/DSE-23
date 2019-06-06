@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -99,10 +99,11 @@ class Drag:
         self.lambda_2_rad   = lambda_2_rad
         self.x_nlg          = x_nlg
         self.z_nlg          = z_nlg
+        self.b_nlg          = b_nlg
         self.D_nlg          = D_nlg
         self.D_strutt_nlg   = D_strutt_nlg
         self.x_mlg          = x_mlg
-        self.z_mlg          = z_mlg
+        self.z_mlg          = abs(z_mlg)
         self.b_mlg          = b_mlg
         self.D_mlg          = D_mlg
         self.D_strutt_mlg   = D_strutt_mlg
@@ -116,6 +117,19 @@ class Drag:
         self.S_h            = S_h
         self.S_v            = S_v
         self.S_c            = S_c
+        self.CL_alpha_h     = CL_alpha_h
+        self.de_da_h        = de_da_h
+        self.i_h            = i_h
+        self.alpha0L_h      = alpha0L_h
+        self.A_h            = A_h
+        self.CL_alpha_c     = CL_alpha_c
+        self.de_da_c        = de_da_c
+        self.i_c            = i_c
+        self.alpha0L_c      = alpha0L_c
+        self.A_c            = A_c
+        self.l_fueltank     = l_fueltank
+        self.d_fueltank     = d_fueltank
+
 
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -154,14 +168,14 @@ class Drag:
         c_l_alpha = np.rad2deg((1.3 + 0.5)/(7+9))
         k = c_l_alpha/(2*pi / beta)
         C_L_a_w = (2*pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (tan(self.lambda_2_rad) / beta) ) + 4)**(1/2) )
-        print (C_L_a_w)
-        
+                
         e = 1.1*(C_L_a_w / self.A)*(R * (C_L_a_w / self.A) + (1-R)*pi)
         
         C_L_w = 1.05 * self.CLdes
         C_D_L_w = C_L_w**2 / (pi * self.A * e)
+        C_D_w_wave = 0.002      #Figure 4.11
         
-        C_D_w = C_D_0_W + C_D_L_w
+        C_D_w = C_D_0_W + C_D_L_w + C_D_w_wave
         
         return (C_D_w, C_D_0_W, C_D_L_w)
         
@@ -203,6 +217,7 @@ class Drag:
 
     def empennage_drag(self):
         #Subsonic for horizontal tail(h), vertical tail(v) and canard(c)
+        #Zero lift drag calculations
         cos_lambda_v_2_rad   = cos(self.lambda_v_2_rad)
         cos_lambda_h_2_rad   = cos(self.lambda_h_2_rad)
         #This results in
@@ -219,12 +234,14 @@ class Drag:
         Re_c_sub = self.rho_0 * self.V_TO     * self.MAC_c / self.mu_sl
         Re_c_trans = self.rho * self.V_cruise     * self.MAC_c / self.mu_37
         #This results in
-        Cf_emp_h_sub = 0.0028   #Figure 4.3
-        Cf_emp_h_trans = 0.0027 #Figure 4.3
-        Cf_emp_v_sub = 0.0026   #Figure 4.3 
-        Cf_emp_v_trans = 0.0026 #Figure 4.3
-        Cf_emp_c_sub = 0        #Figure 4.3
-        Cf_emp_c_trans = 0.0029 #Figure 4.3
+        Cf_emp_h_sub = 0.0028       #Figure 4.3, config 1,2,3
+        Cf_emp_h_trans = 0.0027     #Figure 4.3, config 1,2,3 
+        Cf_emp_v_sub = 0.0026       #Figure 4.3, config 1,2,3 
+        Cf_emp_v_trans = 0.0026     #Figure 4.3, config 1,2,3
+        Cf_emp_c_sub_2 = 0.00325    #Figure 4.3, config 2
+        Cf_emp_c_sub_3 = 0.0029     #Figure 4.3, config 3  
+        Cf_emp_c_trans_2 = 0.00315  #Figure 4.3, config 2
+        Cf_emp_c_trans_3 = 0.00285  #Figure 4.3, config 3 
         
         L_prime = 1.2           #Figure 4.4
         
@@ -238,7 +255,58 @@ class Drag:
         CD0_h_tail_sub = R_LS_h*Cf_emp_h_sub*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_h/self.S
         CD0_v_tail_sub = R_LS_v*Cf_emp_v_sub*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_v/self.S
         
-        return(Re_h_sub, Re_h_trans, Re_v_sub, Re_v_trans, Re_c_sub, Re_c_trans)
+        if Re_c_sub == 0:
+            CD0_c_sub = 0
+        elif self.MAC_c <= 1.15:
+            CD0_c_sub = R_LS_c*Cf_emp_c_sub_2*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S
+        else:
+            CD0_c_sub = R_LS_c*Cf_emp_c_sub_3*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S
+        
+        
+        #Lift induced drag calculations
+        e_h = 0.5
+        e_c = 0.5
+        CL0 = self.CL_alpha*(pi/180)*5.5
+        alpha = (self.CLdes -CL0)/self.CL_alpha
+        CDL_h_sub = ((self.CL_alpha_h*(alpha*(1-self.de_da_h)+self.i_h - self.alpha0L_h))**2)/(pi*self.A_h*e_h)*(self.S_h/self.S)
+        
+        if Re_c_sub == 0:
+            CDL_c_sub = 0 
+        else:
+            CDL_c_sub = ((self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - self.alpha0L_c))**2)/(pi*self.A_c*e_c)*(self.S_c/self.S)
+        
+        CDL_v_sub = 0
+        
+        CD_h_sub = CD0_h_tail_sub + CDL_h_sub
+        CD_v_sub = CD0_v_tail_sub + CDL_v_sub
+        CD_c_sub = CD0_c_sub + CDL_c_sub
+        
+        
+        #Transonic for horizontal tail(h), vertical tail(v) and canard(c)
+        #Zero lift drag calculations
+        CD0_h_tail_trans = R_LS_h*Cf_emp_h_trans*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_h/self.S + 0.002*(self.S_h/self.S)
+        CD0_v_tail_trans = R_LS_v*Cf_emp_v_trans*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_v/self.S + 0.002*(self.S_v/self.S)
+        
+        if Re_c_trans == 0:
+            CD0_c_trans = 0
+        elif self.MAC_c <= 1.15:
+            CD0_c_trans = R_LS_c*Cf_emp_c_trans_2*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S + 0.002*(self.S_c/self.S)
+        else:
+            CD0_c_trans = R_LS_c*Cf_emp_c_trans_3*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S + 0.002*(self.S_h/self.S)
+        
+        #Lift induced drag
+        CDL_CL2 = 0.025     #Figure 4.13
+        CL_h = self.CL_alpha_h*(alpha*(1-self.de_da_h)+self.i_h - self.alpha0L_h)
+        CL_c = self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - self.alpha0L_c)
+        CDL_h_trans = CDL_CL2*CL_h
+        CDL_c_trans = CDL_CL2*CL_c
+        CDL_v_trans = 0
+        
+        CD_h_trans = CD0_h_tail_trans + CDL_h_trans
+        CD_v_trans = CD0_v_tail_trans + CDL_v_trans
+        CD_c_trans = CD0_c_trans + CDL_c_trans
+        
+        return(CD_h_sub, CD_v_sub, CD_c_sub, CD_h_trans, CD_v_trans, CD_c_trans)
         
 #    def nacelle_drag(self):
         
@@ -261,5 +329,51 @@ class Drag:
         #From this follows:
         C_D_mlg = 1.4   #Figure 4.59
         
-        C_D_gear = (C_D_nlg ) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mld) * m / self.S)
+        C_D_gear = (C_D_nlg ) * self.b_nlg * self.D_nlg  / self.S + 2*((C_D_mlg) * m / self.S)
+        
+        return (C_D_gear)
+    
+    
+    def windshield_drag(self):
+        delta_C_D_ws = 0.002        #Figure 4.68
+        C_D_nosecone = 0.078        #Figure 4.68
+        
+        C_D_ws = delta_C_D_ws * (pi*(self.d_f_outer / 2)**2)/self.S
+        
+        return (C_D_ws)
+    
+    def store_drag(self):
+        """ store_drag only applicable for configuration 3 """
+        Re_f  = self.rho   * self.V_cruise * self.l_fueltank / self.mu_37
+        Re_f0 = self.rho_0 * self.V_TO     * self.l_fueltank / self.mu_sl
+        #RE at service ceiling results in (same for all configurations)
+        Rwf = 1.0               #Figure 4.1
+        Cf_fueltank = 0.0019    #Figure 4.3
+        ratio = self.l_fueltank/self.d_fueltank
+        Swet_fueltank = pi*self.d_fueltank*self.l_fueltank*(1-2/ratio)**(2/3)*(1+1/(ratio)**2)
+        
+        CD0_fueltank = Rwf*Cf_fueltank*(1+60/(self.l_fueltank/self.d_fueltank)**3 + 0.0025*(self.l_fueltank/self.d_fueltank))*Swet_fueltank/self.S
+        
+        CL0 = self.CL_alpha*(pi/180)*5.5
+        alpha = (self.CLdes -CL0)/self.CL_alpha
+        
+        eta = 0.66          #Figure 4.19
+        cdc = 1.2           #Figure 4.20
+        Splf = self.d_fueltank*self.l_fueltank
+        
+        CDL_fueltank = eta*cdc*alpha**3*(Splf/self.S)
+        
+        CD_fueltank_sub = CD0_fus + CDL_fus
+        
+        
+        CDf_fueltank = Cf_fueltank*(Swet_fus/self.S)
+        CDp_fueltank = Cf_fueltank*(60/(self.l_fueltank/self.d_fueltank)**3 + 0.0025*(self.l_fueltank/self.d_fueltank))*Swet_fus/self.S
+        CD_wave = 0.005     #Figure 4.22
+        
+        CD_fueltank_trans = Rwf*(CDf_fueltank + CDp_fueltank) +CD_wave*(pi*(self.d_fueltank/2)**2)/self.S
+        
+        C_D_store = CD0_fueltank + CDL_fueltank + CD_fueltank_sub + CD_fueltank_trans
+        
+        return(C_D_store)
+        
         
