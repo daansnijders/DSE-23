@@ -6,8 +6,9 @@ Created on Wed Jun  5 09:50:12 2019
 """
 from inputs.constants import *
 from inputs.concept_1 import *
-from modules.Stability.Stability_runfile import x_cg_min
+from modules.Stability.Stability_runfile import x_cg_min, x_cg_max
 import numpy as np
+import matplotlib.pyplot as plt
 
 class empennage(object):
     def __init__(self,config,C_L_w,C_D_w,C_M_ac_w , aoa_rad,x_cg):
@@ -67,3 +68,75 @@ V_c = ?
 theta/aoa = aerodynamic guys -> alpha cruise
 we need cl/alpha in order to determine the lift produced.
 """
+
+class empennage2:
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, V_h, V, x_lemac, Cm_ac, CL_ah, x_cg, CL_h):   
+        self.config = config
+        self.x_ac=x_ac #from nose in [m]
+        self.CL_a_h = CL_a_h
+        self.CL_a_ah = CL_a_ah
+        self.de_da = de_da
+        self.S_h = S_h
+        self.l_h = l_h
+        self.S = S
+        self.c = c
+        self.V_h = V_h
+        self.V = V
+        self.x_lemac = x_lemac
+        self.Cm_ac = Cm_ac
+        self.CL_ah = CL_ah
+        self.x_cg = x_cg
+        self.CL_h = CL_h
+
+        self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
+
+    
+    def calc_xnp(self):
+        self.x_np = self.x_ac + (self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.hortail_vol * (self.V_h / self.V)**2)*self.c
+        return self.x_np
+    
+    def calc_xcg(self):
+        self.x_cg = self.calc_xnp() - 0.05*self.c
+        return self.x_cg
+    
+    def calc_Cm(self):
+        self.Cm_lesstail = self.Cm_ac + self.CL_ah * (self.x_cg-self.x_ac)/self.c
+        self.Cm_tail = -self.CL_h * self.S_h * self.l_h / (self.S * self.c) * (self.V_h/self.V)**2
+        self.Cm = self.Cm_lesstail + self.Cm_tail
+        return self.Cm    
+    
+    def plot_stability(self):
+        """Stability excluding margin"""
+        a = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        b = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        
+        """Stability including margin"""
+        d = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        e = (self.x_ac - 0.05*self.c) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        
+        """Controlability"""
+        f = self.CL_ah / (self.CL_h*self.l_h*(self.V_h/self.V)**2)
+        g = (self.c*self.Cm_ac-self.CL_ah*self.x_ac)/(self.CL_h*self.l_h*(self.V_h/self.V)**2)
+        
+        self.l = np.arange(self.x_lemac, (self.x_lemac+self.c+0.01), 0.01)
+        self.Sh_S1 = [] #stability xnp
+        self.Sh_S2 = [] #stability xcg
+        self.Sh_C1 = [] #controlability xac - Cmac/CL_ah
+        
+        for i in range (len(self.l)):
+            self.Sh_S1.append(a*self.l[i]-b)
+            self.Sh_S2.append(d*self.l[i]-e)
+            self.Sh_C1.append(f*self.l[i]+g)
+            
+        plt.plot(self.l, self.Sh_S1)
+        plt.plot(self.l, self.Sh_S2)
+        plt.plot(self.l, self.Sh_C1)
+        plt.ylim(0,0.5)
+        plt.show()
+        return self.Sh_S1, self.Sh_S2, self.Sh_C1
+        
+e2 = empennage2(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838)
+
+r = e2.calc_Cm()    
+q = e2.plot_stability()
+    
