@@ -45,19 +45,18 @@ CDW1 = config1_Drag.wing_drag()
 CD0_fus1, CDL_fus1, CD_fus_sub1, CD_fus_trans1 = config1_Drag.fuse_drag()
 CD_h_sub1, CD_v_sub1, CD_c_sub1, CD_h_trans1, CD_v_trans1, CD_c_trans1 = config1_Drag.empennage_drag()
 CD_nacel_sub1, CD_nacel_trans1 = config1_Drag.nacelle_drag()
-
 C_D_gear = config1_Drag.landinggear_drag()
 C_D_ws = config1_Drag.windshield_drag()
-
-print (C_D_gear, C_D_ws)
 
 #print(CDW1)
 #print(CD0_fus1, CDL_fus1,CD_fus_sub1, CD_fus_trans1)
 #print(CD_h_sub1, CD_v_sub1, CD_c_sub1, CD_h_trans1, CD_v_trans1, CD_c_trans1)
 print(CD_nacel_sub1, CD_nacel_trans1)
+print (C_D_gear, C_D_ws)
+
 
 #Configuration 2
-config2_Drag = Drag(S,A,rho,rho_0,l_f[1],V_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[1],CL_alpha,l_cockpit, l_cabin[1], l_tail, lambda_2_rad, lambda_4_rad,x_nlg[1], z_nlg[1], D_nlg, b_nlg, D_strutt_nlg, x_mlg[1], z_mlg[1], D_mlg, b_mlg, D_strutt_mlg, lambda_h_2_rad[1], lambda_v_2_rad[1], MAC_c[1], Cr_v[1], Ct_v[1], Cr_h[1], Ct_h[1], S_h[1], S_v[1], S_c[1], CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_ef, l_nacel, d_nacel, i_n)
+config2_Drag = Drag(S,A,rho,rho_0,l_f[1],V_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[1],CL_alpha,l_cockpit, l_cabin[1], l_tail, lambda_2_rad, lambda_4_rad,x_nlg, z_nlg, D_nlg, b_nlg, D_strutt_nlg, x_mlg[1], z_mlg, D_mlg, b_mlg, D_strutt_mlg, lambda_h_2_rad[1], lambda_v_2_rad[1], MAC_c[1], Cr_v[1], Ct_v[1], Cr_h[1], Ct_h[1], S_h[1], S_v[1], S_c[1], CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_ef, l_nacel, d_nacel, i_n)
 
 CDW2 = config2_Drag.wing_drag()
 CD0_fus2, CDL_fus2,  CD_fus_sub2, CD_fus_trans2 = config2_Drag.fuse_drag()
@@ -67,9 +66,10 @@ CD_nacel_sub2, CD_nacel_trans2 = config2_Drag.nacelle_drag()
 #print(CDW2)
 #print(CD0_fus2, CDL_fus2,CD_fus_sub2, CD_fus_trans2)
 #print(CD_h_sub2, CD_v_sub2, CD_c_sub2, CD_h_trans2, CD_v_trans2, CD_c_trans2)
-print(CD_nacel_sub2, CD_nacel_trans2)
+#print(CD_nacel_sub2, CD_nacel_trans2)
 
-config3_Drag = Drag(S,A,rho,rho_0,l_f[2],V_cruise,V_TO[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[2],CL_alpha,l_cockpit, l_cabin[2], l_tail, lambda_2_rad, lambda_4_rad,x_nlg[2], z_nlg[2], D_nlg, b_nlg, D_strutt_nlg, x_mlg[2], z_mlg[2], D_mlg, b_mlg, D_strutt_mlg, lambda_h_2_rad[2], lambda_v_2_rad[2], MAC_c[2], Cr_v[2], Ct_v[2], Cr_h[2], Ct_h[2], S_h[2], S_v[2], S_c[2], CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_ef, l_nacel, d_nacel, i_n)
+#Configuration 3
+config3_Drag = Drag(S,A,rho,rho_0,l_f[2],V_cruise,V_TO[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes[2],CL_alpha,l_cockpit, l_cabin[2], l_tail, lambda_2_rad, lambda_4_rad,x_nlg, z_nlg, D_nlg, b_nlg, D_strutt_nlg, x_mlg[2], z_mlg, D_mlg, b_mlg, D_strutt_mlg, lambda_h_2_rad[2], lambda_v_2_rad[2], MAC_c[2], Cr_v[2], Ct_v[2], Cr_h[2], Ct_h[2], S_h[2], S_v[2], S_c[2], CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_ef, l_nacel, d_nacel, i_n)
 
 CDW3 = config3_Drag.wing_drag()
 CD0_fus3, CDL_fus3,  CD_fus_sub3, CD_fus_trans3 = config3_Drag.fuse_drag()
@@ -79,4 +79,4 @@ CD_nacel_sub3, CD_nacel_trans3 = config3_Drag.nacelle_drag()
 #print(CDW3)
 #print(CD0_fus3, CDL_fus3,CD_fus_sub3, CD_fus_trans3)
 #print(CD_h_sub3, CD_v_sub3, CD_c_sub3, CD_h_trans3, CD_v_trans3, CD_c_trans3)
-print(CD_nacel_sub3, CD_nacel_trans3)
+#print(CD_nacel_sub3, CD_nacel_trans3)
