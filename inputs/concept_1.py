@@ -72,8 +72,8 @@ M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
 M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]                                                    # [N] required thrust                          
 
 "Change this when correct length of modular part is found, implement the l_cutout here" 
-x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]\
-           , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]     
+x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cutout), Xcargo2+(l_cutout)]\
+           , [Xcargo1+(l_cutout), Xcargo2+(l_cutout)]]     
 
 
 
