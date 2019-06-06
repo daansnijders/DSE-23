@@ -276,7 +276,33 @@ class Drag:
         CD_h_sub = CD0_h_tail_sub + CDL_h_sub
         CD_v_sub = CD0_v_tail_sub + CDL_v_sub
         CD_c_sub = CD0_c_sub + CDL_c_sub
-        return(CD_h_sub, CD_v_sub, CD_c_sub)
+        
+        
+        #Transonic for horizontal tail(h), vertical tail(v) and canard(c)
+        #Zero lift drag calculations
+        CD0_h_tail_trans = R_LS_h*Cf_emp_h_trans*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_h/self.S + 0.002*(self.S_h/self.S)
+        CD0_v_tail_trans = R_LS_v*Cf_emp_v_trans*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_v/self.S + 0.002*(self.S_v/self.S)
+        
+        if Re_c_trans == 0:
+            CD0_c_trans = 0
+        elif self.MAC_c <= 1.15:
+            CD0_c_trans = R_LS_c*Cf_emp_c_trans_2*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S + 0.002*(self.S_c/self.S)
+        else:
+            CD0_c_trans = R_LS_c*Cf_emp_c_trans_3*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S + 0.002*(self.S_h/self.S)
+        
+        #Lift induced drag
+        CDL_CL2 = 0.025     #Figure 4.13
+        CL_h = self.CL_alpha_h*(alpha*(1-self.de_da_h)+self.i_h - self.alpha0L_h)
+        CL_c = self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - self.alpha0L_c)
+        CDL_h_trans = CDL_CL2*CL_h
+        CDL_c_trans = CDL_CL2*CL_c
+        CDL_v_trans = 0
+        
+        CD_h_trans = CD0_h_tail_trans + CDL_h_trans
+        CD_v_trans = CD0_v_tail_trans + CDL_v_trans
+        CD_c_trans = CD0_c_trans + CDL_c_trans
+        
+        return(CD_h_sub, CD_v_sub, CD_c_sub, CD_h_trans, CD_v_trans, CD_c_trans)
         
 #    def nacelle_drag(self):
         
