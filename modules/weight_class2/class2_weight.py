@@ -51,7 +51,7 @@ class Class2_weight:
         if self.config==1:
             self.M_canard    =0
         else:
-            self.M_canard         =get_wing_mass(self.M_carried_canard_MZF,self.b_c,self.S_c,self.Cr_t_c,self.lambda_c_2_rad,self.n_ult)*lbs_to_kg
+            self.M_canard    =get_wing_mass(self.M_carried_canard_MZF,self.b_c,self.S_c,self.Cr_t_c,self.lambda_c_2_rad,self.n_ult)*lbs_to_kg
         
         self.M_horizontaltail   =get_horizontaltail_mass(K_h,self.S_h,self.V_dive,self.lambda_h_2_rad)*lbs_to_kg
         self.M_verticaltail     =get_verticaltail_mass(K_v,self.S_v,self.V_dive,self.lambda_v_2_rad)*lbs_to_kg
