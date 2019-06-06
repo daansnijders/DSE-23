@@ -48,6 +48,14 @@ def get_cg_fuselage(l_f,d_f_outer):
     z_cg_fuselage = 0.5*d_f_outer                                               # [m] z-location of the c.g. of the fuselage
     return x_cg_fuselage, y_cg_fuselage, z_cg_fuselage
 
+def get_cg_canard(Cr_c,t_c_c,l_cutout,x_le_MAC):
+    x_cg_canard=l_cockpit+l_cutout/2
+    y_cg_canard=0
+    z_cg_canard=Cr_c*t_c_c/2
+    return x_cg_canard, y_cg_canard, z_cg_canard
+
+def get_cg_landinggear():
+    return x_cg_landinggear, y_cg_landinggear, z_cg_landinggear
 """
 NOT APPLICABLE YET
 
