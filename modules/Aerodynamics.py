@@ -323,7 +323,7 @@ class Drag:
         ratio = self.l_nacel/self.d_nacel
         Swet_nacel = pi*self.d_nacel*self.l_nacel*abs((1-2/ratio))**(2/3)*(1+1/(ratio)**2)
         
-        CD0_nacel = Rwf*Cf_nacel*(1+60/(self.l_nacel/self.d_nacel)**3 + 0.0025*(self.l_nacel/self.d_nacel))*Swet_nacel/self.S
+        CD0_nacel = 2*Rwf*Cf_nacel*(1+60/(self.l_nacel/self.d_nacel)**3 + 0.0025*(self.l_nacel/self.d_nacel))*Swet_nacel/self.S
         
         CL0 = self.CL_alpha*(pi/180)*5.5
         alpha = (self.CLdes - CL0)/self.CL_alpha
@@ -333,7 +333,7 @@ class Drag:
         cdc = 1.2           #Figure 4.20
         Splf = self.d_nacel*self.l_nacel
         
-        CDL_nacel = eta*cdc*alpha_n**3*(Splf/self.S)
+        CDL_nacel = 2*eta*cdc*alpha_n**3*(Splf/self.S)
         
         CD_nacel_sub = CD0_nacel + CDL_nacel
         
@@ -342,7 +342,7 @@ class Drag:
         CDp_nacel = Cf_nacel*(60/(self.l_nacel/self.d_nacel)**3 + 0.0025*(self.l_nacel/self.d_nacel))*Swet_nacel/self.S
         CD_wave = 0     #Figure 4.22
         
-        CD_nacel_trans = Rwf*(CDf_nacel + CDp_nacel) +CD_wave*(pi*(self.d_nacel/2)**2)/self.S
+        CD_nacel_trans = 2*Rwf*(CDf_nacel + CDp_nacel) +CD_wave*(pi*(self.d_nacel/2)**2)/self.S
         
         return(CD_nacel_sub, CD_nacel_trans)
         

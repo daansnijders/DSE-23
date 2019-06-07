@@ -16,7 +16,7 @@ from inputs.constants import *
 
 
 class Loading_diagram:
-    def __init__(self, x_cargo, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, MTOW, x_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel, M_pax, M_carry_on, x_cg_wing, config):
+    def __init__(self, x_cargo, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, x_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel, M_pax, M_carry_on, x_cg_wing, config):
         self.x_cargo=x_cargo
         self.l_f=l_f
         self.l_cabin=l_cabin
@@ -24,7 +24,6 @@ class Loading_diagram:
         self.N_pax=N_pax
         self.N_sa=N_sa
         self.OEW=OEW
-        self.MTOW=MTOW
         self.x_cg=x_cg
         self.x_cg_wing=x_cg_wing
         self.MAC=MAC
