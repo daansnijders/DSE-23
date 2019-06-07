@@ -16,7 +16,7 @@ from inputs.constants import *
 
 
 class Loading_diagram:
-    def __init__(self, x_cargo, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, MTOW, x_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel, M_pax, M_carry_on, x_cg_wing, config):
+    def __init__(self, x_cargo, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, x_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel, M_pax, M_carry_on, x_cg_wing, config):
         self.x_cargo=x_cargo
         self.l_f=l_f
         self.l_cabin=l_cabin
@@ -24,7 +24,6 @@ class Loading_diagram:
         self.N_pax=N_pax
         self.N_sa=N_sa
         self.OEW=OEW
-        self.MTOW=MTOW
         self.x_cg=x_cg
         self.x_cg_wing=x_cg_wing
         self.MAC=MAC
@@ -98,19 +97,19 @@ class Loading_diagram:
             self.xcg_max = self.xcg_max - (l_cabin[1]-l_cabin[0])
             self.xcg_min = self.xcg_min - (l_cabin[1]-l_cabin[0])
         
-#        plt.figure()   
-#        plt.plot(self.xcg1, self.weight, color='blue', marker='o')
-#        plt.plot(self.xcg2, self.weight, color='green', marker='o')
-#        #plt.hlines(Weight[23],min(xcg), max(xcg),'r')
-#        #plt.hlines(Weight[45],min(xcg), max(xcg), 'r')
-#        #plt.hlines(self.weight[-1],min(self.xcg1), max(self.xcg2), 'r')
-#        #plt.hlines(self.weight[-2],min(self.xcg1), max(self.xcg2), 'r')
-#        plt.vlines(min(self.xcg1)-0.02,self.weight[0], self.weight[-1], 'k')
-#        plt.vlines(max(self.xcg2)+0.02,self.weight[0], self.weight[-1], 'k')
-#        plt.title('C.g. location for configuration: %i' %self.config, fontsize=14)
-#        plt.xlabel('Center of gravity location from nose [m]', fontsize=12)
-#        plt.ylabel('Mass[kg]', fontsize=12)
-#        plt.show()
+        plt.figure()   
+        plt.plot(self.xcg1, self.weight, color='blue', marker='o')
+        plt.plot(self.xcg2, self.weight, color='green', marker='o')
+        #plt.hlines(Weight[23],min(xcg), max(xcg),'r')
+        #plt.hlines(Weight[45],min(xcg), max(xcg), 'r')
+        #plt.hlines(self.weight[-1],min(self.xcg1), max(self.xcg2), 'r')
+        #plt.hlines(self.weight[-2],min(self.xcg1), max(self.xcg2), 'r')
+        plt.vlines(min(self.xcg1)-0.02,self.weight[0], self.weight[-1], 'k')
+        plt.vlines(max(self.xcg2)+0.02,self.weight[0], self.weight[-1], 'k')
+        plt.title('C.g. location for configuration: %i' %self.config, fontsize=14)
+        plt.xlabel('Center of gravity location from nose [m]', fontsize=12)
+        plt.ylabel('Mass[kg]', fontsize=12)
+        plt.show()
 
         return self.xcg1, self.xcg2, self.weight, self.xcg_max, self.xcg_min
     
@@ -138,19 +137,19 @@ class Loading_diagram:
             self.xcg_min = self.xcg_min - (l_cabin[1]-l_cabin[0])
 
         
-#        plt.figure()   
-#        plt.plot(self.xcg1, self.weight, color='blue', marker='o')
-#        plt.plot(self.xcg2, self.weight, color='green', marker='o')
-#        #plt.hlines(Weight[23],min(xcg), max(xcg),'r')
-#        #plt.hlines(Weight[45],min(xcg), max(xcg), 'r')
-#        #plt.hlines(self.weight[-1],min(self.xcg1), max(self.xcg2), 'r')
-#        #plt.hlines(self.weight[-2],min(self.xcg1), max(self.xcg2), 'r')
-#        plt.vlines(min(self.xcg1)-0.02,self.weight[0], self.weight[-1], 'k')
-#        plt.vlines(max(self.xcg2)+0.02,self.weight[0], self.weight[-1], 'k')
-#        plt.title('C.g. location for configuration: %i' %self.config, fontsize=14)
-#        plt.xlabel('Center of gravity location from nose [m]', fontsize=12)
-#        plt.ylabel('Mass[kg]', fontsize=12)
-#        plt.show()
+        plt.figure()   
+        plt.plot(self.xcg1, self.weight, color='blue', marker='o')
+        plt.plot(self.xcg2, self.weight, color='green', marker='o')
+        #plt.hlines(Weight[23],min(xcg), max(xcg),'r')
+        #plt.hlines(Weight[45],min(xcg), max(xcg), 'r')
+        #plt.hlines(self.weight[-1],min(self.xcg1), max(self.xcg2), 'r')
+        #plt.hlines(self.weight[-2],min(self.xcg1), max(self.xcg2), 'r')
+        plt.vlines(min(self.xcg1)-0.02,self.weight[0], self.weight[-1], 'k')
+        plt.vlines(max(self.xcg2)+0.02,self.weight[0], self.weight[-1], 'k')
+        plt.title('C.g. location for configuration: %i' %self.config, fontsize=14)
+        plt.xlabel('Center of gravity location from nose [m]', fontsize=12)
+        plt.ylabel('Mass[kg]', fontsize=12)
+        plt.show()
 
         return self.xcg1, self.xcg2, self.weight, self.xcg_max, self.xcg_min
 
