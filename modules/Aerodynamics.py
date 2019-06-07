@@ -160,7 +160,7 @@ class Drag:
         
         S_wet = 2*(2*((self.Ct + c_fuselage_wing) / 2 * (self.b/2 - self.d_f_outer/2)))
         
-        C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
+        C_D_0_w = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
         
         """ C_D_L_w """
         r_LE = 0.687                  #Leading Edge radius
@@ -179,11 +179,19 @@ class Drag:
         
         C_L_w = 1.05 * self.CLdes
         C_D_L_w = C_L_w**2 / (pi * self.A * e)
+        
+        C_D_w_sub = C_D_0_w + C_D_L_w
+        
+        """ Transsonic drag """
         C_D_w_wave = 0.002      #Figure 4.11
+        C_D_0_w_trans = C_D_0_w + C_D_w_wave
         
-        C_D_w = C_D_0_W + C_D_L_w + C_D_w_wave
+        CDL_CL2 = 0.025         #Figure 4.13
+        C_D_L_w_trans = CDL_CL2 * C_L_w**2.
         
-        return (C_D_w, C_D_0_W, C_D_L_w)
+        C_D_w_trans = C_D_0_w_trans + C_D_L_w_trans
+        
+        return (C_D_w_sub, C_D_w_trans)
         
                         
     def fuse_drag(self):
@@ -219,7 +227,7 @@ class Drag:
         
         CD_fus_trans = Rwf*(CDf_fus + CDp_fus) +CD_wave*(pi*(self.d_f_outer/2)**2)/self.S
         
-        return(CD0_fus, CDL_fus, CD_fus_sub, CD_fus_trans)
+        return(CD_fus_sub, CD_fus_trans)
 
     def empennage_drag(self):
         #Subsonic for horizontal tail(h), vertical tail(v) and canard(c)
@@ -304,8 +312,8 @@ class Drag:
         CDL_CL2 = 0.025     #Figure 4.13
         CL_h = self.CL_alpha_h*(alpha*(1-self.de_da_h)+self.i_h - self.alpha0L_h)
         CL_c = self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - self.alpha0L_c)
-        CDL_h_trans = CDL_CL2*CL_h
-        CDL_c_trans = CDL_CL2*CL_c
+        CDL_h_trans = CDL_CL2*CL_h**2
+        CDL_c_trans = CDL_CL2*CL_c**2
         CDL_v_trans = 0
         
         CD_h_trans = CD0_h_tail_trans + CDL_h_trans
@@ -450,6 +458,27 @@ class Drag:
         l_k = l_f_feet / k
         print (l_k)
         #From this, the cut-off Reynolds number follows
-        Re_cutoff = 1
-        
-        return (l_k)
+        Re_cutoff = 10**9 
+        """ From this, it follows that there is no extra drag due to surface roughness """
+        C_D_surface_roughness = 0
+        return (C_D_surface_roughness)
+    
+    
+class Lift:
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad):
+        self.S              = S
+        self.A              = A
+        self.rho            = rho
+        self.rho_0          = rho_0
+        self.l_f            = l_f
+        self.V_cruise       = V_cruise
+        self.mu_37          = mu_37
+        self.MAC            = MAC
+        self.Ct             = Ct
+        self.Cr             = Cr
+        self.b              = b
+        self.taper_ratio    = taper_ratio
+        self.d_f_outer      = d_f_outer
+        self.lambda_le_rad  = lambda_le_rad
+        self.lambda_4_rad   = lambda_4_rad
+        self.lambda_2_rad   = lambda_2_rad
