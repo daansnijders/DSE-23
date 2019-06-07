@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef, l_nacel, d_nacel, i_n):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef, l_nacel, d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -136,6 +136,11 @@ class Drag:
         self.delta_C_L_h    = delta_C_L_h
         self.delta_C_L_c    = delta_C_L_c
         self.S_ef           = S_ef
+        self.SWF            = SWF
+        self.SWF_LE         = SWF_LE
+        self.Delta_C_L_flap = Delta_C_L_flap 
+        self.b_flap         = b_flap
+        self.b_slat         = b_slat
 
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -355,9 +360,42 @@ class Drag:
         return(CD_nacel_sub, CD_nacel_trans)
         
         
-#    def flaps_drag(self):
+    def flaps_drag(self, C_D_0_W):
+        """ Flaps """
+        Cf_over_c = 0.35
+        Delta_CDp_TO = 0.05
+        Delta_CDp_land = 0.15
+        Delta_CD_prof_TO = Delta_CDp_TO*np.cos(self.lambda_4_rad)*self.SWF/self.S
+        Delta_CD_prof_land = Delta_CDp_land*np.cos(self.lambda_4_rad)*self.SWF/self.S
         
+        Bfi_b = (self.d_f_outer + 1)/self.b
+        Bfo_b = (self.d_f_outer + 1 + 2*self.b_flap)/self.b
+        K = 0.22
+        Delta_CD_i = K**2*self.Delta_C_L_flap**2*cos(self.lambda_4_rad)
         
+        K_int = 0.4
+        Delta_CD_int_TO = K_int*Delta_CD_prof_TO
+        Delta_CD_int_land = K_int*Delta_CD_prof_land
+        
+        CD_flap_TO = Delta_CD_prof_TO + Delta_CD_i + Delta_CD_int_TO
+        CD_flap_land = Delta_CD_prof_land + Delta_CD_i + Delta_CD_int_land
+        
+        """ Krueger """
+        Cs_over_c = 1.1
+        Delta_CDp_LE = C_D_0_W*Cs_over_c
+        Delta_CD_prof_LE = Delta_CDp_LE*np.cos(self.lambda_4_rad)*self.SWF_LE/self.S
+        
+        Delta_CL_krug = 0.1
+        Bfi_b_LE = (self.d_f_outer + 1)/self.b
+        Bfo_b_LE = (self.d_f_outer + 1 + 2*self.b_slat)/self.b
+        K_LE = 0.16
+        Delta_CD_i_LE = K_LE**2*Delta_CL_krug**2*cos(self.lambda_4_rad)
+        
+        K_int_LE = 0.1
+        Delta_CD_int_LE = K_int_LE*Delta_CD_prof_LE
+        
+        CD_slat = Delta_CD_prof_LE + Delta_CD_i_LE + Delta_CD_int_LE
+        return(CD_flap_TO, CD_flap_land, CD_slat)
   
     def landinggear_drag(self):
         drag_par1 = self.x_nlg / self.D_nlg
