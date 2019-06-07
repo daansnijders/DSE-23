@@ -10,6 +10,9 @@ from inputs.constants import *
 from inputs.concept_1 import *
 from modules.Stability.Stability_runfile_empennage import x_cg_min1, x_cg_max1, x_le_MAC_range_perc, x_le_MAC_range
 from modules.Stability.Stability_runfile import x_cg_min, x_cg_max
+from modules.EXECUTE_FILE import *
+
+V_app = 70  #estimated by RB
 
 class empennage:
     def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, V_h, V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h):   
@@ -82,13 +85,14 @@ class empennage:
             ax2.plot(self.l, self.Sh_S1)
             ax2.plot(self.l, self.Sh_S2)
             ax2.plot(self.l, self.Sh_C1)
+            ax2.set( ylim =  (0,0.26))
             plt.show()
         
         """Put this on when iterating"""
         Sh_S = float(input("Input the optimal Sh/S ratio: "))
         x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0] 
         S_h = Sh_S * S
-        print (S_h)
+        #print (S_h)
         # =============================================================================
         # Horizontal tail - NACA 63 010
         # =============================================================================
@@ -102,8 +106,8 @@ class empennage:
         def get_x_h(l_f):
             return 0.9* l_f[0]
         
-        def get_b_h(S_h, A_h):
-            return np.sqrt(S_h*A_h)
+        def get_b(S, A):
+            return np.sqrt(S*A)
         
         def get_Cr_h(S_h, taper_ratio_h, b_h):
             return 2*S_h/((1+taper_ratio_h)*b_h) 
@@ -112,54 +116,67 @@ class empennage:
             return Cr_h * taper_ratio_h
         
         x_h = get_x_h(l_f)
-        b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
+        b_h = get_b(S_h, A_h)                                                     # [m] span horizontal tail
         Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
         Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
         
-        print (b_h)
-        print (Cr_h)
-        print (Ct_h)
-        print (x_h)
+#        print (b_h)
+#        print (Cr_h)
+#        print (Ct_h)
+#        print (x_h)
 
         # =============================================================================
         # Vertical tail - NACA 63 012
         # =============================================================================
                 
-        
         V_v = 0.1                                                               # [-] volume vertical tail
-        A_v = 1.9                                                               # [-] aspect ratio vertical tail
+        A_v = 1.5                                                               # [-] aspect ratio vertical tail
         taper_ratio_v = 0.375                                                   # [-] taper ratio vertical tail
         lambda_v_le_rad = np.deg2rad(40)                                        # [rad] leading edge sweep angle vertical tail
         t_c_v = 0.12                                                            # [-] tickness over chord ratio vertical tail
         
         def get_S_v(S, b, x_cg, V_v, x_v):
-            return [V_v*S* b / (x_v[i] - x_cg[i]) for i in range(3)]
-         
-        def get_b_v(S_v, A_v):
-            return [np.sqrt(S_v*A_v) for i in range(3)]
+            return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]
         
-        def get_Cr_v(S_v, taper_ratio_v, b_v):
-            return [2*S_v/((1+taper_ratio_v)*b_v[i]) for i in range(3)]
+        def get_Cr(S, taper_ratio, b):
+            return 2*S/((1+taper_ratio)*b)
         
-        def get_Ct_v(Cr_v, taper_ratio_v):
-            return [Cr_v[i] * taper_ratio_v for i in range(3)]
+        def get_Ct(Cr, taper_ratio):
+            return Cr * taper_ratio
         
-        S_v = max(get_S_v(S, b, x_cg, V_v, x_le_v))                             # [m^2] surface area vertical tail
-        b_v = get_b_v(S_v, A_v)                                                 # [m] span vertical tail
-        Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                # [m] root chord lengh vertical tail
-        Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                    # [m] tip chord length vertical tail
+        def get_lambda_4_rad_from_lambda_le(lambda_le_rad,Cr,b,taper_ratio):
+            lambda_4_rad= np.arctan(np.tan(lambda_le_rad)+Cr/(2*b)*(taper_ratio-1))
+            return lambda_4_rad
+        
+        def get_lambda_2_rad(lambda_4_rad,A,taper_ratio):
+            return np.arctan(np.tan(lambda_4_rad)-1/A*(1-taper_ratio)/(1+taper_ratio))
+        
+        #print(get_S_v(S, b, x_cg, V_v, x_le_v))
+        S_v = min(get_S_v(S, b, x_cg, V_v, config1_cg.x_cg_vtail))              # [m^2] surface area vertical tail
+        b_v = get_b(S_v, A_v)                                                   # [m] span vertical tail
+        Cr_v = get_Cr(S_v, taper_ratio_v, b_v)                                  # [m] root chord lengh vertical tail
+        Ct_v = get_Ct(Cr_v, taper_ratio_v)                                      # [m] tip chord length vertical tail
         
         
         N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
+        l_v = 0.9*l_f[0] - x_le_MAC - 0.25*MAC                                  # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
 
         C_y_max = 0.836                                                         # [-] maximum airfoil lift coefficient
-        Y_v_max = C_y_max * 0.5*rho*V_cruise**2 * S_v                           # [N] force exerted by the vertical tail
-        l_v = [0.9*l_f[i] - x_le_MAC[i] - 0.25*MAC for i in range(3)]           # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
-        N_v = - Y_v * l_v                                                       # [N*m] moment caused by the vertical tail
+        Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * S_v                            # [N] force exerted by the vertical tail
+        Y_v_req = N_e/l_v                                                       # [N] force required by the vertical tail
+        C_y_req = Y_v_req/(0.5*rho_0*V_app**2*S_v)                              # [-] lift coefficient required vtail
+        
+        beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
+        beta_req = C_y_req / C_y_max * beta_max
+        N_v_max = - Y_v_max * l_v                                               # [N*m] moment caused by the vertical tail
+
+        assert N_e < -N_v_max
+        print(S_v,b_v)
+        print(beta_req)
 
 
         
-        print(S_v)
+        
 
         lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
         lambda_v_2_rad = get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
