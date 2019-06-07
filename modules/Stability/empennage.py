@@ -88,14 +88,16 @@ class empennage:
         Sh_S = float(input("Input the optimal Sh/S ratio: "))
         x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0] 
         S_h = Sh_S * S
-        
+        print (S_h)
         # =============================================================================
-        # Horizontal tail
+        # Horizontal tail - NACA 63 010
         # =============================================================================
 
-        V_h = 1.28                                                              # [-] volume horizontal tail
+        
         A_h = 4.95                                                              # [-] aspect ratio horizontal tail
         taper_ratio_h = 0.39                                                    # [-] taper ratio horizontal tail
+        lambda_h_le_rad = np.deg2rad(34)                                        # [rad] leading edge sweep angle horizontal tail 
+        t_c_h = 0.10                                                             # [-] tickness over chord ratio horizontal tail
         
         def get_x_h(l_f):
             return 0.9* l_f[0]
@@ -109,14 +111,14 @@ class empennage:
         def get_Ct_h(Cr_h, taper_ratio_h):
             return Cr_h * taper_ratio_h
         
-        #b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
-        #Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
-        #Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
+        b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
+        Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
+        Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
         
         
 
         # =============================================================================
-        # Vertical tail
+        # Vertical tail - NACA 63 012
         # =============================================================================
                 
         
@@ -124,6 +126,7 @@ class empennage:
         A_v = 1.9                                                               # [-] aspect ratio vertical tail
         taper_ratio_v = 0.375                                                   # [-] taper ratio vertical tail
         lambda_v_le_rad = np.deg2rad(40)                                        # [rad] leading edge sweep angle vertical tail
+        t_c_v = 0.12                                                            # [-] tickness over chord ratio vertical tail
         
         def get_S_v(S, b, x_cg, V_v, x_v):
             return [V_v*S* b / (x_v[i] - x_cg[i]) for i in range(3)]
