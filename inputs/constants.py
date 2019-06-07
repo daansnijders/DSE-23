@@ -34,7 +34,8 @@ R=287.05                                                                        
 T_0=288.15                                                                      # [K] ISA temperature at sea level
 p_0=101325                                                                      # [Pa] ISA pressure at sea level
 rho_0=1.225                                                                     # [kg/m^3] ISA density at sea level
-g=9.80665                                                                       # [m/s^2] gravitational acceleration
+g=9.80665 
+a_sl=343                                                                      # [m/s^2] gravitational acceleration
 
 mu_37 = 0.0000143226                                                            # [Pa*s] Dynamic Viscosity at 37000ft
 mu_sl = 0.00001789                                                              # [Pa*s] Dynamic Viscosity at sea level
