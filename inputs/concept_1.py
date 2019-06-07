@@ -158,13 +158,13 @@ Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m] tip chord length vertical tail
 
 lambda_h_le_rad = np.deg2rad(34)                                                # [rad] leading edge sweep angle horizontal tail
-lambda_h_4_rad= get_lambda_4_rad_from_lambda_le(lambda_h_le_rad,Cr_h,b_h,taper_ratio_h)
-lambda_h_2_rad=get_lambda_2_rad(lambda_h_4_rad,A_h,taper_ratio_h)
+lambda_h_4_rad= get_lambda_4_rad_from_lambda_le(lambda_h_le_rad,Cr_h,b_h,taper_ratio_h) # [rad] quarter chord sweep angle
+lambda_h_2_rad=get_lambda_2_rad(lambda_h_4_rad,A_h,taper_ratio_h)               # [rad] half chord sweep angle
 
 
 lambda_v_le_rad = np.deg2rad(40)                                                # [rad] leading edge sweep angle vertical tail
-lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
-lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
+lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v) # [rad] quarter chord sweep angle
+lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)               # [rad] half chord sweep angle
 
 # engine specifics
 x_engine = x_le_MAC                                                             # [m] x-location of the engine
@@ -175,7 +175,7 @@ i_e_rad = np.deg2rad(i_e)                                                       
 #undercarriage
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
-weight_distribution = 0.16                                                     # [-] weight percentage on nose wheel
+weight_distribution = 0.16                                                      # [-] weight percentage on nose wheel
 z_engine_clearance = z_engine - d_eng/2                                         # [m] z-location of lowest part of the engine
 
 theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
