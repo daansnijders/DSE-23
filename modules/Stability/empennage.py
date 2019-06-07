@@ -35,7 +35,7 @@ class empennage:
 
         self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
-        self.plot_stability_horitail(False)
+        self.plot_stability_horitail(True)
 
     
     def calc_xnp(self):
@@ -184,7 +184,7 @@ class empennage:
     
 e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
-#r = e2.plot_stability_horitail(False)   
+#r = e2.plot_stability_horitail(True)   
 
     
 
