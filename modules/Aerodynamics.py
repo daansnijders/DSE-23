@@ -420,8 +420,8 @@ class Drag:
         Re_f  = self.rho   * self.V_cruise * self.l_fueltank / self.mu_37
         Re_f0 = self.rho_0 * self.V_TO     * self.l_fueltank / self.mu_sl
         #RE at service ceiling results in (same for all configurations)
-        Rwf = 1.0               #Figure 4.1
-        Cf_fueltank = 0.0019    #Figure 4.3
+        Rwf = 0.95              #Figure 4.1
+        Cf_fueltank = 0.003     #Figure 4.3
         ratio = self.l_fueltank/self.d_fueltank
         Swet_fueltank = pi*self.d_fueltank*self.l_fueltank*(1-2/ratio)**(2/3)*(1+1/(ratio)**2)
         
@@ -436,14 +436,14 @@ class Drag:
         
         CDL_fueltank = eta*cdc*alpha**3*(Splf/self.S)
         
-        CD_fueltank_sub = CD0_fueltank + CDL_fueltank
+        CD_fueltank_sub = 2* (CD0_fueltank + CDL_fueltank)
         
         
         CDf_fueltank = Cf_fueltank*(Swet_fueltank/self.S)
         CDp_fueltank = Cf_fueltank*(60/(self.l_fueltank/self.d_fueltank)**3 + 0.0025*(self.l_fueltank/self.d_fueltank))*Swet_fueltank/self.S
         CD_wave = 0.005     #Figure 4.22
         
-        CD_fueltank_trans = Rwf*(CDf_fueltank + CDp_fueltank) +CD_wave*(pi*(self.d_fueltank/2)**2)/self.S
+        CD_fueltank_trans = 2*(Rwf*(CDf_fueltank + CDp_fueltank) +CD_wave*(pi*(self.d_fueltank/2)**2)/self.S)
 
         return(CD_fueltank_sub, CD_fueltank_trans)
         
@@ -468,3 +468,26 @@ class Drag:
         delta_C_D_P_lambda_4_0 = 0.015       #Figure 4.44
         
         delta_C_D_trim_prof = delta_C_D_P_lambda_4_0 * cos(self.lambda_4_rad) (self.S_ef / self.S_h)*(self.S_h / self.S)
+        
+        C_D_trim = delta_C_D_trim_lift + delta_C_D_trim_prof
+        
+        return (C_D_trim)
+    
+    def spoiler_drag(self):
+        delta_C_D_sp = 0.63
+        S_sp_i = [12,12]             #Area of the different spoilers
+        C_D_sp = [delta_C_D_sp * (x / self.S) for x in S_sp_i]
+        C_D_sp = sum(C_D_sp)
+        
+        return (C_D_sp)
+    
+    def surface_roughness_drag(self):
+        k = 0.00000167
+        ft_to_m=0.3048
+        l_f_feet = self.l_f / ft_to_m        
+        l_k = l_f_feet / k
+        print (l_k)
+        #From this, the cut-off Reynolds number follows
+        Re_cutoff = 1
+        
+        return (l_k)
