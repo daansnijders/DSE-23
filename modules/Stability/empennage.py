@@ -149,6 +149,16 @@ class empennage:
         Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                # [m] root chord lengh vertical tail
         Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                    # [m] tip chord length vertical tail
         
+        
+        N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
+
+        C_y_max = 0.836                                                         # [-] maximum airfoil lift coefficient
+        Y_v_max = C_y_max * 0.5*rho*V_cruise**2 * S_v                           # [N] force exerted by the vertical tail
+        l_v = [0.9*l_f[i] - x_le_MAC[i] - 0.25*MAC for i in range(3)]           # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
+        N_v = - Y_v * l_v                                                       # [N*m] moment caused by the vertical tail
+
+
+        
         print(S_v)
 
         lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
@@ -181,13 +191,6 @@ r = e2.plot_stability_horitail(False)
 
 
 
-
-
-#N_e = thrust_max/2 * y_engine                                                   # [N*m] moment caused by engine inoperative
-#
-#Y_v =0                                                                          # [N] force exerted by the vertical tail
-#l_v = [0.9*l_f[i] - x_le_MAC[i] - 0.25*MAC for i in range(3)]                   # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
-#N_v = - Y_v * l_v                                                               # [N*m] moment caused by the vertical tail
 
 
 #alpha0 = np.deg2rad(-5)
