@@ -116,10 +116,10 @@ class empennage:
         Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
         Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
         
-        print (b_h)
-        print (Cr_h)
-        print (Ct_h)
-        print (x_h)
+#        print (b_h)
+#        print (Cr_h)
+#        print (Ct_h)
+#        print (x_h)
 
         # =============================================================================
         # Vertical tail - NACA 63 012
