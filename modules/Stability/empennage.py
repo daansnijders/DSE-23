@@ -111,11 +111,15 @@ class empennage:
         def get_Ct_h(Cr_h, taper_ratio_h):
             return Cr_h * taper_ratio_h
         
+        x_h = get_x_h(l_f)
         b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
         Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
         Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
         
-        
+        print (b_h)
+        print (Cr_h)
+        print (Ct_h)
+        print (x_h)
 
         # =============================================================================
         # Vertical tail - NACA 63 012
