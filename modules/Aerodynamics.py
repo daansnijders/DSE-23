@@ -196,7 +196,7 @@ class Drag:
         
         C_D_w_trans = C_D_0_w_trans + C_D_L_w_trans
         
-        return (C_D_w_sub, C_D_w_trans)
+        return (C_D_w_sub, C_D_w_trans, C_D_0_w)
         
                         
     def fuse_drag(self):
@@ -470,12 +470,15 @@ class Drag:
 #        e_h = 0.75         #if T-tail
         e_c = 0.5
         
-        delta_C_D_trim_lift = ((self.delta_C_L_h)**2 / (pi * self.A_h * e_h)) * self.S / self.S_h + ((delta_C_L_c)**2 / (pi * self.A_c * e_c)) * self.S / self.S_c
+        if self.S_c == 0:
+            delta_C_D_trim_lift = ((self.delta_C_L_h)**2 / (pi * self.A_h * e_h)) * self.S / self.S_h
+        else: 
+            delta_C_D_trim_lift = ((self.delta_C_L_h)**2 / (pi * self.A_h * e_h)) * self.S / self.S_h + ((delta_C_L_c)**2 / (pi * self.A_c * e_c)) * self.S / self.S_c
         
         #It follows that 
         delta_C_D_P_lambda_4_0 = 0.015       #Figure 4.44
         
-        delta_C_D_trim_prof = delta_C_D_P_lambda_4_0 * cos(self.lambda_4_rad) (self.S_ef / self.S_h)*(self.S_h / self.S)
+        delta_C_D_trim_prof = delta_C_D_P_lambda_4_0 * cos(self.lambda_4_rad) * (self.S_ef / self.S_h)*(self.S_h / self.S)
         
         C_D_trim = delta_C_D_trim_lift + delta_C_D_trim_prof
         
