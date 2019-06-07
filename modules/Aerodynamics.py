@@ -73,7 +73,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef, l_nacel, d_nacel, i_n):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da_h, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef, l_nacel, d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -136,6 +136,11 @@ class Drag:
         self.delta_C_L_h    = delta_C_L_h
         self.delta_C_L_c    = delta_C_L_c
         self.S_ef           = S_ef
+        self.SWF            = SWF
+        self.SWF_LE         = SWF_LE
+        self.Delta_C_L_flap = Delta_C_L_flap 
+        self.b_flap         = b_flap
+        self.b_slat         = b_slat
 
     def wing_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
@@ -160,7 +165,7 @@ class Drag:
         
         S_wet = 2*(2*((self.Ct + c_fuselage_wing) / 2 * (self.b/2 - self.d_f_outer/2)))
         
-        C_D_0_W = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
+        C_D_0_w = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
         
         """ C_D_L_w """
         r_LE = 0.687                  #Leading Edge radius
@@ -179,11 +184,19 @@ class Drag:
         
         C_L_w = 1.05 * self.CLdes
         C_D_L_w = C_L_w**2 / (pi * self.A * e)
+        
+        C_D_w_sub = C_D_0_w + C_D_L_w
+        
+        """ Transsonic drag """
         C_D_w_wave = 0.002      #Figure 4.11
+        C_D_0_w_trans = C_D_0_w + C_D_w_wave
         
-        C_D_w = C_D_0_W + C_D_L_w + C_D_w_wave
+        CDL_CL2 = 0.025         #Figure 4.13
+        C_D_L_w_trans = CDL_CL2 * C_L_w**2.
         
-        return (C_D_w, C_D_0_W, C_D_L_w)
+        C_D_w_trans = C_D_0_w_trans + C_D_L_w_trans
+        
+        return (C_D_w_sub, C_D_w_trans)
         
                         
     def fuse_drag(self):
@@ -219,7 +232,7 @@ class Drag:
         
         CD_fus_trans = Rwf*(CDf_fus + CDp_fus) +CD_wave*(pi*(self.d_f_outer/2)**2)/self.S
         
-        return(CD0_fus, CDL_fus, CD_fus_sub, CD_fus_trans)
+        return(CD_fus_sub, CD_fus_trans)
 
     def empennage_drag(self):
         #Subsonic for horizontal tail(h), vertical tail(v) and canard(c)
@@ -304,8 +317,8 @@ class Drag:
         CDL_CL2 = 0.025     #Figure 4.13
         CL_h = self.CL_alpha_h*(alpha*(1-self.de_da_h)+self.i_h - self.alpha0L_h)
         CL_c = self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - self.alpha0L_c)
-        CDL_h_trans = CDL_CL2*CL_h
-        CDL_c_trans = CDL_CL2*CL_c
+        CDL_h_trans = CDL_CL2*CL_h**2
+        CDL_c_trans = CDL_CL2*CL_c**2
         CDL_v_trans = 0
         
         CD_h_trans = CD0_h_tail_trans + CDL_h_trans
@@ -347,9 +360,42 @@ class Drag:
         return(CD_nacel_sub, CD_nacel_trans)
         
         
-#    def flaps_drag(self):
+    def flaps_drag(self, C_D_0_W):
+        """ Flaps """
+        Cf_over_c = 0.35
+        Delta_CDp_TO = 0.05
+        Delta_CDp_land = 0.15
+        Delta_CD_prof_TO = Delta_CDp_TO*np.cos(self.lambda_4_rad)*self.SWF/self.S
+        Delta_CD_prof_land = Delta_CDp_land*np.cos(self.lambda_4_rad)*self.SWF/self.S
         
+        Bfi_b = (self.d_f_outer + 1)/self.b
+        Bfo_b = (self.d_f_outer + 1 + 2*self.b_flap)/self.b
+        K = 0.22
+        Delta_CD_i = K**2*self.Delta_C_L_flap**2*cos(self.lambda_4_rad)
         
+        K_int = 0.4
+        Delta_CD_int_TO = K_int*Delta_CD_prof_TO
+        Delta_CD_int_land = K_int*Delta_CD_prof_land
+        
+        CD_flap_TO = Delta_CD_prof_TO + Delta_CD_i + Delta_CD_int_TO
+        CD_flap_land = Delta_CD_prof_land + Delta_CD_i + Delta_CD_int_land
+        
+        """ Krueger """
+        Cs_over_c = 1.1
+        Delta_CDp_LE = C_D_0_W*Cs_over_c
+        Delta_CD_prof_LE = Delta_CDp_LE*np.cos(self.lambda_4_rad)*self.SWF_LE/self.S
+        
+        Delta_CL_krug = 0.1
+        Bfi_b_LE = (self.d_f_outer + 1)/self.b
+        Bfo_b_LE = (self.d_f_outer + 1 + 2*self.b_slat)/self.b
+        K_LE = 0.16
+        Delta_CD_i_LE = K_LE**2*Delta_CL_krug**2*cos(self.lambda_4_rad)
+        
+        K_int_LE = 0.1
+        Delta_CD_int_LE = K_int_LE*Delta_CD_prof_LE
+        
+        CD_slat = Delta_CD_prof_LE + Delta_CD_i_LE + Delta_CD_int_LE
+        return(CD_flap_TO, CD_flap_land, CD_slat)
   
     def landinggear_drag(self):
         drag_par1 = self.x_nlg / self.D_nlg
@@ -450,6 +496,27 @@ class Drag:
         l_k = l_f_feet / k
         print (l_k)
         #From this, the cut-off Reynolds number follows
-        Re_cutoff = 1
-        
-        return (l_k)
+        Re_cutoff = 10**9 
+        """ From this, it follows that there is no extra drag due to surface roughness """
+        C_D_surface_roughness = 0
+        return (C_D_surface_roughness)
+    
+    
+class Lift:
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad):
+        self.S              = S
+        self.A              = A
+        self.rho            = rho
+        self.rho_0          = rho_0
+        self.l_f            = l_f
+        self.V_cruise       = V_cruise
+        self.mu_37          = mu_37
+        self.MAC            = MAC
+        self.Ct             = Ct
+        self.Cr             = Cr
+        self.b              = b
+        self.taper_ratio    = taper_ratio
+        self.d_f_outer      = d_f_outer
+        self.lambda_le_rad  = lambda_le_rad
+        self.lambda_4_rad   = lambda_4_rad
+        self.lambda_2_rad   = lambda_2_rad
