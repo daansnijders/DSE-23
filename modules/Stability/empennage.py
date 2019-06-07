@@ -171,12 +171,6 @@ class empennage:
         N_v_max = - Y_v_max * l_v                                               # [N*m] moment caused by the vertical tail
 
         assert N_e < -N_v_max
-        print(S_v,b_v)
-        print(beta_req)
-
-
-        
-        
 
         lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
         lambda_v_2_rad = get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)

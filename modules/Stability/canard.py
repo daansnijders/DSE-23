@@ -14,6 +14,22 @@ class canard:
         self.additional_weight = weight_pass[config][-1] - weight_pass[0][-1]
         
     def size_canard(self):
+        # determine airfoil/angle of attack during cruise
+        
+        
+        # determine force required/surface area
+        S_c = self.additional_weight / (C_L_canard * 0.5 * rho * V_cruise**2)
+        
+        
+        
+        
+        # determine location by use of the moment caused by the aditional module
+        
+        
+        
+        
+        
+        # determine aspect ratio/ taper ratio/ sweep/ ect.
         
         
     
