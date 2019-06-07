@@ -47,18 +47,18 @@ class empennage:
         self.Cm = self.Cm_lesstail + self.Cm_tail
         return self.Cm    
     
-    def plot_stability_horitail(self):
+    def plot_stability_horitail(self, plot = True):
         """Stability excluding margin"""
-        a = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
-        b = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        aa = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        bb = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
         
         """Stability including margin"""
-        d = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
-        e = (self.x_ac - 0.05*self.c) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        dd = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
+        ee = (self.x_ac - 0.05*self.c) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.V_h/self.V)**2)
         
         """Controlability"""
-        f = self.CL_ah / (self.CL_h*self.l_h*(self.V_h/self.V)**2)
-        g = (self.c*self.Cm_ac-self.CL_ah*self.x_ac)/(self.CL_h*self.l_h*(self.V_h/self.V)**2)
+        ff = self.CL_ah / (self.CL_h*self.l_h*(self.V_h/self.V)**2)
+        gg = (self.c*self.Cm_ac-self.CL_ah*self.x_ac)/(self.CL_h*self.l_h*(self.V_h/self.V)**2)
         
         self.l = np.arange(x_le_MAC_range[0], (x_le_MAC_range[2]+self.c+0.01), 0.01)
         self.Sh_S1 = [] #stability xnp
@@ -66,23 +66,23 @@ class empennage:
         self.Sh_C1 = [] #controlability xac - Cmac/CL_ah
         
         for i in range (len(self.l)):
-            self.Sh_S1.append(a*self.l[i]-b)
-            self.Sh_S2.append(d*self.l[i]-e)
-            self.Sh_C1.append(f*self.l[i]+g)
-        
-        fig = plt.figure()
-        ax1 = fig.add_subplot(111)
-        ax1.plot(x_cg_min1, x_le_MAC_range_perc)
-        ax1.plot(x_cg_max1, x_le_MAC_range_perc)
-        ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
-        ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
-   
-        
-        ax2 = ax1.twinx()
-        ax2.plot(self.l, self.Sh_S1)
-        ax2.plot(self.l, self.Sh_S2)
-        ax2.plot(self.l, self.Sh_C1)
-        plt.show()
+            self.Sh_S1.append(aa*self.l[i]-bb)
+            self.Sh_S2.append(dd*self.l[i]-ee)
+            self.Sh_C1.append(ff*self.l[i]+gg)
+        if plot:
+            fig = plt.figure()
+            ax1 = fig.add_subplot(111)
+            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
+            ax1.plot(x_cg_max1, x_le_MAC_range_perc)
+            ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
+            ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
+       
+            
+            ax2 = ax1.twinx()
+            ax2.plot(self.l, self.Sh_S1)
+            ax2.plot(self.l, self.Sh_S2)
+            ax2.plot(self.l, self.Sh_C1)
+            plt.show()
         
         """Put this on when iterating"""
         Sh_S = float(input("Input the optimal Sh/S ratio: "))
@@ -93,8 +93,9 @@ class empennage:
         # Horizontal tail
         # =============================================================================
 
-        A_h = 4.95
-        taper_ratio_h = 0.39
+        V_h = 1.28                                                              # [-] volume horizontal tail
+        A_h = 4.95                                                              # [-] aspect ratio horizontal tail
+        taper_ratio_h = 0.39                                                    # [-] taper ratio horizontal tail
         
         def get_x_h(l_f):
             return 0.9* l_f[0]
@@ -108,9 +109,9 @@ class empennage:
         def get_Ct_h(Cr_h, taper_ratio_h):
             return Cr_h * taper_ratio_h
         
-        b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
-        Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
-        Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
+        #b_h = get_b_h(S_h, A_h)                                                     # [m] span horizontal tail
+        #Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                    # [m] root chord length horizontal tail
+        #Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                        # [m] tip chord length horizontal tail
         
         
 
@@ -118,9 +119,7 @@ class empennage:
         # Vertical tail
         # =============================================================================
                 
-        V_h = 1.28                                                              # [-] volume horizontal tail
-        A_h = 4.95                                                              # [-] aspect ratio horizontal tail
-        taper_ratio_h = 0.39                                                    # [-] taper ratio horizontal tail
+        
         V_v = 0.1                                                               # [-] volume vertical tail
         A_v = 1.9                                                               # [-] aspect ratio vertical tail
         taper_ratio_v = 0.375                                                   # [-] taper ratio vertical tail
@@ -137,11 +136,13 @@ class empennage:
         
         def get_Ct_v(Cr_v, taper_ratio_v):
             return [Cr_v[i] * taper_ratio_v for i in range(3)]
-    
+        
         S_v = max(get_S_v(S, b, x_cg, V_v, x_le_v))                             # [m^2] surface area vertical tail
         b_v = get_b_v(S_v, A_v)                                                 # [m] span vertical tail
         Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                # [m] root chord lengh vertical tail
         Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                    # [m] tip chord length vertical tail
+        
+        print(S_v)
 
         lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
         lambda_v_2_rad = get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
@@ -150,7 +151,7 @@ class empennage:
     
 e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
-r = e2.plot_stability_horitail()   
+r = e2.plot_stability_horitail(False)   
 
     
 
