@@ -524,4 +524,5 @@ class Lift:
         self.lambda_4_rad   = lambda_4_rad
         self.lambda_2_rad   = lambda_2_rad
         
-    def Airfoil_lift_flaps(self)
+    def Airfoil_lift_flaps(self):
+        
