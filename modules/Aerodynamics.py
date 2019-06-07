@@ -506,7 +506,7 @@ class Drag:
     
     
 class Lift:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,i_w):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -527,5 +527,14 @@ class Lift:
         self.C_l_alpha      = C_l_alpha
         self.alpha_C_l_max  = alpha_C_l_max
         self.C_l_max        = C_l_max
+        self.i_w            = i_w
+        
+        
     def Airfoil_lift_flaps(self):
+        
+        
+        
+    
+    def Wing_lift(self):
+        
         
