@@ -36,7 +36,7 @@ class empennage:
 
         self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
-        self.plot_stability_horitail(True)
+        self.plot_stability_horitail(False)
 
     
     def calc_xnp(self):
@@ -107,6 +107,9 @@ class empennage:
 
         S_h_S = y
         x_le_MAC_l_f = f_C1(f_min(y))
+        self.S_h = S_h_S * S
+        self.x_le_MAC = x_le_MAC_l_f * l_f[0]
+
         
         if plot:
             fig = plt.figure()
@@ -223,10 +226,7 @@ class empennage:
 
         assert N_e < -N_v_max                                                   # check if tail is capable enough
         
-
-
-        
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, x_le_MAC, S_h
+        return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, self.x_le_MAC, self.S_h
     
 e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
