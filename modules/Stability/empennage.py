@@ -73,7 +73,11 @@ class empennage:
         
         def interpolate(point1, point2, points):
             dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
-            return dydx
+            b = point1[1] - dydx * point1[0]
+            
+            return dydx,b
+        
+        print(interpolate([0,-1],[1,-2],2))
         
         
         for i in range (len(self.l)):
