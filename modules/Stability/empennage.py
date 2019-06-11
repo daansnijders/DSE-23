@@ -126,6 +126,8 @@ class empennage:
 #        print (Cr_h)
 #        print (Ct_h)
 #        print (x_h)
+        
+        
 
         # =============================================================================
         # Vertical tail - NACA 63 012
