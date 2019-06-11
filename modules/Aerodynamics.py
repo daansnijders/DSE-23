@@ -560,26 +560,7 @@ class Lift:
         
         delta_cl_krueger = cld*df*c_prime_k
         
-<<<<<<< HEAD
-    
-    def Wing_lift(self):
-#        alpha_w = alpha - self.i_w
-        
-        alpha_0_l_m75_m30 = 0.033               #Figure 8.42
-        
-        delta_alpha_0 = (-0.343 - 0.398)/2      #Figure 8.41
-        alpha_0_L_w = (self.alpha_0_l + delta_alpha_0 * self.wing_twist) * (alpha_0_l_m75_m30)
-        
-        C_l_alpha_M75 = self.C_l_alpha / sqrt(1 - self.M_cruise**2)
-        beta = sqrt(1-self.M_cruise**2)      # Prandtl-Glauert compressibility correction factor
-        k = C_l_alpha_M75 / (2*pi / beta)    # 
-        CL_alpha_w = (2*pi*self.A)/(2 + sqrt(4 + (self.A*beta/k)**2 * (1+(tan(self.lambda_2_rad)**2)/beta**2)))
-        
-        """ Determining the spanwise lift distribution """
-#        H_v = d_v * (self.A * beta / k) * 
-        
-=======
-        #lift curve slope
+         #lift curve slope
         c_prime_tot = 1.3 #c_prime and c_prime_k
         clalpha_flaps = c_prime_tot*self.C_l_alpha
         
@@ -598,6 +579,36 @@ class Lift:
         delta_clmax_krueger = cldmax*eta_max*df_rad*c_prime_k
         
         return(delta_cl_flap, delta_cl_krueger, clalpha_flaps, delta_clmax_flap, delta_clmax_krueger)
+       
+    
+    def Wing_lift(self):
+#        alpha_w = alpha - self.i_w
         
-#    def Wing_lift(self):
->>>>>>> 6c25a78e04a59c874a0fea9e9ae298c4b099034f
+        alpha_0_l_m75_m30 = 0.033               #Figure 8.42
+        
+        delta_alpha_0 = (-0.343 - 0.398)/2      #Figure 8.41
+        alpha_0_L_w = (self.alpha_0_l + delta_alpha_0 * self.wing_twist) * (alpha_0_l_m75_m30)
+        
+        C_l_alpha_M75 = self.C_l_alpha / sqrt(1 - self.M_cruise**2)
+        beta = sqrt(1-self.M_cruise**2)      # Prandtl-Glauert compressibility correction factor
+        k = C_l_alpha_M75 / (2*pi / beta)    # 
+        CL_alpha_w = (2*pi*self.A)/(2 + sqrt(4 + (self.A*beta/k)**2 * (1+(tan(self.lambda_2_rad)**2)/beta**2)))
+        
+        """ Determining the spanwise lift distribution """
+#        H_v = d_v * (self.A * beta / k) * 
+
+
+#    def Wing_lift_flaps(self):
+        
+        
+        
+#    def Airplane_lift(self): 
+        
+        
+        
+#    def Airplane_lift_flaps(self):
+        
+        
+        
+        
+
