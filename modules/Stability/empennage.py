@@ -135,11 +135,6 @@ class empennage:
             
             plt.show()
         
-        """Put this on when iterating"""
-        Sh_S = 0.15 # float(input("Input the optimal Sh/S ratio: "))
-        x_le_MAC = 0.4 #float(input("Input the optimal Xlemac/Lf: ")) * l_f[0] 
-        S_h = Sh_S * S
-        #print (S_h)
         # =============================================================================
         # Horizontal tail - NACA 63 010
         # =============================================================================
