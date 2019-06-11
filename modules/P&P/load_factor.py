@@ -12,7 +12,7 @@ from inputs.concept_1 import *
 # look at cs-25 gusts
 
 # inputs:
-i = 0 # select configuration
+i = 2 # select configuration
 
 C_L_max = CLmax[i]                                                                   # [-]
 C_L_min = 1.5       # update with anique value                                                               # [-]
@@ -96,6 +96,7 @@ def calc_gust_D(W_S,MAC,rho,H_ft,V_D,C_L_alpha,g):
 #
 #
 #     return n_lim_B
+
 
 V_S = calc_V_S(W_S[0],C_L_max,C_D_C_L_max,rho)                                  # [m/s]
 n_lim_pos = calc_n_lim_pos(MTOW)                                                # [-]
@@ -257,3 +258,4 @@ ax.text(V_D, 2.95, 'V_D')
 
 ax.set_xlabel('V [m/s]')
 ax.set_ylabel('n [-]')
+plt.show()

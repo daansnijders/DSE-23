@@ -13,7 +13,7 @@ req_approach_EPNdB=89.9
 req_lateral_TO_EPNdB=86
 experimental_dBA_to_EPNdB=1.15503
 
-M_TO=V_TO[0]/a_sl
+M_TO=V_TO[2]/a_sl
 
 
 d_mw=1.5 #[m]
