@@ -213,9 +213,9 @@ class empennage:
         l_v = 0.9*l_f[0] - x_le_MAC - 0.25*MAC                                  # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
 
         C_y_max = 0.836                                                         # [-] maximum airfoil lift coefficient
-        Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * self.S_v                            # [N] force exerted by the vertical tail
+        Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * self.S_v                       # [N] force exerted by the vertical tail
         Y_v_req = N_e/l_v                                                       # [N] force required by the vertical tail
-        C_y_req = Y_v_req/(0.5*rho_0*V_app**2*self.S_v)                              # [-] lift coefficient required vtail
+        C_y_req = Y_v_req/(0.5*rho_0*V_app**2*self.S_v)                         # [-] lift coefficient required vtail
         
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
