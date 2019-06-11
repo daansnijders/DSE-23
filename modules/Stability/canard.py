@@ -76,6 +76,6 @@ class canard():
         
         # determine aspect ratio/ taper ratio/ sweep/ ect.
         
-c = canard(weight_pass,2, 1.3)
+c = canard(weight_pass,3, 1.3)
 
 
