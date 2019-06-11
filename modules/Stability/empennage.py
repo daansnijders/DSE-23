@@ -74,10 +74,14 @@ class empennage:
         def interpolate(point1, point2, points):
             dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
             b = point1[1] - dydx * point1[0]
-            
-            return dydx,b
+            x_list = np.linspace(point1[0],point2[0],points)
+            y_list = np.linspace(point1[1],point2[1],points)
+            return x_list,y_list
         
-        print(interpolate([0,-1],[1,-2],2))
+        x_list,y_list =interpolate([0,-1],[1,-2],10)
+        plt.scatter(x_list,y_list)
+        
+        
         
         
         for i in range (len(self.l)):

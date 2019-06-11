@@ -64,6 +64,7 @@ class canard():
         
         margin = 1E-8
         print(F_c, F_w, F_h)
+        print(w,self.weight)
         assert -margin <= F_c + F_w + F_h - self.weight <= margin
         assert -margin <= l_c * F_c - l_cg * F_w - l_h * F_h + F_e * z_e <= margin
 
@@ -75,5 +76,5 @@ class canard():
         # determine aspect ratio/ taper ratio/ sweep/ ect.
         
         
-c = canard(weight_pass,2)
+c = canard(weight_pass,3)
 
