@@ -507,7 +507,7 @@ class Drag:
     
     
 class Lift:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,i_w,wing_twist):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,i_w,wing_twist, A_h, A_c,lambda_h_2_rad, lambda_c_2_rad, i_c, S_h, S_c):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -532,7 +532,13 @@ class Lift:
         self.C_l_max        = C_l_max
         self.i_w            = i_w
         self.wing_twist     = wing_twist
-        
+        self.A_h            = A_h
+        self.A_c            = A_c
+        self.lambda_h_2_rad = lambda_h_2_rad
+        self.lambda_c_2_rad = lambda_c_2_rad
+        self.i_c            = i_c
+        self.S_h            = S_h
+        self.S_c            = S_c
         
     def Airfoil_lift_flaps(self):
         #Lift increase due to double slotted flaps
@@ -633,9 +639,12 @@ class Lift:
         
         
         
-#    def Airplane_lift_flaps(self):
+    def Airplane_lift_flaps(self):
+        beta = sqrt(1-self.M_cruise**2)
+        CL_alpha_h = (2*pi*self.A_h)/(2 + sqrt(4+(self.A_h*beta/0.95)**2*(1+(np.tan(self.lambda_h_2_rad)**2)/beta**2)))
+        CL_alpha_c = (2*pi*self.A_c)/(2 + sqrt(4+(self.A_c*beta/0.95)**2*(1+(np.tan(self.lambda_c_2_rad)**2)/beta**2)))
+        etah = 0.9      #Source internet
+        etac = 1.0
         
-        
-        
-        
+        return()
 

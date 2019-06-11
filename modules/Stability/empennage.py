@@ -36,7 +36,7 @@ class empennage:
 
         self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
-        self.plot_stability_horitail(False)
+        self.plot_stability_horitail(True)
 
     
     def calc_xnp(self):
@@ -71,23 +71,43 @@ class empennage:
         self.Sh_S2 = [] #stability xcg
         self.Sh_C1 = [] #controlability xac - Cmac/CL_ah
         
-        def interpolate(point1, point2, points):
-            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
-            b = point1[1] - dydx * point1[0]
-            x_list = np.linspace(point1[0],point2[0],points)
-            y_list = np.linspace(point1[1],point2[1],points)
-            return x_list,y_list
-        
-        x_list,y_list =interpolate([0,-1],[1,-2],10)
-        plt.scatter(x_list,y_list)
-        
-        
-        
-        
         for i in range (len(self.l)):
             self.Sh_S1.append(aa*self.l[i]-bb)
             self.Sh_S2.append(dd*self.l[i]-ee)
             self.Sh_C1.append(ff*self.l[i]+gg)
+        
+        
+        
+        def interpolate1(point1, point2):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            b = point1[1] - dydx * point1[0]
+            return lambda y: (y-b) / dydx
+        
+        def interpolate2(point1, point2):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            b = point1[1] - dydx * point1[0]
+            return lambda x: dydx * x + b
+        
+        f_min = interpolate1([x_cg_min1[0],x_le_MAC_range_perc[0]],[x_cg_min1[1],x_le_MAC_range_perc[1]])
+        f_max = interpolate1([x_cg_max1[0],x_le_MAC_range_perc[0]],[x_cg_max1[1],x_le_MAC_range_perc[1]])
+        
+        f_S2 = interpolate2([self.l[0],self.Sh_S2[0]],[self.l[-1],self.Sh_S2[-1]])
+        f_C1 = interpolate2([self.l[0],self.Sh_C1[0]],[self.l[-1],self.Sh_C1[-1]])
+        
+        diff = 1
+        diff1 = 2
+        y = 0.4215000000001215
+        while abs(diff1) >= abs(diff) and abs(f_C1(f_min(y)) - f_S2(f_max(y))) > 0.000001:
+            diff1 = f_S2(f_max(y))-f_C1(f_min(y))
+            y += 0.0000001            
+            if f_min(y) > x_cg_min1[1]:
+                f_min = interpolate1([x_cg_min1[1],x_le_MAC_range_perc[1]],[x_cg_min1[2],x_le_MAC_range_perc[2]])
+                f_max = interpolate1([x_cg_max1[1],x_le_MAC_range_perc[1]],[x_cg_max1[2],x_le_MAC_range_perc[2]])
+            diff = f_S2(f_max(y))-f_C1(f_min(y))
+
+        S_h_S = y
+        x_le_MAC_l_f = f_C1(f_min(y))
+        
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
@@ -96,13 +116,19 @@ class empennage:
             ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
             ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
             ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
-       
             
+            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
+            ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
+    
             ax2 = ax1.twinx()
             ax2.plot(self.l, self.Sh_S1)
             ax2.plot(self.l, self.Sh_S2)
             ax2.plot(self.l, self.Sh_C1)
-            ax2.set( ylim =  (0,0.26),ylabel = 'S_h/S')
+            ax2.set( ylim = [0,0.2565], ylabel = 'S_h/S')
+            
+            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
+            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
+
             
             plt.show()
         
