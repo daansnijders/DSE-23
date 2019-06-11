@@ -10,6 +10,7 @@ from inputs.constants import *
 from inputs.concept_1 import *
 from modules.Stability.Stability_runfile_empennage import x_cg_min1, x_cg_max1, x_le_MAC_range_perc, x_le_MAC_range
 from modules.Stability.Stability_runfile import x_cg_min, x_cg_max
+from modules.Stability.Stability_runfile import weight_pass
 from modules.EXECUTE_FILE import *
 
 V_app = 70  #estimated by RB
@@ -136,6 +137,7 @@ class empennage:
 #        print (Cr_h)
 #        print (Ct_h)
 #        print (x_h)
+
 
         # =============================================================================
         # Vertical tail - NACA 63 012
