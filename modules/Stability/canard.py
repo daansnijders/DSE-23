@@ -10,7 +10,7 @@ from modules.EXECUTE_FILE import *
 
 class canard():
     def __init__ (self, weight_pass, config):
-        self.config = config                                                    # [-] configuration selection
+        self.config = config - 1                                                    # [-] configuration selection
         self.weight_pass = weight_pass                                          # [kg] mass increase per passenger
         self.additional_mass = weight_pass[self.config][-1] - weight_pass[0][-1] # [kg] mass difference between config 1 and 2/3
         self.additional_weight = self.additional_mass * g                       # [N] weight difference between config 1 and 2/3
