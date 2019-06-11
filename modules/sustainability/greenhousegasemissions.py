@@ -56,12 +56,14 @@ fuel_target_1500=E190_E1_1500*(1-CO_2_reduction/100) #for 1500 nm fuel consumpti
 Dp_Foo_NOx_caep6=-1.04+2*pressure_ratio
 Dp_Foo_NOx_caep8=-9.88+2*pressure_ratio
 
-
+def get_EI_NOX_fuelflow(fuel_flow):
+    EI_NOx=29.171*fuel_flow+3.8626
+    return EI_NOx
 
 def get_NOx_emissions_total(fuel_flow,time_in_flight_phase,EI_NOx):  #[g of NOx]
     return fuel_flow*time_in_flight_phase*EI_NOx 
 
-def get_Dp_Foo_NOx_specific(NOx_total,T):
+def get_Dp_Foo_NOx_specific(NOx_total,T):               #[g/kN]
     return NOx_total/T
 
 def get_CO2_emissions(M_fuel_burnt):
