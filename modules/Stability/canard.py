@@ -39,9 +39,13 @@ class canard():
         self.x_c = cg[0] + l_cutout - self.l_c                                   # [m] x-location of canard ac
         
         # determine location by use of the moment caused by the aditional module
-        
-            
-        
+    
+        w = weight_pass[0][-1] * g
+        L_h = (-w*(config1_cg.x_cg_wing - config1_cg_x) + thrust_max * (config1_cg_z - config1_cg.z_cg_engines))/-(-config1_cg.x_cg_wing + config1_cg_x + x_h - config1_cg_x)
+        L_w = w + L_h 
+        print (w)
+        print(L_w)
+        print (L_h)
         
         # determine aspect ratio/ taper ratio/ sweep/ ect.
         
