@@ -9,12 +9,13 @@ from modules.Stability.Stability_runfile import *
 from modules.EXECUTE_FILE import * 
 
 class canard():
-    def __init__ (self, weight_pass, config):
+    def __init__ (self, weight_pass, config, CL_c):
         self.config = config - 1                                                    # [-] configuration selection
         self.weight_pass = weight_pass                                          # [kg] mass increase per passenger
         self.additional_mass = weight_pass[self.config][-1] - weight_pass[0][-1] # [kg] mass difference between config 1 and 2/3
         self.additional_weight = self.additional_mass * g                       # [N] weight difference between config 1 and 2/3
         self.weight = self.weight_pass[self.config][-1] * g                     # [N] MTOW config
+        self.CL_c = CL_c                                                        # [-] CL canard
         
       
         config1_cg.calc_x_cg()
@@ -69,5 +70,5 @@ class canard():
         # determine aspect ratio/ taper ratio/ sweep/ ect.
         
         
-c = canard(weight_pass,2)
+c = canard(weight_pass,2, 1.3)
 
