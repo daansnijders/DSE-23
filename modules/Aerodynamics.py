@@ -506,13 +506,15 @@ class Drag:
     
     
 class Lift:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,i_w):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,i_w,wing_twist):
         self.S              = S
         self.A              = A
         self.rho            = rho
         self.rho_0          = rho_0
         self.l_f            = l_f
         self.V_cruise       = V_cruise
+        self.M_cruise       = M_cruise
+        self.V_TO           = V_TO
         self.mu_37          = mu_37
         self.MAC            = MAC
         self.Ct             = Ct
@@ -528,6 +530,7 @@ class Lift:
         self.alpha_C_l_max  = alpha_C_l_max
         self.C_l_max        = C_l_max
         self.i_w            = i_w
+        self.wing_twist     = wing_twist
         
         
     def Airfoil_lift_flaps(self):
@@ -536,5 +539,18 @@ class Lift:
         
     
     def Wing_lift(self):
+#        alpha_w = alpha - self.i_w
         
+        alpha_0_l_m75_m30 = 0.033               #Figure 8.42
+        
+        delta_alpha_0 = (-0.343 - 0.398)/2      #Figure 8.41
+        alpha_0_L_w = (self.alpha_0_l + delta_alpha_0 * self.wing_twist) * (alpha_0_l_m75_m30)
+        
+        C_l_alpha_M75 = self.C_l_alpha / sqrt(1 - self.M_cruise**2)
+        beta = sqrt(1-self.M_cruise**2)      # Prandtl-Glauert compressibility correction factor
+        k = C_l_alpha_M75 / (2*pi / beta)    # 
+        CL_alpha_w = (2*pi*self.A)/(2 + sqrt(4 + (self.A*beta/k)**2 * (1+(tan(self.lambda_2_rad)**2)/beta**2)))
+        
+        """ Determining the spanwise lift distribution """
+#        H_v = d_v * (self.A * beta / k) * 
         
