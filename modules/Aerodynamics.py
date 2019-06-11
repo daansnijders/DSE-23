@@ -531,10 +531,50 @@ class Lift:
         
         
     def Airfoil_lift_flaps(self):
+        #Lift increase due to double slotted flaps
+        #Wild guess for chord length flap one and two, together a little more than 0.35
+        c1 = 0.2        #0.2*c
+        c2 = 0.17       #0.17*c
+        Phi_TE_upper = np.arctan(10*0.03)
+        df1 = 40        #deg
+        df2 = 10        #deg
+        eta1 = 0.46     #Figure 8.20
+        eta2 = 0.38     #Figure 8.20
+        etat = 1.0      #Figure 8.22
+        cldf1 = 0.0605   #Figure 8.21
+        cldf2 = 0.054    #Figure 8.21
         
+        #Wild guess for chord extension due to flaps
+        c_a_prime = 1.13    #1.13*c
+        c_prime = 1.20      #1.20*c
+
+        delta_cl_flap = eta1*cldf1*df1*c_a_prime + eta2*etat*cldf2*df2*(1+(c_prime-c_a_prime))
         
+        #Lift increase due to Krueger flaps
+        cld = 0.0015    #Figure 8.26
+        df = 60         #Wild guess
+        c_prime_k = 1.1   
         
-    
-    def Wing_lift(self):
+        delta_cl_krueger = cld*df*c_prime_k
         
+        #lift curve slope
+        c_prime_tot = 1.3 #c_prime and c_prime_k
+        clalpha_flaps = c_prime_tot*self.C_l_alpha
         
+        #Cl max increase due to TE and LE devices
+        delclmax_base = 1.55    #Figure 8.31
+        k1 = 1.2                #Figure 8.32
+        k2 = 1.0                #Figure 8.33
+        k3 = 1.0                #Figure 8.34
+        delta_clmax_flap = delclmax_base*k1*k2*k3
+        
+        cldmax = 1.2            #Figure 8.35
+        r_LE = 0.687            #Leading Edge radius
+        eta_max = 0.82          #Figure 8.36
+        df_rad = np.deg2rad(df) 
+        
+        delta_clmax_krueger = cldmax*eta_max*df_rad*c_prime_k
+        
+        return(delta_cl_flap, delta_cl_krueger, clalpha_flaps, delta_clmax_flap, delta_clmax_krueger)
+        
+#    def Wing_lift(self):
