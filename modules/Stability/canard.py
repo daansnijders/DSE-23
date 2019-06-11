@@ -30,16 +30,17 @@ class canard():
         self.L_canard = self.additional_weight
         
         cg = [config1_cg.calc_x_cg(), config2_cg.calc_x_cg(), config3_cg.calc_x_cg()] # [m] x-location of the c.g.
-        moment_arm = cg[self.config] - cg[0]                                    # [m] distance between canard ac and c.g.
-        
+#        print (cg)
+        moment_arm = (cg[self.config] - cg[0]  - l_cutout)*-1                                  # [m] distance between canard ac and c.g.
+        print (moment_arm)
         moment = moment_arm * self.weight                                       # [N*m] moment caused by the c.g. shift
-        
-        self.l_c = moment / self.L_canard                                       # [m] required distance between canard and c.g.
-        self.x_c = cg[self.config] - self.l_c                                   # [m] x-location of canard ac
+        print(moment)        
+        self.l_c = moment / self.L_canard                                       # [m] required distance between canard and c.g.of config 1
+        self.x_c = cg[0] + l_cutout - self.l_c                                   # [m] x-location of canard ac
         
         # determine location by use of the moment caused by the aditional module
         
-        
+            
         
         
         # determine aspect ratio/ taper ratio/ sweep/ ect.
