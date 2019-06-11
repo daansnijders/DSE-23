@@ -7,6 +7,7 @@ Created on Mon Jun  3 14:23:05 2019
 
 from math import * 
 import numpy as np
+import matplotlib.pyplot as plt
 
 class HLD_class:
     def __init__(self,Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer):
@@ -596,6 +597,32 @@ class Lift:
         
         """ Determining the spanwise lift distribution """
 #        H_v = d_v * (self.A * beta / k) * 
+        L_b = np.array([(-0.293 + (-0.323 - -0.293)/2 * 1.5), (-0.204 + (-0.224 - -0.204)/2 * 1.5), (-0.012 + (-0.010 - -0.012)/2 * 1.5), (0.120 + (0.132 - 0.120)/2 * 1.5), (0.174 + (0.188 - 0.174)/2 * 1.5), (0.170 + (0.184 - 0.170)/2 * 1.5), (0.140 + (0.152 - 0.140)/2 * 1.5), (0.091 + (0.105 - 0.091)/2 * 1.5)])
+        L_a = np.array([(1.392 + (1.409 - 1.392)/2 * 1.5), (1.294 + (1.299 - 1.294)/2 * 1.5), (1.150 + (1.148 - 1.150)/2 * 1.5), (0.956 + (0.947 - 0.956)/2 * 1.5), (0.710 + (0.704 - 0.710)/2 * 1.5), (0.536 + (0.541 - 0.536)/2 * 1.5), (0.403 + (0.410 - 0.403)/2 * 1.5), (0.283 + (0.295 - 0.283)/2 * 1.5)])
+        y_b_2 = np.array([0,0.2,0.4,0.6,0.8,0.9,0.95,0.975])
+        
+        
+        x = self.taper_ratio * self.b/2 / (1 - self.taper_ratio)
+        h2 = self.b / 2 + x
+        h1 = h2 - y_b_2 * self.b/2
+        c = h1/h2*self.Cr
+        
+        eta = self.wing_twist
+        a_0 = self.C_l_alpha
+        
+        c_l_b1 = L_b * eta * a_0 * self.S / c / self.b
+        c_l_a1 = L_a * self.S / c / self.b
+        
+        f = 0.997
+        J = -0.38       #Figure 9  (Theory of Wing sections)
+        e = 0.982       #Figure 10 (Theory of Wing sections)
+        
+        plt.plot(y_b_2, c_l_a1)
+        plt.show
+        
+        
+        
+        
 
 
 #    def Wing_lift_flaps(self):
