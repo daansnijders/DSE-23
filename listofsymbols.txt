@@ -213,6 +213,26 @@ Zero lift drag fuselage				CD0_fus
 Lift induced drag fuselage			CDL_fus
 Subsonic total drag fuselage			CD_fus_sub
 Transonic total drag fuselage			CD_fus_trans
+Subsonic total drag wing 			CD_w_sub
+Transonic total drag wing			CD_w_rans
+Subsonic total drag horizontal tail		CD_h_sub
+Transonic total drag horizontal tail		CD_h_trans	
+Subsonic total drag vertical tail		CD_v_sub
+Transonic total drag vertical tail		CD_v_trans	
+Subsonic total drag canard			CD_c_sub
+Transonic total drag canard			CD_c_trans	
+Subsonic total drag nacelle			CD_nacel_sub
+Transonic total drag nacelle			CD_nacel_trans		
+Take-off total drag flaps			CD_flap_TO
+Landing total drag flaps			CD_flap_land
+Landing total drag slats			CD_slat
+Total drag landing gear				CD_gear
+Total drag windshield				CD_ws
+Subsonic total drag storage (fuel tank)		CD_store_sub
+Transonic total drag storage (fuel tank)	CD_store_trans
+Total trim drag					CD_trim
+Total spoiler drag				CD_spoiler
 
-
-									
+Total cruise drag (transonic)			CD_cruise
+Total take-off drag				CD_TO
+Total landing drag				CD_land					

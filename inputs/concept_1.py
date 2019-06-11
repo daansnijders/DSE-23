@@ -16,8 +16,8 @@ from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
 from modules.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
+from inputs.performance_inputs import *
 from inputs.constants import *
-
 
  
 #should move to constants
@@ -103,6 +103,7 @@ y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
+
 #canard parameters
 A_c = 6  
 b_c = [get_b(A_c,S_c[i]) for i in range(3)]
@@ -126,6 +127,8 @@ M_fuselage, x_cg_fuselage=get_mass_fuselage(MTOW,l_f)
 M_tail,x_cg_tail=get_mass_tail(MTOW,l_f)
 M_fuselage_group, x_cg_fuselage_group=get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail)
 x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group)
+
+x_le_w = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)
 
 x_cg_wing,x_cg_eng,x_cg_wing_group=get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )
 
@@ -158,13 +161,13 @@ Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m] tip chord length vertical tail
 
 lambda_h_le_rad = np.deg2rad(34)                                                # [rad] leading edge sweep angle horizontal tail
-lambda_h_4_rad= get_lambda_4_rad_from_lambda_le(lambda_h_le_rad,Cr_h,b_h,taper_ratio_h)
-lambda_h_2_rad=get_lambda_2_rad(lambda_h_4_rad,A_h,taper_ratio_h)
+lambda_h_4_rad= get_lambda_4_rad_from_lambda_le(lambda_h_le_rad,Cr_h,b_h,taper_ratio_h) # [rad] quarter chord sweep angle
+lambda_h_2_rad=get_lambda_2_rad(lambda_h_4_rad,A_h,taper_ratio_h)               # [rad] half chord sweep angle
 
 
 lambda_v_le_rad = np.deg2rad(40)                                                # [rad] leading edge sweep angle vertical tail
-lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
-lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
+lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v) # [rad] quarter chord sweep angle
+lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)               # [rad] half chord sweep angle
 
 # engine specifics
 x_engine = x_le_MAC                                                             # [m] x-location of the engine
@@ -175,7 +178,7 @@ i_e_rad = np.deg2rad(i_e)                                                       
 #undercarriage
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
-weight_distribution = 0.10                                                      # [-] weight percentage on nose wheel
+weight_distribution = 0.16                                                      # [-] weight percentage on nose wheel
 z_engine_clearance = z_engine - d_eng/2                                         # [m] z-location of lowest part of the engine
 
 theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
@@ -187,15 +190,30 @@ P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  
 P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
 
 x_mlg = get_x_mlg(z_cg,theta_rad,beta_rad, x_cg, stroke,l_f)                    # [m] x-location of the mlg
-z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg, l_f)                               # [m] z-location of the mlg
+x_mlg[1]=min(x_mlg)+l_cutout
+x_mlg[2]=min(x_mlg)+l_cutout
+z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg)                               # [m] z-location of the mlg
+z_mlg=max(z_mlg)
+
 
 l_m = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
 l_n = get_l_nw(l_m,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
 
-y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
-                  z_cg,z_mlg,l_n,l_m,y_engine,z_engine_clearance,d_eng)                         # [m] y-location of the mlg
-
 x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
+x_nlg=min(x_nlg)
+l_n=[x_cg[i]-x_nlg for i in range(3)]
+
+
+new_beta_rad=get_new_beta_config23(z_mlg,z_cg,l_m[1])
+new_beta_deg=new_beta_rad*180/pi
+#new_theta_rad=check_new_scrape_angle(l_f,x_mlg,d_f_outer,z_mlg)
+#new_theta_deg=[new_theta_rad[i]*180/pi for i in range(3)]
+
+y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
+               z_cg,z_mlg,l_n,l_m,y_engine,z_engine_clearance,d_eng)            # [m] y-location of the mlg
+#
+
+
 y_nlg = [0,0,0]                                                                 # [m] y-location of nlg
 z_nlg = z_mlg                                                                   # [m] z-location of nlg
 
