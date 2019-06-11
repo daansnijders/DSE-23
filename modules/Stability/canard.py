@@ -7,14 +7,16 @@ Created on Fri Jun  7 10:13:41 2019
 
 from modules.Stability.Stability_runfile import *
 from modules.EXECUTE_FILE import * 
+from modules.Stability.empennage import S_h
 
 class canard():
-    def __init__ (self, weight_pass, config):
+    def __init__ (self, weight_pass, config, CL_c):
         self.config = config - 1                                                    # [-] configuration selection
         self.weight_pass = weight_pass                                          # [kg] mass increase per passenger
         self.additional_mass = weight_pass[self.config][-1] - weight_pass[0][-1] # [kg] mass difference between config 1 and 2/3
         self.additional_weight = self.additional_mass * g                       # [N] weight difference between config 1 and 2/3
         self.weight = self.weight_pass[self.config][-1] * g                     # [N] MTOW config
+        self.CL_c = CL_c                                                        # [-] CL canard
         
       
         config1_cg.calc_x_cg()
@@ -40,26 +42,37 @@ class canard():
         self.x_c = cg_x[0] + l_cutout - self.l_c                                # [m] x-location of canard ac
     
         
-        x_c = 5                                                                 # [m] x-location of canard ac
+        x_c = 7.5                                                                 # [m] x-location of canard ac
         l_c = cg_x[self.config] - x_c
-        l_h = x_le_h[self.config] - cg_x[self.config]
+        l_h = x_le_h[0] + l_cutout - cg_x[self.config]
         l_cg = (x_le_MAC[self.config] + 0.25*MAC) - cg_x[self.config]
         z_e = cg_z[self.config] - z_engine
         F_e = thrust_max
-        print(x_le_h)
-        w = self.weight_pass[0][-1] * g
-        x_h = 0.9* l_f[0]
-        F_h = (-w*(config1_cg.x_cg_wing - config1_cg_x) + thrust_max * (config1_cg_z - config1_cg.z_cg_engines))/-(-config1_cg.x_cg_wing + config1_cg_x + x_h - config1_cg_x)
-        F_w = w + F_h 
         
+        w = self.weight_pass[0][-1] * g
+        x_h = x_le_h[0]
+        
+        F_h = (-w*((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) + thrust_max * (cg_z[0] - config1_cg.z_cg_engines))/-((x_le_MAC[0] + 0.25*MAC) - cg_x[0] - x_h + config1_cg_x)
+        F_w = w - F_h 
+        
+        margin = 1E-8
+        assert -margin <= -F_w * ((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) - F_h * (x_h - cg_x[0]) + F_e * (cg_z[0] - z_engine) <= margin
+        assert -margin <= F_w + F_h - w <= margin
+        
+        print(F_w,F_h)
         F_w = (l_c * (self.weight - F_h) - l_h * F_h + F_e * z_e) / (l_cg + l_c)
         F_c = -F_w + self.weight - F_h
-
         
         margin = 1E-8
         print(F_c, F_w, F_h)
-        assert -margin <= F_c + F_w - self.weight + F_h <= margin
+        print(w,self.weight)
+        assert -margin <= F_c + F_w + F_h - self.weight <= margin
         assert -margin <= l_c * F_c - l_cg * F_w - l_h * F_h + F_e * z_e <= margin
+        
+        
+        CL_h2 = F_h / (0.5*rho*V_cruise**2*S_h)
+        S_c = F_c / (0.5*rho*V_cruise**2*self.CL_c)
+        print (S_c)
 
         # determine location by use of the moment caused by the aditional module
     
@@ -68,6 +81,7 @@ class canard():
         
         # determine aspect ratio/ taper ratio/ sweep/ ect.
         
-        
-c = canard(weight_pass,2)
+c = canard(weight_pass,2, 0.5)
+
+
 
