@@ -7,7 +7,7 @@ Created on Fri Jun  7 10:13:41 2019
 
 from modules.Stability.Stability_runfile import *
 from modules.EXECUTE_FILE import * 
-from modules.Stability.empennage import S_h
+from modules.Stability.empennage import *
 
 class canard():
     def __init__ (self, weight_pass, config, CL_c):
@@ -70,7 +70,8 @@ class canard():
         assert -margin <= l_c * F_c - l_cg * F_w - l_h * F_h + F_e * z_e <= margin
         
         
-        CL_h2 = F_h / (0.5*rho*V_cruise**2*S_h)
+        CL_h2 = F_h / (0.5*rho*V_cruise**2*e2.S_h)
+        print (CL_h2)
         S_c = F_c / (0.5*rho*V_cruise**2*self.CL_c)
         print (S_c)
 
