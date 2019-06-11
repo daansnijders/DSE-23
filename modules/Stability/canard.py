@@ -7,6 +7,7 @@ Created on Fri Jun  7 10:13:41 2019
 
 from modules.Stability.Stability_runfile import *
 from modules.EXECUTE_FILE import * 
+from modules.Stability.empennage import S_h
 
 class canard():
     def __init__ (self, weight_pass, config, CL_c):
@@ -62,13 +63,17 @@ class canard():
         #F_w = (l_c * (self.weight - F_h) - l_h * F_h + F_e * z_e) / (l_cg + l_c)
         F_h = (l_c * (self.weight - F_w) - l_cg * F_w + F_e * z_e) / (l_h + l_c)
         F_c = -F_w + self.weight - F_h
-
         
         margin = 1E-8
         print(F_c, F_w, F_h)
         print(w,self.weight)
         assert -margin <= F_c + F_w + F_h - self.weight <= margin
         assert -margin <= l_c * F_c - l_cg * F_w - l_h * F_h + F_e * z_e <= margin
+        
+        
+        CL_h2 = F_h / (0.5*rho*V_cruise**2*S_h)
+        S_c = F_c / (0.5*rho*V_cruise**2*self.CL_c)
+        print (S_c)
 
         # determine location by use of the moment caused by the aditional module
     
