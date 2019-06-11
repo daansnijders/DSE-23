@@ -10,6 +10,7 @@ from inputs.constants import *
 from inputs.concept_1 import *
 from modules.Stability.Stability_runfile_empennage import x_cg_min1, x_cg_max1, x_le_MAC_range_perc, x_le_MAC_range
 from modules.Stability.Stability_runfile import x_cg_min, x_cg_max
+from modules.Stability.Stability_runfile import weight_pass
 from modules.EXECUTE_FILE import *
 
 V_app = 70  #estimated by RB
@@ -35,7 +36,7 @@ class empennage:
 
         self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
-        self.plot_stability_horitail(True)
+        self.plot_stability_horitail(False)
 
     
     def calc_xnp(self):
@@ -70,6 +71,11 @@ class empennage:
         self.Sh_S2 = [] #stability xcg
         self.Sh_C1 = [] #controlability xac - Cmac/CL_ah
         
+        def interpolate(point1, point2, points):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            return dydx
+        
+        
         for i in range (len(self.l)):
             self.Sh_S1.append(aa*self.l[i]-bb)
             self.Sh_S2.append(dd*self.l[i]-ee)
@@ -81,18 +87,20 @@ class empennage:
             ax1.plot(x_cg_max1, x_le_MAC_range_perc)
             ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
             ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
+            ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
        
             
             ax2 = ax1.twinx()
             ax2.plot(self.l, self.Sh_S1)
             ax2.plot(self.l, self.Sh_S2)
             ax2.plot(self.l, self.Sh_C1)
-            ax2.set( ylim =  (0,0.26))
+            ax2.set( ylim =  (0,0.26),ylabel = 'S_h/S')
+            
             plt.show()
         
         """Put this on when iterating"""
-        Sh_S = float(input("Input the optimal Sh/S ratio: "))
-        x_le_MAC = float(input("Input the optimal Xlemac/Lf: ")) * l_f[0] 
+        Sh_S = 0.15 # float(input("Input the optimal Sh/S ratio: "))
+        x_le_MAC = 0.4 #float(input("Input the optimal Xlemac/Lf: ")) * l_f[0] 
         S_h = Sh_S * S
         #print (S_h)
         # =============================================================================
@@ -122,22 +130,24 @@ class empennage:
         Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                # [m] root chord length horizontal tail
         Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                    # [m] tip chord length horizontal tail
         
+        
+        
+        
 #        print (b_h)
 #        print (Cr_h)
 #        print (Ct_h)
 #        print (x_h)
-        
-        
+
 
         # =============================================================================
         # Vertical tail - NACA 63 012
         # =============================================================================
                 
-        self.V_v = 0.1                                                               # [-] volume vertical tail
-        self.A_v = 1.5                                                               # [-] aspect ratio vertical tail
-        self.taper_ratio_v = 0.375                                                   # [-] taper ratio vertical tail
-        self.lambda_v_le_rad = np.deg2rad(40)                                        # [rad] leading edge sweep angle vertical tail
-        self.t_c_v = 0.12                                                            # [-] tickness over chord ratio vertical tail
+        self.V_v = 0.1                                                          # [-] volume vertical tail
+        self.A_v = 1.5                                                          # [-] aspect ratio vertical tail
+        self.taper_ratio_v = 0.375                                              # [-] taper ratio vertical tail
+        self.lambda_v_le_rad = np.deg2rad(40)                                   # [rad] leading edge sweep angle vertical tail
+        self.t_c_v = 0.12                                                       # [-] tickness over chord ratio vertical tail
         
         def get_S_v(S, b, x_cg, V_v, x_v):
             return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]

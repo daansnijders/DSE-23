@@ -184,7 +184,7 @@ def get_rate_of_climb(thrust, wing_surface_area, drag_coefficient, mass, g):
     for i in range(0, 100, 1):
         list = []
         for j in range(0, 100, 1):
-            list.append((thrust-get_thrust_required(isa(h[i]), V[j], wing_surface_area, drag_coefficient))*V[j]/mass/g)
+            list.append((thrust-get_thrust_required(isa(h[i])[2], V[j], wing_surface_area, drag_coefficient))*V[j]/mass/g)
         z.append(list)
     return V, h, z
 

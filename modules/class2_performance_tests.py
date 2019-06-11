@@ -13,7 +13,7 @@ i = 0   # configuration selection
 h_screen_to = 35 * ft_to_m                                  # [m]
 h_screen_la = 50 * ft_to_m
 reverse_thrust_factor = 0.45
-engine_failure = False
+engine_failure = True
 cj = 0.790/thrust_max #kg/s/N
 cj_retard = cj / 2.832545035E-5
 thrust_transition_setting = 1.
@@ -85,11 +85,10 @@ def analyze_take_off_performance():
 
     plt.ylabel('Mass [kg]')
     plt.xlabel('Take-off field length [m]')
-    plt.close()
     return take_off_field_length, airport_altitude_list
 
 
-# take_off_field_length = analyze_take_off_performance()[0]
+take_off_field_length = analyze_take_off_performance()[0]
 
 """
 landing performance
@@ -131,7 +130,6 @@ def analyze_landing_performance():
     # plt.plot([0, max(select[1])], [OEW[i], OEW[i]], color='C0', linestyle=':')
     plt.ylabel('Mass [kg]')
     plt.xlabel('Landing field length [m]')
-    plt.close()
     return landing_field_length
 
 
