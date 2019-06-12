@@ -62,3 +62,4 @@ lowerfreq=[2**(-1/6)*centrefreq[i] for i in range(len(bandnumbers))]
 upperfreq=[2**(1/6)*centrefreq[i] for i in range(len(bandnumbers))]
 freq_delta=[upperfreq[i]-lowerfreq[i] for i in range(len(bandnumbers))]
 
+limit_epndb=[get_the_limit_for_lateral(MTOW[i]) for i in range(3)]

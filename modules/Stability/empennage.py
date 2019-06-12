@@ -36,7 +36,7 @@ class empennage:
 
         self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
-        self.plot_stability_horitail(True)
+        self.plot_stability_horitail(False)
 
     
     def calc_xnp(self):
@@ -52,6 +52,13 @@ class empennage:
         self.Cm_tail = -self.CL_h * self.S_h * self.l_h / (self.S * self.c) * (self.V_h/self.V)**2
         self.Cm = self.Cm_lesstail + self.Cm_tail
         return self.Cm    
+    
+    
+    def plot_stability_canard(self, plot = True):
+        aa = 1/(self.CL_a_c / self.CL_a_ah * self.l_c)
+    
+    
+    
     
     def plot_stability_horitail(self, plot = True):
         """Stability excluding margin"""
