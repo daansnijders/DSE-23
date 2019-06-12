@@ -688,4 +688,5 @@ class Lift:
         CL_max = CL_max_w - CL_alpha_wf*delta_alpha_wc + CL_alpha_h*(self.S_h/self.S)*(alpha_CL_max*(1-de_da) + self.i_h) + CL_alpha_c*(self.S_c/self.S)*(alpha_CL_max*(1+de_da_c) + self.i_c)
         return(CL_alpha, alpha_0_L, CL_max)
 
-#    def Airplane_lift_flaps(self): 
+#    def Airplane_lift_flaps(self, delta_CL_w): 
+        
