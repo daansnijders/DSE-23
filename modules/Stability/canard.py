@@ -5,8 +5,8 @@ Created on Fri Jun  7 10:13:41 2019
 @author: daansnijders
 """
 
-from modules.Stability.Stability_runfile import *
-from modules.EXECUTE_FILE import * 
+from modules.Stability.cg_weight_loadingdiagram import *
+from modules.main_class2 import * 
 from modules.Stability.empennage import *
 
 class canard():
@@ -35,15 +35,8 @@ class canard():
         cg_x = [config1_cg.calc_x_cg(), config2_cg.calc_x_cg(), config3_cg.calc_x_cg()] # [m] x-location of the c.g.
         cg_z = [config1_cg.calc_z_cg(), config2_cg.calc_z_cg(), config3_cg.calc_z_cg()] # [m] x-location of the c.g.
 
-#        moment_arm = (cg_x[self.config] - cg_x[0]  - l_cutout)*-1               # [m] distance between canard ac and c.g.
-#        moment = moment_arm * self.weight                                       # [N*m] moment caused by the c.g. shift
-#    
-#        self.l_c = moment / self.L_canard                                       # [m] required distance between canard and c.g.of config 1
-#        self.x_c = cg_x[0] + l_cutout - self.l_c                                # [m] x-location of canard ac
-   
-        
         x_c = 7.5                                                               # [m] x-location of canard ac
-        self.l_c = cg_x[self.config] - x_c                                           # [m] distance between canard ac and c.g.
+        self.l_c = cg_x[self.config] - x_c                                      # [m] distance between canard ac and c.g.
         l_h = x_le_h[0] + l_cutout - cg_x[self.config]                          # [m] distance between htail ac and c.g.
         l_cg = (x_le_MAC[self.config] + 0.25*MAC) - cg_x[self.config]           # [m] distance between wing ac and c.g.
         z_e = cg_z[self.config] - z_engine                                      # [m] distance between engine and c.g.
@@ -80,15 +73,3 @@ class canard():
     def plot_stability_canard(self, plot = True):
         aa = 1/(self.CL_a_c / e2.CL_a_ah * self.l_c * self.Vc_V**2)
         bb = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h
-
-
-
-c2 = canard(weight_pass,2, 1.3)        
-c3 = canard(weight_pass,3, 1.3)
-
-print('Canard: ' + str(c3.F_c / c2.F_c *100 - 100))
-print('Main w: ' + str(c3.F_w / c2.F_w *100 - 100))
-print('H tail: ' + str(c3.F_h / c2.F_h *100 - 100))
-
-
-
