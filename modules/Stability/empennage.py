@@ -229,6 +229,7 @@ class empennage:
         
         return self.Sh_S1, self.Sh_S2, self.Sh_C1, self.S_h_S, self.x_le_MAC, self.S_h, z_h, self.l_v, self.l_h
     
+e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
     
     
     

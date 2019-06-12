@@ -249,3 +249,12 @@ Delta Cl max Krueger airfoil 			delta_clmax_krueger
 Lift curve slope aircraft 			CL_alpha
 Zero lift alpha aircraft			alpha_0_L
 CL max aircraft 				CL_max
+
+
+main wheel diameter				D_mlg
+nose wheel diameter				D_nlg
+width of main wheel				w_mlg
+width of nose wheel				w_nlg
+length of the strut main			L_strut_mlg
+lentgth of the strut nose			L_strut_nlg
+
