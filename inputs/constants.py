@@ -104,6 +104,12 @@ N_nw = 2                                                                        
 N_struts = 2                                                                    # [-] number of struts used
 stroke = 0.3                                                                    # [m] shock absorber stroke
 
+#chosen tires
+D_nlg = 28.4*inch_to_m
+w_nlg = 7.85*inch_to_m
+D_mlg = 40*inch_to_m
+w_mlg = 15.5*inch_to_m
+
 LCN = 45                                                                        # [-] load classification number    
  
 #angles clearance
