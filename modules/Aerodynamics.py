@@ -507,7 +507,7 @@ class Drag:
     
     
 class Lift:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,i_w,wing_twist, A_h, A_c,lambda_h_2_rad, lambda_c_2_rad, i_c, S_h, S_c):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,i_w,wing_twist, A_h, A_c,lambda_h_2_rad, lambda_c_2_rad, i_c, S_h, S_c, i_h, x_le_MAC):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -528,17 +528,20 @@ class Lift:
         self.lambda_2_rad   = lambda_2_rad
         self.alpha_0_l      = alpha_0_l
         self.C_l_alpha      = C_l_alpha
-        self.alpha_C_l_max  = alpha_C_l_max
+        self.alpha_C_l_max  = np.deg2rad(alpha_C_l_max)
         self.C_l_max        = C_l_max
-        self.i_w            = i_w
-        self.wing_twist     = wing_twist
+        self.i_w            = np.deg2rad(i_w)
+        self.wing_twist     = np.deg2rad(wing_twist)
         self.A_h            = A_h
         self.A_c            = A_c
         self.lambda_h_2_rad = lambda_h_2_rad
         self.lambda_c_2_rad = lambda_c_2_rad
-        self.i_c            = i_c
+        self.i_c            = np.deg2rad(i_c)
         self.S_h            = S_h
         self.S_c            = S_c
+        self.i_h            = i_h
+        self.x_le_MAC       = x_le_MAC
+        
         
     def Airfoil_lift_flaps(self):
         #Lift increase due to double slotted flaps
@@ -634,17 +637,35 @@ class Lift:
 #    def Wing_lift_flaps(self):
         
         
-        
-#    def Airplane_lift(self): 
-        
-        
-        
-    def Airplane_lift_flaps(self):
+    
+    def Airplane_lift(self, CL_alpha_w, alpha_0_L_w, CL_max_w, alpha_CL_max_w):
         beta = sqrt(1-self.M_cruise**2)
         CL_alpha_h = (2*pi*self.A_h)/(2 + sqrt(4+(self.A_h*beta/0.95)**2*(1+(np.tan(self.lambda_h_2_rad)**2)/beta**2)))
         CL_alpha_c = (2*pi*self.A_c)/(2 + sqrt(4+(self.A_c*beta/0.95)**2*(1+(np.tan(self.lambda_c_2_rad)**2)/beta**2)))
         etah = 0.9      #Source internet
         etac = 1.0
         
-        return()
+        Kwf = 1 + 0.025*(self.d_f_outer/self.b) - 0.25*(self.d_f_outer/self.b)**2
+        CL_alpha_wf = Kwf*CL_alpha_w
+        
+        CL0 = (self.i_w - np.deg2rad(alpha_0_L_w))*CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)(self.i_h) + CL_alpha_c*etac*(self.S_c/self.S)(self.i_c)
+        KA = (1/self.A) - 1/(1 + self.A**1.7)
+        KL = (10 - 3*self.taper_ratio)/7
+        l_h = 0.9*l_f - self.x_le_MAC - 0.25*self.MAC
+        h_h = 0.75*self.d_f_outer
+        Kh = (1-h_h/self.b)/(2*l_h/self.b)**(1/3)
+        beta2 = sqrt(1-0**2)
+        CL_alpha_w_M0 = (2*pi*self.A)/(2 + sqrt(4+(self.A*beta2/0.95)**2*(1+(np.tan(self.lambda_2_rad)**2)/beta2**2)))
+        de_da = 4.44*((KA*KL*Kh*cos(self.lambda_4_rad)**0.5)**1.19)*(CL_alpha_w/CL_alpha_w_M0)
+        de_da_c = 0.15  #Figure 8.67
+        CL_alpha = CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)(1 - de_da) + CL_alpha_c*etac*(self.S_c/self.S)(1 + de_da_c)
+        
+        alpha_0_L = (-CL0)/CL_alpha
+        
+        delta_alpha_wc = np.deg2rad(3)          #rad
+        alpha_CL_max = np.deg2rad(alpha_CL_max_w) - self.i_w - delta_alpha_wc
+        
+        CL_max = CL_max_w - CL_alpha_wf*delta_alpha_wc + CL_alpha_h*(self.S_h/self.S)*(alpha_CL_max*(1-de_da) + self.i_h) + CL_alpha_c*(self.S_c/self.S)*(alpha_CL_max*(1+de_da_c) + self.i_c)
+        return(CL_alpha, alpha_0_L, CL_max)
 
+#    def Airplane_lift_flaps(self): 

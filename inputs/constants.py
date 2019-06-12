@@ -18,7 +18,7 @@ kg_to_lbs = 2.20462262
 lbs_to_kg=1/(kg_to_lbs)
 nm_to_m=1852
 gallons_to_l=3.78541178
-
+mph_to_ms=0.447 
 
 #FLIGHT PARAMETERS parameters
 H_ft=37000                                                                      # [ft] cruising altitude in feet
