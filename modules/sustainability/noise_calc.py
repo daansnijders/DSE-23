@@ -16,11 +16,10 @@ experimental_dBA_to_EPNdB=1.15503
 M_TO=V_TO[2]/a_sl
 
 
-d_mw=1.5 #[m]
-d_nw=0.7    #[m]
+
 flap_deflection=np.radians(40)
-L_strut_main= -z_mlg-d_mw/2
-L_strut_nose=  -z_mlg-d_nw/2
+L_strut_mlg= -z_mlg-D_mlg/2
+L_strut_nlg=  -z_mlg-D_nlg/2
 
 b_flap=b/2*0.4
 c_flap=0.35*Cr
@@ -43,8 +42,8 @@ L_flap=S_flap/b_flap
 K_flap=2.787*10**-4
 a_flap=6
 
-G_mlg=N_mw*(d_mw/b)**2
-G_nlg=N_nw*(d_nw/b)**2
+G_mlg=N_mw*(D_mlg/b)**2
+G_nlg=N_nw*(D_nlg/b)**2
 K_mlg=3.414E-4  #4 wheels
 K_nlg=4.349E-4 #1 or 2 wheels (nose)
 K_strut=2.753E-4 
