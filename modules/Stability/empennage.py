@@ -71,23 +71,46 @@ class empennage:
         self.Sh_S2 = [] #stability xcg
         self.Sh_C1 = [] #controlability xac - Cmac/CL_ah
         
-        def interpolate(point1, point2, points):
-            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
-            b = point1[1] - dydx * point1[0]
-            x_list = np.linspace(point1[0],point2[0],points)
-            y_list = np.linspace(point1[1],point2[1],points)
-            return x_list,y_list
-        
-        x_list,y_list =interpolate([0,-1],[1,-2],10)
-        plt.scatter(x_list,y_list)
-        
-        
-        
-        
         for i in range (len(self.l)):
             self.Sh_S1.append(aa*self.l[i]-bb)
             self.Sh_S2.append(dd*self.l[i]-ee)
             self.Sh_C1.append(ff*self.l[i]+gg)
+        
+        
+        
+        def interpolate1(point1, point2):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            b = point1[1] - dydx * point1[0]
+            return lambda y: (y-b) / dydx
+        
+        def interpolate2(point1, point2):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            b = point1[1] - dydx * point1[0]
+            return lambda x: dydx * x + b
+        
+        f_min = interpolate1([x_cg_min1[0],x_le_MAC_range_perc[0]],[x_cg_min1[1],x_le_MAC_range_perc[1]])
+        f_max = interpolate1([x_cg_max1[0],x_le_MAC_range_perc[0]],[x_cg_max1[1],x_le_MAC_range_perc[1]])
+        
+        f_S2 = interpolate2([self.l[0],self.Sh_S2[0]],[self.l[-1],self.Sh_S2[-1]])
+        f_C1 = interpolate2([self.l[0],self.Sh_C1[0]],[self.l[-1],self.Sh_C1[-1]])
+        
+        diff = 1
+        diff1 = 2
+        y = 0.4215000000001215
+        while abs(diff1) >= abs(diff) and abs(f_C1(f_min(y)) - f_S2(f_max(y))) > 0.000001:
+            diff1 = f_S2(f_max(y))-f_C1(f_min(y))
+            y += 0.0000001            
+            if f_min(y) > x_cg_min1[1]:
+                f_min = interpolate1([x_cg_min1[1],x_le_MAC_range_perc[1]],[x_cg_min1[2],x_le_MAC_range_perc[2]])
+                f_max = interpolate1([x_cg_max1[1],x_le_MAC_range_perc[1]],[x_cg_max1[2],x_le_MAC_range_perc[2]])
+            diff = f_S2(f_max(y))-f_C1(f_min(y))
+
+        S_h_S = y
+        x_le_MAC_l_f = f_C1(f_min(y))
+        self.S_h = S_h_S * S
+        self.x_le_MAC = x_le_MAC_l_f * l_f[0]
+
+        
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
@@ -96,21 +119,22 @@ class empennage:
             ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
             ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
             ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
-       
             
+            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
+            ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
+    
             ax2 = ax1.twinx()
             ax2.plot(self.l, self.Sh_S1)
             ax2.plot(self.l, self.Sh_S2)
             ax2.plot(self.l, self.Sh_C1)
-            ax2.set( ylim =  (0,0.26),ylabel = 'S_h/S')
+            ax2.set( ylim = [0,0.2565], ylabel = 'S_h/S')
+            
+            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
+            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
+
             
             plt.show()
         
-        """Put this on when iterating"""
-        Sh_S = 0.15 # float(input("Input the optimal Sh/S ratio: "))
-        x_le_MAC = 0.4 #float(input("Input the optimal Xlemac/Lf: ")) * l_f[0] 
-        S_h = Sh_S * S
-        #print (S_h)
         # =============================================================================
         # Horizontal tail - NACA 63 010
         # =============================================================================
@@ -187,9 +211,9 @@ class empennage:
         l_v = 0.9*l_f[0] - x_le_MAC - 0.25*MAC                                  # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
 
         C_y_max = 0.836                                                         # [-] maximum airfoil lift coefficient
-        Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * self.S_v                            # [N] force exerted by the vertical tail
+        Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * self.S_v                       # [N] force exerted by the vertical tail
         Y_v_req = N_e/l_v                                                       # [N] force required by the vertical tail
-        C_y_req = Y_v_req/(0.5*rho_0*V_app**2*self.S_v)                              # [-] lift coefficient required vtail
+        C_y_req = Y_v_req/(0.5*rho_0*V_app**2*self.S_v)                         # [-] lift coefficient required vtail
         
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
@@ -197,10 +221,7 @@ class empennage:
 
         assert N_e < -N_v_max                                                   # check if tail is capable enough
         
-
-
-        
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, x_le_MAC, S_h
+        return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, self.x_le_MAC, self.S_h
     
 e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
