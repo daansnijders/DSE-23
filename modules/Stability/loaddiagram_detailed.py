@@ -2,18 +2,14 @@
 """
 Created on Wed Mar  6 22:27:28 2019
 
+Tool for other programs
+
 @author: Lisa
 """
 import numpy as np
 import matplotlib.pyplot as plt
-
 from inputs.concept_1 import *
 from inputs.constants import *
-
-
-
-"Values to input once known"
-
 
 class Loading_diagram:
     def __init__(self, x_cargo, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, x_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel, M_pax, M_carry_on, x_cg_wing, config):
@@ -61,7 +57,6 @@ class Loading_diagram:
         
         self.passenger_cg1= np.arange(self.Xfirst, self.Xlast+self.seat_pitch,self.seat_pitch)
         self.passenger_cg2= np.arange(self.Xlast, self.Xfirst-self.seat_pitch,-self.seat_pitch)
-        #print(self.passenger_cg1)
         
         for i in range(len(self.passenger_cg1)):
             self.xcg1.append((self.weight[-1]*self.xcg1[-1]+self.passenger_cg1[i]*2*self.M_pax_cabin)/(2*self.M_pax_cabin+self.weight[-1]))

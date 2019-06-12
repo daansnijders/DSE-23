@@ -6,7 +6,7 @@ Created on Tue Jun  4 11:53:00 2019
 """
 from math import *
 from inputs.concept_1 import *
-from inputs.constants import mu_sl, rho_0,a_sl
+from inputs.constants import mu_sl, rho_0,a_sl,D_mlg,D_nlg
 import matplotlib.pyplot as plt
 #noise definitions
 

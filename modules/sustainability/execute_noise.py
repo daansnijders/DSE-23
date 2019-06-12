@@ -4,7 +4,6 @@ Created on Thu Jun  6 16:41:25 2019
 
 @author: Lisa
 """
-from modules.sustainability.noise_defs import *
 from modules.sustainability.noise_calc import *
 
 
@@ -23,12 +22,12 @@ pe_2_slat =[ get_effective_pressure_slat(f,rho_0,a_sl,M_TO,r_observer,theta_obse
 
 pe_2_wing = [get_effective_pressure_wing(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,L_wing,K_wing,a_wing,G_wing)for f in centrefreq]
 
-pe_2_mlg =  [get_effective_pressure_lg(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,K_mlg,d_mw,a_lg,G_mlg)for f in centrefreq]
+pe_2_mlg =  [get_effective_pressure_lg(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,K_mlg,D_mlg,a_lg,G_mlg)for f in centrefreq]
 
-pe_2_nlg =  [get_effective_pressure_lg(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,K_nlg,d_nw,a_lg,G_nlg)for f in centrefreq]
+pe_2_nlg =  [get_effective_pressure_lg(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,K_nlg,D_nlg,a_lg,G_nlg)for f in centrefreq]
 
-pe_2_strut_main= [get_effective_pressure_strut(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,K_strut,L_strut_main,a_lg,G_mlg)for f in centrefreq]
-pe_2_strut_nose= [get_effective_pressure_strut(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,K_strut,L_strut_nose,a_lg,G_nlg)for f in centrefreq]
+pe_2_strut_main= [get_effective_pressure_strut(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,K_strut,L_strut_mlg,a_lg,G_mlg)for f in centrefreq]
+pe_2_strut_nose= [get_effective_pressure_strut(f,rho_0,a_sl,M_TO,r_observer,theta_observer,phi_observer,K_strut,L_strut_nlg,a_lg,G_nlg)for f in centrefreq]
 
 
 OSPL_dBA_flap=get_overall_sound_level_general(pe_2_flap,freq_delta,centrefreq)
