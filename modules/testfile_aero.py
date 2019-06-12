@@ -33,11 +33,7 @@ delta_C_L_h = 0.3
 delta_C_L_c = 0.25
 Delta_C_L_flap = Cl_land - Cl_clean
 
-<<<<<<< HEAD
-#""" HLD design """
-=======
 """ HLD design """
->>>>>>> 0a88abb3d4b0d44e32da4eda9da6a233bb36d749
 config1_HLD = HLD_class(Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer)
 SWF, b_flap, SWF_LE, b_slat = config1_HLD.HLD()
 ##print(SWF, b_flap, SWF_LE, b_slat)
