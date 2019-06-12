@@ -158,8 +158,8 @@ class empennage:
             return Cr_h * taper_ratio_h
         
         x_h = get_x_h(l_f)
-        b_h = get_b(S_h, A_h)                                                   # [m] span horizontal tail
-        Cr_h = get_Cr_h(S_h, taper_ratio_h, b_h)                                # [m] root chord length horizontal tail
+        b_h = get_b(self.S_h, A_h)                                                   # [m] span horizontal tail
+        Cr_h = get_Cr_h(self.S_h, taper_ratio_h, b_h)                                # [m] root chord length horizontal tail
         Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                    # [m] tip chord length horizontal tail
         
         
@@ -208,7 +208,7 @@ class empennage:
         
         
         N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
-        l_v = 0.9*l_f[0] - x_le_MAC - 0.25*MAC                                  # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
+        l_v = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                                  # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
 
         C_y_max = 0.836                                                         # [-] maximum airfoil lift coefficient
         Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * self.S_v                       # [N] force exerted by the vertical tail
@@ -221,7 +221,7 @@ class empennage:
 
         assert N_e < -N_v_max                                                   # check if tail is capable enough
         
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1, Sh_S, self.x_le_MAC, self.S_h
+        return self.Sh_S1, self.Sh_S2, self.Sh_C1, S_h_S, self.x_le_MAC, self.S_h
     
 e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
