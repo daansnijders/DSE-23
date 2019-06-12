@@ -507,11 +507,7 @@ class Drag:
     
     
 class Lift:
-<<<<<<< HEAD
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, A_h, A_c,lambda_h_2_rad, lambda_c_2_rad, i_c, S_h, S_c):
-=======
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,i_w,wing_twist, A_h, A_c,lambda_h_2_rad, lambda_c_2_rad, i_c, S_h, S_c, i_h, x_le_MAC):
->>>>>>> 8d9e85f4b4f5213db9540796caf37facb1ca76d4
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, A_h, A_c,lambda_h_2_rad, lambda_c_2_rad, i_c, S_h, S_c, i_h, x_le_MAC):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -534,14 +530,9 @@ class Lift:
         self.C_l_alpha      = C_l_alpha
         self.alpha_C_l_max  = np.deg2rad(alpha_C_l_max)
         self.C_l_max        = C_l_max
-<<<<<<< HEAD
         self.alpha_star_l   = alpha_star_l
-        self.i_w            = i_w
-        self.wing_twist     = wing_twist
-=======
         self.i_w            = np.deg2rad(i_w)
         self.wing_twist     = np.deg2rad(wing_twist)
->>>>>>> 8d9e85f4b4f5213db9540796caf37facb1ca76d4
         self.A_h            = A_h
         self.A_c            = A_c
         self.lambda_h_2_rad = lambda_h_2_rad
