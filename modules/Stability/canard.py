@@ -61,6 +61,7 @@ class canard():
         
         self.F_w = (self.l_c * (self.weight - self.F_h) - l_h * self.F_h + F_e * z_e) / (l_cg + self.l_c)
         #self.F_h = (self.l_c * (self.weight - self.F_w) - l_cg * self.F_w + F_e * z_e) / (l_h + self.l_c)
+
         self.F_c = -self.F_w + self.weight - self.F_h
         
         margin = 1E-8
@@ -75,9 +76,11 @@ class canard():
         
         # determine aspect ratio/ taper ratio/ sweep/ ect.
 
+
     def plot_stability_canard(self, plot = True):
         aa = 1/(self.CL_a_c / e2.CL_a_ah * self.l_c * self.Vc_V**2)
         bb = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h
+
 
 
 c2 = canard(weight_pass,2, 1.3)        
