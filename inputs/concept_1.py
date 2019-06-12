@@ -218,6 +218,9 @@ y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
 y_nlg = [0,0,0]                                                                 # [m] y-location of nlg
 z_nlg = z_mlg                                                                   # [m] z-location of nlg
 
+L_strut_mlg= -z_mlg-D_mlg/2
+L_strut_nlg= -z_nlg-D_nlg/2
+
 
 #MAKE THIS ITERABLE WITH THE LOADING DIAGRAM
 # Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
