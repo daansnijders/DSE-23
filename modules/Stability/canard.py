@@ -77,7 +77,7 @@ class canard():
 
     def plot_stability_canard(self, plot = True):
         aa = 1/(self.CL_a_c / e2.CL_a_ah * self.l_c * self.Vc_V**2)
-        bb = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * 
+        bb = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h
 
 
 c2 = canard(weight_pass,2, 1.3)        

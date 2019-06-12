@@ -23,7 +23,7 @@ class empennage:
         self.CL_a_ah = CL_a_ah
         self.de_da = de_da
         self.S_h = S_h
-        self.l_h = l_h # can be removed
+        self.l_h_ac = l_h # can be removed
         self.S = S
         self.c = c
         self.Vh_V = Vh_V
@@ -33,7 +33,7 @@ class empennage:
         self.x_cg = x_cg
         self.CL_h = CL_h
 
-        self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
+        self.hortail_vol = self.S_h * self.l_h_ac / (self.S * self.c)
         
         self.plot_stability_horitail(False)
 
