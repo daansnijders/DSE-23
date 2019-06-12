@@ -507,7 +507,7 @@ class Drag:
     
     
 class Lift:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, A_h, A_c,lambda_h_2_rad, lambda_c_2_rad, i_c, S_h, S_c, i_h, x_le_MAC, b_flap):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, A_h, A_c,lambda_h_2_rad, lambda_c_2_rad, i_c, S_h, S_c, i_h, x_le_MAC, b_flap, SWF):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -543,6 +543,7 @@ class Lift:
         self.i_h            = i_h
         self.x_le_MAC       = x_le_MAC
         self.b_flap         = b_flap
+        self.SWF            = SWF
         
         
     def Airfoil_lift_flaps(self):
@@ -655,8 +656,12 @@ class Lift:
         
         return (C_L_alpha_w, alpha_0_L_w_deg, C_L_max_w, alpha_C_L_max_w_deg)
 
-#    def Wing_lift_flaps(self):
+    def Wing_lift_flaps(self, delta_C_l,C_L_alpha_w,C_l_alpha):
+        K_b = 1                     #Figure 8.51 & 8.52
+        alpha_delta_CL_Cl = 1       #Figure 8.53
+        delta_C_L_w = K_b * (delta_C_l) * (C_L_alpha_w / C_l_alpha) * alpha_delta_CL_Cl
         
+        delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime_c - 1)* self.SWF/self.S )
         
     
     def Airplane_lift(self, CL_alpha_w, alpha_0_L_w, CL_max_w, alpha_CL_max_w):
