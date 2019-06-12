@@ -58,8 +58,8 @@ class canard():
         margin = 1E-8
         assert -margin <= -self.F_w * ((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) - self.F_h * (x_h - cg_x[0]) + F_e * (cg_z[0] - z_engine) <= margin
 
-        self.F_w = (l_c * (self.weight - self.F_h) - l_h * self.F_h + F_e * z_e) / (l_cg + l_c)
-        #self.F_h = (l_c * (self.weight - self.F_w) - l_cg * self.F_w + F_e * z_e) / (l_h + l_c)
+        #self.F_w = (l_c * (self.weight - self.F_h) - l_h * self.F_h + F_e * z_e) / (l_cg + l_c)
+        self.F_h = (l_c * (self.weight - self.F_w) - l_cg * self.F_w + F_e * z_e) / (l_h + l_c)
         self.F_c = -self.F_w + self.weight - self.F_h
         
         margin = 1E-8
