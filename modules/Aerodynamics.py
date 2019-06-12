@@ -660,8 +660,9 @@ class Lift:
         K_b = 1                     #Figure 8.51 & 8.52
         alpha_delta_CL_Cl = 1       #Figure 8.53
         delta_C_L_w = K_b * (delta_C_l) * (C_L_alpha_w / C_l_alpha) * alpha_delta_CL_Cl
+        c_prime = 1.20      #Based on airfoil lift
         
-        delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime_c - 1)* self.SWF/self.S )
+        delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime - 1)* self.SWF/self.S )
         
     
     def Airplane_lift(self, CL_alpha_w, alpha_0_L_w, CL_max_w, alpha_CL_max_w):
