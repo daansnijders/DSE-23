@@ -641,7 +641,7 @@ class Lift:
         c_l_max = [self.C_l_max, self.C_l_max, self.C_l_max, self.C_l_max, self.C_l_max, self.C_l_max, self.C_l_max, self.C_l_max]
         for i in range(len(alpha_w)):
             c_l_i = c_l_b1 + c_l_a1 * C_L_w[i]
-            plt.plot(y_b_2, c_l_i)
+#            plt.plot(y_b_2, c_l_i)
             c_l.append(c_l_i)
         
 #        plt.plot(y_b_2, c_l_max)
