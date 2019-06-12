@@ -9,7 +9,7 @@ from modules.sustainability.noise_calc import *
 
 
 
-r_observer=450
+r_observer=120
 theta_observer=radians(90)
 phi_observer=radians(1)
 
