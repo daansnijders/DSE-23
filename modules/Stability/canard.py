@@ -10,13 +10,14 @@ from modules.main_class2 import *
 from modules.Stability.empennage import *
 
 class canard():
-    def __init__ (self, weight_pass, config, CL_c):
-        self.config = config - 1                                                    # [-] configuration selection
+    def __init__ (self, weight_pass, config, CL_c, CL_a_c):
+        self.config = config - 1                                                # [-] configuration selection
         self.weight_pass = weight_pass                                          # [kg] mass increase per passenger
         self.additional_mass = weight_pass[self.config][-1] - weight_pass[0][-1] # [kg] mass difference between config 1 and 2/3
         self.additional_weight = self.additional_mass * g                       # [N] weight difference between config 1 and 2/3
         self.weight = self.weight_pass[self.config][-1] * g                     # [N] MTOW config
         self.CL_c = CL_c                                                        # [-] CL canard
+        self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard
         self.Vc_V = 1
       
         config1_cg.calc_x_cg()
@@ -71,5 +72,53 @@ class canard():
 
 
     def plot_stability_canard(self, plot = True):
-        aa = 1/(self.CL_a_c / e2.CL_a_ah * self.l_c * self.Vc_V**2)
-        bb = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h
+        aa = 1/(self.CL_a_c / e2.CL_a_ah * -self.l_c * self.Vc_V**2)
+        bb = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h * e2.Vh_V + 0.05 * MAC
+        
+        cc = 1/(self.CL_a_c / e2.CL_a_ah * -self.l_c * self.Vc_V**2)
+        dd = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h * e2.Vh_V 
+        
+        ee = 1/(self.CL_c / e2.CL_ah * -self.l_c * self.Vc_V**2)
+        ff = -e2.x_ac + e2.Cm_ac / e2.CL_ah * MAC - e2.CL_h / e2.CL_ah * e2.S_h_S * e2.l_h * e2.Vh_V**2
+        
+        self.l = e2.l
+        self.Sc_S1 = [] #stability xnp
+        self.Sc_S2 = [] #stability incl S.M.
+        self.Sc_C1 = [] #controlability
+        
+        
+        for i in range (len(self.l)):
+            self.Sc_S1.append(aa*self.l[i]+aa*bb)
+            self.Sc_S2.append(cc*self.l[i]+cc*dd)
+            self.Sc_C1.append(ee*self.l[i]+ee*ff)
+        
+        if plot:
+            fig = plt.figure()
+            ax1 = fig.add_subplot(111)
+            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
+            ax1.plot(x_cg_max1, x_le_MAC_range_perc)
+            ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
+            ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
+            ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
+            
+#            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
+#            ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
+    
+            ax2 = ax1.twinx()
+            ax2.plot(self.l, self.Sc_S1)
+            ax2.plot(self.l, self.Sc_S2)
+            ax2.plot(self.l, self.Sc_C1)
+            ax2.set( ylim = [0,0.2565], ylabel = 'S_h/S')
+            
+#            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
+#            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
+            
+            
+#c2 = canard(weight_pass,2, 1.3, 1.0)        
+#c3 = canard(weight_pass,3, 1.3, 1.0)
+#
+#c22 = c2.plot_stability_canard(True)
+#
+#print('Canard: ' + str(c3.F_c / c2.F_c *100 - 100))
+#print('Main w: ' + str(c3.F_w / c2.F_w *100 - 100))
+#print('H tail: ' + str(c3.F_h / c2.F_h *100 - 100))

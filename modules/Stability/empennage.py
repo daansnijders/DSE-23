@@ -109,8 +109,8 @@ class empennage:
                 f_max = interpolate1([x_cg_max1[1],x_le_MAC_range_perc[1]],[x_cg_max1[2],x_le_MAC_range_perc[2]])
             diff = f_S2(f_max(y))-f_C1(f_min(y))
 
-        self.S_h_S = y
-        x_le_MAC_l_f = f_C1(f_min(y))
+        self.S_h_S = f_C1(f_min(y))
+        x_le_MAC_l_f = y
         self.S_h = self.S_h_S * S
         self.x_le_MAC = x_le_MAC_l_f * l_f[0]
 
@@ -166,6 +166,7 @@ class empennage:
         Cr_h = get_Cr_h(self.S_h, taper_ratio_h, b_h)                           # [m] root chord length horizontal tail
         Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                    # [m] tip chord length horizontal tail
         z_h = 0.75 * d_f_outer                                                  # [m] height of the vertical tail
+        self.l_h = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
    
         
         
@@ -206,14 +207,15 @@ class empennage:
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
         self.Ct_v = get_Ct(self.Cr_v, self.taper_ratio_v)                       # [m] tip chord length vertical tail
-        self.l_h = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
         
         self.lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_v_le_rad,self.Cr_v,self.b_v,self.taper_ratio_v) # [rad] quarter chord sweep angle
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
         
         
         N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
+
         self.l_v = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
+
         C_y_max = 0.836                                                         # [-] maximum airfoil lift coefficient
         Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * self.S_v                       # [N] force exerted by the vertical tail
         Y_v_req = N_e/self.l_v                                                  # [N] force required by the vertical tail
