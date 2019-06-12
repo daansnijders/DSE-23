@@ -59,22 +59,22 @@ class canard():
         assert -margin <= -F_w * ((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) - F_h * (x_h - cg_x[0]) + F_e * (cg_z[0] - z_engine) <= margin
         assert -margin <= F_w + F_h - w <= margin
         
-        print(F_w,F_h)
+#        print(F_w,F_h)
         #F_w = (l_c * (self.weight - F_h) - l_h * F_h + F_e * z_e) / (l_cg + l_c)
         F_h = (l_c * (self.weight - F_w) - l_cg * F_w + F_e * z_e) / (l_h + l_c)
         F_c = -F_w + self.weight - F_h
         
         margin = 1E-8
         print(F_c, F_w, F_h)
-        print(w,self.weight)
+#        print(w,self.weight)
         assert -margin <= F_c + F_w + F_h - self.weight <= margin
         assert -margin <= l_c * F_c - l_cg * F_w - l_h * F_h + F_e * z_e <= margin
         
         
         CL_h2 = F_h / (0.5*rho*V_cruise**2*e2.S_h)
-        print (CL_h2)
+#        print (CL_h2)
         S_c = F_c / (0.5*rho*V_cruise**2*self.CL_c)
-        print (S_c)
+#        print (S_c)
 
         # determine location by use of the moment caused by the aditional module
     
@@ -83,6 +83,7 @@ class canard():
         
         # determine aspect ratio/ taper ratio/ sweep/ ect.
         
-c = canard(weight_pass,2, 1.3)
+c2 = canard(weight_pass, 2, 1.3)
+c3 = canard(weight_pass, 3, 1.3)
 
 
