@@ -235,4 +235,17 @@ Total spoiler drag				CD_spoiler
 
 Total cruise drag (transonic)			CD_cruise
 Total take-off drag				CD_TO
-Total landing drag				CD_land					
+Total landing drag				CD_land	
+
+Lift curve slope airfoil 			C_l_alpha
+Alpha at Cl max airfoil				alpha_C_l_max
+Cl max airfoil					C_l_max
+Delta Cl flaps airfoil 				delta_cl_flaps		
+Delta Cl Krueger airfoil 			delta_cl_krueger
+Lift curve slope flaps airfoil 			clalpha_flaps
+Delta Cl max flaps airfoil  			delta_clmax_flap
+Delta Cl max Krueger airfoil 			delta_clmax_krueger
+
+Lift curve slope aircraft 			CL_alpha
+Zero lift alpha aircraft			alpha_0_L
+CL max aircraft 				CL_max
