@@ -17,7 +17,7 @@ class canard():
         self.additional_weight = self.additional_mass * g                       # [N] weight difference between config 1 and 2/3
         self.weight = self.weight_pass[self.config][-1] * g                     # [N] MTOW config
         self.CL_c = CL_c                                                        # [-] CL canard
-        
+        self.Vc_V = 1
       
         config1_cg.calc_x_cg()
         self.size_canard()
@@ -35,54 +35,60 @@ class canard():
         cg_x = [config1_cg.calc_x_cg(), config2_cg.calc_x_cg(), config3_cg.calc_x_cg()] # [m] x-location of the c.g.
         cg_z = [config1_cg.calc_z_cg(), config2_cg.calc_z_cg(), config3_cg.calc_z_cg()] # [m] x-location of the c.g.
 
-        moment_arm = (cg_x[self.config] - cg_x[0]  - l_cutout)*-1               # [m] distance between canard ac and c.g.
-        moment = moment_arm * self.weight                                       # [N*m] moment caused by the c.g. shift
-    
-        self.l_c = moment / self.L_canard                                       # [m] required distance between canard and c.g.of config 1
-        self.x_c = cg_x[0] + l_cutout - self.l_c                                # [m] x-location of canard ac
-    
+#        moment_arm = (cg_x[self.config] - cg_x[0]  - l_cutout)*-1               # [m] distance between canard ac and c.g.
+#        moment = moment_arm * self.weight                                       # [N*m] moment caused by the c.g. shift
+#    
+#        self.l_c = moment / self.L_canard                                       # [m] required distance between canard and c.g.of config 1
+#        self.x_c = cg_x[0] + l_cutout - self.l_c                                # [m] x-location of canard ac
+   
         
-        x_c = 7.5                                                                 # [m] x-location of canard ac
-        l_c = cg_x[self.config] - x_c
-        l_h = x_le_h[0] + l_cutout - cg_x[self.config]
-        l_cg = (x_le_MAC[self.config] + 0.25*MAC) - cg_x[self.config]
-        z_e = cg_z[self.config] - z_engine
-        F_e = thrust_max
+        x_c = 7.5                                                               # [m] x-location of canard ac
+        self.l_c = cg_x[self.config] - x_c                                           # [m] distance between canard ac and c.g.
+        l_h = x_le_h[0] + l_cutout - cg_x[self.config]                          # [m] distance between htail ac and c.g.
+        l_cg = (x_le_MAC[self.config] + 0.25*MAC) - cg_x[self.config]           # [m] distance between wing ac and c.g.
+        z_e = cg_z[self.config] - z_engine                                      # [m] distance between engine and c.g.
+        F_e = thrust_max                                                        # [N] maximum thrust produced by the engine
         
         w = self.weight_pass[0][-1] * g
         x_h = x_le_h[0]
         
-        F_h = (-w*((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) + thrust_max * (cg_z[0] - config1_cg.z_cg_engines))/-((x_le_MAC[0] + 0.25*MAC) - cg_x[0] - x_h + config1_cg_x)
-        F_w = w - F_h 
+        self.F_h = (-w*((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) + thrust_max * (cg_z[0] - config1_cg.z_cg_engines))/-((x_le_MAC[0] + 0.25*MAC) - cg_x[0] - x_h + config1_cg_x)
+        self.F_w = w - self.F_h 
         
         margin = 1E-8
-        assert -margin <= -F_w * ((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) - F_h * (x_h - cg_x[0]) + F_e * (cg_z[0] - z_engine) <= margin
-        assert -margin <= F_w + F_h - w <= margin
+        assert -margin <= -self.F_w * ((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) - self.F_h * (x_h - cg_x[0]) + F_e * (cg_z[0] - z_engine) <= margin
+        assert -margin <= self.F_w + self.F_h - w <= margin
         
-        print(F_w,F_h)
-        #F_w = (l_c * (self.weight - F_h) - l_h * F_h + F_e * z_e) / (l_cg + l_c)
-        F_h = (l_c * (self.weight - F_w) - l_cg * F_w + F_e * z_e) / (l_h + l_c)
-        F_c = -F_w + self.weight - F_h
+        self.F_w = (self.l_c * (self.weight - self.F_h) - l_h * self.F_h + F_e * z_e) / (l_cg + self.l_c)
+        #self.F_h = (self.l_c * (self.weight - self.F_w) - l_cg * self.F_w + F_e * z_e) / (l_h + self.l_c)
+
+        self.F_c = -self.F_w + self.weight - self.F_h
         
         margin = 1E-8
-        print(F_c, F_w, F_h)
-        print(w,self.weight)
-        assert -margin <= F_c + F_w + F_h - self.weight <= margin
-        assert -margin <= l_c * F_c - l_cg * F_w - l_h * F_h + F_e * z_e <= margin
+        assert -margin <= self.F_c + self.F_w + self.F_h - self.weight <= margin
+        assert -margin <= self.l_c * self.F_c - l_cg * self.F_w - l_h * self.F_h + F_e * z_e <= margin
         
-        
-        CL_h2 = F_h / (0.5*rho*V_cruise**2*e2.S_h)
-        print (CL_h2)
-        S_c = F_c / (0.5*rho*V_cruise**2*self.CL_c)
-        print (S_c)
+        CL_h2 = self.F_h / (0.5*rho*V_cruise**2*e2.S_h)
+        S_c = self.F_c / (0.5*rho*V_cruise**2*self.CL_c)
 
         # determine location by use of the moment caused by the aditional module
     
-
-
         
         # determine aspect ratio/ taper ratio/ sweep/ ect.
-        
-c = canard(weight_pass,2, 1.3)
+
+
+    def plot_stability_canard(self, plot = True):
+        aa = 1/(self.CL_a_c / e2.CL_a_ah * self.l_c * self.Vc_V**2)
+        bb = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h
+
+
+
+c2 = canard(weight_pass,2, 1.3)        
+c3 = canard(weight_pass,3, 1.3)
+
+print('Canard: ' + str(c3.F_c / c2.F_c *100 - 100))
+print('Main w: ' + str(c3.F_w / c2.F_w *100 - 100))
+print('H tail: ' + str(c3.F_h / c2.F_h *100 - 100))
+
 
 
