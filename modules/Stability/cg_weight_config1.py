@@ -9,9 +9,9 @@ Created on Mon Jun  3 12:43:09 2019
 from inputs.concept_1 import *
 from inputs.constants import *
 
-from modules.loaddiagram_detailed import *
+from modules.Stability.loaddiagram_detailed import *
 from modules.Stability.Check_ground import *
-from modules.EXECUTE_FILE import *
+from modules.main_class2 import *
 
 x_le_MAC1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
 x_le_MAC2 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
@@ -51,16 +51,16 @@ cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config1_load2
 cg1_fuel[2], cg2_fuel[2], weight_fuel[2], xcg_max[5], xcg_min[5] = config1_load3.loading_diagrams_fuel()
 
 
-config1_ground       = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-config1_ground2      = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-config1_ground3      = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+#config1_ground       = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+#config1_ground2      = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+#config1_ground3      = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
 
 
-frac_min = [0,0,0]
-frac_max = [0,0,0]
-frac_min[0], frac_max[0], frac1 = config1_ground.check_equilibrium()
-frac_min[1], frac_max[1], frac2 = config1_ground2.check_equilibrium()
-frac_min[2], frac_max[2], frac2 = config1_ground3.check_equilibrium()
+#frac_min = [0,0,0]
+#frac_max = [0,0,0]
+#frac_min[0], frac_max[0], frac1 = config1_ground.check_equilibrium()
+#frac_min[1], frac_max[1], frac2 = config1_ground2.check_equilibrium()
+#frac_min[2], frac_max[2], frac2 = config1_ground3.check_equilibrium()
 
 x_cg_max1 = [0, 0, 0]
 x_cg_min1 = [0, 0, 0]
