@@ -598,19 +598,19 @@ class Lift:
         alpha = np.array([-2,0,2,4,6,8,10,12,14]) * pi/180
         alpha_w = alpha - self.i_w
         M_wing = self.M_cruise / cos(self.lambda_4_rad)
-        print (alpha_w)
+#        print (alpha_w)
                 
         alpha_0_l_m75_m30 = 0.033               #Figure 8.42
         
         delta_alpha_0 = (-0.343 - 0.398)/2      #Figure 8.41
         alpha_0_L_w = (self.alpha_0_l + delta_alpha_0 * self.wing_twist) * (alpha_0_l_m75_m30)
-        print (alpha_0_L_w)
+#        print (alpha_0_L_w)
                 
         C_l_alpha_Mwing = self.C_l_alpha / sqrt(1 - M_wing**2)
         beta = sqrt(1-M_wing**2)      # Prandtl-Glauert compressibility correction factor
         k = C_l_alpha_Mwing / (2*pi / beta)    # Constant dependent on the airfoil lift curve slope at M=0.75
         C_L_alpha_w = (2*pi*self.A)/(2 + sqrt(4 + (self.A*beta/k)**2 * (1+(tan(self.lambda_2_rad)**2)/beta**2)))
-        print (C_L_alpha_w)
+#        print (C_L_alpha_w)
         
         """ Determining the spanwise lift distribution """
         L_b = np.array([(-0.293 + (-0.323 - -0.293)/2 * 1.5), (-0.204 + (-0.224 - -0.204)/2 * 1.5), (-0.012 + (-0.010 - -0.012)/2 * 1.5), (0.120 + (0.132 - 0.120)/2 * 1.5), (0.174 + (0.188 - 0.174)/2 * 1.5), (0.170 + (0.184 - 0.170)/2 * 1.5), (0.140 + (0.152 - 0.140)/2 * 1.5), (0.091 + (0.105 - 0.091)/2 * 1.5)])
@@ -631,7 +631,7 @@ class Lift:
         a_e = a_0 / E
         
         C_L_w = C_L_alpha_w * (alpha_w - alpha_0_L_w)
-        print (C_L_w)
+#        print (C_L_w)
         
         c_l_b1 = L_b * eta * a_e * self.S / c / self.b
         c_l_a1 = L_a * self.S / c / self.b
@@ -643,9 +643,9 @@ class Lift:
             plt.plot(y_b_2, c_l_i)
             c_l.append(c_l_i)
         
-        plt.plot(y_b_2, c_l_max)
+#        plt.plot(y_b_2, c_l_max)
             
-        plt.show
+#        plt.show
         
         "From this, it follows that """
         alpha_C_L_max_w_deg = 12.75           # deg
@@ -669,17 +669,17 @@ class Lift:
         Kwf = 1 + 0.025*(self.d_f_outer/self.b) - 0.25*(self.d_f_outer/self.b)**2
         CL_alpha_wf = Kwf*CL_alpha_w
         
-        CL0 = (self.i_w - np.deg2rad(alpha_0_L_w))*CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)(self.i_h) + CL_alpha_c*etac*(self.S_c/self.S)(self.i_c)
+        CL0 = (self.i_w - np.deg2rad(alpha_0_L_w))*CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)*(self.i_h) + CL_alpha_c*etac*(self.S_c/self.S)*(self.i_c)
         KA = (1/self.A) - 1/(1 + self.A**1.7)
         KL = (10 - 3*self.taper_ratio)/7
-        l_h = 0.9*l_f - self.x_le_MAC - 0.25*self.MAC
+        l_h = 0.9*self.l_f - self.x_le_MAC - 0.25*self.MAC
         h_h = 0.75*self.d_f_outer
         Kh = (1-h_h/self.b)/(2*l_h/self.b)**(1/3)
         beta2 = sqrt(1-0**2)
         CL_alpha_w_M0 = (2*pi*self.A)/(2 + sqrt(4+(self.A*beta2/0.95)**2*(1+(np.tan(self.lambda_2_rad)**2)/beta2**2)))
         de_da = 4.44*((KA*KL*Kh*cos(self.lambda_4_rad)**0.5)**1.19)*(CL_alpha_w/CL_alpha_w_M0)
         de_da_c = 0.15  #Figure 8.67
-        CL_alpha = CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)(1 - de_da) + CL_alpha_c*etac*(self.S_c/self.S)(1 + de_da_c)
+        CL_alpha = CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)*(1 - de_da) + CL_alpha_c*etac*(self.S_c/self.S)*(1 + de_da_c)
         
         alpha_0_L = (-CL0)/CL_alpha
         
