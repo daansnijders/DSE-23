@@ -207,26 +207,27 @@ class empennage:
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
         self.Ct_v = get_Ct(self.Cr_v, self.taper_ratio_v)                       # [m] tip chord length vertical tail
+        self.l_h = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                             # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
         
         self.lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_v_le_rad,self.Cr_v,self.b_v,self.taper_ratio_v) # [rad] quarter chord sweep angle
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
         
         
         N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
-        l_v = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                             # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
-        print (l_v)
+        self.l_v = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                             # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
+        print (self.l_v)
         C_y_max = 0.836                                                         # [-] maximum airfoil lift coefficient
         Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * self.S_v                       # [N] force exerted by the vertical tail
-        Y_v_req = N_e/l_v                                                       # [N] force required by the vertical tail
+        Y_v_req = N_e/self.l_v                                                       # [N] force required by the vertical tail
         C_y_req = Y_v_req/(0.5*rho_0*V_app**2*self.S_v)                         # [-] lift coefficient required vtail
         
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
-        N_v_max = - Y_v_max * l_v                                               # [N*m] moment caused by the vertical tail
+        N_v_max = - Y_v_max * self.l_v                                               # [N*m] moment caused by the vertical tail
 
         assert N_e < -N_v_max                                                   # check if tail is capable enough
         
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1, self.S_h_S, self.x_le_MAC, self.S_h, z_h, l_v
+        return self.Sh_S1, self.Sh_S2, self.Sh_C1, self.S_h_S, self.x_le_MAC, self.S_h, z_h, self.l_v, self.l_h
     
 e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
 
