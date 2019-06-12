@@ -193,6 +193,13 @@ def plot_pbl_vs_freq(p_e_squared,centrefreq,freq_delta):
     plt.show()
 
 
+
+
+def get_the_limit_for_lateral(MTOW):
+    EPNdB_limit=94+log10(35000)+(9)/(log10(400000)-log10(35000))*(log10(MTOW)-log10(35000))
+    return EPNdB_limit
+
+
 'redundant definitions for now '
 def get_overall_sound_pressure_level(SPL,centrefreq):
     OSPL=10*log10(sum(10**(SPL/10)))
