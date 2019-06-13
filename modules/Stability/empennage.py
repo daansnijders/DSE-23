@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 from inputs.constants import *
 from inputs.concept_1 import *
 from modules.Stability.cg_weight_config1 import x_cg_min1, x_cg_max1, x_le_MAC_range_perc, x_le_MAC_range
-from modules.Stability.cg_weight_loadingdiagram import x_cg_min, x_cg_max,weight_pass
+from modules.Stability.cg_weight_loadingdiagram import x_cg_min11, x_cg_max11, weight_pass, x_cg_max22, x_cg_max33
 from modules.main_class2 import *
 
 V_app = 70  #estimated by RB we will get from rik (lowest speed)
 
 class empennage:
-    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing):   
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V):   
         self.config = config - 1                                                # [-] configuration selection
         self.x_ac=x_ac                                                          # [m] x-loaction of the main wing ac
         self.CL_a_h = CL_a_h                                                    # [-] CL_alpha_h
@@ -46,7 +46,7 @@ class empennage:
         self.weight = self.weight_pass[self.config][-1] * g                     # [N] MTOW config
         self.CL_c = CL_c                                                        # [-] CL canard
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard                
-        self.x_cg_wing = x_cg_wing                                              # [m] x-location of the wing c.g.
+
 
         # running class functions
         self.plot_stability_tail(False)
@@ -310,8 +310,15 @@ class empennage:
     
     
     def deflection_curve(self, plot = False):
-        self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
-        self.Cm_a = self.CN_w_a * (self.x_cg - self.x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        if self.config ==1:
+            config_cg = x_cg_max22
+            x_cg_wing = config2_cg.x_cg_wing
+        if self.config ==2:
+            config_cg = x_cg_max33
+            x_cg_wing = config3_cg.x_cg_wing
+            
+        self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
+        self.Cm_a = self.CN_w_a * (config_cg- x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
         self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
         
         alpha_list = np.arange(0., (0.4+0.001), 0.001)
@@ -322,9 +329,8 @@ class empennage:
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.set (ylim = [-1.5,1.0], ylabel = 'delta_e')
-        ax.plot((alpha_list*180/np.pi), def_curve)
-
-
+        ax.plot((np.rad2deg(alpha_list)), def_curve)
+        plt.gca().invert_yaxis()
 
 
     

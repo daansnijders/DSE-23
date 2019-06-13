@@ -38,7 +38,7 @@ class HLD_class:
         
         CL_alpha_flapped = Sprime_S * self.CL_alpha_clean
         
-        HLD_clearance = 0.5     #Clearance between fuselage and the HLD's 
+        HLD_clearance = 0.1     #Clearance between fuselage and the HLD's 
         
         """ Calculate span of the flap """
         #x, h1, h2, and h3 are only used for calculation purposes
@@ -54,6 +54,8 @@ class HLD_class:
             S_wet = 2*((c_flap_start + c_flap_end) / 2 * (i*0.001))
             i += 1
         b_flap = h1 - h3
+        
+        HLD_clearance = 0.5
         
         SWF_LE = (0.1*self.S)/(0.9*0.3*self.lambda_le_rad)
         """ Calculate span of the slat """
@@ -540,7 +542,7 @@ class Lift:
         self.i_c            = np.deg2rad(i_c)
         self.S_h            = S_h
         self.S_c            = S_c
-        self.i_h            = i_h
+        self.i_h            = np.deg2rad(i_h)
         self.x_le_MAC       = x_le_MAC
         self.b_flap         = b_flap
         self.SWF            = SWF
@@ -549,22 +551,37 @@ class Lift:
     def Airfoil_lift_flaps(self):
         #Lift increase due to double slotted flaps
         #Wild guess for chord length flap one and two, together a little more than 0.35
-        c1 = 0.2        #0.2*c
+        c1 = 0.20       #0.2*c
         c2 = 0.17       #0.17*c
         Phi_TE_upper = np.arctan(10*0.03)
-        df1 = 40        #deg
-        df2 = 10        #deg
+        df1_land = 35   #deg
+        df2_land = 15   #deg
         eta1 = 0.46     #Figure 8.20
         eta2 = 0.38     #Figure 8.20
         etat = 1.0      #Figure 8.22
-        cldf1 = 0.0605   #Figure 8.21
-        cldf2 = 0.054    #Figure 8.21
+        cldf1 = 0.0605  #Figure 8.21
+        cldf2 = 0.054   #Figure 8.21
         
         #Wild guess for chord extension due to flaps
         c_a_prime = 1.13    #1.13*c
         c_prime = 1.20      #1.20*c
 
-        delta_cl_flap = eta1*cldf1*df1*c_a_prime + eta2*etat*cldf2*df2*(1+(c_prime-c_a_prime))
+        delta_cl_flap = eta1 * cldf1 * df1_land * c_a_prime + eta2 * etat * cldf2 * df2_land * (1 + (c_prime-c_a_prime))
+        print (delta_cl_flap) 
+        """
+        #Lift increase due to Fowler flap
+        c_f = 0.25
+        delta_TO   = np.deg2rad(15)
+        delta_land = np.deg2rad(40)
+        alpha_delta_TO   = 0.50
+        alpha_delta_land = 0.40
+        c_prime_TO   = 1 + cos(delta_TO)   * c_f
+        c_prime_land = 1 + cos(delta_land) * c_f
+        
+        delta_cl_TO   = self.C_l_alpha * alpha_delta_TO   * c_prime_TO   * delta_TO
+        delta_cl_land = self.C_l_alpha * alpha_delta_land * c_prime_land * delta_land
+        print (delta_cl_TO, delta_cl_land)
+        """
         
         #Lift increase due to Krueger flaps
         cld = 0.0015    #Figure 8.26
@@ -573,7 +590,7 @@ class Lift:
         
         delta_cl_krueger = cld*df*c_prime_k
         
-         #lift curve slope
+        #lift curve slope
         c_prime_tot = 1.3 #c_prime and c_prime_k
         clalpha_flaps = c_prime_tot*self.C_l_alpha
         
@@ -665,11 +682,10 @@ class Lift:
         delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime - 1)* self.SWF/self.S )
         
         K_delta = (1 - 0.08*(cos(self.lambda_4_rad))**2)*(cos(self.lambda_4_rad))**(0.75)   #Compare to Figure 8.55
-#        print(K_delta)
         delta_C_L_max_w_TE = delta_C_l_max * self.SWF / self.S * K_delta
         
-        c_f_c  = 0.1                   #Figure 8.56
-        b_LE_e = b_slats / (self.b / 2)                  #Figure 8.57
+        c_f_c  = 0.1                                    #Figure 8.56
+        b_LE_e = b_slats / (self.b / 2)                 #Figure 8.57
         
         delta_C_L_max_w_LE = 7.11 * c_f_c * (b_LE_e)**2 * (cos(self.lambda_4_rad))**2
         
@@ -749,31 +765,98 @@ class Lift:
                 C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)))**2
                 C_L.append(C_L_i)
         
-        plt.plot(alpha, C_L, "b-")
-        plt.show
-             
-        return (C_L)
         
+        plt.plot(alpha, C_L, "b-")
+                     
         C_L_flaps = []
+        
+        l = alpha.index(0)
+        alpha_0_L_flaps = -(delta_CL + CL_alpha * alpha_0_L) / delta_CL_alpha
         
         for i in range(len(alpha)): 
             
             if alpha[i] <= 7:
-                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)
-                C_L.append(C_L_i)
+                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)
+                C_L_flaps.append(C_L_i)
                 
             elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/pi : 
                 j = alpha.index(7)
                 k = alpha.index(alpha_CL_max*180/pi)
-                C_L_i = (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L)) + ((CL_max - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L))) / (k - j)) * (i - j)
-                C_L.append(C_L_i)
+                C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps)) + (((CL_max + delta_CL_max) - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
+                C_L_flaps.append(C_L_i)
                 
             elif alpha[i] == alpha_CL_max*180/pi:
-                C_L_i = CL_max
-                C_L.append(C_L_i)
+                C_L_i = CL_max + delta_CL_max
+                C_L_flaps.append(C_L_i)
             else:
-                C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)))**2
-                C_L.append(C_L_i)
+                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
+                C_L_flaps.append(C_L_i)
         
-        plt.plot(alpha, C_L, "b-")
+        plt.plot(alpha, C_L_flaps, "k-")
         plt.show
+        
+        return (C_L)
+        
+        
+        
+class Moment:
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap,delta_cl_krueger, x_ref, cl_des_airfoil):
+        self.S                  = S
+        self.A                  = A
+        self.rho                = rho
+        self.rho_0              = rho_0
+        self.l_f                = l_f
+        self.V_cruise           = V_cruise
+        self.M_cruise           = M_cruise
+        self.V_TO               = V_TO
+        self.mu_37              = mu_37
+        self.MAC                = MAC
+        self.Ct                 = Ct
+        self.Cr                 = Cr
+        self.b                  = b
+        self.taper_ratio        = taper_ratio
+        self.d_f_outer          = d_f_outer
+        self.lambda_le_rad      = lambda_le_rad
+        self.lambda_4_rad       = lambda_4_rad
+        self.lambda_2_rad       = lambda_2_rad
+        self.t_c                = t_c
+        self.C_l_alpha          = C_l_alpha
+        self.alpha_0_l          = alpha_0_l
+        self.alpha_star_l       = alpha_star_l
+        self.delta_cl_flap      = delta_cl_flap
+        self.delta_cl_krueger   = delta_cl_krueger
+        self.x_ref              = x_ref
+        self.cl_des_airfoil     = cl_des_airfoil
+        
+    def Airfoil_moment(self):
+        cm0_airfoil = -0.123        #Zero lift moment coefficient according to JAVAfoil
+        x_ac = 0.25                 #Percentage of chord
+        
+        Mcrit = 0.86 - 0.1*self.cl_des_airfoil -self.t_c
+        cm_des_airfoil = cm0_airfoil + self.cl_des_airfoil*(self.x_ref - x_ac)
+        dcm_dcl_airfoil = self.x_ref-x_ac
+        
+        cl_star = self.C_l_alpha*(self.alpha_star_l - self.alpha_0_l)
+        return(cm_des_airfoil, dcm_dcl_airfoil)
+        
+    def Airfoil_moment_flaps(self, cm_des_airfoil):
+        xcp_cprime = 0.415              #Figure 8.91
+        c_prime = 1.20 
+        delta_cm_flap = self.delta_cl_flap*(self.x_ref - xcp_cprime*c_prime)
+        
+        cmdle = 0.0006      #Figure 8.93
+        dfle = 60           #DEG
+        delta_cm_krueger = cmdle*c_prime**2*dfle + (self.x_ref + (c_prime-1)) + cm_des_airfoil*(c_prime**2 -1) + 0.75*self.cl_des_airfoil*c_prime*(c_prime-1)
+        return(delta_cm_flap, delta_cm_krueger)
+        
+#    def Wing_moment(self):
+        
+         
+#    def Wing_moment_flaps(self):
+        
+        
+#    def Airplane_moment(self):
+        
+        
+#    def Airplane_moment_flaps(self):
+

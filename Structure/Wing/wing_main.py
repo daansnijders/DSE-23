@@ -18,6 +18,10 @@ import numpy as np
 import geo_prop_function as gpf
 import fuel_force_function as fff
 
+import sys
+sys.path.insert(0,'/Users/thong/Documents/TU Delft DSE/DSE-23')
+import inputs.concept_1 as c1
+
 """
 Parameters
 ------------------------------------------------------------------------------
@@ -29,19 +33,23 @@ spar_front = gpf.spar_front
 spar_rear = gpf.spar_rear
 
 # Maximum Take-off Mass [kg]
-MTOM = 58722.6
+MTOM = c1.MTOW[0]
+print("MTOM [kg] = ",MTOM)
 
 # Wing span [m]
-wing_span = 35.24129
+wing_span = c1.b
+print("Wing span [m] = ",wing_span)
 
 # Root chord [m]
-chord_root = 5.666
+chord_root = c1.Cr
+print("Root chord [m] = ",chord_root)
 
 # Tip Chord [m]
-chord_tip = 1.753
-
+chord_tip = c1.Ct
+print("Tip chord [m] = ",chord_tip)
 # Wing surface area [m^2]
-wing_area = 130.7314
+wing_area = c1.S
+print("Wing area [m^2] = ",wing_area)
 
 # Discretisation number [-]
 N = 200
@@ -58,20 +66,29 @@ load_factor = 3.1
 safety_factor = 1.5
 
 # Leading edge sweep [deg]
-sweep_LE = 28.48
+sweep_LE = c1.lambda_le_rad*180/np.pi
 
 # Engine property list[x_loc(m), y_loc(m), z_loc(m), thrust [N], y_force, weight[N]
 engine_thrust = 108540    #[N]
-engine_mass = 2177      #[kg] 
-engine = [0,5,-1,-engine_thrust,0,engine_mass*-9.81*load_factor]
+engine_mass = 2177      #[kg]
+print("Y engine [m] = ",c1.y_engine) 
+engine = [0,c1.y_engine,0,-engine_thrust,0,engine_mass*-9.81*load_factor]
 
 # main landing gear property list[x_loc(m), y_loc(m), z_loc(m), drag [N], y_force, weight[N]]
 mlg_drag = 200       #[N]
 mlg_mass = 2500     #[kg]
-mlg = [6,3,-1,mlg_drag,0,mlg_mass*-9.81*load_factor]
+x_mlg = c1.x_mlg[0]-c1.x_le_w[0]
+y_mlg = c1.y_mlg[0]
+z_mlg = c1.z_mlg
+print("X mlg [m] = ",x_mlg)
+print("Y mlg [m] = ",y_mlg)
+print("Z mlg [m] = ",z_mlg)
+mlg = [x_mlg,y_mlg,-z_mlg,mlg_drag,0,mlg_mass*-9.81*load_factor]
 
 # Fuel Mass [kg]
-fuel_mass = 12000
+fuel_mass = c1.M_fuel[0]
+print("fuel mass [kg] = ",fuel_mass)
+
 """
 Form list of cross-section
 """
@@ -90,7 +107,8 @@ fuel = fff.get_fuel_force(cross_section_lst,N,wing_span,load_factor,\
 tot_fuel_mass = fuel[0]
 fuel_force_lst = fuel[1]
 
-#check = sum(np.array(fuel_force_lst)[:,-1])/load_factor/9.81
+check = sum(np.array(fuel_force_lst)[:,-1])/load_factor/9.81
+print(check)
 
 """
 Form list of external forces
@@ -107,6 +125,10 @@ force_lst.extend([mlg])
 force_lst.extend([engine])
 force_lst.extend(fuel_force_lst)
 force_lst = np.array(force_lst)
+force_lst=force_lst[np.argsort(force_lst[:,1])]
+
+#plt.figure()
+#plt.scatter(force_lst[:,1],force_lst[:,0])
 
 """
 Form list of internal loads
@@ -119,17 +141,17 @@ internal_loads_lst = np.array(internal_loads_lst)
 """
 ANSWER ANALYSIS 1
 """
-plt.figure("Shear x")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,3])
-plt.figure("Shear z")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,4])
-plt.figure("Moment x")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,5])
-plt.figure("Moment z")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,6])
-plt.figure("Torque")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,7])
-plt.show()
+#plt.figure("Shear x")
+#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,3])
+#plt.figure("Shear z")
+#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,4])
+#plt.figure("Moment x")
+#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,5])
+#plt.figure("Moment z")
+#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,6])
+#plt.figure("Torque")
+#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,7])
+#plt.show()
 
 """
 Calculate normal stress due to bending
@@ -137,6 +159,13 @@ sigma = -My/I
 """
 sigmax_upper = -safety_factor*internal_loads_lst[:,5]*cross_section_lst[:,7]/cross_section_lst[:,8]
 sigmax_lower = -safety_factor*internal_loads_lst[:,5]*cross_section_lst[:,6]/cross_section_lst[:,8]
+
+"""
+Calculate normal stress due to engine
+sigma = -Mx/I
+"""
+sigmaz_upper = -safety_factor*internal_loads_lst[:,6]*cross_section_lst[:,14]/cross_section_lst[:,12]
+sigmaz_lower = -safety_factor*internal_loads_lst[:,6]*cross_section_lst[:,15]/cross_section_lst[:,12]
 
 """
 Calculate critical shear web buckling stress [Pa]
@@ -164,18 +193,32 @@ q = VQ/I
 q_web_lst = np.abs(internal_loads_lst[:,4]*cross_section_lst[:,10]/(cross_section_lst[:,8]))
 
 """
+Calculate shear flow at skin due to engine
+q = VQ/I
+"""
+q_skin_lst = np.abs(internal_loads_lst[:,3]*cross_section_lst[:,13]/(cross_section_lst[:,12]))
+
+"""
 Calculate shear due to torque
 q = Torque/2A
 """
 q_torque_lst = np.abs(internal_loads_lst[:,7]/(2*cross_section_lst[:,1]))
 
 """Calculate shear at the web"""
-shear_lst = safety_factor*(q_torque_lst+q_web_lst)/gpf.t_spar
+shear_web_lst = safety_factor*(q_torque_lst+q_web_lst)/gpf.t_spar
 
-"""
-Group stresses together
-sigmax_comp,sigma_cr_skin,shear,shear_cr
-"""
-stress = np.column_stack((sigmax_upper,sigma_cr_skin_lst[:,4],sigma_cr_skin_lst[:,5],shear_lst,tau_cr_web_lst[:,4],tau_cr_web_lst[:,5]))
-stress = stress/10**6
+"""Calculate shear at the skin"""
+shear_skin_lst = safety_factor*(q_torque_lst+q_skin_lst)/gpf.t_skin
 
+"""Combine stresses"""
+stress = abs(sigmax_upper)+abs(sigmaz_upper)
+
+plt.figure("Skin Stress")
+plt.plot(cross_section_lst[:,0],stress)
+plt.plot(cross_section_lst[:,0],sigma_cr_skin_lst[:,4:])
+plt.show
+
+#plt.figure("Stress")
+#plt.plot(cross_section_lst[:,0],sigmax_upper)
+#plt.plot(cross_section_lst[:,0],sigmaz_upper)
+#plt.show()
