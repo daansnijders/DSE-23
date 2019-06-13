@@ -18,7 +18,7 @@ from modules.Stability.empennage import *
 
 
 """NEED FROM OTHER FILES"""
-x_ac     = (11.78+0.25*3.8)
+x_ac     = (x_le_MAC[0]+0.25*MAC)
 CL_a_h   = 3.82
 CL_a_ah  = 4.90
 de_da    = 0.3835
