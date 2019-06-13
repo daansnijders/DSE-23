@@ -13,8 +13,8 @@ from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
-#from modules.performance.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
+#from modules.performance.payload_range import *
 from inputs.performance_inputs import *
 #from modules.performance.class2_performance_de5fs import get_thrust_required
 from inputs.constants import *
