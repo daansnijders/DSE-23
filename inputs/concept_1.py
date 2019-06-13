@@ -4,19 +4,16 @@ Created on Fri May  3 09:45:17 2019
 
 @author: Lisa
 """
-import numpy as np
-import matplotlib.pyplot as plt
 from modules.initialsizing_cg import *
 from modules.airfoil_calculations import *
-from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
-from modules.payload_range import *
+from modules.performance.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.performance_inputs import *
-from modules.class2_performance_defs import get_thrust_required
+from modules.performance.class2_performance_defs import get_thrust_required
 from inputs.constants import *
 from Structure.Wing.isa import isa
 
