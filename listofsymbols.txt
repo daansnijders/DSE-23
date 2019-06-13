@@ -101,15 +101,45 @@ x position of the leading edge Vert tail	x_le_v
 x position of the leading edge Horiz tail	x_le_h
 
 
-Area horizontal tail				S_h
-area vertical tail				S_v
+x-location of MAC main wing 			x_le_MAC
 
-span of the horizon tail			b_h
-span of the vertic tail				b_v
-Root chord of the horiz tail			Cr_h
-Tip chord of the horiz tail			Ct_h
-Root chord of the vert tail			Cr_v
-Tip chord of the vert tail			Ct_v
+surface area of htail 				S_h
+aspect ratio htail				A_h
+span htail					b_h
+root chord htail				Cr_h
+tip chord htail 				Ct_h
+taper ration htail				taper_ratio_h
+leading edge sweep htail			lambda_h_le_rad
+half chord sweep htail				lambda_h_2_rad
+quarter chord sweep htail			lambda_h_4_rad
+x-location htail				x_h
+
+surface area of vtail 				S_v
+aspect ratio vtail				A_v
+span vtail					b_v
+root chord vtail				Cr_v
+tip chord vtail 				Ct_v
+taper ration vtail				taper_ratio_v
+leading edge sweep vtail			lambda_v_le_rad
+half chord sweep vtail				lambda_v_2_rad
+quarter chord sweep vtail			lambda_v_4_rad
+x-location vtail				x_v
+
+
+chord length elevator				c_elev
+surface area elevator				S_elev
+span elevator					b_elev
+
+chord length rudder				c_rud
+surface area rudder				S_rud
+span rudder					b_rud
+
+chord length aileron				c_ail
+surface area aileron 				S_ail
+span aileron					b_ail
+
+chord length spoiler				c_splr
+span spoiler					b_splr
 
 Reynolds number					Re
 Reynolds number Take-off			Reto
@@ -133,6 +163,7 @@ Stall speed					V_s
 climb gradient 					c
 Take off parameter				TOP
 sigma						sigma
+loading factor (maximum)			n_max
 
 
 Parasite drag coefficient			Cfe
@@ -259,5 +290,14 @@ nose wheel diameter				D_nlg
 width of main wheel				w_mlg
 width of nose wheel				w_nlg
 length of the strut main			L_strut_mlg
-lentgth of the strut nose			L_strut_nlg
+length of the strut nose			L_strut_nlg
+
+
+Area of flap					S_flap
+span of the flap				b_flap
+chord of the flap				c_flap
+deflection angle of the flap			deflection_flap
+
+
+
 
