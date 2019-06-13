@@ -14,22 +14,22 @@ Parameters
 """
 
 # Spar thickness [m]
-t_spar = 0.008
+t_spar = 0.015
 
 # Skin thickness [m]
-t_skin = 0.008
+t_skin = 0.005
 
 # Front spar location/chord [-]
 spar_front = 0.15#0.1
 
 # Rear spar location/chord [-]
-spar_rear = 0.6
+spar_rear = 0.65
 
 # Chord [m] example
 chord = 5
 
-stringer_area_upper = 600/10**6
-stringer_area_lower = 600/10**6
+stringer_area_upper = 400/10**6
+stringer_area_lower = 400/10**6
 
 
 """
@@ -117,7 +117,7 @@ Obtain skin buckling stress
 kc = pd.read_excel('wing_box_design.xlsx','kc_ss_c')
 
 E_skin = 71*10**9
-comp_strength_skin = 441*10**6
+comp_strength_skin = 510*10**6
 skin_poisson_ratio = 0.33
 
 def get_skin_buckling(y_loc,stringer_space, span):
@@ -183,6 +183,7 @@ def get_cross_sec_prop(chord,y_loc,span):
     front_spar_area_z = front_spar_area * (upper_frontspar_z+lower_frontspar_z)/2
     rear_spar_area_z = rear_spar_area * (upper_rearspar_z+lower_rearspar_z)/2
     
+    
     skin_box_area = 0
     skin_box_area_z = 0
     skin_box_area_x = 0
@@ -234,56 +235,90 @@ def get_cross_sec_prop(chord,y_loc,span):
     neutral_z = total_area_z/total_area
     max_z = max(foil_upper[:,1])-neutral_z
     min_z = min(foil_lower[:,1])-neutral_z
+    max_x = rear_spar-neutral_x
+    min_x = front_spar-neutral_x
     
     #-------------------------Calculate area moment of inertia-----------------
-    front_spar_moi = (1/12)*((upper_frontspar_z-lower_frontspar_z)**3)*t_spar + \
+    front_spar_moi_x = (1/12)*((upper_frontspar_z-lower_frontspar_z)**3)*t_spar + \
                         front_spar_area*((upper_frontspar_z+lower_frontspar_z)/2-
                                          neutral_z)**2
-    front_spar_Q = (upper_frontspar_z-lower_frontspar_z)*t_spar*(upper_frontspar_z-
-                                         neutral_z)/2
-    rear_spar_moi = (1/12)*((upper_rearspar_z-lower_rearspar_z)**3)*t_spar + \
-                        rear_spar_area*((upper_rearspar_z+lower_rearspar_z)/2-
-                                         neutral_z)**2
-    rear_spar_Q = (upper_rearspar_z-lower_rearspar_z)*t_spar*(upper_rearspar_z-
+    front_spar_moi_z = (1/12)*((upper_frontspar_z-lower_frontspar_z))*t_spar**2 + \
+                        front_spar_area*(front_spar-neutral_x)**2
+
+    front_spar_Q_z = (upper_frontspar_z-lower_frontspar_z)*t_spar*(upper_frontspar_z-
                                          neutral_z)/2
 
-    skin_moi = 0
-    upper_skin_Q = 0 #First area moment
-    lower_skin_Q = 0
+    front_spar_Q_x = (upper_frontspar_z-lower_frontspar_z)*t_spar*(front_spar-
+                                         neutral_x)
+
+    rear_spar_moi_x = (1/12)*((upper_rearspar_z-lower_rearspar_z)**3)*t_spar + \
+                        rear_spar_area*((upper_rearspar_z+lower_rearspar_z)/2-
+                                         neutral_z)**2
+    rear_spar_moi_z = (1/12)*((upper_rearspar_z-lower_rearspar_z))*t_spar**3 + \
+                        rear_spar_area*(rear_spar-
+                                         neutral_x)**2
+
+    rear_spar_Q_z = (upper_rearspar_z-lower_rearspar_z)*t_spar*(upper_rearspar_z-
+                                         neutral_z)/2
+
+    rear_spar_Q_x = (upper_frontspar_z-lower_frontspar_z)*t_spar*(rear_spar-
+                                         neutral_x)
+    
+    skin_moi_x = 0
+    skin_moi_z = 0
+    upper_skin_Q_z = 0 #First area moment
+    upper_skin_Q_x = 0
+    lower_skin_Q_z = 0
+    lower_skin_Q_x = 0
     for i in range(N):
         x1 = front_spar+i*step_size
         x2 = front_spar+i*step_size+step_size
+        skin_area_i = abs(x2-x1)*t_skin
         z1_up = np.interp(x1,foil_upper[:,0],foil_upper[:,1])
         z2_up = np.interp(x1,foil_upper[:,0],foil_upper[:,1])
         z1_low = np.interp(x1,foil_lower[:,0],foil_lower[:,1])
         z2_low = np.interp(x1,foil_lower[:,0],foil_lower[:,1])
-        skin_moi += abs(x2-x1)*t_skin*((z2_up+z1_up)/2-neutral_z)**2
-        skin_moi += abs(x2-x1)*t_skin*((z2_low+z1_low)/2-neutral_z)**2
+        skin_moi_x += skin_area_i*((z2_up+z1_up)/2-neutral_z)**2
+        skin_moi_x += skin_area_i*((z2_low+z1_low)/2-neutral_z)**2
+        skin_moi_z += skin_area_i*2*(x1-neutral_x)**2
         if x1 < neutral_x:
-            upper_skin_Q += abs(x2-x1)*t_skin*((z2_up+z1_up)/2-neutral_z)
+            upper_skin_Q_z += skin_area_i*((z2_up+z1_up)/2-neutral_z)
+            upper_skin_Q_x += skin_area_i*(x1-neutral_x)
         if x1 < neutral_x:
-            lower_skin_Q += abs(x2-x1)*t_skin*((z2_low+z1_low)/2-neutral_z)
+            lower_skin_Q_z += skin_area_i*((z2_low+z1_low)/2-neutral_z)
+            lower_skin_Q_x += skin_area_i*(x1-neutral_x)
         
-    upper_stringer_moi = 0
-    upper_stringer_Q = 0
+    upper_stringer_moi_x = 0
+    upper_stringer_moi_z = 0
+    upper_stringer_Q_z = 0
+    upper_stringer_Q_x = 0
     for j in range(upper_stringer):
         xi = stringer_interval_upper*(j+1)+front_spar
         zi = np.interp(xi,foil_upper[:,0],foil_upper[:,1])
-        upper_stringer_moi += stringer_area_upper*(zi-neutral_z)**2
+        upper_stringer_moi_x += stringer_area_upper*(zi-neutral_z)**2
+        upper_stringer_moi_z += stringer_area_upper*(xi-neutral_x)**2
         if xi < neutral_x:
-            upper_stringer_Q += stringer_area_upper*(zi-neutral_z)
+            upper_stringer_Q_z += stringer_area_upper*(zi-neutral_z)
+            upper_stringer_Q_x += stringer_area_upper*(xi-neutral_x)
     
-    lower_stringer_moi = 0
-    lower_stringer_Q = 0
+    lower_stringer_moi_x = 0
+    lower_stringer_moi_z = 0
+    lower_stringer_Q_z = 0
+    lower_stringer_Q_x = 0
     for k in range(lower_stringer):
         xi = stringer_interval_lower*(k+1)+front_spar
         zi = np.interp(xi,foil_lower[:,0],foil_lower[:,1])
-        lower_stringer_moi += stringer_area_lower*(zi-neutral_z)**2
+        lower_stringer_moi_x += stringer_area_lower*(zi-neutral_z)**2
+        lower_stringer_moi_z += stringer_area_lower*(xi-neutral_x)**2
         if xi < neutral_x:
-            lower_stringer_Q += stringer_area_lower*(zi-neutral_z)
+            lower_stringer_Q_z += stringer_area_lower*(zi-neutral_z)
+            lower_stringer_Q_x += stringer_area_lower*(xi-neutral_x)
+            
+    moi_x = front_spar_moi_x+rear_spar_moi_x+skin_moi_x+upper_stringer_moi_x+lower_stringer_moi_x
+    moi_z = front_spar_moi_z+rear_spar_moi_z+skin_moi_z+upper_stringer_moi_z+lower_stringer_moi_z
 
-    moi = front_spar_moi+rear_spar_moi+skin_moi+upper_stringer_moi+lower_stringer_moi
-    Q = front_spar_Q+upper_stringer_Q+upper_skin_Q
+    Q_z = front_spar_Q_z+upper_stringer_Q_z+upper_skin_Q_z
+    Q_x = front_spar_Q_x+upper_stringer_Q_x+upper_skin_Q_x
     
     spar_height = h_front_spar
     stringer_space = stringer_interval_upper
@@ -301,8 +336,8 @@ def get_cross_sec_prop(chord,y_loc,span):
 #    print("Neutral-axis [%] =", abs(1-neutral_z/0.1518)*100)
 #    print("Moment of inertia [%] =", (1-moi/0.003)*100)
     
-    return [y_loc,enclosed_area,total_area,fuel_area,neutral_x,neutral_z,min_z,max_z,moi,\
-            spar_height,Q,stringer_space]
+    return [y_loc,enclosed_area,total_area,fuel_area,neutral_x,neutral_z,min_z,max_z,moi_x,\
+            spar_height,Q_z,stringer_space,moi_z,Q_x,min_x,max_x]
 
 ##Verification
 #stuff = get_cross_sec_prop(5,1,1)

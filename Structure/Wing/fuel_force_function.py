@@ -15,7 +15,7 @@ def get_fuel_force(cross_section_lst,N,wing_span,load_factor,fuel_mass,LE_sweep,
     step_size = (wing_span/2)/N
     tot_fuel_mass = 0
     for i in range(len(cross_section_lst)):
-        if cross_section_lst[i,0]<0.75*wing_span/2:
+        if cross_section_lst[i,0]<=0.75*wing_span/2 and cross_section_lst[i,0]>=0.1*wing_span/2:
             tot_fuel_mass += cross_section_lst[i,3]*step_size*804*2
     
     print("Total available fuel mass [kg] = ",tot_fuel_mass)
