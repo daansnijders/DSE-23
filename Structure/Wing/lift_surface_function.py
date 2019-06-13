@@ -46,52 +46,56 @@ def get_aeroforce_distri(mass,load_factor,S,b,LE_sweep,Cr,Ct,number,CL,CD):
     return aero_force_lst
 """
 Get internal force at every point
+[y, chord, surface area, shear_x, shear_z, moment_x, moment_z, torque]
 """
-def get_internal_force_distri(span,Cr,Ct,N,force_lst,LE_sweep):
+def get_internal_force_distri(span,Cr,Ct,N,force_lst,LE_sweep,spar_front,spar_rear):
     print("------------------------------------------")
     print("Run get_internal_force_distri")
     step_size = span/(2*N)
     root_shear_z = -sum(force_lst[:,-1])
     root_shear_x = -sum(force_lst[:,3])
-    root_moment_y = sum(force_lst[:,3]*force_lst[:,1])
+    root_moment_z = sum(force_lst[:,3]*force_lst[:,1])
     root_moment_x = sum(force_lst[:,-1]*force_lst[:,1])
     torque_lst = force_lst[:,-1]*(force_lst[:,0]-(force_lst[:,1]*np.tan(LE_sweep/180*np.pi)+\
-                      0.5*get_chord(force_lst[:,1],span,Cr,Ct)))+ force_lst[:,3]*-force_lst[:,2]
+                      (spar_front+spar_rear)/2*get_chord(force_lst[:,1],span,Cr,Ct)))+ force_lst[:,3]*-force_lst[:,2]
     root_torque = sum(torque_lst)
     internal_loads = []
     print("-----Checking-----")
     print("Root Shear x[N] =  ", root_shear_x)
     print("Root Shear z[N] =  ", root_shear_z)
     print("Root Moment x[Nm] =  ", root_moment_x)
-    print("Root Moment y[Nm] =  ", root_moment_y)
+    print("Root Moment z[Nm] =  ", root_moment_z)
     print("Root Torque [Nm] =  ", root_torque)
     for i in range(N):
         yi = i*step_size
-        shear_z_i = 0
-        shear_x_i = 0
-        moment_x_i = 0
-        moment_y_i = 0
-        torque_i = 0
         chord = get_chord(yi,span,Cr,Ct)
         Ct_i = get_chord(yi+step_size,span,Cr,Ct)
         Cr_i = chord        
         Si = 0.5*(Cr_i+Ct_i)*step_size
+        force_lst=force_lst[np.argsort(force_lst[:, 1])]
+        shear_z_i = 0
+        shear_x_i = 0
+        moment_x_i = 0
+        moment_z_i = 0
+        torque_i = 0
         for j in range(len(force_lst)):
             if yi>=force_lst[j,1]:
                 shear_z_i += force_lst[j,-1]
-                moment_x_i += force_lst[j,-1]*force_lst[j,1]
+                moment_x_i += force_lst[j,-1]*(yi-force_lst[j,1])
                 torque_i += torque_lst[j]
                 shear_x_i += force_lst[j,3]
-                moment_y_i += force_lst[j,3]*force_lst[j,1]
-        torque = root_torque-torque_i
-        moment_x = root_moment_x-moment_x_i
+                moment_z_i += force_lst[j,3]*(yi-force_lst[j,1])
+        torque = root_torque - torque_i
+        moment_x = root_moment_x+moment_x_i+root_shear_z*yi
         shear_z = root_shear_z + shear_z_i
         shear_x = root_shear_x + shear_x_i
-        moment_y = root_moment_y - moment_y_i
-        internal_loads.append([yi,chord,Si,shear_x,shear_z,moment_x,moment_y,torque])
+        moment_z = root_moment_z + moment_z_i + root_shear_x*yi
+        internal_loads.append([yi,chord,Si,shear_x,shear_z,moment_x,moment_z,torque])
     print("Tip Shear x[N] =  ", internal_loads[-1][3])
     print("Tip Shear z[N] =  ", internal_loads[-1][4])
     print("Tip Moment x[Nm] =  ", internal_loads[-1][5])    
-    print("Tip Moment y[Nm] =  ", internal_loads[-1][6])    
+    print("Tip Moment z[Nm] =  ", internal_loads[-1][6])    
     print("Tip Torque [Nm] =  ", internal_loads[-1][7])
     return internal_loads
+
+

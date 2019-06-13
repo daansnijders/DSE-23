@@ -4,14 +4,17 @@ Created on Fri May  3 09:45:17 2019
 
 @author: Lisa
 """
+import numpy as np
+import matplotlib.pyplot as plt
 from modules.initialsizing_cg import *
 from modules.airfoil_calculations import *
+from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
-#from modules.performance.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
+#from modules.performance.payload_range import *
 from inputs.performance_inputs import *
 #from modules.performance.class2_performance_de5fs import get_thrust_required
 from inputs.constants import *
@@ -103,7 +106,7 @@ lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             
 
 
 #canard parameters
-A_c = 6  
+A_c = 6
 b_c = [get_b(A_c,S_c[i]) for i in range(3)]
 lambda_c_4_rad = get_lambda_4_rad(M_cruise,M_x)                                 # [rad] quarter chord sweep angle canard
 taper_ratio_c = get_taper_ratio(lambda_c_4_rad)                                 # [-] taper ratio canard
@@ -217,8 +220,8 @@ z_nlg = z_mlg                                                                   
 
 L_strut_mlg= -z_mlg-D_mlg/2
 L_strut_nlg= -z_nlg-D_nlg/2
-
-
+D_strut_mlg=( max(P_mw)*2*1.5*4/(517*10**6))**0.5
+D_strut_nlg=( max(P_nw)*2*1.5*4/(517*10**6))**0.5
 #MAKE THIS ITERABLE WITH THE LOADING DIAGRAM
 # Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
 
@@ -230,16 +233,19 @@ Cl_max = [1.552, 1.582, 1.584]
 Reto1, Re1, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
 CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
 
+
 """Please add this one below"""
 alpha_cruise_rad = np.deg2rad(0)                                                # [rad] angle of attack during cruise
 
 
 # loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 
+
 #create loading diagram with new Cl and Cd
 #CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
 #for i in range(3):
 #    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
+# loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 
 #V_TO estimation to get Class-II drag calculation going
 

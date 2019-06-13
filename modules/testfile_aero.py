@@ -119,6 +119,7 @@ delta_CL1, delta_CL_alpha1, delta_CL_max1 = config1_Lift.Airplane_lift_flaps(del
 #print(delta_cl_flap1, delta_cl_krueger1, clalpha_flaps1, delta_clmax_flap1, delta_clmax_krueger1)
 print(CL_alpha_h1, CL_alpha_c1, CL_alpha1, alpha_0_L1, CL_max1)
 print(delta_CL1, delta_CL_alpha1, delta_CL_max1)
+
 #Configuration 2
 config2_Lift = Lift(S,A,rho,rho_0,l_f[1],V_cruise,M_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, A_h, A_c,lambda_h_2_rad[1], lambda_c_2_rad, i_c, S_h[1], S_c[1], i_h, x_le_MAC[1], b_flap, SWF)
 delta_cl_flap2, delta_cl_krueger2, clalpha_flaps2, delta_clmax_flap2, delta_clmax_krueger2 = config2_Lift.Airfoil_lift_flaps()
