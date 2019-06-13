@@ -38,7 +38,7 @@ class HLD_class:
         
         CL_alpha_flapped = Sprime_S * self.CL_alpha_clean
         
-        HLD_clearance = 0.5     #Clearance between fuselage and the HLD's 
+        HLD_clearance = 0.1     #Clearance between fuselage and the HLD's 
         
         """ Calculate span of the flap """
         #x, h1, h2, and h3 are only used for calculation purposes
@@ -54,6 +54,8 @@ class HLD_class:
             S_wet = 2*((c_flap_start + c_flap_end) / 2 * (i*0.001))
             i += 1
         b_flap = h1 - h3
+        
+        HLD_clearance = 0.5
         
         SWF_LE = (0.1*self.S)/(0.9*0.3*self.lambda_le_rad)
         """ Calculate span of the slat """
@@ -540,7 +542,7 @@ class Lift:
         self.i_c            = np.deg2rad(i_c)
         self.S_h            = S_h
         self.S_c            = S_c
-        self.i_h            = i_h
+        self.i_h            = np.deg2rad(i_h)
         self.x_le_MAC       = x_le_MAC
         self.b_flap         = b_flap
         self.SWF            = SWF
@@ -549,22 +551,37 @@ class Lift:
     def Airfoil_lift_flaps(self):
         #Lift increase due to double slotted flaps
         #Wild guess for chord length flap one and two, together a little more than 0.35
-        c1 = 0.2        #0.2*c
+        c1 = 0.20       #0.2*c
         c2 = 0.17       #0.17*c
         Phi_TE_upper = np.arctan(10*0.03)
-        df1 = 40        #deg
-        df2 = 10        #deg
+        df1_land = 35   #deg
+        df2_land = 15   #deg
         eta1 = 0.46     #Figure 8.20
         eta2 = 0.38     #Figure 8.20
         etat = 1.0      #Figure 8.22
-        cldf1 = 0.0605   #Figure 8.21
-        cldf2 = 0.054    #Figure 8.21
+        cldf1 = 0.0605  #Figure 8.21
+        cldf2 = 0.054   #Figure 8.21
         
         #Wild guess for chord extension due to flaps
         c_a_prime = 1.13    #1.13*c
         c_prime = 1.20      #1.20*c
 
-        delta_cl_flap = eta1*cldf1*df1*c_a_prime + eta2*etat*cldf2*df2*(1+(c_prime-c_a_prime))
+        delta_cl_flap = eta1 * cldf1 * df1 * c_a_prime + eta2 * etat * cldf2 * df2 * (1 + (c_prime-c_a_prime))
+        print (delta_cl_flap) 
+        """
+        #Lift increase due to Fowler flap
+        c_f = 0.25
+        delta_TO   = np.deg2rad(15)
+        delta_land = np.deg2rad(40)
+        alpha_delta_TO   = 0.50
+        alpha_delta_land = 0.40
+        c_prime_TO   = 1 + cos(delta_TO)   * c_f
+        c_prime_land = 1 + cos(delta_land) * c_f
+        
+        delta_cl_TO   = self.C_l_alpha * alpha_delta_TO   * c_prime_TO   * delta_TO
+        delta_cl_land = self.C_l_alpha * alpha_delta_land * c_prime_land * delta_land
+        print (delta_cl_TO, delta_cl_land)
+        """
         
         #Lift increase due to Krueger flaps
         cld = 0.0015    #Figure 8.26
@@ -573,7 +590,7 @@ class Lift:
         
         delta_cl_krueger = cld*df*c_prime_k
         
-         #lift curve slope
+        #lift curve slope
         c_prime_tot = 1.3 #c_prime and c_prime_k
         clalpha_flaps = c_prime_tot*self.C_l_alpha
         
@@ -665,7 +682,6 @@ class Lift:
         delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime - 1)* self.SWF/self.S )
         
         K_delta = (1 - 0.08*(cos(self.lambda_4_rad))**2)*(cos(self.lambda_4_rad))**(0.75)   #Compare to Figure 8.55
-        print(K_delta)
         delta_C_L_max_w_TE = delta_C_l_max * self.SWF / self.S * K_delta
         
         c_f_c  = 0.1                   #Figure 8.56
@@ -749,31 +765,34 @@ class Lift:
                 C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)))**2
                 C_L.append(C_L_i)
         
-        plt.plot(alpha, C_L, "b-")
-        plt.show
-             
-        return (C_L)
         
+        plt.plot(alpha, C_L, "b-")
+                     
         C_L_flaps = []
+        
+        l = alpha.index(0)
+        alpha_0_L_flaps = -(delta_CL + CL_alpha * alpha_0_L) / delta_CL_alpha
         
         for i in range(len(alpha)): 
             
             if alpha[i] <= 7:
-                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)
-                C_L.append(C_L_i)
+                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)
+                C_L_flaps.append(C_L_i)
                 
             elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/pi : 
                 j = alpha.index(7)
                 k = alpha.index(alpha_CL_max*180/pi)
-                C_L_i = (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L)) + ((CL_max - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L))) / (k - j)) * (i - j)
-                C_L.append(C_L_i)
+                C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps)) + (((CL_max + delta_CL_max) - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
+                C_L_flaps.append(C_L_i)
                 
             elif alpha[i] == alpha_CL_max*180/pi:
-                C_L_i = CL_max
-                C_L.append(C_L_i)
+                C_L_i = CL_max + delta_CL_max
+                C_L_flaps.append(C_L_i)
             else:
-                C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)))**2
-                C_L.append(C_L_i)
+                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
+                C_L_flaps.append(C_L_i)
         
-        plt.plot(alpha, C_L, "b-")
+        plt.plot(alpha, C_L_flaps, "k-")
         plt.show
+        
+        return (C_L)
