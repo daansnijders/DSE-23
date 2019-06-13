@@ -13,11 +13,11 @@ from modules.Stability.cg_weight_config1 import x_cg_min1, x_cg_max1, x_le_MAC_r
 from modules.Stability.cg_weight_loadingdiagram import x_cg_min, x_cg_max,weight_pass
 from modules.main_class2 import *
 
-V_1 = 70  #estimated by RB we will get from rik (lowest speed)
+V_app = 70  #estimated by RB we will get from rik (lowest speed)
 
 class empennage:
     def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing):   
-        self.config = config                                                    # [-] configuration selection
+        self.config = config - 1                                                # [-] configuration selection
         self.x_ac=x_ac                                                          # [m] x-loaction of the main wing ac
         self.CL_a_h = CL_a_h                                                    # [-] CL_alpha_h
         self.CL_a_ah = CL_a_ah                                                  # [-] CL_alpha_(A-h)
@@ -51,7 +51,7 @@ class empennage:
         # running class functions
         self.plot_stability_tail(False)
         self.size_canard()
-        self.plot_stability_canard()
+        self.plot_stability_canard(False)
         self.deflection_curve()
 
     
@@ -205,7 +205,7 @@ class empennage:
         
         self.lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_v_le_rad,self.Cr_v,self.b_v,self.taper_ratio_v) # [rad] quarter chord sweep angle
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
- 
+
         # engine inoperative case
         N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
 
@@ -221,8 +221,6 @@ class empennage:
         N_v_max = - Y_v_max * self.l_v                                          # [N*m] moment caused by the vertical tail
 
         assert N_e < -N_v_max                                                   # check if tail is capable enough
-        
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1, self.Sh_S, self.x_le_MAC, self.S_h, self.z_h, self.l_v, self.l_h
 
     def size_canard(self):
         # determine airfoil/angle of attack during cruise
@@ -311,19 +309,19 @@ class empennage:
         self.Sc_S = 0.2                                                         # [-] Ratio area canard (assumed for now)
     
     
-    def deflection_curve(self):
+    def deflection_curve(self, plot = False):
         self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
         self.Cm_a = self.CN_w_a * (self.x_cg - self.x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
         self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
         
-        alpha_list = np.arange(-0.1, (0.2+0.001), 0.001)
+        alpha_list = np.arange(0., (0.4+0.001), 0.001)
         def_curve = []
         for i in range (len(alpha_list)):
             def_curve.append(- 1 / self.Cm_def * (self.Cm_0 + self.Cm_a * (alpha_list[i] - self.a_0)))
         
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.set (ylim = [-1.15,0.], ylabel = 'delta_e')
+        ax.set (ylim = [-1.5,1.0], ylabel = 'delta_e')
         ax.plot((alpha_list*180/np.pi), def_curve)
 
 
