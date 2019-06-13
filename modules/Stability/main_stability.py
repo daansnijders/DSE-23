@@ -32,7 +32,7 @@ CL_a_c   = 1.0
 """====================="""
 
 # initialize class:
-empennage1 = empennage(0, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c)
+empennage1 = empennage(0, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, 1., 0., 0., 0.5, 0.5, 0.5, 0.5, 1.)
 
 # outputs:
 x_le_MAC = empennage1.x_le_MAC                                                  # [m] x-location of MAC main wing

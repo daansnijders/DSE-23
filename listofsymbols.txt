@@ -299,6 +299,8 @@ span of the flap				b_flap
 chord of the flap				c_flap
 deflection angle of the flap			deflection_flap
 
-
+Wing angle of incidence 			i_w
+Horizontal tail angle of incidence 		i_h
+Canard angle of incidence 			i_c
 
 
