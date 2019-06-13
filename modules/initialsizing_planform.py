@@ -70,3 +70,7 @@ def get_y_MAC_canard(b, Cr, MAC, Ct):
 
 def get_dihedral_rad(lambda_4_rad):
     return np.deg2rad(3-np.rad2deg(lambda_4_rad)/10 + 2)
+
+def get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr):
+    return (x_le_MAC + 0.5 * MAC) - np.tan(lambda_2_rad) * y_MAC - 0.5*Cr
+    

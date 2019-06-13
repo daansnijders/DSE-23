@@ -5,14 +5,13 @@ Created on Tue May 14 09:25:55 2019
 @author: Stijn
 """
 
-
 def get_MTOW_class1(OEW):
     MTOW = (OEW+1000)/0.582     # [kg] #delete this one and put every MTOW as an input ?
     return MTOW
 
 
 def get_TOW(OEW,M_payload, M_ff):
-    return [(M_payload[i]+OEW[i])/Mff[i] for i in range(3)]
+    return [(M_payload[i]+OEW[i])/M_ff[i] for i in range(3)]
 
 
 def get_M_fuel(MTOW,M_ff):

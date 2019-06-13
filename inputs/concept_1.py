@@ -4,53 +4,49 @@ Created on Fri May  3 09:45:17 2019
 
 @author: Lisa
 """
-import numpy as np
-import matplotlib.pyplot as plt
-from modules.performance import *
 from modules.initialsizing_cg import *
 from modules.airfoil_calculations import *
-from modules.initialsizing_weights import *
 from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
-from modules.payload_range import *
+from modules.performance.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
+from inputs.performance_inputs import *
+from modules.performance.class2_performance_defs import get_thrust_required
 from inputs.constants import *
+from Structure.Wing.isa import isa
 
-
-#initial sizing 
-
+ 
+#should move to constants
 N_pax = [90,120,120]                                                            # [-] number of passengers
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
-
+#inputs to this file 
 T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
 W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
-OEW = [34631.92,38223.31-360,38729.81]                                              # [kg] operational empty weight
-MTOW = [58722.6,67394-360,68264.27]                                                 # [kg] maximum take-off weight
-M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
-T_req = get_T_req(T_W, MTOW)                                                    # [N] required thrust
-M_payload = get_M_payload_available(MTOW,OEW,M_fuel)                            # [kg] payload mass
-M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
+OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
+#MTOW = [58722.6,67394-360,68264.27]                                             # [kg] maximum take-off weight
 d_OEW1,d_OEW2=get_mass_efficiency(OEW)
 
-M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
-M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
-M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]
-# Fuselage parameters
-l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length
 
+
+
+#START SIZING 
+# Fuselage parameters]
+l_cutout=30/N_sa*seat_pitch + seat_pitch                                        #change with additional safety factors
+
+l_cabin = get_l_cabin(N_pax,N_sa)                                               # [m] cabin length UPDATE THIS TO THE REAL VALUE
+l_cabin = [max(l_cabin)-l_cutout, max(l_cabin), max(l_cabin)]
 d_f_inner = get_d_f_inner(N_sa, seat_width, N_aisle,\
                           armrest, aisle_width, s_clearance)                    # [m] inner diameter fuselage
-
 d_f_outer = get_d_f_outer(d_f_inner)                                            # [m] outer diameter fuselage
 l_nose = get_l_nose(d_f_outer)                                                  # [m] nose length
 l_tailcone = get_l_tailcone(d_f_outer)                                          # [m] tailcone length
 l_tail = get_l_tail(d_f_outer)                                                  # [m] tail length
 l_f = get_l_fuselage(l_cockpit, l_cabin, l_tail)                                # [m] length fuselage
-R_f = d_f_outer/2                                        # [m] radius fuselage
-S_fus=[d_f_outer**2/4*pi*l_f[i] for i in range(3)]                           #[m^2] gross shell fuselage area
+R_f = d_f_outer/2                                                               # [m] radius fuselage
+S_fus=[R_f*2*pi*l_f[i] for i in range(3)]                              # [m^2] gross shell fuselage area
 
 V_os = get_overhead_volume(l_cabin)                                             # [m^3] overhead storage volume
 V_cc = get_cargo_volume(R_f,l_cabin)                                            # [m^3] total storage volume
@@ -59,23 +55,37 @@ Mtot_carry_on, Mtot_check_in, V_carry_on\
 , V_check_in = get_masses_volumes(N_pax, V_cc, V_os)                            # [kg,kg,m^3,m^3] mass and volume of check-in/carry-on luggage
 
 V_cargo_available = get_available_cargo_volume(V_cc,V_os,V_carry_on, V_check_in)# [m^3] available cargo volume
-M_cargo_available = get_cargo_mass(N_pax,M_payload)                             # [kg] available cargo mass
 
-"Change this when correct length of modular part is found"
-x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]\
-           , [Xcargo1+(l_cabin[1]-l_cabin[0]), Xcargo2+(l_cabin[1]-l_cabin[0])]]
+#CALCULATE MASSES BASED ON THE FUSALGE LAYOUT
+M_pax_and_lugg=get_passenger_luggage_mass(N_pax)
+M_cargo_available=[V_cargo_available[i]*rho_cargo for i in range(3)]             # [kg] available cargo mass
+M_payload=[M_cargo_available[i]+M_pax_and_lugg[i] for i in range(3)]
+MTOW=get_TOW(OEW,M_payload,M_ff)
+M_fuel = get_M_fuel(MTOW,M_ff)                                                  # [kg] fuel mass
+T_req = get_T_req(T_W, MTOW)
+
+#needed for class2 estimation
+M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
+M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
+M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]                                                    # [N] required thrust                          
+
+"Change this when correct length of modular part is found, implement the l_cutout here" 
+x_cargo = [[Xcargo1, Xcargo2], [Xcargo1+(l_cutout), Xcargo2+(l_cutout)]\
+           , [Xcargo1+(l_cutout), Xcargo2+(l_cutout)]]     
+
+
+
 #Propulsion
-
 d_nacel = 1.1*d_fan                                                             # [m] diameter of engine nacelle
 l_nacel = 1.1*l_eng                                                             # [m] length of the engine nacelle
 
-# Wing parameters
-A = 9.5                                                                  # [-] aspect ration main wing
-e = 0.85                                                            # [-]
+# Wing parameters MOVE TO CONSTANTS
+A = 9.5                                                                         # [-] aspect ration main wing
+e = 0.85                                                                        # [-] 
 S = get_S(MTOW,W_S)                                                             # [m^2] surface area main wing
 #take canard into account
 S_c = [S[0]-S[0],S[1]-S[0],S[2]-S[0]]
-S = min(S)                                                  #update surface area to be the same for all config
+S = min(S)                                                                      # [m] update surface area to be the same for all config
 b = get_b(A,S)                                                                  # [m] span main wing
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad] quarter chord sweep angle main wing
 taper_ratio = get_taper_ratio(lambda_4_rad)                                     # [-] taper ratio main wing
@@ -85,51 +95,57 @@ Ct = get_Ct(Cr, taper_ratio)                                                    
 CL = get_CL(MTOW,rho,V_cruise,S)                                                # [-] lift coefficient aircraft
 CL = CL[0]
 t_c =  get_t_c(lambda_2_rad,M_x, M_cruise,CL)                                   # [-] thickness over chord main wing
-Cr_t= t_c*Cr                                                                    #thinkness at the root chord [m]
+Cr_t= t_c*Cr                                                                    # [m] thinkness at the root chord
 MAC = get_MAC(Cr, taper_ratio)                                                  # [m] mean aerodynamic chord main wing
 y_MAC = get_y_MAC(b, Cr, MAC, Ct)                                               # [m] y-location of the MAC of the main wing
 dihedral_rad = get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
 lambda_le_rad = get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
+
 #canard parameters
-A_c = 6
+A_c = 6  
 b_c = [get_b(A_c,S_c[i]) for i in range(3)]
 lambda_c_4_rad = get_lambda_4_rad(M_cruise,M_x)                                 # [rad] quarter chord sweep angle canard
 taper_ratio_c = get_taper_ratio(lambda_c_4_rad)                                 # [-] taper ratio canard
-lambda_c_2_rad = get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c)                    # [rad] half chord sweep angle canard
+lambda_c_2_rad = get_lambda_2_rad_canard(lambda_c_4_rad,A_c,taper_ratio_c)      # [rad] half chord sweep angle canard
 
 Cr_c = [0] + [get_Cr_canard(S_c[i],taper_ratio_c,b_c[i]) for i in range(1,3)]   # [m] root chord length canard
-Ct_c = [0] + [get_Ct_canard(Cr_c[i], taper_ratio_c) for i in range(1,3)]                                                   # [m] tip chord length canard
-CL_c = [0] + get_CL_canard(M_carried_canard_MTOW,rho,V_cruise,S_c)                                                # [-] lift coefficient aircraft
-t_c_c =  [0]+get_t_c_canard(lambda_c_2_rad,M_x, M_cruise,CL_c)                                   # [-] thickness over chord main wing
-Cr_t_c= [t_c_c[i]*Cr_c[i] for i in range(3)]                                            #thinkness at the root chord [m]
-MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                                  # [m] mean aerodynamic chord canard
-y_MAC_c = [0]+get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                                               # [m] y-location of the MAC of the canard
+Ct_c = [0] + [get_Ct_canard(Cr_c[i], taper_ratio_c) for i in range(1,3)]        # [m] tip chord length canard
+CL_c = [0] + get_CL_canard(M_carried_canard_MTOW,rho,V_cruise,S_c)              # [-] lift coefficient aircraft
+t_c_c =  [0]+get_t_c_canard(lambda_c_2_rad,M_x, M_cruise,CL_c)                  # [-] thickness over chord main wing
+Cr_t_c= [t_c_c[i]*Cr_c[i] for i in range(3)]                                    # [m] thinkness at the root chord
+MAC_c = [0]+get_MAC_canard(Cr_c, taper_ratio_c)                                 # [m] mean aerodynamic chord canard
+y_MAC_c = [0]+get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                          # [m] y-location of the MAC of the canard
 
 
 #cg and masses of components
+#NEED L_H FOR CLASS 2 (DAAAN EN STIJJN)
 M_wing, M_eng, M_wing_group=get_mass_winggroup(MTOW)
 M_fuselage, x_cg_fuselage=get_mass_fuselage(MTOW,l_f)
 M_tail,x_cg_tail=get_mass_tail(MTOW,l_f)
 M_fuselage_group, x_cg_fuselage_group=get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail)
 x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group)
+
+x_le_w = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)
+
 x_cg_wing,x_cg_eng,x_cg_wing_group=get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )
 
 l_h=[x_cg_tail[i]-x_cg_wing[i] for i in range(3)]
 
 
 
-x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group)       # [m] x-location of the centre of mass aircraft
-y_cg = get_y_cg()                                                                       # [m] y-location of the centre of mass aircraft
-z_cg = get_z_cg(d_f_outer)                                                              # [m] z-location of the centre of mass aircraft
+
+x_cg=get_x_cg(M_wing_group, M_fuselage_group,x_cg_wing_group,x_cg_fuselage_group) # [m] x-location of the centre of mass aircraft
+y_cg = get_y_cg()                                                               # [m] y-location of the centre of mass aircraft
+z_cg = get_z_cg(d_f_outer)                                                      # [m] z-location of the centre of mass aircraft
 
 # Empennage parameters
-V_h = 1.28                                                        # [-] volume horizontal tail
-A_h = 4.95                                                        # [-] aspect ratio horizontal tail
-taper_ratio_h = 0.39                                              # [-] taper ratio horizontal tail
-V_v = 0.1                                                         # [-] volume vertical tail
-A_v = 1.9                                                           # [-] aspect ratio vertical tail
-taper_ratio_v = 0.375                                          # [-] taper ratio vertical tail
+V_h = 1.28                                                                      # [-] volume horizontal tail
+A_h = 4.95                                                                      # [-] aspect ratio horizontal tail
+taper_ratio_h = 0.39                                                            # [-] taper ratio horizontal tail
+V_v = 0.1                                                                       # [-] volume vertical tail
+A_v = 1.9                                                                       # [-] aspect ratio vertical tail
+taper_ratio_v = 0.375                                                           # [-] taper ratio vertical tail
 x_le_h = get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
 
@@ -142,23 +158,26 @@ Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                            
 Cr_v = get_Cr_v(S_v, taper_ratio_v, b_v)                                        # [m] root chord lengh vertical tail
 Ct_v = get_Ct_v(Cr_v, taper_ratio_v)                                            # [m] tip chord length vertical tail
 
-lambda_h_le_rad = np.deg2rad(34)                          # [rad] leading edge sweep angle horizontal tail
-lambda_h_4_rad= get_lambda_4_rad_from_lambda_le(lambda_h_le_rad,Cr_h,b_h,taper_ratio_h)
-lambda_h_2_rad=get_lambda_2_rad(lambda_h_4_rad,A_h,taper_ratio_h)
+lambda_h_le_rad = np.deg2rad(34)                                                # [rad] leading edge sweep angle horizontal tail
+lambda_h_4_rad= get_lambda_4_rad_from_lambda_le(lambda_h_le_rad,Cr_h,b_h,taper_ratio_h) # [rad] quarter chord sweep angle
+lambda_h_2_rad=get_lambda_2_rad(lambda_h_4_rad,A_h,taper_ratio_h)               # [rad] half chord sweep angle
 
 
-lambda_v_le_rad = np.deg2rad(40)                            # [rad] leading edge sweep angle vertical tail
-lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v)
-lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)
+lambda_v_le_rad = np.deg2rad(40)                                                # [rad] leading edge sweep angle vertical tail
+lambda_v_4_rad= get_lambda_4_rad_from_lambda_le(lambda_v_le_rad,Cr_v,b_v,taper_ratio_v) # [rad] quarter chord sweep angle
+lambda_v_2_rad=get_lambda_2_rad(lambda_v_4_rad,A_v,taper_ratio_v)               # [rad] half chord sweep angle
 
+# engine specifics
+x_engine = x_le_MAC                                                             # [m] x-location of the engine
+y_engine = 0.3*b/2                                                              # [m] y-location of the engine
+z_engine = 0                                                                    # [m] z-location of the engine
+i_e_rad = np.deg2rad(i_e)                                                       # [rad] incidence angle of the engine
 
 #undercarriage
 tire_pressure = 430 * np.log(LCN) - 680                                         # [Pa] tire pressure mlg
 
-weight_distribution = 0.08                                                      # [-] weight percentage on nose wheel
-y_eng = 0.3*b/2
-z_eng = -d_eng/2                                                                # [m] z-location of lowest part of the engine
-
+weight_distribution = 0.16                                                      # [-] weight percentage on nose wheel
+z_engine_clearance = z_engine - d_eng/2                                         # [m] z-location of lowest part of the engine
 
 theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
 beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
@@ -169,19 +188,38 @@ P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  
 P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
 
 x_mlg = get_x_mlg(z_cg,theta_rad,beta_rad, x_cg, stroke,l_f)                    # [m] x-location of the mlg
-z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg, l_f)                               # [m] z-location of the mlg
+x_mlg[1]=min(x_mlg)+l_cutout
+x_mlg[2]=min(x_mlg)+l_cutout
+z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg)                               # [m] z-location of the mlg
+z_mlg=max(z_mlg)
+
 
 l_m = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
 l_n = get_l_nw(l_m,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
 
-y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
-                  z_cg,z_mlg,l_n,l_m,y_eng,z_eng,d_eng)                         # [m] y-location of the mlg
-
 x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
+x_nlg=min(x_nlg)
+l_n=[x_cg[i]-x_nlg for i in range(3)]
+
+
+new_beta_rad=get_new_beta_config23(z_mlg,z_cg,l_m[1])
+new_beta_deg=new_beta_rad*180/pi
+#new_theta_rad=check_new_scrape_angle(l_f,x_mlg,d_f_outer,z_mlg)
+#new_theta_deg=[new_theta_rad[i]*180/pi for i in range(3)]
+
+y_mlg = get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,\
+               z_cg,z_mlg,l_n,l_m,y_engine,z_engine_clearance,d_eng)            # [m] y-location of the mlg
+#
+
+
 y_nlg = [0,0,0]                                                                 # [m] y-location of nlg
 z_nlg = z_mlg                                                                   # [m] z-location of nlg
 
+L_strut_mlg= -z_mlg-D_mlg/2
+L_strut_nlg= -z_nlg-D_nlg/2
 
+
+#MAKE THIS ITERABLE WITH THE LOADING DIAGRAM
 # Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
 
 Cl_max = [1.552, 1.582, 1.584]
@@ -190,13 +228,21 @@ Cl_max = [1.552, 1.582, 1.584]
 # CLmax: Wing CL max for three Re numbers: [9*10^6, 17*10^6, 20*10^6]
 # CL_alpha: Wing CL_alpha for three configurations
 Reto1, Re1, Reto3, CLdes, Cl_des, CL_alpha, CLmax, CLmaxto=airfoil(Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, lambda_le_rad, lambda_2_rad, b, taper_ratio, A, Cl_max)
-
 CD0, CDcruise, LoverD, Wing, Fuselage, Nacelle, Tailplane=drag1(A, S, S_h, S_v, l_nose, l_tailcone, l_f, d_f_outer, d_nacel, l_nacel, lambda_le_rad, CLdes)
+
+"""Please add this one below"""
+alpha_cruise_rad = np.deg2rad(0)                                                # [rad] angle of attack during cruise
+
+
+# loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 
 #create loading diagram with new Cl and Cd
 #CD0_roskam, CD0_TO_roskam, CD0_land_roskam=dragcoefficient(Cfe,Swet_S)
 #for i in range(3):
 #    loadingdiagram=plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,Vto1*kts_to_ms,c,f,sigma, TOP, CD0_roskam,100,7100,100)
-# loadingdiagram=plot_loadingdiagram(Sland,CLmaxto,CLmax,CLmaxto,c,f,sigma, TOP, CD0,100,7100,100)
 
+#V_TO estimation to get Class-II drag calculation going
 
+V_TO = [sqrt(2* x * 9.80665 /(rho_0 * S * Cl_TO)) for x in MTOW]
+
+thrust_cruise = [get_thrust_required(isa(H_m)[2], V_cruise, S, CDcruise[i]) for i in range(3)]

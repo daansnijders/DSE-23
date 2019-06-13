@@ -46,6 +46,7 @@ from isa import isa
 #from main import *
 
 
+
 fitting_factor = 1.15
 safety_factor = 1.5
 nu = 3
@@ -89,12 +90,28 @@ Xlast = 26.0
 #Xlast = Xfirst+c1.l_cabin
 #M_horizontal_tail = config1_class2.M_horizontaltail
 
+M_payload = 12500
+M_fuselage = 9000
+M_fittings = 9000
+M_verticaltail = 1000
+M_landinggear_nose = 200
+M_landinggear_main = 1500
+M_wing_group = 12000
+Lift_mainwing = 500000
+Lift_tail = -10000
+
+
 
 n= 1000
 step_size = float(l_fuselage)/n
 
 x = np.linspace(0,l_fuselage,n)
 
+
+stringer_area = 0.0004
+stringer_no = [0] *n
+for i in range(n):
+    stringer_no[i]=60
 
 
 radius = [0] *n
@@ -109,7 +126,7 @@ skin_thickness = (p_diff* max(radius))/(skin_yield/safety_factor)
 payload_w = [0] *n
 for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
     payload_w[i]=-M_payload* g*nu/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
-    
+
 fuselage_w = [0] *n
 for i in range(n):
     fuselage_w[i]=-(M_fuselage+M_fittings)*g*nu/n
