@@ -1,9 +1,7 @@
-import matplotlib.pyplot as plt
 import pandas as pd
 
-from Structure.Wing.isa import isa
 from inputs.concept_1 import ft_to_m, OEW, MTOW, thrust_max, S, g, M_payload, M_fuel, A, e, CD0, R, V_cruise, LoverD, CDcruise
-from modules.class2_performance_defs import *
+from modules.performance.class2_performance_defs import *
 from inputs.constants import H_m
 from modules.performance.climb_optimization import get_climb_optimization
 
