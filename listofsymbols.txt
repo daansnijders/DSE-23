@@ -237,7 +237,8 @@ density of the fuel				rho_fuel
 
 TE reference wing flapped surface		SWF
 LE reference wing flapped surface		SWF_LE
-
+Span flaps 					b_flap
+Span Krueger flaps 				b_slat
 
 
 Zero lift drag fuselage				CD0_fus
