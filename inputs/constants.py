@@ -18,7 +18,7 @@ kg_to_lbs = 2.20462262
 lbs_to_kg=1/(kg_to_lbs)
 nm_to_m=1852
 gallons_to_l=3.78541178
-
+mph_to_ms=0.447 
 
 #FLIGHT PARAMETERS parameters
 H_ft=37000                                                                      # [ft] cruising altitude in feet
@@ -34,7 +34,8 @@ R=287.05                                                                        
 T_0=288.15                                                                      # [K] ISA temperature at sea level
 p_0=101325                                                                      # [Pa] ISA pressure at sea level
 rho_0=1.225                                                                     # [kg/m^3] ISA density at sea level
-g=9.80665                                                                       # [m/s^2] gravitational acceleration
+g=9.80665 
+a_sl=343                                                                      # [m/s^2] gravitational acceleration
 
 mu_37 = 0.0000143226                                                            # [Pa*s] Dynamic Viscosity at 37000ft
 mu_sl = 0.00001789                                                              # [Pa*s] Dynamic Viscosity at sea level
@@ -95,12 +96,19 @@ n_fueltanks  = 4                                                                
 d_eng = 2.006                                                                   # [m] diameter of the engine
 d_fan = 2.006                                                                   # [m] diameter of the fan
 l_eng = 3.184                                                                   # [m] length of the engine
-rho_fuel=810                                                                  #[kg/m*3] wikipedia? at 15 degrees
+rho_fuel=810                                                                    # [kg/m*3] wikipedia? at 15 degrees
+i_e = 0                                                                         # [deg] incidence angle of the engine
 # Undercarriage
 N_mw = 4                                                                        # [-] number of wheels mlg
 N_nw = 2                                                                        # [-] number of wheels nlg
 N_struts = 2                                                                    # [-] number of struts used
 stroke = 0.3                                                                    # [m] shock absorber stroke
+
+#chosen tires
+D_nlg = 28.4*inch_to_m
+w_nlg = 7.85*inch_to_m
+D_mlg = 40*inch_to_m
+w_mlg = 15.5*inch_to_m
 
 LCN = 45                                                                        # [-] load classification number    
  
