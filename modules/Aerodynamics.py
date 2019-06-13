@@ -656,13 +656,26 @@ class Lift:
         
         return (C_L_alpha_w, alpha_0_L_w_deg, C_L_max_w, alpha_C_L_max_w_deg)
 
-    def Wing_lift_flaps(self, delta_C_l,C_L_alpha_w,C_l_alpha):
-        K_b = 1                     #Figure 8.51 & 8.52
-        alpha_delta_CL_Cl = 1       #Figure 8.53
+    def Wing_lift_flaps(self, delta_C_l,C_L_alpha_w,C_l_alpha,delta_C_l_max,b_slats):
+        K_b = 0.85 - 0.36           #Figure 8.51 & 8.52
+        alpha_delta_CL_Cl = 1.03    #Figure 8.53
         delta_C_L_w = K_b * (delta_C_l) * (C_L_alpha_w / C_l_alpha) * alpha_delta_CL_Cl
         c_prime = 1.20      #Based on airfoil lift
         
         delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime - 1)* self.SWF/self.S )
+        
+        K_delta = (1 - 0.08*(cos(self.lambda_4_rad))**2)*(cos(self.lambda_4_rad))**(0.75)   #Compare to Figure 8.55
+        print(K_delta)
+        delta_C_L_max_w_TE = delta_C_l_max * self.SWF / self.S * K_delta
+        
+        c_f_c  = 0.1                   #Figure 8.56
+        b_LE_e = b_slats / (self.b / 2)                  #Figure 8.57
+        
+        delta_C_L_max_w_LE = 7.11 * c_f_c * (b_LE_e)**2 * (cos(self.lambda_4_rad))**2
+        
+        delta_C_L_max_w = delta_C_L_max_w_LE + delta_C_L_max_w_TE
+        
+        return (delta_C_L_w, delta_C_L_alpha_w, delta_C_L_max_w)
         
     
     def Airplane_lift(self, CL_alpha_w, alpha_0_L_w, CL_max_w, alpha_CL_max_w):
