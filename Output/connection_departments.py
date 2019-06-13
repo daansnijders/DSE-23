@@ -12,6 +12,11 @@ from modules.Aerodynamics import *
 
 
 'AERODYNAMICS'
+'Initial guess for some values, must be updated after iteration' 
+i_w = 0                 #Angle of incidence wing in DEG
+i_h = 0                 #Angle of incidence horinzontal tail in DEG
+i_c = 0                 #Angle of incidence canard in DEG
+
 'HLD'
 config_HLD = HLD_class(Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer)
 SWF, b_flap, SWF_LE, b_slat = config_HLD.HLD()
