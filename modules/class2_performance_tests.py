@@ -5,15 +5,16 @@ from Structure.Wing.isa import isa
 from inputs.concept_1 import ft_to_m, OEW, MTOW, thrust_max, S, g, M_payload, M_fuel, A, e, CD0, R, V_cruise, LoverD, CDcruise
 from modules.class2_performance_defs import *
 from inputs.constants import H_m
+from modules.performance.climb_optimization import get_climb_optimization
 
 """
 inputs
 """
-i = 0   # configuration selection
+i = 1   # configuration selection
 h_screen_to = 35 * ft_to_m                                  # [m]
 h_screen_la = 50 * ft_to_m
 reverse_thrust_factor = 0.45
-engine_failure = True
+engine_failure = False
 cj = 0.790/thrust_max #kg/s/N
 cj_retard = cj / 2.832545035E-5
 thrust_transition_setting = 1.
@@ -45,7 +46,7 @@ def analyze_take_off_performance():
 
     take_off_field_length = []
 
-    mass_resolution = 50
+    mass_resolution = 20
     mass_list = np.linspace(OEW[i], MTOW[i], mass_resolution)   # todo; incorrect
 
     for altitude in airport_altitude_list:
@@ -125,6 +126,7 @@ def analyze_landing_performance():
 
     plt.legend()
     engines_used = 2 - engine_failure
+    plt.axvline(1300, linestyle=':')
     plt.title('Landing field length, %a engine(s) operative' % engines_used)
     # plt.plot([0, max(select[1])], [MTOW[i], MTOW[i]], color='C0', linestyle=':')
     # plt.plot([0, max(select[1])], [OEW[i], OEW[i]], color='C0', linestyle=':')
@@ -141,7 +143,7 @@ fuel economy
 """
 
 
-def analyze_fuel_consumption(MTOW, take_off_velocity):
+def analyze_fuel_consumption(MTOW):
     fuel_consumption = pd.DataFrame(data=None, columns=['fuel_flow', 'fuel_mass'])
     pick_breguet = True
     # engine_failure = False
@@ -162,7 +164,6 @@ def analyze_fuel_consumption(MTOW, take_off_velocity):
     """
     # assume full thrust during entire take-off
 
-
     take_off_field_length, take_off_velocity = get_take_off_field_length(engine_failure, isa(0)[2], g, h_screen_to, MTOW[i], thrust_max, thrust_transition_setting, thrust_climb_out_setting, C_L_to, C_D_to, S, friction_coefficient_to, True, 80, reverse_thrust_factor)
     fuel_flow_take_off, fuel_mass_take_off = get_fuel_consumption(engines_operative*thrust_max, take_off_field_length, take_off_velocity/np.sqrt(2))
     fuel_consumption.loc['take_off'] = [fuel_flow_take_off, fuel_mass_take_off]
@@ -173,11 +174,9 @@ def analyze_fuel_consumption(MTOW, take_off_velocity):
     climb
     """
 
-    fuel_fraction_climb = 0.980
-    fuel_mass_climb = (1 - fuel_fraction_climb) * MTOW[i]
+    fuel_flow_climb, fuel_mass_climb, climb_final_velocity = get_climb_optimization()
     fuel_consumption.loc['climb'] = ['variable', fuel_mass_climb]
     mass -= fuel_mass_climb
-
 
     """
     cruise breguet
@@ -316,7 +315,7 @@ def analyze_fuel_consumption(MTOW, take_off_velocity):
     return fuel_consumption
 
 
-fuel_consumption = analyze_fuel_consumption(MTOW, 70)
+fuel_consumption = analyze_fuel_consumption(MTOW)
 print(sum(fuel_consumption['fuel_mass']))
 fuel_consumption['fuel_mass'] = fuel_consumption['fuel_mass'] * 1.1
 print(sum(fuel_consumption['fuel_mass']))

@@ -1,6 +1,6 @@
 import numpy as np
 from Structure.Wing.isa import isa
-
+import matplotlib.pyplot as plt
 
 def get_climb_gradient(thrust, drag, mass, g):
     y = (thrust - drag) / mass / g
@@ -38,9 +38,15 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
             distance_try+=x_brake
 
             return(distance_try)
-
+        # plt.figure('Covergence')
         difference = 100
+        count = 0
+        # nominal_list = []
+        # try_list = []
+        # difference_list = []
+        # count_list = []
         while abs(difference)>5:
+            count += 1
             if difference > 0:
                 velocity += .1
             else:
@@ -52,6 +58,15 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
                                                          mu_TO, False, velocity, reverse_thrust_factor)[0]
             try_distance = give_try(velocity)
             difference = nominal_distance - try_distance
+            # nominal_list.append(nominal_distance)
+            # try_list.append(try_distance)
+            # difference_list.append(difference)
+            # count_list.append(count)
+        # plt.plot(count_list, nominal_list, color='C0', label='Nominal')
+        # plt.plot(count_list, try_list, color='C1', label='Try')
+        # print(difference_list)
+        # plt.plot(count_list, difference_list, color='C2', label='Difference')
+        # plt.legend()
         return velocity
 
     V_min = get_V_stall(mass, g, rho, S, C_L)
@@ -166,8 +181,8 @@ def get_fuel_consumption(thrust, distance, velocity):
 
 
 def get_energy_height():
-    V = np.linspace(0, 250, 100)
-    h = np.linspace(0, 11277.6, 100)
+    V = np.linspace(0, 300, 100)
+    h = np.linspace(0, 20000, 100)
     z = []
     for i in range(0, 100, 1):
         list = []
@@ -177,16 +192,24 @@ def get_energy_height():
     return V,h,z
 
 
-def get_rate_of_climb(thrust, wing_surface_area, drag_coefficient, mass, g):
-    V = np.linspace(0, 250, 100)
-    h = np.linspace(0, 11277.6, 100)
+def get_2d_rate_of_climb(thrust_max, engines_operative, wing_surface_area, drag_coefficient, mass, g):
+    steps = 300
+    V = np.linspace(0, 300, steps)
+    h = np.linspace(0, 20000, steps)
     z = []
-    for i in range(0, 100, 1):
+    for i in range(0, steps, 1):
         list = []
-        for j in range(0, 100, 1):
-            list.append((thrust-get_thrust_required(isa(h[i])[2], V[j], wing_surface_area, drag_coefficient))*V[j]/mass/g)
+        for j in range(0, steps, 1):
+            list.append(get_rate_of_climb(engines_operative, thrust_max, h[i], V[j], wing_surface_area, drag_coefficient, mass, g))
         z.append(list)
+
     return V, h, z
+
+
+def get_rate_of_climb(engines_operative, thrust_max, h, V, wing_surface_area, drag_coefficient, mass, g):
+    thrust_available = engines_operative * get_thrust_available(thrust_max, h, V)
+    z = ((thrust_available - get_thrust_required(isa(h)[2], V, wing_surface_area, drag_coefficient)) * V / mass / g)
+    return z
 
 
 def get_range_breguet(mass_initial, mass_final, velocity, cj, LD_cruise, g):
@@ -203,3 +226,19 @@ def get_fuel_burned_breguet(mass_initial, range_cruise, velocity, cj, g, LD_crui
 def get_thrust_required(rho, velocity, S_wing, C_D_cruise):
     T = 0.5 * rho * velocity**2 * S_wing * C_D_cruise     # N
     return T
+
+
+def get_thrust_available(thrust_max, altitude, velocity):
+    # assume linear relation with density
+    n = 1.0
+    altitude_effect = (isa(altitude)[2] / isa(0)[2])**n
+
+    pressure_ratio = 38.7
+    fuel_flow = 0.790
+    p0 = 101325
+
+
+    velocity_effect = 1
+
+    thrust = thrust_max * altitude_effect * velocity_effect
+    return thrust
