@@ -726,27 +726,54 @@ class Lift:
         
     def CL_alpha_plot(self, CL_alpha, alpha_0_L, CL_max, alpha_CL_max, delta_CL, delta_CL_alpha, delta_CL_max):
         
-        alpha = list(np.arange(-10,14,0.25)*pi/180)
-        print (alpha, alpha_CL_max)
-                
+        alpha = list(np.arange(-10,14,0.25))
+                        
         C_L = []
         
         for i in range(len(alpha)): 
             
-            if alpha[i] <= 3*pi/180:
-                C_L_i = CL_alpha * (alpha[i] - alpha_0_L)
+            if alpha[i] <= 7:
+                C_L_i = CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)
                 C_L.append(C_L_i)
                 
-            elif alpha[i] == alpha_CL_max:
+            elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/pi : 
+                j = alpha.index(7)
+                k = alpha.index(alpha_CL_max*180/pi)
+                C_L_i = (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L)) + ((CL_max - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L))) / (k - j)) * (i - j)
+                C_L.append(C_L_i)
+                
+            elif alpha[i] == alpha_CL_max*180/pi:
                 C_L_i = CL_max
                 C_L.append(C_L_i)
             else:
-                C_L_i = 0
+                C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)))**2
                 C_L.append(C_L_i)
         
-        plt.plot(alpha, C_L, "bo")
+        plt.plot(alpha, C_L, "b-")
         plt.show
              
         return (C_L)
         
-#        C_L_flaps = []
+        C_L_flaps = []
+        
+        for i in range(len(alpha)): 
+            
+            if alpha[i] <= 7:
+                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)
+                C_L.append(C_L_i)
+                
+            elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/pi : 
+                j = alpha.index(7)
+                k = alpha.index(alpha_CL_max*180/pi)
+                C_L_i = (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L)) + ((CL_max - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L))) / (k - j)) * (i - j)
+                C_L.append(C_L_i)
+                
+            elif alpha[i] == alpha_CL_max*180/pi:
+                C_L_i = CL_max
+                C_L.append(C_L_i)
+            else:
+                C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)))**2
+                C_L.append(C_L_i)
+        
+        plt.plot(alpha, C_L, "b-")
+        plt.show

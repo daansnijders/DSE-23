@@ -59,7 +59,7 @@ class Class2_weight:
         
         self.M_landinggear_nose      =get_landinggear_mass(K_gr,Ag_nose,Bg_nose,Cg_nose,Dg_nose,max(MTOW))*lbs_to_kg
         self.M_landinggear_main      =get_landinggear_mass(K_gr,Ag_main,Bg_main,Cg_main,Dg_main,max(MTOW))*lbs_to_kg
-        self.M_landinggear           =(self.M_landinggear_nose+self.M_landinggear_main)*lbs_to_kg
+        self.M_landinggear           =(self.M_landinggear_nose+self.M_landinggear_main)
         
         M_structure =get_structural_mass(self.M_wing,self.M_fuselage,self.M_nacelle,self.M_horizontaltail,self.M_verticaltail,self.M_landinggear, self.M_canard)
         
