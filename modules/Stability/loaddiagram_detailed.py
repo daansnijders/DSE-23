@@ -85,14 +85,14 @@ class Loading_diagram:
         self.xcg_max = self.xcg1[-1]
         if (self.xcg1[-2]>=self.xcg_max):
             self.xcg_max = self.xcg1[-2]
-        #print (self.xcg_max)
+
         self.xcg_min = self.xcg1[-1]
         if (self.xcg1[-2]<=self.xcg_min):
            self.xcg_min = self.xcg1[-2]
 
         if (self.config == 2 or self.config == 3):
-            self.xcg_max = self.xcg_max - (l_cutout)
-            self.xcg_min = self.xcg_min - (l_cutout)
+            self.xcg_max = self.xcg_max #- (l_cutout)
+            self.xcg_min = self.xcg_min #- (l_cutout)
         
         if plot:
             plt.figure()   
@@ -125,14 +125,14 @@ class Loading_diagram:
         self.xcg_max = self.xcg1[-1]
         if (self.xcg1[-2]>=self.xcg_max):
            self.xcg_max = self.xcg1[-2]
-        print (self.xcg_max)
+
         self.xcg_min = self.xcg1[-1]
         if (self.xcg1[-2]<=self.xcg_min):
            self.xcg_min = self.xcg1[-2]
         
         if (self.config == 2 or self.config == 3):
-            self.xcg_max = self.xcg_max - (l_cutout)
-            self.xcg_min = self.xcg_min - (l_cutout)
+            self.xcg_max = self.xcg_max #- (l_cutout)
+            self.xcg_min = self.xcg_min #- (l_cutout)
 
         if plot:
             plt.figure()   
