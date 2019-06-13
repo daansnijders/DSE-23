@@ -30,14 +30,7 @@ fuel_burnt_ref= 299   #[kg]
 
 pressure_ratio=38.67   #ratio of the end of the combustor and the beginning of the combustor (at ISA and take-off conditions)
 bypass_ratio=11.05
-T_max=108.53            #[kN]
 
-
-#fuelflow [kg/s]
-fuel_flow_TO=0.79
-fuel_flow_cruise=0.65
-fuel_flow_app=0.23
-fuel_flow_idle=0.08
 
 #power setting in percentage 
 power_TO=100        #[%]
