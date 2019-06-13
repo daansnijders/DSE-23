@@ -133,6 +133,7 @@ Stall speed					V_s
 climb gradient 					c
 Take off parameter				TOP
 sigma						sigma
+loading factor (maximum)			n_max
 
 
 Parasite drag coefficient			Cfe
@@ -256,5 +257,14 @@ nose wheel diameter				D_nlg
 width of main wheel				w_mlg
 width of nose wheel				w_nlg
 length of the strut main			L_strut_mlg
-lentgth of the strut nose			L_strut_nlg
+length of the strut nose			L_strut_nlg
+
+
+Area of flap					S_flap
+span of the flap				b_flap
+chord of the flap				c_flap
+deflection angle of the flap			deflection_flap
+
+
+
 
