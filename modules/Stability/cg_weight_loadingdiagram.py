@@ -36,7 +36,7 @@ cg1_fuel[0], cg2_fuel[0], weight_fuel[0], xcg_max[3], xcg_min[3] = config1_load.
 cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config2_load.loading_diagrams_fuel()
 cg1_fuel[2], cg2_fuel[2], weight_fuel[2], xcg_max[5], xcg_min[5] = config3_load.loading_diagrams_fuel()
 
-print(xcg_max)
+#print(xcg_max)
 x_cg_max = max(xcg_max[0], xcg_max[3]) + 0.05*MAC
 x_cg_min = min(xcg_min[0], xcg_min[3])
 

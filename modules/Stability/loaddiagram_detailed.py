@@ -85,7 +85,7 @@ class Loading_diagram:
         self.xcg_max = self.xcg1[-1]
         if (self.xcg1[-2]>=self.xcg_max):
             self.xcg_max = self.xcg1[-2]
-        print (self.xcg_max)
+        #print (self.xcg_max)
         self.xcg_min = self.xcg1[-1]
         if (self.xcg1[-2]<=self.xcg_min):
            self.xcg_min = self.xcg1[-2]
