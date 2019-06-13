@@ -17,7 +17,7 @@ V_app = 70  #estimated by RB
 
 class empennage:
     def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing):   
-        self.config = config                                                    # [-] configuration selection
+        self.config = config - 1                                                    # [-] configuration selection
         self.x_ac=x_ac #from nose in [m]
         self.CL_a_h = CL_a_h
         self.CL_a_ah = CL_a_ah
@@ -207,7 +207,6 @@ class empennage:
         def get_S_v(S, b, x_cg, V_v, x_v):
             return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]
         
-
         self.S_v = min(get_S_v(S, b, x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
@@ -215,8 +214,6 @@ class empennage:
         
         self.lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_v_le_rad,self.Cr_v,self.b_v,self.taper_ratio_v) # [rad] quarter chord sweep angle
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
-        
-        
         
         # engine inoperative case
         N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
@@ -233,9 +230,6 @@ class empennage:
         N_v_max = - Y_v_max * self.l_v                                          # [N*m] moment caused by the vertical tail
 
         assert N_e < -N_v_max                                                   # check if tail is capable enough
-        
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1, self.Sh_S, self.x_le_MAC, self.S_h, self.z_h, self.l_v, self.l_h
-    
 
     def size_canard(self):
         # determine airfoil/angle of attack during cruise

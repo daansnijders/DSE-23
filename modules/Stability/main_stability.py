@@ -41,7 +41,8 @@ x_cg_wing = 12                                                                  
 
 
 # initialize class:
-empennage1 = empennage(0, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing)
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing)
+empennage1 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing)
 
 # outputs:
 x_le_MAC = empennage1.x_le_MAC                                                  # [m] x-location of MAC main wing
@@ -69,7 +70,7 @@ lambda_v_4_rad  = empennage1.lambda_v_4_rad                                     
 x_v             = empennage1.x_v                                                # [m] x-location of ac of the vtail?
 
 # control surfaces: (inputs still need to be worked on...)
-c_elev = get_c_elev(Cr_h, Ct_h, b_h)                                                       # [m] chord length elevator
+c_elev = get_c_elev(Cr_h, Ct_h, b_h)                                            # [m] chord length elevator
 S_elev = get_S_elev(S_h)                                                        # [m^2] surface area elevator
 b_elev = get_b_elev(S_elev,c_elev)                                              # [m] span elevator
 
