@@ -13,44 +13,42 @@ from modules.Stability.cg_weight_config1 import x_cg_min1, x_cg_max1, x_le_MAC_r
 from modules.Stability.cg_weight_loadingdiagram import x_cg_min, x_cg_max,weight_pass
 from modules.main_class2 import *
 
-V_app = 70  #estimated by RB
+V_1 = 70  #estimated by RB we will get from rik (lowest speed)
 
 class empennage:
-    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing):   
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing):   
         self.config = config                                                    # [-] configuration selection
-        self.x_ac=x_ac #from nose in [m]
-        self.CL_a_h = CL_a_h
-        self.CL_a_ah = CL_a_ah
-        self.de_da = de_da
-        #self.S_h = S_h
-        self.l_h = l_h                                                       # [m] distance between the two quarters chords of the main wing and tail
-        self.S = S
-        self.c = c
-        self.Vh_V = Vh_V
-        self.x_lemac = x_le_MAC
-        self.Cm_ac = Cm_ac
-        self.CL_ah = CL_ah
-        self.x_cg = x_cg
-        self.CL_h = CL_h
-        self.a_0 = a_0
-        self.i_h = i_h
-        self.i_c = i_c
-        self.CN_h_a = CN_h_a
-        self.CN_w_a = CN_w_a
-        self.CN_c_a = CN_c_a
-        self.CN_h_def = CN_h_def
-        self.Vc_v = Vc_V
+        self.x_ac=x_ac                                                          # [m] x-loaction of the main wing ac
+        self.CL_a_h = CL_a_h                                                    # [-] CL_alpha_h
+        self.CL_a_ah = CL_a_ah                                                  # [-] CL_alpha_(A-h)
+        self.de_da = de_da                                                      # [-] downwash
+        self.l_h = l_h                                                          # [m] distance between the two quarters chords of the main wing and tail
+        self.S = S                                                              # [m^2] surface area main wing
+        self.c = c                                                              # [m] chord length main wing
+        self.Vh_V = Vh_V                                                        # [-] V_h/V velocity factors
+        self.x_lemac = x_le_MAC                                                 # [m] x-location of the main wing MAC
+        self.Cm_ac = Cm_ac                                                      # [-] moment coefficient of main wing ac
+        self.CL_ah = CL_ah                                                      # [-] CL_(A-h)
+        self.x_cg = x_cg                                                        # [-] x-location of the c.g.
+        self.CL_h = CL_h                                                        # [-] lift coefficient htail
+        self.a_0 = a_0                                                          # [rad] zero lift angle of attack
+        self.i_h = i_h                                                          # [rad] incidence angle htail
+        self.i_c = i_c                                                          # [rad] incidence angle canard
+        self.CN_h_a = CN_h_a                                                    # [-] C_N_h_alpha htail
+        self.CN_w_a = CN_w_a                                                    # [-] C_N_w_alpha main wing
+        self.CN_c_a = CN_c_a                                                    # [-] C_N_c_alpha canard
+        self.CN_h_def = CN_h_def                                                # [-] C_N_h_de elevator deflection
+        self.Vc_V = Vc_V                                                        # [-] V_c/V velocity factors
         
         self.weight_pass = weight_pass                                          # [kg] mass increase per passenger
         self.additional_mass = weight_pass[self.config][-1] - weight_pass[0][-1] # [kg] mass difference between config 1 and 2/3
         self.additional_weight = self.additional_mass * g                       # [N] weight difference between config 1 and 2/3
         self.weight = self.weight_pass[self.config][-1] * g                     # [N] MTOW config
         self.CL_c = CL_c                                                        # [-] CL canard
-        self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard
-        self.Vc_V = 1
-        self.x_cg_wing = x_cg_wing
-        #self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
-        
+        self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard                
+        self.x_cg_wing = x_cg_wing                                              # [m] x-location of the wing c.g.
+
+        # running class functions
         self.plot_stability_tail(False)
         self.size_canard()
         self.plot_stability_canard()
@@ -71,7 +69,6 @@ class empennage:
         self.Cm = self.Cm_lesstail + self.Cm_tail
         return self.Cm    
     
-
     
     def plot_stability_tail(self, plot = True):
         """Stability excluding margin"""
@@ -95,8 +92,6 @@ class empennage:
             self.Sh_S1.append(aa*self.l[i]-bb)
             self.Sh_S2.append(dd*self.l[i]-ee)
             self.Sh_C1.append(ff*self.l[i]+gg)
-        
-        
         
         def interpolate1(point1, point2):
             dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
@@ -125,13 +120,11 @@ class empennage:
                 f_max = interpolate1([x_cg_max1[1],x_le_MAC_range_perc[1]],[x_cg_max1[2],x_le_MAC_range_perc[2]])
             diff_after = f_S2(f_max(y))-f_C1(f_min(y))
 
-
         self.Sh_S = f_C1(f_min(y))
-        x_le_MAC_l_f = y
+        self.x_le_MAC_l_f = y
         self.S_h = self.Sh_S * S
-        self.x_le_MAC = x_le_MAC_l_f * l_f[0]
+        self.x_le_MAC = self.x_le_MAC_l_f * l_f[0]
 
-        
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
@@ -153,12 +146,10 @@ class empennage:
             ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
             ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
-        
         # =============================================================================
         # Horizontal tail - NACA 63 010
         # =============================================================================
 
-        
         self.A_h = 4.95                                                         # [-] aspect ratio horizontal tail
         self.taper_ratio_h = 0.39                                               # [-] taper ratio horizontal tail
         self.lambda_h_le_rad = np.deg2rad(34)                                   # [rad] leading edge sweep angle horizontal tail 
@@ -207,7 +198,6 @@ class empennage:
         def get_S_v(S, b, x_cg, V_v, x_v):
             return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]
         
-
         self.S_v = min(get_S_v(S, b, x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
@@ -215,9 +205,7 @@ class empennage:
         
         self.lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_v_le_rad,self.Cr_v,self.b_v,self.taper_ratio_v) # [rad] quarter chord sweep angle
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
-        
-        
-        
+ 
         # engine inoperative case
         N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
 
@@ -235,7 +223,6 @@ class empennage:
         assert N_e < -N_v_max                                                   # check if tail is capable enough
         
         return self.Sh_S1, self.Sh_S2, self.Sh_C1, self.Sh_S, self.x_le_MAC, self.S_h, self.z_h, self.l_v, self.l_h
-    
 
     def size_canard(self):
         # determine airfoil/angle of attack during cruise
@@ -284,7 +271,7 @@ class empennage:
         aa = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2)
         bb = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V + 0.05 * MAC
         
-        cc = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2)
+        cc = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2) #SAME?
         dd = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V 
         
         ee = 1/(self.CL_c / self.CL_ah * -self.l_c * self.Vc_V**2)
@@ -316,7 +303,7 @@ class empennage:
             ax2.plot(self.l, self.Sc_S1)
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_C1)
-            ax2.set( ylim = [0,0.2565], ylabel = 'S_h/S')
+            ax2.set( ylim = [0,0.2565], ylabel = 'S_c/S')
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')

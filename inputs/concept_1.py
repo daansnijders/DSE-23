@@ -6,6 +6,7 @@ Created on Fri May  3 09:45:17 2019
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from modules.performance import *
 from modules.initialsizing_cg import *
 from modules.airfoil_calculations import *
 from modules.initialsizing_weights import *
@@ -18,7 +19,6 @@ from modules.initialsizing_loading import *     # commented out because this imp
 from inputs.performance_inputs import *
 #from modules.performance.class2_performance_de5fs import get_thrust_required
 from inputs.constants import *
-from Structure.Wing.isa import isa
 
  
 #should move to constants
