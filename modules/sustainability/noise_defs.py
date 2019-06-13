@@ -14,6 +14,49 @@ import matplotlib.pyplot as plt
 'set up the effective pressure of the different airframe components'
 #f will be a list which will be an 1./third octave band or complete octave band 
 
+
+
+
+def get_constants_wing(M):
+    G_wing=0.37*S/b**2*((rho_0*M*a_sl*S)/(mu_sl*b))**-0.2
+    L_wing=G_wing*b
+    K_wing=4.464E-5 
+    a_wing=5
+    return G_wing,L_wing,K_wing,a_wing
+
+def get_constants_slats(M):
+    G_slat=0.37*S/b**2*((rho_0*M*a_sl*S)/(mu_sl*b))**-0.2
+    L_slat=G_slat*b
+    K_slat=4.464E-5 
+    a_slat=5
+    return G_slat,L_slat,K_slat,a_slat
+
+
+def get_constants_flaps(M,flap_deflection,S_flap,b_flap):
+    G_flap=S_flap/b**2*(sin(flap_deflection))**2
+    L_flap=S_flap/b_flap
+    K_flap=2.787*10**-4
+    a_flap=6
+    return G_flap,L_flap,K_flap,a_flap
+
+def get_constants_landinggear(N_mw,N_nw,D_mlg,D_nlg):
+    G_mlg=N_mw*(D_mlg/b)**2
+    G_nlg=N_nw*(D_nlg/b)**2
+    K_mlg=3.414E-4  #4 wheels
+    K_nlg=4.349E-4 #1 or 2 wheels (nose)
+    K_strut=2.753E-4 
+    a_lg=6
+    return G_mlg, G_nlg, K_mlg,K_nlg,K_strut,a_lg
+
+def get_octave_frequency_bands():
+    number_of_bands=43
+    bandnumbers=list(range(1,number_of_bands+1))
+    centrefreq=[10**(bandnumbers[i]/10) for i in range(len(bandnumbers))]
+    lowerfreq=[2**(-1/6)*centrefreq[i] for i in range(len(bandnumbers))]
+    upperfreq=[2**(1/6)*centrefreq[i] for i in range(len(bandnumbers))]
+    freq_delta=[upperfreq[i]-lowerfreq[i] for i in range(len(bandnumbers))]
+    return centrefreq,freq_delta
+
 'strouhal numbers'
 def get_strouhal_number(f,L,M,theta,a):
     S=f*L*(1-M*cos(theta))/(M*a)
@@ -224,9 +267,3 @@ def get_perceived_noise_level(N):
 def get_effective_perceived_noise_level(L_pn,delta_t):
     L_epn=10*log10(delta_t/10*sum(10**(L_pn/10)))
           
-def get_theta_observer(r,h):
-    return 'ok'
-
-def get_phi_observer(r,h):
-    phi=np.theta(r/h)
-    return 'ok'
