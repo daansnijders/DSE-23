@@ -56,7 +56,7 @@ def get_internal_force_distri(span,Cr,Ct,N,force_lst,LE_sweep,spar_front,spar_re
     root_shear_x = -sum(force_lst[:,3])
     root_moment_z = sum(force_lst[:,3]*force_lst[:,1])
     root_moment_x = sum(force_lst[:,-1]*force_lst[:,1])
-    torque_lst = force_lst[:,-1]*(force_lst[:,0]-(force_lst[:,1]*np.tan(LE_sweep/180*np.pi)+\
+    torque_lst = force_lst[:,5]*(force_lst[:,0]-(force_lst[:,1]*np.tan(LE_sweep/180*np.pi)+\
                       (spar_front+spar_rear)/2*get_chord(force_lst[:,1],span,Cr,Ct)))+ force_lst[:,3]*-force_lst[:,2]
     root_torque = sum(torque_lst)
     internal_loads = []
