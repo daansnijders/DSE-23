@@ -48,7 +48,7 @@ from isa import isa
 
 fitting_factor = 1.15
 safety_factor = 1.5
-nu = 3
+nu = 2.66
 g = 9.80665
 ######stringers: Aluminum 2024-T81########
 stringer_yield = 372000000
@@ -189,7 +189,117 @@ for j in range(no_of_frames):
     for i in range(k, k + n_in_frame):
         stringer_no_new[i] = max(stringer_no[k:k+n_in_frame])
     k+= n_in_frame
+    
+    
+    
+    
+    
+    
+
+plt.figure()
+plt.plot(x,stringer_no)
+plt.show()
+
+plt.figure()
+plt.plot(x,stringer_no_new)
+plt.show()
+
+
+plt.figure()
+plt.plot(x, V)
+plt.show()
+
+plt.figure()
+plt.plot(x, M)
+plt.show()
+
+######################################BUCKILING LOAD FACTOR TEST#####################################    
+nu = 1       
+buckling_crit = 100000000000000.0 
+start = True
+while start:
+    nu+=0.001
+    
         
+    payload_w = [0] *n
+    for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
+        payload_w[i]=-M_payload* g*nu/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
+        
+    fuselage_w = [0] *n
+    for i in range(n):
+        fuselage_w[i]=-(M_fuselage+M_fittings)*g*nu/n
+        
+    component_w = [0] *n 
+    component_w[int((x_cg_hwing/l_fuselage)*n)]=-M_horizontal_tail* g*nu
+    component_w[int((x_cg_vwing/l_fuselage)*n)]=-M_verticaltail* g*nu
+    component_w[int((x_cg_ngear/l_fuselage)*n)]=-M_landinggear_nose* g*nu
+    component_w[int((x_cg_mgear/l_fuselage)*n)]=-M_landinggear_main* g*nu
+    #component_w[int((x_cg_wing_group/l_fuselage)*n)]=-(M_wing_group+ 1.00* M_fuel)* g*nu
+    for i in range(int((X_wingbox_start/l_fuselage)*n),int((X_wingbox_end/l_fuselage)*n)):
+        component_w[i]=-(M_wing_group+ 1.00* M_fuel)* g*nu/(int((X_wingbox_end/l_fuselage)*n)-int((X_wingbox_start/l_fuselage)*n))   
+    
+    weights_sum =  [0] *n 
+    for i in range(n):
+        weights_sum[i]= payload_w[i]+fuselage_w[i]+component_w[i]
+    
+    #m =  [0] *n 
+    #for i in range(n):
+    #    for j in range(i):
+    #        m[i]+=weights_sum[j]*(x[i]-step_size*j)
+    #        
+    m = 0     
+    for i in range(n):
+        m+=weights_sum[i]*x[i]
+    
+    Lift_mainwing = (-m+x_cg_hwing*sum(weights_sum))/(np.average([X_wingbox_start, X_wingbox_end])-x_cg_hwing)
+    Lift_tail = -sum(weights_sum)-Lift_mainwing
+    
+    lift_forces = [0] *n 
+    for i in range(int((X_wingbox_start/l_fuselage)*n),int((X_wingbox_end/l_fuselage)*n)):
+        lift_forces[i]=Lift_mainwing/(int((X_wingbox_end/l_fuselage)*n)-int((X_wingbox_start/l_fuselage)*n))
+        
+    lift_forces[int((x_cg_hwing/l_fuselage)*n)]=Lift_tail
+    
+    forces_sum =  [0] *n 
+    for i in range(n):
+        forces_sum[i]= payload_w[i]+fuselage_w[i]+component_w[i]+lift_forces[i]
+    
+    V =  [0] *n 
+    for i in range(n):
+        if i == 0:
+            V[i]=0
+        else:
+            V[i]=V[i-1]+forces_sum[i-1]
+    
+    M =  [0] *n 
+    for i in range(n):
+        for j in range(i):
+            M[i]+=forces_sum[j]*(x[i]-step_size*j)
+    
+    
+    
+    buckling_crit = [0]*n
+    for i in range(n):      
+        MOI[i] = stringer_no_new[i]*(radius[i])**2 *stringer_area * 0.5 + np.pi*radius[i]**3*0.001
+       
+        Y_mod = 72 * 10**9
+        v = 0.33
+        b_skin =  2* np.pi /stringer_no_new[i] * radius[i]
+        buckling_crit[i] = (0.001/b_skin)**2 * (np.pi**2 * 7 * Y_mod)/(12*(1-v**2))
+        
+    
+        stress_pressure_long[i]=(p_diff*np.pi*(radius[i])**2)/(stringer_area*stringer_no[i] + 2*np.pi*radius[i]*0.001)    
+    
+        stress_bending_max[i] = M[i]*radius[i]/MOI[i]    
+       
+        stress_long_max[i] = (abs(stress_bending_max[i])-stress_pressure_long[i])* safety_factor
+        
+    for i in range(n):
+        if stress_long_max[i] > buckling_crit[i]:
+            start = False
+        
+print "Load factor:", nu        
+
     
 ######################################JOINT CALCULATION########################
 radius_joint = 3.685*0.5
@@ -257,20 +367,3 @@ print (k_c)
 
 
 
-
-plt.figure()
-plt.plot(x,stringer_no)
-plt.show()
-
-plt.figure()
-plt.plot(x,stringer_no_new)
-plt.show()
-
-
-plt.figure()
-plt.plot(x, V)
-plt.show()
-
-plt.figure()
-plt.plot(x, M)
-plt.show()

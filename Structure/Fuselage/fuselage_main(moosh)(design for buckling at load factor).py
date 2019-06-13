@@ -52,6 +52,7 @@ nu = 3
 g = 9.80665
 ######stringers: Aluminum 2024-T81########
 stringer_yield = 372000000
+stringer_comp = 262000000
 stringer_area = 0.0002
 skin_yield = 372000000
 
@@ -104,6 +105,7 @@ for i in range(n):
     
 p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
 skin_thickness = (p_diff* max(radius))/(skin_yield/safety_factor)
+skin_thickness = 0.001
 
 
 payload_w = [0] *n
@@ -169,10 +171,12 @@ MOI = [0] *n
 stress_pressure_long =  [0] *n
 stress_bending_max = [0] *n
 stress_long_max = [1000000000000] *n
+critical = 0
 for i in range(n):
-    while stress_long_max[i] > (stringer_yield/fitting_factor):       
+    while stress_long_max[i] > (stringer_yield):       
         stringer_no[i]+=1
         MOI[i] = stringer_no[i]*(radius[i])**2 *stringer_area * 0.5 #+ np.pi*radius[i]**3*skin_thickness
+       
     
         stress_pressure_long[i]=(p_diff*np.pi*(radius[i])**2)/(stringer_area*stringer_no[i] + 2*np.pi*radius[i]*skin_thickness)    
     
@@ -180,6 +184,100 @@ for i in range(n):
        
         stress_long_max[i] = (abs(stress_bending_max[i])+stress_pressure_long[i])* safety_factor
      
+#######################################BUCKLING CALCULATION: REQUIRED NO OF STRINGERS###################################
+nu = 1.5
+payload_w = [0] *n
+for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
+    payload_w[i]=-M_payload* g*nu/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
+    
+fuselage_w = [0] *n
+for i in range(n):
+    fuselage_w[i]=-(M_fuselage+M_fittings)*g*nu/n
+    
+component_w = [0] *n 
+component_w[int((x_cg_hwing/l_fuselage)*n)]=-M_horizontal_tail* g*nu
+component_w[int((x_cg_vwing/l_fuselage)*n)]=-M_verticaltail* g*nu
+component_w[int((x_cg_ngear/l_fuselage)*n)]=-M_landinggear_nose* g*nu
+component_w[int((x_cg_mgear/l_fuselage)*n)]=-M_landinggear_main* g*nu
+#component_w[int((x_cg_wing_group/l_fuselage)*n)]=-(M_wing_group+ 1.00* M_fuel)* g*nu
+for i in range(int((X_wingbox_start/l_fuselage)*n),int((X_wingbox_end/l_fuselage)*n)):
+    component_w[i]=-(M_wing_group+ 1.00* M_fuel)* g*nu/(int((X_wingbox_end/l_fuselage)*n)-int((X_wingbox_start/l_fuselage)*n))   
+
+weights_sum =  [0] *n 
+for i in range(n):
+    weights_sum[i]= payload_w[i]+fuselage_w[i]+component_w[i]
+
+#m =  [0] *n 
+#for i in range(n):
+#    for j in range(i):
+#        m[i]+=weights_sum[j]*(x[i]-step_size*j)
+#        
+m = 0     
+for i in range(n):
+    m+=weights_sum[i]*x[i]
+
+Lift_mainwing = (-m+x_cg_hwing*sum(weights_sum))/(np.average([X_wingbox_start, X_wingbox_end])-x_cg_hwing)
+Lift_tail = -sum(weights_sum)-Lift_mainwing
+
+lift_forces = [0] *n 
+for i in range(int((X_wingbox_start/l_fuselage)*n),int((X_wingbox_end/l_fuselage)*n)):
+    lift_forces[i]=Lift_mainwing/(int((X_wingbox_end/l_fuselage)*n)-int((X_wingbox_start/l_fuselage)*n))
+    
+lift_forces[int((x_cg_hwing/l_fuselage)*n)]=Lift_tail
+
+forces_sum =  [0] *n 
+for i in range(n):
+    forces_sum[i]= payload_w[i]+fuselage_w[i]+component_w[i]+lift_forces[i]
+
+V =  [0] *n 
+for i in range(n):
+    if i == 0:
+        V[i]=0
+    else:
+        V[i]=V[i-1]+forces_sum[i-1]
+
+M =  [0] *n 
+for i in range(n):
+    for j in range(i):
+        M[i]+=forces_sum[j]*(x[i]-step_size*j)
+
+p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
+
+
+stringer_no_buckle = [0] *n
+MOI = [0] *n
+stress_pressure_long =  [0] *n
+stress_bending_max = [0] *n
+stress_long_max = [1000000000000] *n
+critical = 0
+for i in range(n):
+    while stress_long_max[i] > critical:       
+        stringer_no_buckle[i]+=1
+        MOI[i] = stringer_no_buckle[i]*(radius[i])**2 *stringer_area * 0.5 + np.pi*radius[i]**3*skin_thickness
+       
+        Y_mod = 72 * 10**9
+        v = 0.33
+        b_skin =  2* np.pi /stringer_no_buckle[i] * radius[i]
+        buckling_crit = (skin_thickness/b_skin)**2 * (np.pi**2 * 7 * Y_mod)/(12*(1-v**2))
+        critical = min([buckling_crit, stringer_comp])
+    
+        stress_pressure_long[i]=(p_diff*np.pi*(radius[i])**2)/(stringer_area*stringer_no_buckle[i] + 2*np.pi*radius[i]*skin_thickness)    
+    
+        stress_bending_max[i] = M[i]*radius[i]/MOI[i]    
+       
+        stress_long_max[i] = (abs(stress_bending_max[i])-stress_pressure_long[i])* safety_factor
+     
+
+
+
+
+
+
+
+
+
+
+
 frame_spacing = 0.5  
 no_of_frames = int(l_fuselage/ frame_spacing)
 n_in_frame = int(1.0/no_of_frames* n)
@@ -187,7 +285,7 @@ k = 0
 stringer_no_new= [1]* n
 for j in range(no_of_frames):
     for i in range(k, k + n_in_frame):
-        stringer_no_new[i] = max(stringer_no[k:k+n_in_frame])
+        stringer_no_new[i] = max([max(stringer_no[k:k+n_in_frame]),max(stringer_no_buckle[k:k+n_in_frame])])
     k+= n_in_frame
         
     
@@ -245,25 +343,27 @@ width = 0.0625
 r_frame = max(radius)
 I_frame = np.pi/4 * (r_frame**4 - (r_frame-width)**4)
 ######frame: Aluminum 2024-T81########
-Y_mod = 72 * 10**9
-v = 0.33
-frame_yield = 372000000
-L = abs(min(M))*(r_frame*2)**2/(16000*Y_mod*I_frame)
-b_skin =  2* np.pi /180 *r_frame
-k_c = (b_skin/0.001)**2 * (max(stress_long_max) * 12 * (1-v**2))/(Y_mod * np.pi**2)
-print (k_c)
+#Y_mod = 72 * 10**9
+#v = 0.33
+#frame_yield = 372000000
+#L = abs(min(M))*(r_frame*2)**2/(16000*Y_mod*I_frame)
+#b_skin =  2* np.pi / *r_frame
+#buckling_crit = (0.001/b_skin)**2 * (np.pi**2 * 4 * Y_mod)/(12*(1-v**2))
 
 
 
 
 
+plt.figure()
+plt.plot(x,stringer_no_new)
+plt.show()
 
 plt.figure()
 plt.plot(x,stringer_no)
 plt.show()
 
 plt.figure()
-plt.plot(x,stringer_no_new)
+plt.plot(x,stringer_no_buckle)
 plt.show()
 
 
