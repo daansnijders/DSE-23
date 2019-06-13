@@ -69,7 +69,6 @@ M_fuel_burnt=14000
 N_pax=120
 R=4000
 
-FueL_comparison=get_CO2_per_passenger_per_km(M_fuel_burnt,N_pax,R)
+Fuel_comparison=get_CO2_per_passenger_per_km(M_fuel_burnt,N_pax,R)
 
-werk=get_NOx_reduction_CAEP(Dp_Foo_NOx_caep6,Dp_Foo_NOx_av)
 

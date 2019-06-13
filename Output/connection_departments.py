@@ -72,18 +72,18 @@ D_strutt_mlg = 0.2
 
 'sustainability '
 'greenhouse gas emissions'
-#CO_2_emissions=get_CO2_emissions(M_fuel_burnt)
+#CO_2_emissions=[get_CO2_emissions(M_fuel_burnt[i]) for i in range(3)]
 #
 #EI_NOx_phase=get_EI_NOX_fuelflow(fuel_flow)
 #    
 #  
-#NOx_phase = get_NOx_emissions_total(fuel_flow_phase,time_in_flight_phase,EI_NOx_phase)
+#NOx_phase = [get_NOx_emissions_total(fuel_flow_phase,time_in_flight_phase,EI_NOx_phase)]
 # 
 #    
-#Dp_Foo_NOx=get_Dp_Foo_NOx_specific(NOx_total,T_phase)               
+#Dp_Foo_NOx=[get_Dp_Foo_NOx_specific(NOx_total,T_phase)   ]            
 #    
-#NO_x_req=get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_NOx)  #should come to 45%
+#NO_x_req=[get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_NOx) ] #should come to 45%
 #     
-
+#Fuel_per_pax=[get_CO2_per_passenger_per_km(M_fuel_burnt[i],N_pax[i],R[i]) for i in range(3)]
 
 'Structures'
