@@ -4,6 +4,7 @@ Created on Wed Jun  5 09:58:24 2019
 
 @author: Lisa
 """
+
 from modules.weight_class2.class2_weight import *
 from modules.CG.class2_CG import *
 from inputs.concept_1 import *
