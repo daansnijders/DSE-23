@@ -48,7 +48,7 @@ class empennage:
         self.CL_c = CL_c                                                        # [-] CL canard
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard
         self.Vc_V = 1
-
+        x_cg_wing_config = [config1_cg.x_cg_wing, config2_cg.x_cg_wing, config3_cg.x_cg_wing]
         #self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
         self.plot_stability_tail(False)
@@ -252,7 +252,7 @@ class empennage:
         cg_z = [config1_cg.calc_z_cg(), config2_cg.calc_z_cg(), config3_cg.calc_z_cg()] # [m] x-location of the c.g.
 
         self.x_c = 7.5                                                               # [m] x-location of canard ac
-        self.l_c = cg_x[self.config] - x_c                                      # [m] distance between canard ac and c.g.
+        self.l_c = cg_x[self.config] - self.x_c                                      # [m] distance between canard ac and c.g.
         l_h = x_le_h[0] + l_cutout - cg_x[self.config]                          # [m] distance between htail ac and c.g.
         l_cg = (x_le_MAC[self.config] + 0.25*MAC) - cg_x[self.config]           # [m] distance between wing ac and c.g.
         z_e = cg_z[self.config] - z_engine                                      # [m] distance between engine and c.g.
@@ -327,7 +327,7 @@ class empennage:
     
     def deflection_curve(self):
         Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
-        Cm_a = self.CN_w_a * (self.cg - x_w) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        Cm_a = self.CN_w_a * (self.x_cg - x_w) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
         Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
         
         alpha_list = np.arange(-0.1, (0.2+0.001), 0.001)
