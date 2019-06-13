@@ -722,4 +722,4 @@ class Lift:
         
         delta_alpha_wc = np.deg2rad(3) 
         delta_CL_max = Kcw*delta_CL_max_w - delta_CL_alpha_w*delta_alpha_wc + (self.S_h/self.S)*CL_alpha_h*((1-de_da)+self.i_h - delta_ef)
-        return(delta_cl, delta_CL_alpha, delta_CL_max)
+        return(delta_CL, delta_CL_alpha, delta_CL_max)
