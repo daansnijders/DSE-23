@@ -3,7 +3,6 @@ import pandas as pd
 from inputs.concept_1 import ft_to_m, OEW, MTOW, thrust_max, S, g, M_payload, M_fuel, A, e, CD0, R, V_cruise, LoverD, CDcruise
 from modules.performance.class2_performance_defs import *
 from inputs.constants import H_m
-from modules.performance.climb_optimization import get_climb_optimization
 
 """
 inputs
@@ -12,7 +11,7 @@ i = 1   # configuration selection
 h_screen_to = 35 * ft_to_m                                  # [m]
 h_screen_la = 50 * ft_to_m
 reverse_thrust_factor = 0.45
-engine_failure = False
+engine_failure = True
 cj = 0.790/thrust_max #kg/s/N
 cj_retard = cj / 2.832545035E-5
 thrust_transition_setting = 1.
@@ -172,7 +171,7 @@ def analyze_fuel_consumption(MTOW):
     climb
     """
 
-    fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance = get_climb_optimization(MTOW, thrust_max, CDcruise, S, g, H_m, V_cruise)
+    fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance = get_climb_optimization(MTOW, thrust_max, CDcruise, S, g, H_m, V_cruise, 1.)
     fuel_consumption.loc['climb'] = [fuel_flow_climb, fuel_mass_climb]
     mass -= fuel_mass_climb
 
