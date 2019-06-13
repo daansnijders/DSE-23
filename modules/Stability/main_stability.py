@@ -16,7 +16,6 @@ from modules.Stability.control_surf_func import *
 from modules.Stability.empennage import *
 
 
-
 """NEED FROM OTHER FILES"""
 x_ac     = (x_le_MAC[0]+0.25*MAC)
 CL_a_h   = 3.82
