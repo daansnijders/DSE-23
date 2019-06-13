@@ -21,7 +21,7 @@ class empennage:
         self.CL_a_h = CL_a_h
         self.CL_a_ah = CL_a_ah
         self.de_da = de_da
-        self.S_h = S_h
+        #self.S_h = S_h
         self.l_h_ac = l_h # can be removed
         self.S = S
         self.c = c
@@ -32,9 +32,9 @@ class empennage:
         self.x_cg = x_cg
         self.CL_h = CL_h
 
-        self.hortail_vol = self.S_h * self.l_h_ac / (self.S * self.c)
+        #self.hortail_vol = self.S_h * self.l_h_ac / (self.S * self.c)
         
-        self.plot_stability_horitail(False)
+        self.plot_stability_tail(False)
 
     
     def calc_xnp(self):
@@ -57,7 +57,7 @@ class empennage:
     
     
     
-    def plot_stability_horitail(self, plot = True):
+    def plot_stability_tail(self, plot = True):
         """Stability excluding margin"""
         aa = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h_ac*(self.Vh_V)**2)
         bb = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h_ac*(self.Vh_V)**2)
@@ -144,50 +144,16 @@ class empennage:
         # =============================================================================
 
         
-        A_h = 4.95                                                              # [-] aspect ratio horizontal tail
-        taper_ratio_h = 0.39                                                    # [-] taper ratio horizontal tail
-        lambda_h_le_rad = np.deg2rad(34)                                        # [rad] leading edge sweep angle horizontal tail 
-        t_c_h = 0.10                                                            # [-] tickness over chord ratio horizontal tail
+        self.A_h = 4.95                                                         # [-] aspect ratio horizontal tail
+        self.taper_ratio_h = 0.39                                               # [-] taper ratio horizontal tail
+        self.lambda_h_le_rad = np.deg2rad(34)                                   # [rad] leading edge sweep angle horizontal tail 
+        self.t_c_h = 0.10                                                       # [-] tickness over chord ratio horizontal tail
         
         def get_x_h(l_f):
             return 0.9* l_f[0]
         
         def get_b(S, A):
             return np.sqrt(S*A)
-        
-        def get_Cr_h(S_h, taper_ratio_h, b_h):
-            return 2*S_h/((1+taper_ratio_h)*b_h) 
-        
-        def get_Ct_h(Cr_h, taper_ratio_h):
-            return Cr_h * taper_ratio_h
-        
-        x_h = get_x_h(l_f)
-        b_h = get_b(self.S_h, A_h)                                              # [m] span horizontal tail
-        Cr_h = get_Cr_h(self.S_h, taper_ratio_h, b_h)                           # [m] root chord length horizontal tail
-        Ct_h = get_Ct_h(Cr_h, taper_ratio_h)                                    # [m] tip chord length horizontal tail
-        z_h = 0.75 * d_f_outer                                                  # [m] height of the vertical tail
-        self.l_h = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
-   
-        
-        
-#        print (b_h)
-#        print (Cr_h)
-#        print (Ct_h)
-#        print (x_h)
-
-
-        # =============================================================================
-        # Vertical tail - NACA 63 012
-        # =============================================================================
-                
-        self.V_v = 0.1                                                          # [-] volume vertical tail
-        self.A_v = 1.5                                                          # [-] aspect ratio vertical tail
-        self.taper_ratio_v = 0.375                                              # [-] taper ratio vertical tail
-        self.lambda_v_le_rad = np.deg2rad(40)                                   # [rad] leading edge sweep angle vertical tail
-        self.t_c_v = 0.12                                                       # [-] tickness over chord ratio vertical tail
-        
-        def get_S_v(S, b, x_cg, V_v, x_v):
-            return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]
         
         def get_Cr(S, taper_ratio, b):
             return 2*S/((1+taper_ratio)*b)
@@ -202,7 +168,31 @@ class empennage:
         def get_lambda_2_rad(lambda_4_rad,A,taper_ratio):
             return np.arctan(np.tan(lambda_4_rad)-1/A*(1-taper_ratio)/(1+taper_ratio))
         
-        #print(get_S_v(S, b, x_cg, V_v, x_le_v))
+        self.x_h = get_x_h(l_f)
+        self.b_h = get_b(self.S_h, self.A_h)                                    # [m] span horizontal tail
+        self.Cr_h = get_Cr(self.S_h, self.taper_ratio_h, self.b_h)              # [m] root chord length horizontal tail
+        self.Ct_h = get_Ct(self.Cr_h, self.taper_ratio_h)                       # [m] tip chord length horizontal tail
+        self.z_h = 0.75 * d_f_outer                                             # [m] height of the vertical tail
+        self.l_h = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
+   
+        self.lambda_h_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_h_le_rad,self.Cr_h,self.b_h,self.taper_ratio_h) # [rad] quarter chord sweep angle
+        self.lambda_h_2_rad = get_lambda_2_rad(self.lambda_h_4_rad,self.A_h,self.taper_ratio_h) # [rad] half chord sweep angle
+
+        # =============================================================================
+        # Vertical tail - NACA 63 012
+        # =============================================================================
+                
+        self.V_v = 0.1                                                          # [-] volume vertical tail
+        self.A_v = 1.5                                                          # [-] aspect ratio vertical tail
+        self.taper_ratio_v = 0.375                                              # [-] taper ratio vertical tail
+        self.lambda_v_le_rad = np.deg2rad(40)                                   # [rad] leading edge sweep angle vertical tail
+        self.t_c_v = 0.12                                                       # [-] tickness over chord ratio vertical tail
+        self.x_v = self.x_h
+        
+        def get_S_v(S, b, x_cg, V_v, x_v):
+            return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]
+        
+
         self.S_v = min(get_S_v(S, b, x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
@@ -212,6 +202,8 @@ class empennage:
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
         
         
+        
+        # engine inoperative case
         N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
 
         self.l_v = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
@@ -227,7 +219,9 @@ class empennage:
 
         assert N_e < -N_v_max                                                   # check if tail is capable enough
         
-        return self.Sh_S1, self.Sh_S2, self.Sh_C1, self.S_h_S, self.x_le_MAC, self.S_h, z_h, self.l_v, self.l_h
+        return self.Sh_S1, self.Sh_S2, self.Sh_C1, self.S_h_S, self.x_le_MAC, self.S_h, self.z_h, self.l_v, self.l_h
+    
+    
     
 e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
     
