@@ -16,7 +16,7 @@ from modules.main_class2 import *
 V_app = 70  #estimated by RB
 
 class empennage:
-    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V):   
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing):   
         self.config = config                                                    # [-] configuration selection
         self.x_ac=x_ac #from nose in [m]
         self.CL_a_h = CL_a_h
@@ -48,7 +48,7 @@ class empennage:
         self.CL_c = CL_c                                                        # [-] CL canard
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard
         self.Vc_V = 1
-        x_cg_wing_config = [config1_cg.x_cg_wing, config2_cg.x_cg_wing, config3_cg.x_cg_wing]
+        self.x_cg_wing = x_cg_wing
         #self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
         self.plot_stability_tail(False)
@@ -327,13 +327,13 @@ class empennage:
     
     def deflection_curve(self):
         Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
-        Cm_a = self.CN_w_a * (self.x_cg - x_w) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        Cm_a = self.CN_w_a * (self.x_cg - self.x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
         Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
         
         alpha_list = np.arange(-0.1, (0.2+0.001), 0.001)
         def_curve = []
         for i in range (len(alpha_list)):
-            def_curve.append(- 1 / Cm_def * (Cm_0 + Cm_a * (alpha_list[i] - a_0)))
+            def_curve.append(- 1 / Cm_def * (Cm_0 + Cm_a * (alpha_list[i] - self.a_0)))
         
         plt.plot(alpha_list, def_curve, "o")
 
