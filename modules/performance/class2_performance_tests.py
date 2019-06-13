@@ -172,15 +172,17 @@ def analyze_fuel_consumption(MTOW):
     climb
     """
 
-    fuel_flow_climb, fuel_mass_climb, climb_final_velocity = get_climb_optimization()
-    fuel_consumption.loc['climb'] = ['variable', fuel_mass_climb]
+    fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance = get_climb_optimization(MTOW, thrust_max, CDcruise, S, g, H_m, V_cruise)
+    fuel_consumption.loc['climb'] = [fuel_flow_climb, fuel_mass_climb]
     mass -= fuel_mass_climb
 
     """
     cruise breguet
     """
-    fuel_mass_cruise_breguet = get_fuel_burned_breguet(mass, R[i], V_cruise, cj, g, LoverD[i])  # todo; update cj
-    fuel_flow_cruise_breguet = fuel_mass_cruise_breguet * V_cruise / R[i]
+    # range_leftover = R[i] - distance
+    range_leftover = R[i]
+    fuel_mass_cruise_breguet = get_fuel_burned_breguet(mass, range_leftover, V_cruise, cj, g, LoverD[i])  # todo; update cj
+    fuel_flow_cruise_breguet = fuel_mass_cruise_breguet * V_cruise / range_leftover
     # print(fuel_mass_cruise_breguet)
     if pick_breguet:
         fuel_consumption.loc['cruise_breguet'] = [fuel_flow_cruise_breguet, fuel_mass_cruise_breguet]
