@@ -291,7 +291,9 @@ nose wheel diameter				D_nlg
 width of main wheel				w_mlg
 width of nose wheel				w_nlg
 length of the strut main			L_strut_mlg
-length of the strut nose			L_strut_nlg
+length of the strut nose			L_strut_n
+diameter of the strut main			d_strut_mlg
+diameter of the strut nose			d_strut_nlg
 
 
 Area of flap					S_flap
