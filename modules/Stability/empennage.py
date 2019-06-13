@@ -4,6 +4,7 @@ Created on Wed Jun  5 09:50:12 2019
 
 @author: Stijn
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
@@ -321,3 +322,4 @@ class empennage:
     
     
     
+

@@ -47,6 +47,27 @@ from isa import isa
 
 
 
+
+
+l_fuselage = config1_class2.l_f
+x_cg_hwing = c1.x_cg_tail
+x_cg_vwing = c1.x_cg_tail
+x_cg_ngear = c1.x_nlg
+x_cg_mgear = c1.x_mlg
+Xfirst = c1.l_cockpit
+Xlast = Xfirst+c1.l_cabin[0]
+X_wingbox_start = c1.x_le_MAC-c1.y_MAC*np.tan(c1.lambda_le_rad)
+X_wingbox_end = X_wingbox_start + c1.Cr
+M_payload = c1.M_payload[0]
+M_fuselage = c1.M_fuselage
+M_fittings = 0
+M_horizontal_tail = config1_class2.M_horizontaltail
+M_vertical_tail = config1_class2.M_verticaltail
+M_landinggear_nose = config1_class2.M_landinggear_nose
+M_landinggear_main = config1_class2.M_landinggear_nose
+M_wing_group = c1.M_wing_group
+lift_mainwing = c1.lift
+
 fitting_factor = 1.15
 safety_factor = 1.5
 nu = 3
@@ -99,6 +120,7 @@ M_landinggear_main = 1500
 M_wing_group = 12000
 Lift_mainwing = 500000
 Lift_tail = -10000
+
 
 
 
@@ -244,7 +266,7 @@ while sigma > sigma_critical:
     
     
 
-print t
+print (t)
 
 ##########Titanium Ti-6Al-4V aged##########
 delta = 0.0001
@@ -254,7 +276,7 @@ bolt_d = D - delta*2
 bolt_rupture = 1020000000
 I_bolt = np.pi/4 * (bolt_d/2)**4
 MS = ((Mom*bolt_d)/(2*I_bolt))/bolt_rupture  -1
-print "MS:", MS
+print ("MS:", MS)
 
 
 #################################Frame spacing################################
