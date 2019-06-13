@@ -781,48 +781,54 @@ class Lift:
         
         
 class Moment:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap):
-        self.S              = S
-        self.A              = A
-        self.rho            = rho
-        self.rho_0          = rho_0
-        self.l_f            = l_f
-        self.V_cruise       = V_cruise
-        self.M_cruise       = M_cruise
-        self.V_TO           = V_TO
-        self.mu_37          = mu_37
-        self.MAC            = MAC
-        self.Ct             = Ct
-        self.Cr             = Cr
-        self.b              = b
-        self.taper_ratio    = taper_ratio
-        self.d_f_outer      = d_f_outer
-        self.lambda_le_rad  = lambda_le_rad
-        self.lambda_4_rad   = lambda_4_rad
-        self.lambda_2_rad   = lambda_2_rad
-        self.t_c            = t_c
-        self.C_l_alpha      = C_l_alpha
-        self.alpha_0_l      = alpha_0_l
-        self.alpha_star_l   = alpha_star_l
-        self.delta_cl_flap  = delta_cl_flap
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap,delta_cl_krueger, x_ref, cl_des_airfoil):
+        self.S                  = S
+        self.A                  = A
+        self.rho                = rho
+        self.rho_0              = rho_0
+        self.l_f                = l_f
+        self.V_cruise           = V_cruise
+        self.M_cruise           = M_cruise
+        self.V_TO               = V_TO
+        self.mu_37              = mu_37
+        self.MAC                = MAC
+        self.Ct                 = Ct
+        self.Cr                 = Cr
+        self.b                  = b
+        self.taper_ratio        = taper_ratio
+        self.d_f_outer          = d_f_outer
+        self.lambda_le_rad      = lambda_le_rad
+        self.lambda_4_rad       = lambda_4_rad
+        self.lambda_2_rad       = lambda_2_rad
+        self.t_c                = t_c
+        self.C_l_alpha          = C_l_alpha
+        self.alpha_0_l          = alpha_0_l
+        self.alpha_star_l       = alpha_star_l
+        self.delta_cl_flap      = delta_cl_flap
+        self.delta_cl_krueger   = delta_cl_krueger
+        self.x_ref              = x_ref
+        self.cl_des_airfoil     = cl_des_airfoil
         
     def Airfoil_moment(self):
         cm0_airfoil = -0.123        #Zero lift moment coefficient according to JAVAfoil
         x_ac = 0.25                 #Percentage of chord
-        x_ref = 0.5                 #Own decision based on nothing
-        cl_des_airfoil = 0.651      #CL at zero angle of attack from JAVAfoil (RE = 17*10^6, 65-615)
         
-        Mcrit = 0.86 - 0.1*cl_des_airfoil -self.t_c
-        cm_des_airfoil = cm0_airfoil + cl_des_airfoil(x_ref - x_ac)
-        dcm_dcl_airfoil = x_ref-x_ac
+        Mcrit = 0.86 - 0.1*self.cl_des_airfoil -self.t_c
+        cm_des_airfoil = cm0_airfoil + self.cl_des_airfoil*(self.x_ref - x_ac)
+        dcm_dcl_airfoil = self.x_ref-x_ac
         
         cl_star = self.C_l_alpha*(self.alpha_star_l - self.alpha_0_l)
         return(cm_des_airfoil, dcm_dcl_airfoil)
         
-    def Airfoil_moment_flaps(self):
+    def Airfoil_moment_flaps(self, cm_des_airfoil):
         xcp_cprime = 0.415              #Figure 8.91
         c_prime = 1.20 
-        delta_cm = self.delta_cl_flap*(x_ref - xcp_cprime*c_prime)
+        delta_cm_flap = self.delta_cl_flap*(self.x_ref - xcp_cprime*c_prime)
+        
+        cmdle = 0.0006      #Figure 8.93
+        dfle = 60           #DEG
+        delta_cm_krueger = cmdle*c_prime**2*dfle + (self.x_ref + (c_prime-1)) + cm_des_airfoil*(c_prime**2 -1) + 0.75*self.cl_des_airfoil*c_prime*(c_prime-1)
+        return(delta_cm_flap, delta_cm_krueger)
         
 #    def Wing_moment(self):
         
