@@ -4,6 +4,7 @@ Created on Wed Jun  5 09:50:12 2019
 
 @author: Stijn
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
@@ -15,14 +16,14 @@ from modules.main_class2 import *
 V_app = 70  #estimated by RB
 
 class empennage:
-    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c):   
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V):   
         self.config = config                                                    # [-] configuration selection
         self.x_ac=x_ac #from nose in [m]
         self.CL_a_h = CL_a_h
         self.CL_a_ah = CL_a_ah
         self.de_da = de_da
         #self.S_h = S_h
-        self.l_h_ac = l_h # can be removed
+        self.l_h = l_h                                                       # [m] distance between the two quarters chords of the main wing and tail
         self.S = S
         self.c = c
         self.Vh_V = Vh_V
@@ -31,6 +32,14 @@ class empennage:
         self.CL_ah = CL_ah
         self.x_cg = x_cg
         self.CL_h = CL_h
+        self.a_0 = a_0
+        self.i_h = i_h
+        self.i_c = i_c
+        self.CN_h_a = CN_h_a
+        self.CN_w_a = CN_w_a
+        self.CN_c_a = CN_c_a
+        self.CN_h_def = CN_h_def
+        self.Vc_v = Vc_V
         
         self.weight_pass = weight_pass                                          # [kg] mass increase per passenger
         self.additional_mass = weight_pass[self.config][-1] - weight_pass[0][-1] # [kg] mass difference between config 1 and 2/3
@@ -40,10 +49,12 @@ class empennage:
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard
         self.Vc_V = 1
 
-        #self.hortail_vol = self.S_h * self.l_h_ac / (self.S * self.c)
+        #self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
         self.plot_stability_tail(False)
         self.size_canard()
+        self.plot_stability_canard()
+        self.deflection_curve()
 
     
     def calc_xnp(self):
@@ -56,7 +67,7 @@ class empennage:
     
     def calc_Cm(self):
         self.Cm_lesstail = self.Cm_ac + self.CL_ah * (self.x_cg-self.x_ac)/self.c
-        self.Cm_tail = -self.CL_h * self.S_h * self.l_h_ac / (self.S * self.c) * (self.Vh_V)**2
+        self.Cm_tail = -self.CL_h * self.S_h * self.l_h / (self.S * self.c) * (self.Vh_V)**2
         self.Cm = self.Cm_lesstail + self.Cm_tail
         return self.Cm    
     
@@ -64,16 +75,16 @@ class empennage:
     
     def plot_stability_tail(self, plot = True):
         """Stability excluding margin"""
-        aa = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h_ac*(self.Vh_V)**2)
-        bb = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h_ac*(self.Vh_V)**2)
+        aa = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
+        bb = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
         
         """Stability including margin"""
-        dd = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h_ac*(self.Vh_V)**2)
-        ee = (self.x_ac - 0.05*self.c) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h_ac*(self.Vh_V)**2)
+        dd = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
+        ee = (self.x_ac - 0.05*self.c) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
         
         """Controlability"""
-        ff = self.CL_ah / (self.CL_h*self.l_h_ac*(self.Vh_V)**2)
-        gg = (self.c*self.Cm_ac-self.CL_ah*self.x_ac)/(self.CL_h*self.l_h_ac*(self.Vh_V)**2)
+        ff = self.CL_ah / (self.CL_h*self.l_h*(self.Vh_V)**2)
+        gg = (self.c*self.Cm_ac-self.CL_ah*self.x_ac)/(self.CL_h*self.l_h*(self.Vh_V)**2)
         
         self.l = np.arange(x_le_MAC_range[0], (x_le_MAC_range[2]+self.c+0.01), 0.01)
         self.Sh_S1 = [] #stability xnp
@@ -142,7 +153,6 @@ class empennage:
             ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
             ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
-            
            
         
         # =============================================================================
@@ -241,7 +251,7 @@ class empennage:
         cg_x = [config1_cg.calc_x_cg(), config2_cg.calc_x_cg(), config3_cg.calc_x_cg()] # [m] x-location of the c.g.
         cg_z = [config1_cg.calc_z_cg(), config2_cg.calc_z_cg(), config3_cg.calc_z_cg()] # [m] x-location of the c.g.
 
-        x_c = 7.5                                                               # [m] x-location of canard ac
+        self.x_c = 7.5                                                               # [m] x-location of canard ac
         self.l_c = cg_x[self.config] - x_c                                      # [m] distance between canard ac and c.g.
         l_h = x_le_h[0] + l_cutout - cg_x[self.config]                          # [m] distance between htail ac and c.g.
         l_cg = (x_le_MAC[self.config] + 0.25*MAC) - cg_x[self.config]           # [m] distance between wing ac and c.g.
@@ -272,16 +282,15 @@ class empennage:
 
 
     def plot_stability_canard(self, plot = True):
-        aa = 1/(self.CL_a_c / e2.CL_a_ah * -self.l_c * self.Vc_V**2)
-        bb = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h * e2.Vh_V + 0.05 * MAC
+        aa = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2)
+        bb = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V + 0.05 * MAC
         
-        cc = 1/(self.CL_a_c / e2.CL_a_ah * -self.l_c * self.Vc_V**2)
-        dd = -e2.x_ac - e2.CL_a_h / e2.CL_a_ah * (1-e2.de_da) * e2.S_h_S * e2.l_h * e2.Vh_V 
+        cc = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2)
+        dd = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V 
         
-        ee = 1/(self.CL_c / e2.CL_ah * -self.l_c * self.Vc_V**2)
-        ff = -e2.x_ac + e2.Cm_ac / e2.CL_ah * MAC - e2.CL_h / e2.CL_ah * e2.S_h_S * e2.l_h * e2.Vh_V**2
+        ee = 1/(self.CL_c / self.CL_ah * -self.l_c * self.Vc_V**2)
+        ff = -self.x_ac + self.Cm_ac / self.CL_ah * MAC - self.CL_h / self.CL_ah * self.Sh_S * self.l_h * self.Vh_V**2
         
-        self.l = e2.l
         self.Sc_S1 = [] #stability xnp
         self.Sc_S2 = [] #stability incl S.M.
         self.Sc_C1 = [] #controlability
@@ -313,6 +322,24 @@ class empennage:
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
     
+        self.Sc_S = 0.2                                                         # [-] Ratio area canard (assumed for now)
+    
+    
+    def deflection_curve(self):
+        Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        Cm_a = self.CN_w_a * (self.cg - x_w) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
+        
+        alpha_list = np.arange(-0.1, (0.2+0.001), 0.001)
+        def_curve = []
+        for i in range (len(alpha_list)):
+            def_curve.append(- 1 / Cm_def * (Cm_0 + Cm_a * (alpha_list[i] - a_0)))
+        
+        plt.plot(alpha_list, def_curve, "o")
+
+
+
+
     
 #e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
     
@@ -321,3 +348,4 @@ class empennage:
     
     
     
+
