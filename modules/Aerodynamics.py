@@ -712,7 +712,7 @@ class Lift:
         Kcw = 1
         etah = 0.9      #Source internet
         etac = 1.0
-        delta_ef = (18.5*delta_CL_w*self.b)/(self.A*self.b_flap)
+        delta_ef = np.deg2rad(18.5*delta_CL_w*self.b)/(self.A*self.b_flap)
         delta_CL = Kcw*delta_CL_w - CL_alpha_h*etah*(self.S_h/self.S)*delta_ef
         
         Kwf = 1 + 0.025*(self.d_f_outer/self.b) - 0.25*(self.d_f_outer/self.b)**2

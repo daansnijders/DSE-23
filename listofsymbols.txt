@@ -249,6 +249,9 @@ Delta Cl max Krueger airfoil 			delta_clmax_krueger
 Lift curve slope aircraft 			CL_alpha
 Zero lift alpha aircraft			alpha_0_L
 CL max aircraft 				CL_max
+Delta CL flaps down aircraft 			delta_CL
+Delta Lift curve slope flaps down aircraft 	delta_CL_alpha
+Delta CL max flaps down aircraft 		delta_CL_max
 
 
 main wheel diameter				D_mlg
