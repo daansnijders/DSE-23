@@ -220,8 +220,8 @@ z_nlg = z_mlg                                                                   
 
 L_strut_mlg= -z_mlg-D_mlg/2
 L_strut_nlg= -z_nlg-D_nlg/2
-D_strut_mlg=( max(P_mw)*2*1.5*4/(517*10**6))**0.5
-D_strut_nlg=( max(P_nw)*2*1.5*4/(517*10**6))**0.5
+D_strut_mlg=( max(P_mw)*2*1.5*4/(423*10**6))**0.5
+D_strut_nlg=( max(P_nw)*2*1.5*4/(423*10**6))**0.5
 #MAKE THIS ITERABLE WITH THE LOADING DIAGRAM
 # Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
 
