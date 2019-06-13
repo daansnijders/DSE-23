@@ -693,12 +693,17 @@ class Lift:
         alpha_CL_max = np.deg2rad(alpha_CL_max_w) - self.i_w - delta_alpha_wc
         
         CL_max = CL_max_w - CL_alpha_wf*delta_alpha_wc + CL_alpha_h*(self.S_h/self.S)*(alpha_CL_max*(1-de_da) + self.i_h) + CL_alpha_c*(self.S_c/self.S)*(alpha_CL_max*(1+de_da_c) + self.i_c)
-        return(CL_alpha_h, CL_alpha_c, CL_alpha, alpha_0_L, CL_max)
+        return(CL_alpha_h, CL_alpha_c, CL_alpha, alpha_0_L, CL_max, de_da)
 
-    def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c): 
+    def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c, delta_CL_alpha_w, de_da): 
         Kcw = 1
         etah = 0.9      #Source internet
+        etac = 1.0
         delta_ef = (18.5*delta_CL_w*self.b)/(self.A*self.b_flap)
         delta_CL = Kcw*delta_CL_w - CL_alpha_h*etah*(self.S_h/self.S)*delta_ef
         
-        return(delta_cl)
+        Kwf = 1 + 0.025*(self.d_f_outer/self.b) - 0.25*(self.d_f_outer/self.b)**2
+        de_da_c = 0.15  #Figure 8.67
+        
+        delta_CL_alpha = Kwf*delta_CL_alpha_w + CL_alpha_h*etah*(self.S_h/self.S)*(1-de_da) + CL_alpha_c*etac*(self.S_c/self.S)*(1-de_da_c)
+        return(delta_cl, delta_CL_alpha)
