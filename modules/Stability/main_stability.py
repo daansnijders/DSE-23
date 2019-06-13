@@ -24,7 +24,7 @@ de_da     = 0.3835                                                              
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
 Cm_ac     = -0.3                                                                # [-] moment coefficient of main wing ac
 CL_ah     = 1.6                                                                 # [-] CL_(A-h)
-x_cg      = x_cg_max                                                            # [m] x-location of the most aft cg location
+x_cg      = x_cg_max11                                                            # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.5838                                                             # [-] lift coefficient htail
 CL_c      = 1.3                                                                 # [-] lift coefficient canard
 CL_a_c    = 1.0                                                                 # [-] CL_alpha_canard
@@ -36,15 +36,17 @@ CN_w_a    = 0.5                                                                 
 CN_c_a    = 0.5                                                                 # [-] C_N_c_alpha canard
 CN_h_def  = 0.5                                                                 # [-] C_N_h_de elevator deflection
 Vc_V      = 1                                                                   # [-] V_c/V velocity factors
-x_cg_wing = 12                                                                  # [m] x-location c.g. wing
+x_cg_wing = 12                                                                  # [m] x-location c.g. wing 
 """====================="""
 
 
 # initialize class:
-empennage1 = empennage(0, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing)
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing)
+empennage1 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing)
 
 # outputs:
-x_le_MAC = empennage1.x_le_MAC                                                  # [m] x-location of MAC main wing
+x_le_MAC        = empennage1.x_le_MAC                                           # [m] x-location of MAC main wing
+x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
@@ -69,7 +71,7 @@ lambda_v_4_rad  = empennage1.lambda_v_4_rad                                     
 x_v             = empennage1.x_v                                                # [m] x-location of ac of the vtail?
 
 # control surfaces: (inputs still need to be worked on...)
-c_elev = get_c_elev(Cr_h, Ct_h, b_h)                                                       # [m] chord length elevator
+c_elev = get_c_elev(Cr_h, Ct_h, b_h)                                            # [m] chord length elevator
 S_elev = get_S_elev(S_h)                                                        # [m^2] surface area elevator
 b_elev = get_b_elev(S_elev,c_elev)                                              # [m] span elevator
 
