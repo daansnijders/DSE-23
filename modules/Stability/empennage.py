@@ -153,7 +153,6 @@ class empennage:
             ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
             ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
-           
         
         # =============================================================================
         # Horizontal tail - NACA 63 010
@@ -318,7 +317,7 @@ class empennage:
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_C1)
             ax2.set( ylim = [0,0.2565], ylabel = 'S_h/S')
-            
+
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
     
@@ -337,7 +336,7 @@ class empennage:
         
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot(alpha_list, def_curve, "o")
+        ax.plot((alpha_list*180/np.pi), def_curve)
 
 
 

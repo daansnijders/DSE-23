@@ -17,11 +17,11 @@ from modules.Stability.empennage import *
 
 
 """NEED FROM OTHER FILES"""
-x_ac     = (x_le_MAC[0]+0.25*MAC)
-CL_a_h   = 3.82
-CL_a_ah  = 4.90
+x_ac     = (x_le_MAC[0]+0.25*MAC)                                               # [m] x-location of the main wing ac
+CL_a_h   = 3.82                                                                 # [-] CL_(a-h)
+CL_a_ah  = 4.90                                                                 # [-] CL_
 de_da    = 0.3835
-Vh_V     = 1.
+Vh_V     = 1.                                                                   # [-] V_h/V velocity factors
 Cm_ac    = -0.3
 CL_ah    = 1.6
 x_cg     = x_cg_max
