@@ -16,7 +16,7 @@ from modules.main_class2 import *
 V_app = 70  #estimated by RB we will get from rik (lowest speed)
 
 class empennage:
-    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing):   
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V):   
         self.config = config - 1                                                # [-] configuration selection
         self.x_ac=x_ac                                                          # [m] x-loaction of the main wing ac
         self.CL_a_h = CL_a_h                                                    # [-] CL_alpha_h
@@ -46,7 +46,7 @@ class empennage:
         self.weight = self.weight_pass[self.config][-1] * g                     # [N] MTOW config
         self.CL_c = CL_c                                                        # [-] CL canard
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard                
-        self.x_cg_wing = x_cg_wing                                              # [m] x-location of the wing c.g.
+
 
         # running class functions
         self.plot_stability_tail(False)
@@ -329,7 +329,7 @@ class empennage:
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.set (ylim = [-1.5,1.0], ylabel = 'delta_e')
-        ax.plot((alpha_list*180/np.pi), def_curve)
+        ax.plot((np.rad2deg(alpha_list)), def_curve)
         plt.gca().invert_yaxis()
 
 
