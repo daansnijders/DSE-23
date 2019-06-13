@@ -167,7 +167,19 @@ def get_overall_sound_level_general(p_e_squared,freq_delta,centrefreq):
     PBL         =[SPL[i]+10*log10(freq_delta[i]) for i in range(len(centrefreq))]
     delta_L_A   = [A_weighting_correction(centrefreq[i]) for i in range(len(centrefreq))]
     PBL_a = [A_weighted_sound_level(centrefreq,delta_L_A[i],PBL[i])for i in range(len(centrefreq))]
+    
     OSPL_A      =A_weighted_overall_sound_level(centrefreq,PBL_a)
+    
+    
+    plt.figure()
+    plt.plot(centrefreq,PBL_a,'-o',label='A-weighted PBL')
+    plt.xlabel('frequency [Hz]')
+    plt.ylabel('1/3 octave PBL [dBA]')
+    plt.xscale('log')
+    plt.title('1/3 octave Pressure Band Level A-weightening comparison')
+    plt.legend()
+    plt.show()
+    
     return OSPL_A
 
 
