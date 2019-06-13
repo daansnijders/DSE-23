@@ -5,18 +5,35 @@ Created on Thu Jun 13 09:57:56 2019
 @author: Stijn
 """
 
-# elevator
+def chordlength(perc, Cr, Ct,b):
+    decrease = (Cr-Ct)/(b/2)                                                    # [-] slope of decrease of the chord along the length
+    return Cr-decrease*(b/2)*b*perc                                             # [m] length of the chord at a certain y-location
 
-def get_c_elev(c_h):
-    return 0.3 * c_h
+# elevator
 
 def get_S_elev(S_h):
     return 0.25 * S_h
+
+def get_c_elev(Cr_h, Ct_h, b_h):
+    c_elev_r = chordlength(0, Cr_h,Ct_h, b_h)*0.3
+    c_elev_t = chordlength(b_h, Cr_h,Ct_h, b_h)*0.3
+    
+    return c_elev_r, c_elev_t
 
 def get_b_elev(S_e,c_e):
     return S_e / c_e
 
 # rudder
+    
+def get_S_rud(S_v):
+    return 0.325 * S_v
+
+def get_c_rud(c_v,Cr_v, Ct_v, b_v):
+    c_rud_r = chordlength(0, Cr_v,Ct_v, b_v)*0.3
+    c_rud_t = chordlength(b_v, Cr_v,Ct_v, b_v)*0.3
+    
+    return c_rud_r, c_rud_t
+
     
 def get_c_rud(c_v):
     return 0.3 * c_v
