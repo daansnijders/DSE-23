@@ -53,7 +53,7 @@ class empennage:
         
         self.plot_stability_tail(False)
         self.size_canard()
-        self.plot_stability_canard()
+        self.plot_stability_canard(False)
         self.deflection_curve()
 
     
@@ -324,19 +324,19 @@ class empennage:
         self.Sc_S = 0.2                                                         # [-] Ratio area canard (assumed for now)
     
     
-    def deflection_curve(self):
+    def deflection_curve(self, plot = False):
         self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
         self.Cm_a = self.CN_w_a * (self.x_cg - self.x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
         self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
         
-        alpha_list = np.arange(-0.1, (0.2+0.001), 0.001)
+        alpha_list = np.arange(0., (0.4+0.001), 0.001)
         def_curve = []
         for i in range (len(alpha_list)):
             def_curve.append(- 1 / self.Cm_def * (self.Cm_0 + self.Cm_a * (alpha_list[i] - self.a_0)))
         
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.set (ylim = [-1.15,0.], ylabel = 'delta_e')
+        ax.set (ylim = [-1.5,1.0], ylabel = 'delta_e')
         ax.plot((alpha_list*180/np.pi), def_curve)
 
 
