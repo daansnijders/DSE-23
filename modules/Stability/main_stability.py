@@ -10,13 +10,11 @@ import matplotlib.pyplot as plt
 from inputs.concept_1 import *
 from inputs.constants import *
 from modules.main_class2 import *
-
-from modules.Stability.canard import *
-
-from modules.Stability.empennage import *
 from modules.Stability.cg_weight_loadingdiagram import *
 from modules.Stability.cg_weight_config1 import *
 from modules.Stability.control_surf_func import *
+from modules.Stability.empennage import *
+
 
 
 """NEED FROM OTHER FILES"""
@@ -29,10 +27,12 @@ Cm_ac    = -0.3
 CL_ah    = 1.6
 x_cg     = x_cg_max
 CL_h     = -0.5838
+CL_c     = 1.3
+CL_a_c   = 1.0
 """====================="""
 
 # initialize class:
-empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h)
+empennage1 = empennage(0, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c)
 
 # outputs:
 x_le_MAC = empennage1.x_le_MAC                                                  # [m] x-location of MAC main wing
