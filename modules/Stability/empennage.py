@@ -335,7 +335,9 @@ class empennage:
         for i in range (len(alpha_list)):
             def_curve.append(- 1 / Cm_def * (Cm_0 + Cm_a * (alpha_list[i] - self.a_0)))
         
-        plt.plot(alpha_list, def_curve, "o")
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.plot(alpha_list, def_curve, "o")
 
 
 
