@@ -143,9 +143,6 @@ delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(del
 #print(CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3)
 
 
-<<<<<<< HEAD
-#plot = config1_Lift.CL_alpha_plot(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1)
-=======
 plot = config1_Lift.CL_alpha_plot(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1)
 
 
@@ -170,4 +167,3 @@ delta_cm_flap2, delta_cm_krueger2 = config2_Moment.Airfoil_moment_flaps(cm_des_a
 config3_Moment = Moment(S,A,rho,rho_0,l_f[2],V_cruise,M_cruise,V_TO[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger3, x_ref, cl_des_airfoil)
 cm_des_airfoil3, dcm_dcl_airfoil3 = config3_Moment.Airfoil_moment()
 delta_cm_flap3, delta_cm_krueger3 = config3_Moment.Airfoil_moment_flaps(cm_des_airfoil3)
->>>>>>> e7f2ad7695c3316fee5737ad9db3ee79a2314ec5

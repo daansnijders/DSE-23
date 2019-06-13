@@ -566,7 +566,7 @@ class Lift:
         c_a_prime = 1.13    #1.13*c
         c_prime = 1.20      #1.20*c
 
-        delta_cl_flap = eta1 * cldf1 * df1 * c_a_prime + eta2 * etat * cldf2 * df2 * (1 + (c_prime-c_a_prime))
+        delta_cl_flap = eta1 * cldf1 * df1_land * c_a_prime + eta2 * etat * cldf2 * df2_land * (1 + (c_prime-c_a_prime))
         print (delta_cl_flap) 
         """
         #Lift increase due to Fowler flap
@@ -682,14 +682,10 @@ class Lift:
         delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime - 1)* self.SWF/self.S )
         
         K_delta = (1 - 0.08*(cos(self.lambda_4_rad))**2)*(cos(self.lambda_4_rad))**(0.75)   #Compare to Figure 8.55
-<<<<<<< HEAD
-=======
-#        print(K_delta)
->>>>>>> e7f2ad7695c3316fee5737ad9db3ee79a2314ec5
         delta_C_L_max_w_TE = delta_C_l_max * self.SWF / self.S * K_delta
         
-        c_f_c  = 0.1                   #Figure 8.56
-        b_LE_e = b_slats / (self.b / 2)                  #Figure 8.57
+        c_f_c  = 0.1                                    #Figure 8.56
+        b_LE_e = b_slats / (self.b / 2)                 #Figure 8.57
         
         delta_C_L_max_w_LE = 7.11 * c_f_c * (b_LE_e)**2 * (cos(self.lambda_4_rad))**2
         
@@ -796,14 +792,10 @@ class Lift:
                 C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
                 C_L_flaps.append(C_L_i)
         
-<<<<<<< HEAD
         plt.plot(alpha, C_L_flaps, "k-")
         plt.show
         
         return (C_L)
-=======
-        plt.plot(alpha, C_L, "b-")
-        plt.show
         
         
         
@@ -867,4 +859,4 @@ class Moment:
         
         
 #    def Airplane_moment_flaps(self):
->>>>>>> e7f2ad7695c3316fee5737ad9db3ee79a2314ec5
+
