@@ -4,6 +4,7 @@ Created on Wed Jun  5 09:50:12 2019
 
 @author: Stijn
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
@@ -70,11 +71,7 @@ class empennage:
         self.Cm = self.Cm_lesstail + self.Cm_tail
         return self.Cm    
     
-    
 
-    
-    
-    
     
     def plot_stability_tail(self, plot = True):
         """Stability excluding margin"""
@@ -117,16 +114,17 @@ class empennage:
         f_S2 = interpolate2([self.l[0],self.Sh_S2[0]],[self.l[-1],self.Sh_S2[-1]])
         f_C1 = interpolate2([self.l[0],self.Sh_C1[0]],[self.l[-1],self.Sh_C1[-1]])
         
-        diff = 1
-        diff1 = 2
-        y = 0.4215000000001215
-        while abs(diff1) >= abs(diff) and abs(f_C1(f_min(y)) - f_S2(f_max(y))) > 0.000001:
-            diff1 = f_S2(f_max(y))-f_C1(f_min(y))
-            y += 0.0000001            
+        diff_after = 1
+        diff_before = 2
+        y = 0.41
+        while (abs(diff_before) >= abs(diff_after) and abs(f_C1(f_min(y)) - f_S2(f_max(y))) > 0.000001) or abs(diff_before) > 0.1:
+            diff_before = f_S2(f_max(y))-f_C1(f_min(y))
+            y += 0.00001            
             if f_min(y) > x_cg_min1[1]:
                 f_min = interpolate1([x_cg_min1[1],x_le_MAC_range_perc[1]],[x_cg_min1[2],x_le_MAC_range_perc[2]])
                 f_max = interpolate1([x_cg_max1[1],x_le_MAC_range_perc[1]],[x_cg_max1[2],x_le_MAC_range_perc[2]])
-            diff = f_S2(f_max(y))-f_C1(f_min(y))
+            diff_after = f_S2(f_max(y))-f_C1(f_min(y))
+
 
         self.Sh_S = f_C1(f_min(y))
         x_le_MAC_l_f = y
@@ -186,7 +184,7 @@ class empennage:
         def get_lambda_2_rad(lambda_4_rad,A,taper_ratio):
             return np.arctan(np.tan(lambda_4_rad)-1/A*(1-taper_ratio)/(1+taper_ratio))
         
-        self.x_h = get_x_h(l_f)
+        self.x_h = get_x_h(l_f)                                                 # [m] x-location of the htail ac
         self.b_h = get_b(self.S_h, self.A_h)                                    # [m] span horizontal tail
         self.Cr_h = get_Cr(self.S_h, self.taper_ratio_h, self.b_h)              # [m] root chord length horizontal tail
         self.Ct_h = get_Ct(self.Cr_h, self.taper_ratio_h)                       # [m] tip chord length horizontal tail
@@ -350,3 +348,4 @@ class empennage:
     
     
     
+
