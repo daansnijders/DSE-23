@@ -12,7 +12,7 @@ from inputs.concept_1 import *
 from inputs.constants import *
 
 class Loading_diagram:
-    def __init__(self, x_cargo, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, x_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel, M_pax, M_carry_on, x_cg_wing, config):
+    def __init__(self, x_cargo, l_f, l_cabin, seat_pitch, N_pax, N_sa, OEW, x_cg, MAC, S, b, A, Xfirst, M_payload, M_cargo_available, M_fuel, M_pax, M_carry_on, x_cg_wing, config, l_cutout):
         self.x_cargo=x_cargo
         self.l_f=l_f
         self.l_cabin=l_cabin
@@ -40,6 +40,7 @@ class Loading_diagram:
         self.M_payload_cargo=self.M_payload2-self.M_pass_total
         self.x_fuel = [x_cg_wing]
         self.config=config
+        self.l_cutout = l_cutout
 
     def loading_diagrams_pass(self, plot = False):
         self.xcg1 = [self.x_cg]
@@ -90,8 +91,8 @@ class Loading_diagram:
            self.xcg_min = self.xcg1[-2]
 
         if (self.config == 2 or self.config == 3):
-            self.xcg_max = self.xcg_max - (l_cabin[1]-l_cabin[0])
-            self.xcg_min = self.xcg_min - (l_cabin[1]-l_cabin[0])
+            self.xcg_max = self.xcg_max #- (l_cutout)
+            self.xcg_min = self.xcg_min #- (l_cutout)
         
         if plot:
             plt.figure()   
@@ -124,14 +125,14 @@ class Loading_diagram:
         self.xcg_max = self.xcg1[-1]
         if (self.xcg1[-2]>=self.xcg_max):
            self.xcg_max = self.xcg1[-2]
-        
+
         self.xcg_min = self.xcg1[-1]
         if (self.xcg1[-2]<=self.xcg_min):
            self.xcg_min = self.xcg1[-2]
         
         if (self.config == 2 or self.config == 3):
-            self.xcg_max = self.xcg_max - (l_cabin[1]-l_cabin[0])
-            self.xcg_min = self.xcg_min - (l_cabin[1]-l_cabin[0])
+            self.xcg_max = self.xcg_max #- (l_cutout)
+            self.xcg_min = self.xcg_min #- (l_cutout)
 
         if plot:
             plt.figure()   

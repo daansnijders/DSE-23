@@ -6,6 +6,7 @@ Created on Fri May  3 09:45:17 2019
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from modules.performance import *
 from modules.initialsizing_cg import *
 from modules.airfoil_calculations import *
 from modules.initialsizing_weights import *
@@ -18,7 +19,6 @@ from modules.initialsizing_loading import *     # commented out because this imp
 from inputs.performance_inputs import *
 #from modules.performance.class2_performance_de5fs import get_thrust_required
 from inputs.constants import *
-from Structure.Wing.isa import isa
 
  
 #should move to constants
@@ -220,8 +220,8 @@ z_nlg = z_mlg                                                                   
 
 L_strut_mlg= -z_mlg-D_mlg/2
 L_strut_nlg= -z_nlg-D_nlg/2
-D_strut_mlg=( max(P_mw)*2*1.5*4/(517*10**6))**0.5
-D_strut_nlg=( max(P_nw)*2*1.5*4/(517*10**6))**0.5
+D_strut_mlg=( max(P_mw)*2*1.5*4/(423*10**6))**0.5
+D_strut_nlg=( max(P_nw)*2*1.5*4/(423*10**6))**0.5
 #MAKE THIS ITERABLE WITH THE LOADING DIAGRAM
 # Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
 
