@@ -312,12 +312,12 @@ class empennage:
     def deflection_curve(self, plot = False):
         if self.config ==1:
             config_cg = x_cg_max22
-            x_cg_wing = config1_cg.x_cg_wing
+            x_cg_wing = config2_cg.x_cg_wing
         if self.config ==2:
             config_cg = x_cg_max33
-            x_cg_wing = config1_cg.x_cg_wing
+            x_cg_wing = config3_cg.x_cg_wing
             
-        self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
         self.Cm_a = self.CN_w_a * (config_cg- x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
         self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
         
@@ -330,8 +330,7 @@ class empennage:
         ax = fig.add_subplot(111)
         ax.set (ylim = [-1.5,1.0], ylabel = 'delta_e')
         ax.plot((alpha_list*180/np.pi), def_curve)
-
-
+        plt.gca().invert_yaxis()
 
 
     
