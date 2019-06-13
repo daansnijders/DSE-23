@@ -24,7 +24,7 @@ de_da     = 0.3835                                                              
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
 Cm_ac     = -0.3                                                                # [-] moment coefficient of main wing ac
 CL_ah     = 1.6                                                                 # [-] CL_(A-h)
-x_cg      = x_cg_max                                                            # [m] x-location of the most aft cg location
+x_cg      = x_cg_max11                                                            # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.5838                                                             # [-] lift coefficient htail
 CL_c      = 1.3                                                                 # [-] lift coefficient canard
 CL_a_c    = 1.0                                                                 # [-] CL_alpha_canard
@@ -36,7 +36,7 @@ CN_w_a    = 0.5                                                                 
 CN_c_a    = 0.5                                                                 # [-] C_N_c_alpha canard
 CN_h_def  = 0.5                                                                 # [-] C_N_h_de elevator deflection
 Vc_V      = 1                                                                   # [-] V_c/V velocity factors
-x_cg_wing = 12                                                                  # [m] x-location c.g. wing
+x_cg_wing = 12                                                                  # [m] x-location c.g. wing 
 """====================="""
 
 
