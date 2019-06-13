@@ -10,10 +10,10 @@ from modules.initialsizing_planform import *
 from modules.initialsizing_fuselage import *
 from modules.initialsizing_empennage import *
 from modules.initialsizing_undercarriage import *
-from modules.performance.payload_range import *
+#from modules.performance.payload_range import *
 from modules.initialsizing_loading import *     # commented out because this import immediately runs the plot......
 from inputs.performance_inputs import *
-from modules.performance.class2_performance_defs import get_thrust_required
+#from modules.performance.class2_performance_de5fs import get_thrust_required
 from inputs.constants import *
 from Structure.Wing.isa import isa
 
@@ -245,4 +245,4 @@ alpha_cruise_rad = np.deg2rad(0)                                                
 
 V_TO = [sqrt(2* x * 9.80665 /(rho_0 * S * Cl_TO)) for x in MTOW]
 
-thrust_cruise = [get_thrust_required(isa(H_m)[2], V_cruise, S, CDcruise[i]) for i in range(3)]
+#thrust_cruise = [get_thrust_required(isa(H_m)[2], V_cruise, S, CDcruise[i]) for i in range(3)]
