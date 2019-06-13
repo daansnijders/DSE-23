@@ -706,7 +706,7 @@ class Lift:
         alpha_CL_max = np.deg2rad(alpha_CL_max_w) - self.i_w - delta_alpha_wc
         
         CL_max = CL_max_w - CL_alpha_wf*delta_alpha_wc + CL_alpha_h*(self.S_h/self.S)*(alpha_CL_max*(1-de_da) + self.i_h) + CL_alpha_c*(self.S_c/self.S)*(alpha_CL_max*(1+de_da_c) + self.i_c)
-        return(CL_alpha_h, CL_alpha_c, CL_alpha, alpha_0_L, CL_max, de_da)
+        return(CL_alpha_h, CL_alpha_c, CL_alpha, alpha_0_L, CL_max, de_da, alpha_CL_max)
 
     def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c, delta_CL_alpha_w, de_da, delta_CL_max_w): 
         Kcw = 1
@@ -723,3 +723,30 @@ class Lift:
         delta_alpha_wc = np.deg2rad(3) 
         delta_CL_max = Kcw*delta_CL_max_w - delta_CL_alpha_w*delta_alpha_wc + (self.S_h/self.S)*CL_alpha_h*((1-de_da)+self.i_h - delta_ef)
         return(delta_CL, delta_CL_alpha, delta_CL_max)
+        
+    def CL_alpha_plot(self, CL_alpha, alpha_0_L, CL_max, alpha_CL_max, delta_CL, delta_CL_alpha, delta_CL_max):
+        
+        alpha = list(np.arange(-10,14,0.25)*pi/180)
+        print (alpha, alpha_CL_max)
+                
+        C_L = []
+        
+        for i in range(len(alpha)): 
+            
+            if alpha[i] <= 3*pi/180:
+                C_L_i = CL_alpha * (alpha[i] - alpha_0_L)
+                C_L.append(C_L_i)
+                
+            elif alpha[i] == alpha_CL_max:
+                C_L_i = CL_max
+                C_L.append(C_L_i)
+            else:
+                C_L_i = 0
+                C_L.append(C_L_i)
+        
+        plt.plot(alpha, C_L, "bo")
+        plt.show
+             
+        return (C_L)
+        
+#        C_L_flaps = []
