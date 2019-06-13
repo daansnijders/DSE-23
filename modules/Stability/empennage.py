@@ -16,7 +16,7 @@ from modules.main_class2 import *
 V_app = 70  #estimated by RB
 
 class empennage:
-    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V):   
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing):   
         self.config = config                                                    # [-] configuration selection
         self.x_ac=x_ac #from nose in [m]
         self.CL_a_h = CL_a_h
@@ -48,7 +48,7 @@ class empennage:
         self.CL_c = CL_c                                                        # [-] CL canard
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard
         self.Vc_V = 1
-
+        self.x_cg_wing = x_cg_wing
         #self.hortail_vol = self.S_h * self.l_h / (self.S * self.c)
         
         self.plot_stability_tail(False)
@@ -153,7 +153,6 @@ class empennage:
             ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
             ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
-           
         
         # =============================================================================
         # Horizontal tail - NACA 63 010
@@ -252,7 +251,7 @@ class empennage:
         cg_z = [config1_cg.calc_z_cg(), config2_cg.calc_z_cg(), config3_cg.calc_z_cg()] # [m] x-location of the c.g.
 
         self.x_c = 7.5                                                               # [m] x-location of canard ac
-        self.l_c = cg_x[self.config] - x_c                                      # [m] distance between canard ac and c.g.
+        self.l_c = cg_x[self.config] - self.x_c                                      # [m] distance between canard ac and c.g.
         l_h = x_le_h[0] + l_cutout - cg_x[self.config]                          # [m] distance between htail ac and c.g.
         l_cg = (x_le_MAC[self.config] + 0.25*MAC) - cg_x[self.config]           # [m] distance between wing ac and c.g.
         z_e = cg_z[self.config] - z_engine                                      # [m] distance between engine and c.g.
@@ -318,7 +317,7 @@ class empennage:
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_C1)
             ax2.set( ylim = [0,0.2565], ylabel = 'S_h/S')
-            
+
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
     
@@ -326,16 +325,19 @@ class empennage:
     
     
     def deflection_curve(self):
-        Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
-        Cm_a = self.CN_w_a * (self.cg - x_w) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
-        Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
+        self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        self.Cm_a = self.CN_w_a * (self.x_cg - self.x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
         
         alpha_list = np.arange(-0.1, (0.2+0.001), 0.001)
         def_curve = []
         for i in range (len(alpha_list)):
-            def_curve.append(- 1 / Cm_def * (Cm_0 + Cm_a * (alpha_list[i] - a_0)))
+            def_curve.append(- 1 / self.Cm_def * (self.Cm_0 + self.Cm_a * (alpha_list[i] - self.a_0)))
         
-        plt.plot(alpha_list, def_curve, "o")
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.set (ylim = [-1.15,0.], ylabel = 'delta_e')
+        ax.plot((alpha_list*180/np.pi), def_curve)
 
 
 
