@@ -17,21 +17,31 @@ from modules.Stability.empennage import *
 
 
 """NEED FROM OTHER FILES"""
-x_ac     = (x_le_MAC[0]+0.25*MAC)                                               # [m] x-location of the main wing ac
-CL_a_h   = 3.82                                                                 # [-] CL_(a-h)
-CL_a_ah  = 4.90                                                                 # [-] CL_
-de_da    = 0.3835
-Vh_V     = 1.                                                                   # [-] V_h/V velocity factors
-Cm_ac    = -0.3
-CL_ah    = 1.6
-x_cg     = x_cg_max
-CL_h     = -0.5838
-CL_c     = 1.3
-CL_a_c   = 1.0
+x_ac      = (x_le_MAC[0]+0.25*MAC)                                              # [m] x-location of the main wing ac
+CL_a_h    = 3.82                                                                # [-] CL_alpha_h
+CL_a_ah   = 4.90                                                                # [-] CL_alpha_(A-h)
+de_da     = 0.3835                                                              # [-] downwash
+Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
+Cm_ac     = -0.3                                                                # [-] moment coefficient of main wing ac
+CL_ah     = 1.6                                                                 # [-] CL_(A-h)
+x_cg      = x_cg_max                                                            # [m] x-location of the most aft cg location
+CL_h      = -0.5838                                                             # [-] lift coefficient htail
+CL_c      = 1.3                                                                 # [-] lift coefficient canard
+CL_a_c    = 1.0                                                                 # [-] CL_alpha_canard
+a_0       = 1                                                                   # [rad] zero lift angle of attack
+i_h       = 0                                                                   # [rad] incidence angle htail
+i_c       = 0                                                                   # [rad] incidence angle canard
+CN_h_a    = 0.5                                                                 # [-] C_N_h_alpha htail
+CN_w_a    = 0.5                                                                 # [-] C_N_w_alpha main wing
+CN_c_a    = 0.5                                                                 # [-] C_N_c_alpha canard
+CN_h_def  = 0.5                                                                 # [-] C_N_h_de elevator deflection
+Vc_V      = 1                                                                   # [-] V_c/V velocity factors
+x_cg_wing = 12                                                                  # [m] x-location c.g. wing
 """====================="""
 
+
 # initialize class:
-empennage1 = empennage(0, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, 1., 0., 0., 0.5, 0.5, 0.5, 0.5, 1., 12.)
+empennage1 = empennage(0, x_ac, CL_a_h, CL_a_ah, de_da, S_h, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, x_cg_wing)
 
 # outputs:
 x_le_MAC = empennage1.x_le_MAC                                                  # [m] x-location of MAC main wing

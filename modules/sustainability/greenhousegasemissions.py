@@ -29,14 +29,7 @@ NOx_total_mass=4125 #[g], for the reference take-off and landing cycle (trivial)
 fuel_burnt_ref= 299   #[kg]
 
 pressure_ratio=38.67   #ratio of the end of the combustor and the beginning of the combustor (at ISA and take-off conditions)
-bypass_ratio=11.05
-
-
-#power setting in percentage 
-power_TO=100        #[%]
-power_climb=85      #[%]
-power_app=30        #[%]
-power_idle=7        #[%]
+bypass_ratio=11.05      # other sources claim to be 12?
 
 
 #check with the requirements 
@@ -68,7 +61,15 @@ def get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_flight):  #should come to 45%
 def get_requirement_CO2_check(M_fuel_burnt):
     return (M_fuel_burnt-fuel_target_1500)/fuel_target_1500*100
 
+def get_CO2_per_passenger_per_km(M_fuel_burnt,N_pax,R):
+    return M_fuel_burnt/N_pax/R
 
+
+M_fuel_burnt=14000
+N_pax=120
+R=4000
+
+FueL_comparison=get_CO2_per_passenger_per_km(M_fuel_burnt,N_pax,R)
 
 werk=get_NOx_reduction_CAEP(Dp_Foo_NOx_caep6,Dp_Foo_NOx_av)
 
