@@ -60,7 +60,7 @@ lambda_v_4_rad  = empennage1.lambda_v_4_rad                                     
 x_v             = empennage1.x_v                                                # [m] x-location of ac of the vtail?
 
 # control surfaces: (inputs still need to be worked on...)
-c_elev = get_c_elev(Cr_h)                                                       # [m] chord length elevator
+c_elev = get_c_elev(Cr_h, Ct_h, b_h)                                                       # [m] chord length elevator
 S_elev = get_S_elev(S_h)                                                        # [m^2] surface area elevator
 b_elev = get_b_elev(S_elev,c_elev)                                              # [m] span elevator
 
