@@ -10,6 +10,7 @@ def get_S(MTOW,W_S):
     return [MTOW[i] * 9.80665 /W_S[i] for i in range(3)]
 
 def get_b(A,S):
+    assert np.sqrt(A*S) < 36
     return np.sqrt(A*S)
 
 def get_lambda_4_rad(M_cr, M_x):
