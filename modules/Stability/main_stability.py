@@ -75,13 +75,13 @@ c_elev = get_c_elev(Cr_h, Ct_h, b_h)                                            
 S_elev = get_S_elev(S_h)                                                        # [m^2] surface area elevator
 b_elev = get_b_elev(S_elev,c_elev)                                              # [m] span elevator
 
-c_rud = get_c_rud(Cr_v)                                                         # [m] chord length rudder
+c_rud = get_c_rud(Cr_v, Ct_v, b_v)                                              # [m] chord length rudder
 S_rud = get_S_rud(S_v)                                                          # [m^2] surface area rudder
 b_rud = get_b_rud(S_rud,c_rud)                                                  # [m] span rudder
 
-c_ail = get_c_ail(Ct)                                                           # [m] chord length aileron
+c_ail = get_c_ail(Cr,Ct,b)                                                      # [m] chord length aileron
 S_ail = get_S_ail(S)                                                            # [m^2] surface area aileron
 b_ail = get_b_ail(b)                                                            # [m] span aileron
 
-c_splr = get_c_splr(MAC)                                                        # [m] chord length spoiler
+c_splr = get_c_splr(Cr, Ct, b)                                                  # [m] chord length spoiler
 b_splr = get_b_splr(b)                                                          # [m] span spoiler
