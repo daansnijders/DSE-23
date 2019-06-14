@@ -54,8 +54,7 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
 
             nominal_distance = get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one_engine,
                                                          thrust_transition_setting, thrust_climb_out_setting, C_L, C_D,
-                                                         S,
-                                                         mu_TO, False, velocity, reverse_thrust_factor)[0]
+                                                         S, mu_TO, False, velocity, reverse_thrust_factor)[0]
             try_distance = give_try(velocity)
             difference = nominal_distance - try_distance
             # nominal_list.append(nominal_distance)
@@ -126,7 +125,6 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
         distance_total_airborne = V_liftoff**2/0.15/g*np.sin(gamma_2)
 
     distance_total = distance_ground + distance_total_airborne
-
     return distance_total, V_liftoff, V_1
 
 
@@ -200,7 +198,7 @@ def get_energy_height():
 
 
 def get_2d_rate_of_climb(thrust_max, engines_operative, wing_surface_area, drag_coefficient, mass, g):
-    steps = 300
+    steps = 500
     V = np.linspace(0, 300, steps)
     h = np.linspace(0, 20000, steps)
     z = []
@@ -263,7 +261,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     """
     inputs
     """
-    steps = 10
+    steps = 100
     take_off_velocity = 70.
     mass = mass_climb_initial
     engines_operative = 2
