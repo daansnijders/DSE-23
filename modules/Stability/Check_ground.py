@@ -25,7 +25,6 @@ class check_ground():
                
     def check_equilibrium(self):
         self.b_n = [0]*(2*len(self.weight_pass))
-        print(len(self.weight_pass))
         self.b_m = [0]*(2*len(self.weight_pass))
         self.F_n = [0]*(2*len(self.weight_pass))
         self.F_m = [0]*(2*len(self.weight_pass))

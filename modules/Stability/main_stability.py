@@ -30,8 +30,8 @@ Vh_V      = 1.                                                                  
 Cm_ac     = -0.3                                        #TBD                    # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max11                                                          # [m] x-location of the most aft cg location for configuration 1 during flight
-CL_h      = -0.5838                                                             # [-] lift coefficient htail
-CL_c      = 1.3                                                                 # [-] lift coefficient canard
+CL_h      = -0.8                                                                # [-] lift coefficient htail
+CL_c      = 1.3                                         #zelf                   # [-] lift coefficient canard
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 a_0       = alpha_0_l                                                           # [rad] zero lift angle of attack
 i_h       = 0                                                                   # [rad] incidence angle htail
@@ -39,8 +39,8 @@ i_c       = 0                                                                   
 CN_h_a    = CL_a_h                                                              # [-] C_N_h_alpha htail
 CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
 CN_c_a    = CL_a_c                                                              # [-] C_N_c_alpha canard
-CN_h_def  = 0.5                                                                 # [-] C_N_h_de elevator deflection
-Vc_V      = 1                                                                   # [-] V_c/V velocity factors
+CN_h_def  = 0.5                                         #zelf                   # [-] C_N_h_de elevator deflection
+Vc_V      = 1                                           #zelf                   # [-] V_c/V velocity factors
 """====================="""
 
 
@@ -48,8 +48,9 @@ Vc_V      = 1                                                                   
 empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 empennage1 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 
+
 # outputs:
-x_le_MAC        = empennage1.x_le_MAC                                           # [m] x-location of MAC main wing
+x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
 x_le_w = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)                     # [m] x-location of le main wing with updated lemac
 
@@ -63,6 +64,7 @@ lambda_h_le_rad = empennage1.lambda_h_le_rad                                    
 lambda_h_2_rad  = empennage1.lambda_h_2_rad                                     # [rad] half chord sweep htail
 lambda_h_4_rad  = empennage1.lambda_h_4_rad                                     # [rad] quarter chord sweep htail
 x_h             = empennage1.x_h                                                # [m] x-location of ac of the htail?
+l_h             = empennage1.l_h                                                # [m] distance between c/4 on MAC of the main wing and horizontal tail
 
 S_v             = empennage1.S_v                                                # [m^2] surface area of vtail
 A_v             = empennage1.A_v                                                # [-] aspect ratio vtail
