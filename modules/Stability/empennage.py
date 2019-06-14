@@ -12,6 +12,8 @@ from inputs.concept_1 import *
 from modules.Stability.cg_weight_config1 import x_cg_min1, x_cg_max1, x_le_MAC_range_perc, x_le_MAC_range
 from modules.Stability.cg_weight_loadingdiagram import x_cg_min11, x_cg_max11, weight_pass, x_cg_max22, x_cg_max33
 from modules.main_class2 import *
+from modules.Stability.cg_weight_config2 import x_cg_min2canard, x_cg_max2canard, x_le_MAC_range_perccanard2
+from modules.Stability.cg_weight_config3 import x_cg_min3canard, x_cg_max3canard, x_le_MAC_range_perccanard3
 
 
 V_app = 70  #estimated by RB we will get from rik (lowest speed)
@@ -48,13 +50,8 @@ class empennage:
         self.CL_c = CL_c                                                        # [-] CL canard
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard                
         
-        if (self.config == 1):
-            from modules.Stability.cg_weight_config2 import x_cg_min1canard, x_cg_max1canard, x_le_MAC_range_perccanard
-        if (self.config == 2):
-            from modules.Stability.cg_weight_config3 import x_cg_min1canard, x_cg_max1canard, x_le_MAC_range_perccanard
-
         # running class functions
-        self.plot_stability_tail(False)
+        self.plot_stability_tail(True)
         self.size_canard()
         self.plot_stability_canard(True)
         self.deflection_curve()
@@ -290,13 +287,25 @@ class empennage:
             self.Sc_S2.append(cc*self.l[i]+cc*dd)
             self.Sc_C1.append(ee*self.l[i]+ee*ff)
         
+        if self.config == 1:
+            x_cg_mincanard = x_cg_min2canard
+            x_cg_maxcanard = x_cg_max2canard
+            x_le_MAC_range_perccanard = x_le_MAC_range_perccanard2
+
+        if self.config == 2:
+            x_cg_mincanard = x_cg_min3canard
+            x_cg_maxcanard = x_cg_max3canard
+            x_le_MAC_range_perccanard = x_le_MAC_range_perccanard3
+            
+        
+        
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
 #            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
 #            ax1.plot(x_cg_max1, x_le_MAC_range_perc)
-            ax1.scatter(x_cg_min1canard, x_le_MAC_range_perccanard)
-            ax1.scatter(x_cg_max1canard, x_le_MAC_range_perccanard)
+            ax1.scatter(x_cg_mincanard, x_le_MAC_range_perccanard)
+            ax1.scatter(x_cg_maxcanard, x_le_MAC_range_perccanard)
             ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
             
 #            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')

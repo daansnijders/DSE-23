@@ -22,7 +22,7 @@ x_cg_wing_config3_range = [get_cg(x_le_MAC1,config3_class2).x_cg_wing,get_cg(x_l
 
 x_le_MAC_range = [x_le_MAC1[1], x_le_MAC2[1], x_le_MAC3[1]]
 #x_le_MAC_range_perc = [x_le_MAC1[1]/l_f[1], x_le_MAC2[1]/l_f[1], x_le_MAC3[1]/l_f[1]]
-x_le_MAC_range_perccanard = [x_le_MAC2[1]/l_f[1]]
+x_le_MAC_range_perccanard3 = [x_le_MAC2[1]/l_f[1]]
 
 #config2_cg_x=config2_cg.calc_x_cg()
 
@@ -63,14 +63,14 @@ cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config2_load2
 #frac_min[1], frac_max[1], frac2 = config2_ground2.check_equilibrium()
 #frac_min[2], frac_max[2], frac2 = config2_ground3.check_equilibrium()
 
-x_cg_max1canard = [0]
-x_cg_min1canard = [0]
+x_cg_max3canard = [0]
+x_cg_min3canard = [0]
 
 #x_cg_max1canard[0] = max(xcg_max[0], xcg_max[3]) + 0.05*MAC
-x_cg_max1canard[0] = max(xcg_max[1], xcg_max[4]) + 0.05*MAC
+x_cg_max3canard[0] = max(xcg_max[1], xcg_max[4]) + 0.05*MAC
 #x_cg_max1canard[2] = max(xcg_max[2], xcg_max[5]) + 0.05*MAC
 #x_cg_min1canard[0] = min(xcg_min[0], xcg_min[3]) - 0.05*MAC
-x_cg_min1canard[0] = min(xcg_min[1], xcg_min[4]) - 0.05*MAC
+x_cg_min3canard[0] = min(xcg_min[1], xcg_min[4]) - 0.05*MAC
 #x_cg_min1canard[2] = min(xcg_min[2], xcg_min[5]) - 0.05*MAC
 
 #print ("The most aft CG position from the nose for configuration 1 during flight is: ", max(xcg_max[0], xcg_max[3]))
