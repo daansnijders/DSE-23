@@ -5,15 +5,11 @@ Created on Tue Jun  4 09:17:48 2019
 @author: daansnijders
 """
 
-x_nlg = [1., 1., 1.]
-x_mlg = [13., 19., 19.]
-
-
 from inputs.concept_1 import *
 from inputs.constants import *
 
 
-class Stability_check_ground:
+class check_ground():
     def __init__ (self, cg1_pass, cg2_pass, weight_pass, cg1_fuel, cg2_fuel, weight_fuel, x_nlg, x_mlg):
         self.cg1_pass=cg1_pass
         self.cg2_pass=cg2_pass
@@ -77,6 +73,8 @@ class Stability_check_ground:
             self.frac.append(self.F_n[(2*len(self.weight_pass)+i)]/self.weight_fuel[i])
         for i in range(len(self.weight_fuel)):
             self.frac.append(self.F_n[(i+len(self.weight_fuel)+2*len(self.weight_pass))]/self.weight_fuel[i])
-        
-                
+            
         return min(self.frac), max(self.frac), self.frac
+    
+    
+    
