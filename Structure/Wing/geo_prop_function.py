@@ -8,6 +8,7 @@ of the wing.
 """
 import numpy as np
 import pandas as pd
+import lift_surface_function as lsf
 """
 Parameters
 ------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ Parameters
 t_spar = 0.015
 
 # Skin thickness [m]
-t_skin = 0.0035
+t_skin = 0.003
 
 # Front spar location/chord [-]
 spar_front = 0.15#0.1
@@ -31,6 +32,26 @@ chord = 5
 stringer_area_upper = 400/10**6
 stringer_area_lower = 400/10**6
 
+# Spar materials properties: Aluminium 7150T7751
+E_spar = 71*10**9
+shear_strength_spar = 462*10**6
+spar_poisson_ratio = 0.33
+density_spar = 2810
+cost_spar = 4.43
+
+# Skin Material: Aluminium 2224A,T351 
+E_skin = 72*10**9                 # Pa
+comp_strength_skin = 344*10**6      # Pa
+skin_poisson_ratio = 0.33
+density_skin = 2800                 # kgm^-3
+cost_skin = 2.8
+
+# Stringer Material: Aluminium 7150T7751
+E_stringer = 71*10**9
+shear_strength_web = 462*10**6
+web_poisson_ratio = 0.33
+density_stringer = 2810
+cost_stringer = 4.43
 
 """
 Read airfoil data
@@ -78,11 +99,6 @@ ribs = component['ribs'] > 0
 ribs_loc = component[ribs]['y_frac']
 ribs_loc = np.array(ribs_loc)
 
-# Materials properties for web [Pa]
-E_web = 71*10**9
-shear_strength_web = 310*10**6
-web_poisson_ratio = 0.33
-
 """
 Obtain web buckling stress
 ------------------------------------------------------------------------------
@@ -103,9 +119,9 @@ def get_web_buckling(y_loc,spar_height,span):
     a = max(ribs_pitch,spar_height)
     ks_value = np.interp(a/b,ks['ratio'],ks['ks'])
 #    print(a/b,ribs_pitch,ks_value,y_ribs1,y_ribs2)
-    tau_cr = (np.pi**2*ks_value*E_web)/(12*(1-web_poisson_ratio**2))*(t_spar/b)**2
+    tau_cr = (np.pi**2*ks_value*E_spar)/(12*(1-web_poisson_ratio**2))*(t_spar/b)**2
 
-    return [ribs_pitch,spar_height,a/b,ks_value,tau_cr,shear_strength_web]
+    return [ribs_pitch,spar_height,a/b,ks_value,tau_cr,shear_strength_spar]
 
 
 #print(get_web_buckling(7,0.4,38))
@@ -115,10 +131,6 @@ Obtain skin buckling stress
 ------------------------------------------------------------------------------
 """
 kc = pd.read_excel('wing_box_design.xlsx','kc_ss_c')
-
-E_skin = 67.6*10**9
-comp_strength_skin = 345*10**6
-skin_poisson_ratio = 0.239
 
 def get_skin_buckling(y_loc,stringer_space, span):
     y_frac = y_loc/(span/2)
@@ -237,6 +249,15 @@ def get_cross_sec_prop(chord,y_loc,span):
     min_z = min(foil_lower[:,1])-neutral_z
     max_x = rear_spar-neutral_x
     min_x = front_spar-neutral_x
+    #-------------------------Average material properties----------------------
+    E_modulus = (skin_box_area*E_skin+tot_stringer_area*E_stringer+\
+                (front_spar_area+rear_spar_area)*E_spar)/total_area
+                
+    density = (skin_box_area*density_skin+tot_stringer_area*density_stringer+\
+              (front_spar_area+rear_spar_area)*density_spar)/total_area
+ 
+    cost = (skin_box_area*cost_skin+tot_stringer_area*cost_stringer+\
+              (front_spar_area+rear_spar_area)*cost_spar)/total_area
     
     #-------------------------Calculate area moment of inertia-----------------
     front_spar_moi_x = (1/12)*((upper_frontspar_z-lower_frontspar_z)**3)*t_spar + \
@@ -337,13 +358,39 @@ def get_cross_sec_prop(chord,y_loc,span):
 #    print("Moment of inertia [%] =", (1-moi/0.003)*100)
     
     return [y_loc,enclosed_area,total_area,fuel_area,neutral_x,neutral_z,min_z,max_z,moi_x,\
-            spar_height,Q_z,stringer_space,moi_z,Q_x,min_x,max_x]
+            spar_height,Q_z,stringer_space,moi_z,Q_x,min_x,max_x,E_modulus,density,cost]
 
 ##Verification
 #stuff = get_cross_sec_prop(5,1,1)
 #print(stuff)
     
-
+"""
+Get structural weight at every point of the wing
+[xi,yi,zi,Fx,Fy,Fz]
+"""
+def get_struc_force(cross_section_lst,load_factor,sweep_LE,b_wing,Cr,Ct):
+    step_size = b_wing/(2*len(cross_section_lst))
+    struc_force_lst = []
+    for i in range(len(cross_section_lst)):
+        yi = cross_section_lst[i,0]
+        xi = yi*np.tan(sweep_LE/180*np.pi)+(spar_front+spar_rear)/2*lsf.get_chord(yi,b_wing,Cr,Ct) 
+        zi = 0
+        Fx = 0
+        Fy = 0
+        Fz = -9.81*load_factor*cross_section_lst[i,17]*cross_section_lst[i,2]*step_size
+        
+        struc_force_lst.append([xi,yi,zi,Fx,Fy,Fz])
+    return struc_force_lst
     
-
+"""
+Get total cost of the wing
+"""
+def get_wingbox_mass_cost(cross_section_lst,b_wing):
+    step_size = b_wing/(2*len(cross_section_lst))
+    mass = 0
+    cost = 0
+    for i in range(len(cross_section_lst)):
+        mass+= cross_section_lst[i,2]*cross_section_lst[i,17]*step_size
+        cost+= mass*cross_section_lst[i,18]
+    return [mass,cost]
     
