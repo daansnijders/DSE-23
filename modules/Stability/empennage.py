@@ -264,6 +264,7 @@ class empennage:
         assert -margin <= self.F_c + self.F_w + self.F_h - self.weight <= margin
         assert -margin <= self.l_c * self.F_c - l_cg * self.F_w - l_h * self.F_h + F_e * z_e <= margin
         
+        """Not actual, just to test"""
         CL_h2 = self.F_h / (0.5*rho*V_cruise**2*self.S_h)
         S_c = self.F_c / (0.5*rho*V_cruise**2*self.CL_c)
 
@@ -318,9 +319,22 @@ class empennage:
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
-    
+
+        self.taper_ratio_c = 0.8                                                # [-] taper ratio canard
+        self.lambda_h_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
+        self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
         self.Sc_S = 0.2                                                         # [-] Ratio area canard (assumed for now)
-    
+        self.Sc = self.Sc_s * self.S                                            # [m^2] Surface area of the canard
+        self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
+        self.b_c = get_b(self.S_c, self.A_c)                                    # [m] span horizontal tail
+        self.Cr_c = get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length horizontal tail
+        self.Ct_c = get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length horizontal tail
+        self.z_c = 0.05 * d_f_outer                                             # [m] height of the vertical tail
+        self.l_h = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
+   
+        self.lambda_h_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_h_le_rad,self.Cr_h,self.b_h,self.taper_ratio_h) # [rad] quarter chord sweep angle
+        self.lambda_h_2_rad = get_lambda_2_rad(self.lambda_h_4_rad,self.A_h,self.taper_ratio_h) # [rad] half chord sweep angle
+        
     
     def deflection_curve(self, plot = False):
         C_l_C_l_theory = 1
