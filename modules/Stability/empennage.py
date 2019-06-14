@@ -8,10 +8,10 @@ Created on Wed Jun  5 09:50:12 2019
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
-from inputs.concept_1 import *
+from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, x_cg, thrust_max, y_engine, x_le_h, x_le_MAC, z_engine, get_b, get_Cr, get_Ct
 from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
-from modules.main_class2 import *
+from modules.main_class2 import config1_cg, config2_cg, config3_cg, config1_cg_x
 from modules.Stability.cg_weight_config2 import x_cg_min2canard_can1, x_cg_max2canard_can1, x_le_MAC_range_perccanard2_can1
 from modules.Stability.cg_weight_config3 import x_cg_min3canard_can2, x_cg_max3canard_can2, x_le_MAC_range_perccanard3_can2
 
@@ -52,9 +52,9 @@ class empennage:
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard                
         
         # running class functions
-        self.plot_stability_tail(True)
+        self.plot_stability_tail()
         self.size_canard()
-        self.plot_stability_canard(True)
+        self.plot_stability_canard()
         self.deflection_curve()
 
     
@@ -73,7 +73,7 @@ class empennage:
         return self.Cm    
     
     
-    def plot_stability_tail(self, plot = True):
+    def plot_stability_tail(self, plot = False):
         """Stability excluding margin"""
         aa = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
         bb = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
@@ -269,7 +269,7 @@ class empennage:
         S_c = self.F_c / (0.5*rho*V_cruise**2*self.CL_c)
 
 
-    def plot_stability_canard(self, plot = True):
+    def plot_stability_canard(self, plot = False):
         aa = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2)
         bb = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V + 0.05 * MAC
         
@@ -326,11 +326,11 @@ class empennage:
         self.Sc_S = 0.2                                                         # [-] Ratio area canard (assumed for now)
         self.S_c = self.Sc_S * self.S                                            # [m^2] Surface area of the canard
         self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
-        self.b_c = get_b(self.S_c, self.A_c)                                    # [m] span horizontal tail
-        self.Cr_c = get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length horizontal tail
-        self.Ct_c = get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length horizontal tail
-        self.z_c = 0.05 * d_f_outer                                             # [m] height of the vertical tail
-        self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)        
+        self.b_c = get_b(self.S_c, self.A_c)                                    # [m] span canard
+        self.Cr_c = get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
+        self.Ct_c = get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard
+        self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
+        self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard        
     
     def deflection_curve(self, plot = False):
         C_l_C_l_theory = 1
@@ -358,9 +358,10 @@ class empennage:
         for i in range (len(alpha_list)):
             def_curve.append(- 1 / self.Cm_def * (self.Cm_0 + self.Cm_a * (alpha_list[i] - self.a_0)))
         
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.set ( ylabel = 'delta_e')
-        ax.set ( xlabel = 'angle of attack [deg]')
-        ax.plot((np.rad2deg(alpha_list)), def_curve)
-        plt.gca().invert_yaxis()
+        if plot:
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            ax.set ( ylabel = 'delta_e')
+            ax.set ( xlabel = 'angle of attack [deg]')
+            ax.plot((np.rad2deg(alpha_list)), def_curve)
+            plt.gca().invert_yaxis()

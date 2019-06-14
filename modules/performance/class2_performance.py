@@ -337,7 +337,7 @@ class Performance:
             engines_operative * self.reverse_thrust_factor * self.thrust_max,
             landing_2_field_length, landing_2_velocity / np.sqrt(2))
         fuel_consumption.loc['landing_2'] = [fuel_flow_landing_2, fuel_mass_landing_2]
-        self.fuel_consumption = fuel_consumption
+
         mass -= fuel_mass_landing_2
         fuel_mass_total = sum(fuel_consumption['fuel_mass'])
         fuel_mass_nominal = sum([fuel_mass_engine_startup, fuel_mass_take_off, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_landing])

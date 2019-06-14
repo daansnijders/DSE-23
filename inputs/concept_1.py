@@ -190,7 +190,7 @@ P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  
 x_mlg = get_x_mlg(z_cg,theta_rad,beta_rad, x_cg, stroke,l_f)                    # [m] x-location of the mlg
 x_mlg[1]=min(x_mlg)+l_cutout
 x_mlg[2]=min(x_mlg)+l_cutout
-z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg)                               # [m] z-location of the mlg
+z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg)                                    # [m] z-location of the mlg
 z_mlg=max(z_mlg)
 
 
