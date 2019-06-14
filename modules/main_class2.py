@@ -43,8 +43,9 @@ config3_M_fixedeq               =config3_class2.fixed_equipment_mass()
 
 config3_M_winggroup             =config3_class2.get_wing_group_mass()
 config3_M_fuselagegroup         =config3_class2.get_fuselage_group_mass()
-#get x lemac
+
 config3_class2_OEW              =config3_class2.OEW(config3_M_structural,config3_M_powerplant,config3_M_fixedeq)
+
 #cg locations
 config3_cg = get_cg(x_le_MAC,config3_class2) 
 config3_cg_x=config3_cg.calc_x_cg()
@@ -60,7 +61,8 @@ config2_M_fixedeq               =config3_M_fixedeq                              
    
 config2_M_winggroup             =config2_class2.get_wing_group_mass()
 config2_M_fuselagegroup         =config2_class2.get_fuselage_group_mass()
-#get x lemac                                           
+
+                                          
 config2_class2_OEW              =config2_class2.OEW(config2_M_structural,config2_M_powerplant,config2_M_fixedeq)
 #cg locations
 config2_cg = get_cg(x_le_MAC,config2_class2)   
