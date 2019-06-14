@@ -52,9 +52,9 @@ class empennage:
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard                
         
         # running class functions
-        self.plot_stability_tail(True)
+        self.plot_stability_tail()
         self.size_canard()
-        self.plot_stability_canard(True)
+        self.plot_stability_canard()
         self.deflection_curve()
 
     
@@ -73,7 +73,7 @@ class empennage:
         return self.Cm    
     
     
-    def plot_stability_tail(self, plot = True):
+    def plot_stability_tail(self, plot = False):
         """Stability excluding margin"""
         aa = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
         bb = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
@@ -269,7 +269,7 @@ class empennage:
         S_c = self.F_c / (0.5*rho*V_cruise**2*self.CL_c)
 
 
-    def plot_stability_canard(self, plot = True):
+    def plot_stability_canard(self, plot = False):
         aa = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2)
         bb = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V + 0.05 * MAC
         
@@ -358,9 +358,10 @@ class empennage:
         for i in range (len(alpha_list)):
             def_curve.append(- 1 / self.Cm_def * (self.Cm_0 + self.Cm_a * (alpha_list[i] - self.a_0)))
         
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.set ( ylabel = 'delta_e')
-        ax.set ( xlabel = 'angle of attack [deg]')
-        ax.plot((np.rad2deg(alpha_list)), def_curve)
-        plt.gca().invert_yaxis()
+        if plot:
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            ax.set ( ylabel = 'delta_e')
+            ax.set ( xlabel = 'angle of attack [deg]')
+            ax.plot((np.rad2deg(alpha_list)), def_curve)
+            plt.gca().invert_yaxis()
