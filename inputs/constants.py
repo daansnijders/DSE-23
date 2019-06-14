@@ -6,6 +6,7 @@ Created on Tue May 14 09:27:30 2019
 """
 
 from math import * 
+import numpy as np
 
 #conversion
 inch_to_m=0.0254                                                                # [m/in] inches to metres
@@ -28,7 +29,7 @@ M_x=0.935                                                                       
 
 #air constants
 gamma=1.4                                                                       # [-] heat capacity ratio
-R=287.05                                                                        # [J/kg/K] specific gas constant
+gas_constant=287.05                                                                        # [J/kg/K] specific gas constant
 
 
 T_0=288.15                                                                      # [K] ISA temperature at sea level
@@ -42,8 +43,8 @@ mu_sl = 0.00001789                                                              
 
 if H_m<11000:
     T=T_0-0.0065*(H_m)                                                          # [K] temperature at cruising altitude
-    p=p_0*(T/T_0)**(-g/(R*-0.0065))                                             # [Pa] pressure at cruising altitude
-    rho= rho_0*(T/T_0)**(-g/(R*-0.0065)-1)                                      # [kg/m^3] density at cruising altitude
+    p=p_0*(T/T_0)**(-g / (gas_constant * -0.0065))                                             # [Pa] pressure at cruising altitude
+    rho= rho_0*(T/T_0)**(-g / (gas_constant * -0.0065) - 1)                                      # [kg/m^3] density at cruising altitude
 
 elif H_m<20000:
     T1=216.65
@@ -51,11 +52,11 @@ elif H_m<20000:
     p1=22631.7
 
     T=T1+a1*(H_m)                                                               # [K] temperature at cruising altitude
-    p=p1*e**(-g/(R*T)*(H_m-11000))                                              # [Pa] pressure at cruising altitude
-    rho= rho_0*(T1/T_0)**(-g/(R*-0.0065)-1)*p/p1                                # [kg/m^3] density at cruising altitude
+    p=p1*e**(-g / (gas_constant * T) * (H_m - 11000))                                              # [Pa] pressure at cruising altitude
+    rho= rho_0 * (T1/T_0) ** (-g / (gas_constant * -0.0065) - 1) * p / p1                                # [kg/m^3] density at cruising altitude
     
 #get cruise velocities and speed of sound
-a=(gamma*R*T)**0.5                                                              # [m/s] speed of sound
+a= (gamma * gas_constant * T) ** 0.5                                                              # [m/s] speed of sound
 V_cruise=M_cruise*a                                                             # [m/s] true airspeed speed cruise
 
 
@@ -113,10 +114,15 @@ w_mlg = 15.5*inch_to_m
 LCN = 45                                                                        # [-] load classification number    
  
 #angles clearance
-theta = 15                                                                      # [deg] scrape angle
-beta = 17                                                                       # [deg] tip-back angle
+theta = 12.75                                                                   # [deg] scrape angle
+beta = 15                                                                       # [deg] tip-back angle
 phi = 5                                                                         # [deg] tip clearance angle
 psi = 55                                                                        # [deg] overturn angle
+
+theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
+beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
+phi_rad = np.deg2rad(phi)                                                       # [rad] tip clearance angle
+psi_rad = np.deg2rad(psi)                                                       # [rad] overturn angle
 
 #constants used for Class-II                     
 K_fsp = 6.55                                                                    # [lbs/gal] see page 91 from torenbeek V

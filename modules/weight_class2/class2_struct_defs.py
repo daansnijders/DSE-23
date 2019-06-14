@@ -4,7 +4,7 @@ Created on Fri May 24 09:30:42 2019
 
 @author: Lisa
 """
-
+#
 from inputs.constants import *
 
 def get_wing_mass(M_MZF,b,S,Cr_t,lambda_2_rad,n_ult):

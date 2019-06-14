@@ -186,12 +186,13 @@ def get_fuel_consumption(thrust, distance, velocity):
 
 
 def get_energy_height():
-    V = np.linspace(0, 300, 100)
-    h = np.linspace(0, 20000, 100)
+    height_intervals = 50
+    V = np.linspace(0, 300, height_intervals)
+    h = np.linspace(0, 20000, height_intervals)
     z = []
-    for i in range(0, 100, 1):
+    for i in range(0, height_intervals, 1):
         list = []
-        for j in range(0, 100, 1):
+        for j in range(0, height_intervals, 1):
             list.append(h[i]+V[j]**2/2/9.80655)
         z.append(list)
     return V,h,z
@@ -263,8 +264,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     """
     inputs
     """
-    steps = 100
-    take_off_velocity = 70.
+    steps = 250
     mass = mass_climb_initial
     engines_operative = 2
     climb_thrust = thrust_max * thrust_setting
@@ -278,9 +278,8 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     plt.clabel(cp, inline=False, fontsize=10)
     # inline = True looks prettier but destroys the program as gradient can not be found for inline pieces
 
-
     """"
-    finding raaklijn
+    finding tangent line
     """
     x_loc_list = []
     y_loc_list = []
@@ -317,9 +316,11 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     # V_optimal.append(np.real((fn_roots[np.isreal(fn_roots)])[0]))
     # z_optimal.append(get_rate_of_climb(engines_operative, thrust_max, take_off_velocity**2/2/g, np.sqrt(V_optimal[-1]*2*g), S, CD[i], mass[i], g))
 
-    h_optimal = list(np.flip(h_optimal))
-    V_optimal = list(np.flip(V_optimal))
-    z_optimal = list(np.flip(z_optimal))
+
+    h_optimal = list(np.flip(h_optimal, 0))
+    V_optimal = list(np.flip(V_optimal, 0))
+    z_optimal = list(np.flip(z_optimal, 0))
+
 
     rate_of_climb_fn = np.poly1d(np.polyfit(V_optimal, h_optimal, 2))
 
@@ -339,7 +340,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     plt.scatter(V_optimal, h_optimal)
     polyfit_x = np.linspace(500, 2000, 1000)
     polyfit_y = rate_of_climb_fn(polyfit_x)
-    plt.plot(polyfit_x, polyfit_y)
+    # plt.plot(polyfit_x, polyfit_y)
     x, y, energy_height = get_energy_height()
     plt.contour(x**2/2/9.80655, y, energy_height, steps+1)
     plt.xlim(left=0.0)

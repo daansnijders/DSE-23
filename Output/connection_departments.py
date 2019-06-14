@@ -9,7 +9,6 @@ from modules.sustainability.greenhousegasemissions import *
 from modules.performance.class2_performance import *
 from modules.sustainability.noise_defs import *
 
-
 """
 AERODYNAMICS
 """
@@ -167,7 +166,7 @@ mass_resolution = 20  # resolution of plotting mass vs take-off field length
 
 'general inputs'
 engine_failure = False
-show_plots = True
+show_plots = False
 
 # temporary values, will be removed as soon as aerodynamics inputs are ready
 C_L_to = 1.9
@@ -189,22 +188,22 @@ config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D
                                   max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
                                   H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
                                   oswald_efficiency_number, correction_factor_to, show_plots)
-#
-# config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW, MTOW, g,
-#                                   screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
-#                                   friction_coefficient_la, reverse_thrust_factor, engine_failure,
-#                                   thrust_setting_climb_out, thrust_setting_transition, M_payload[1], M_fuel[1],
-#                                   max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-#                                   H_m, V_cruise, R[1], lift_over_drag, aspect_ratio,
-#                                   oswald_efficiency_number, correction_factor_to, show_plots)
-#
-# config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW, MTOW, g,
-#                                   screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
-#                                   friction_coefficient_la, reverse_thrust_factor, engine_failure,
-#                                   thrust_setting_climb_out, thrust_setting_transition, M_payload[2], M_fuel[2],
-#                                   max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-#                                   H_m, V_cruise, R[2], lift_over_drag, aspect_ratio,
-#                                   oswald_efficiency_number, correction_factor_to, show_plots)
+
+config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[1], MTOW[1], g,
+                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
+                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
+                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[1], M_fuel[1],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
+                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
+                                  oswald_efficiency_number, correction_factor_to, show_plots)
+
+config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[2], MTOW[2], g,
+                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
+                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
+                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[2], M_fuel[2],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
+                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
+                                  oswald_efficiency_number, correction_factor_to, show_plots)
 
 
 """
