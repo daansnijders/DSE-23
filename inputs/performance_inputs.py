@@ -4,7 +4,7 @@ Created on Tue May 14 14:02:42 2019
 
 @author: Lisa
 """
-from inputs.constants import *
+from inputs.constants import ft_to_m
 #lift coefficient
 #Input in CL from Roskam 
 #CL_clean_min=1.2
@@ -52,3 +52,11 @@ FF5 = 0.8366         # Fuel Fraction phase 5 [-]
 
 #engine characteristics
 thrust_max = 108.5E3        # [N] maximum engine thrust (1 engine) a.k.a. rated output
+thrust_setting_transition = 1.
+thrust_setting_climb_out = 1.
+thrust_setting_climb = 0.9
+reverse_thrust_factor = 0.45
+
+# friction coefficients
+friction_coefficient_to = 0.05
+friction_coefficient_la = 0.45

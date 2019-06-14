@@ -1,13 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun 12 09:01:30 2019
-
-@author: Lisa
-"""
-
 'inputs'
-from inputs.constants import *
-from inputs.performance_inputs import *
+# from inputs.constants import *
+# from inputs.performance_inputs import *
 from inputs.concept_1 import *
 
 'department modules'
@@ -95,20 +88,7 @@ mass_resolution = 20  # resolution of plotting mass vs take-off field length
 engine_failure = False
 show_plots = True
 
-screen_height_to = 35 * ft_to_m
-screen_height_la = 50 * ft_to_m
-
-thrust_setting_transition = 1.
-thrust_setting_climb_out = 1.
-thrust_setting_climb = 0.9
-
-friction_coefficient_to = 0.05
-friction_coefficient_la = 0.45
-reverse_thrust_factor = 0.45
-
-correction_factor_to = 1.15     # from cs-25
-
-# temporary values
+# temporary values, will be removed as soon as aerodynamics inputs are ready
 C_L_to = 1.9
 C_L_la = 2.3
 C_D_0 = 0.018117539865047032

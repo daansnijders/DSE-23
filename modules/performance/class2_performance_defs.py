@@ -253,6 +253,8 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     import matplotlib.pyplot as plt
     import numpy as np
 
+    np.seterr(divide='ignore', invalid='ignore')
+
     def find_nearest(array, value):
         array = np.asarray(array)
         idx = (np.abs(array - value)).argmin()
@@ -296,12 +298,11 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
         gradient = np.gradient(y_list, x_list)
         rico = -1.
         value, index = find_nearest(gradient, rico)
-        if value <= rico+0.1:
-            if value >= rico-0.1:
-                x_loc = x_list[index]
-                y_loc = y_list[index]
-                x_loc_list.append(x_loc)
-                y_loc_list.append(y_loc)
+        if rico-0.1 < value < rico+0.1:
+            x_loc = x_list[index]
+            y_loc = y_list[index]
+            x_loc_list.append(x_loc)
+            y_loc_list.append(y_loc)
 
     # filtering out points below cruise altitude
     below_cruise_altitude = [item <= H_m for item in y_loc_list]
