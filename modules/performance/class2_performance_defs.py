@@ -316,9 +316,11 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     # V_optimal.append(np.real((fn_roots[np.isreal(fn_roots)])[0]))
     # z_optimal.append(get_rate_of_climb(engines_operative, thrust_max, take_off_velocity**2/2/g, np.sqrt(V_optimal[-1]*2*g), S, CD[i], mass[i], g))
 
+
     h_optimal = list(np.flip(h_optimal, 0))
     V_optimal = list(np.flip(V_optimal, 0))
     z_optimal = list(np.flip(z_optimal, 0))
+
 
     rate_of_climb_fn = np.poly1d(np.polyfit(V_optimal, h_optimal, 2))
 
