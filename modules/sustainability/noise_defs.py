@@ -291,12 +291,19 @@ def doppler_effect_moving_towards(f,V_approach):
     return f 
 
 def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap, b_flap,flap_deflection ):
-    r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
-
+    
+    
     
     centrefreq,freq_delta=get_octave_frequency_bands()
     
     M=V_approach/a_sl
+    
+    if r_observer>121.:
+        centrefreq=[doppler_effect_moving_towards(f,V_approach) for f in centrefreq]
+    else:
+        centrefreq=[doppler_effect_moving_away(f,V_approach) for f in centrefreq]
+        
+    
 
     G_wing,L_wing,K_wing,a_wing=get_constants_wing(M)
     G_slat,L_slat,K_slat,a_slat=get_constants_slats(M)
@@ -349,5 +356,5 @@ def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap
 
     print('overall dBA',OSPL_dBA_tot, 'dBA' )
     
-    return OSPL_dBA_flap, OSPL_dBA_slat,OSPL_dBA_wing,OSPL_dBA_mlg , OSPL_dBA_nlg ,OSPL_dBA_mlg_strut,OSPL_dBA_nlg_strut, OSPL_dBA_tot
+    return  OSPL_dBA_tot #OSPL_dBA_flap, OSPL_dBA_slat,OSPL_dBA_wing,OSPL_dBA_mlg , OSPL_dBA_nlg ,OSPL_dBA_mlg_strut,OSPL_dBA_nlg_strut,
           
