@@ -171,7 +171,7 @@ def analyze_fuel_consumption(MTOW):
     climb
     """
 
-    fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance = get_climb_optimization(MTOW, thrust_max, CDcruise, S, g, H_m, V_cruise, 1.)
+    fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance = get_climb_optimization(MTOW[i], thrust_max, CDcruise[i], S, g, H_m, V_cruise, 1.)
     fuel_consumption.loc['climb'] = [fuel_flow_climb, fuel_mass_climb]
     mass -= fuel_mass_climb
 
