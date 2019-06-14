@@ -6,10 +6,10 @@ Created on Tue May 14 17:20:01 2019
 """
 # Loading all variables
 from modules.concept_1 import *
-from modules.main_class2 import *
+#from modules.main_class2 import *
 import csv 
 
-
+concept=1
 # Opening file
 safety_check = input('Really want to write and start a new iteration? If so, write "yes" ')
 if safety_check == 'yes':
