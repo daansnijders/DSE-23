@@ -150,100 +150,6 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 """
 CONTROL AND STABILITY
 """
-
-
-"""
-STRUCTURES
-"""
-
-"""
-PERFORMANCE & PROPULSION
-"""
-'simulation accuracy inputs'
-max_airport_altitude = 2000.  # [m]
-altitude_resolution = 5  # number of different altitudes considered
-mass_resolution = 20  # resolution of plotting mass vs take-off field length
-
-'general inputs'
-engine_failure = False
-show_plots = False
-
-# temporary values, will be removed as soon as aerodynamics inputs are ready
-C_L_to = 1.9
-C_L_la = 2.3
-C_D_0 = 0.018117539865047032
-C_D_to = 0.19542078310015343
-C_D_la = 0.28017202214599246
-C_L_cruise = 0.8
-C_D_cruise = 0.05
-lift_over_drag = LoverD[0]
-aspect_ratio = A
-oswald_efficiency_number = e
-
-'analysis'
-config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[0], MTOW[0], g,
-                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
-                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
-                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[0], M_fuel[0],
-                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
-                                  oswald_efficiency_number, correction_factor_to, show_plots)
-
-config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[1], MTOW[1], g,
-                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
-                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
-                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[1], M_fuel[1],
-                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
-                                  oswald_efficiency_number, correction_factor_to, show_plots)
-
-config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[2], MTOW[2], g,
-                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
-                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
-                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[2], M_fuel[2],
-                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
-                                  oswald_efficiency_number, correction_factor_to, show_plots)
-
-
-"""
-SUSTAINABILITY
-"""
-'Greenhouse Gas Emissions'
-#CO_2_emissions=[get_CO2_emissions(M_fuel_burnt[i]) for i in range(3)]
-#
-#EI_NOx_phase=get_EI_NOX_fuelflow(fuel_flow)
-#
-#
-#NOx_phase = [get_NOx_emissions_total(fuel_flow_phase,time_in_flight_phase,EI_NOx_phase)]
-#
-#
-#Dp_Foo_NOx=[get_Dp_Foo_NOx_specific(NOx_total,T_phase)   ]
-#
-#NO_x_req=[get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_NOx) ] #should come to 45%
-#
-#Fuel_per_pax=[get_CO2_per_passenger_per_km(M_fuel_burnt[i],N_pax[i],R[i]) for i in range(3)]
-
-
-'Noise'
-phi_observer=radians(1)
-flap_deflection=np.radians(40)
-
-
-b_flap=b/2*0.4
-c_flap=0.35*Cr
-S_flap=b_flap*c_flap
-
-V_approach=64
-
-r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
-
-OSPL_dBA_tot_straight=EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-OSPL_dBA_tot_up=EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-OSPL_dBA_tot_down=EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-
-"""Stability and Control"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -255,7 +161,7 @@ from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_el
 from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_mlg, check_ground
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.Stability.empennage import empennage
-from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
+#from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 """NEED FROM OTHER FILES"""
@@ -390,3 +296,96 @@ frac = np.ones((3,2))
 frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
 frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
 frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
+
+"""
+STRUCTURES
+"""
+
+"""
+PERFORMANCE & PROPULSION
+"""
+'simulation accuracy inputs'
+max_airport_altitude = 2000.  # [m]
+altitude_resolution = 5  # number of different altitudes considered
+mass_resolution = 20  # resolution of plotting mass vs take-off field length
+
+'general inputs'
+engine_failure = False
+show_plots = False
+
+# temporary values, will be removed as soon as aerodynamics inputs are ready
+C_L_to = 1.9
+C_L_la = 2.3
+C_D_0 = 0.018117539865047032
+C_D_to = 0.19542078310015343
+C_D_la = 0.28017202214599246
+C_L_cruise = 0.8
+C_D_cruise = 0.05
+lift_over_drag = LoverD[0]
+aspect_ratio = A
+oswald_efficiency_number = e
+
+'analysis'
+config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[0], MTOW[0], g,
+                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
+                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
+                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[0], M_fuel[0],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
+                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
+                                  oswald_efficiency_number, correction_factor_to, show_plots)
+
+config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[1], MTOW[1], g,
+                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
+                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
+                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[1], M_fuel[1],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
+                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
+                                  oswald_efficiency_number, correction_factor_to, show_plots)
+
+config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[2], MTOW[2], g,
+                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
+                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
+                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[2], M_fuel[2],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
+                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
+                                  oswald_efficiency_number, correction_factor_to, show_plots)
+
+
+"""
+SUSTAINABILITY
+"""
+'Greenhouse Gas Emissions'
+#CO_2_emissions=[get_CO2_emissions(M_fuel_burnt[i]) for i in range(3)]
+#
+#EI_NOx_phase=get_EI_NOX_fuelflow(fuel_flow)
+#
+#
+#NOx_phase = [get_NOx_emissions_total(fuel_flow_phase,time_in_flight_phase,EI_NOx_phase)]
+#
+#
+#Dp_Foo_NOx=[get_Dp_Foo_NOx_specific(NOx_total,T_phase)   ]
+#
+#NO_x_req=[get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_NOx) ] #should come to 45%
+#
+#Fuel_per_pax=[get_CO2_per_passenger_per_km(M_fuel_burnt[i],N_pax[i],R[i]) for i in range(3)]
+
+
+'Noise'
+phi_observer=radians(1)
+flap_deflection=np.radians(40)
+
+
+b_flap=b/2*0.4
+c_flap=0.35*Cr
+S_flap=b_flap*c_flap
+
+V_approach=64
+
+r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
+
+OSPL_dBA_tot_straight=EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_up=EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_down=EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+
+"""Stability and Control"""
+
