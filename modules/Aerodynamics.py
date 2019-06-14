@@ -844,9 +844,9 @@ class Moment:
         c_prime = 1.20 
         delta_cm_flap = self.delta_cl_flap*(self.x_ref - xcp_cprime*c_prime)
         
-        cmdle = 0.0006      #Figure 8.93
+        cmdle = -0.0007      #Figure 8.93
         dfle = 60           #DEG
-        delta_cm_krueger = cmdle*c_prime**2*dfle + (self.x_ref + (c_prime-1)) + cm_des_airfoil*(c_prime**2 -1) + 0.75*self.cl_des_airfoil*c_prime*(c_prime-1)
+        delta_cm_krueger = cmdle*c_prime**2*dfle + (self.x_ref + (c_prime-1))*self.delta_cl_krueger + cm_des_airfoil*(c_prime**2 -1) + 0.75*self.cl_des_airfoil*c_prime*(c_prime-1)
         return(delta_cm_flap, delta_cm_krueger)
         
 #    def Wing_moment(self):
