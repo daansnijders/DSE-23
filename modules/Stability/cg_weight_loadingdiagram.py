@@ -9,7 +9,6 @@ from inputs.concept_1 import *
 from inputs.constants import *
 
 from modules.Stability.loaddiagram_detailed import *
-from modules.Stability.Check_ground import *
 from modules.main_class2 import *
 
 x_cg_config1_range = [config1_cg_x - 0.1* l_f[0],config1_cg_x,config1_cg_x + 0.1* l_f[0]]
@@ -44,16 +43,6 @@ x_cg_min_flight2 = min(xcg_min[1], xcg_min[4]) - 0.05*MAC
 x_cg_min_flight3 = min(xcg_min[2], xcg_min[5]) - 0.05*MAC
 
 
-#config1_ground      = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-#config2_ground      = Stability_check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
-#config3_ground      = Stability_check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
-
-
-#frac_min = [0,0,0]
-#frac_max = [0,0,0]
-#frac_min[0], frac_max[0], frac1 = config1_ground.check_equilibrium()
-#frac_min[1], frac_max[1], frac2 = config2_ground.check_equilibrium()
-#frac_min[2], frac_max[2], frac2 = config3_ground.check_equilibrium()
 
 
 

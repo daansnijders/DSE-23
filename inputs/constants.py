@@ -28,7 +28,7 @@ M_x=0.935                                                                       
 
 #air constants
 gamma=1.4                                                                       # [-] heat capacity ratio
-R=287.05                                                                        # [J/kg/K] specific gas constant
+gas_constant=287.05                                                                        # [J/kg/K] specific gas constant
 
 
 T_0=288.15                                                                      # [K] ISA temperature at sea level
@@ -42,8 +42,8 @@ mu_sl = 0.00001789                                                              
 
 if H_m<11000:
     T=T_0-0.0065*(H_m)                                                          # [K] temperature at cruising altitude
-    p=p_0*(T/T_0)**(-g/(R*-0.0065))                                             # [Pa] pressure at cruising altitude
-    rho= rho_0*(T/T_0)**(-g/(R*-0.0065)-1)                                      # [kg/m^3] density at cruising altitude
+    p=p_0*(T/T_0)**(-g / (gas_constant * -0.0065))                                             # [Pa] pressure at cruising altitude
+    rho= rho_0*(T/T_0)**(-g / (gas_constant * -0.0065) - 1)                                      # [kg/m^3] density at cruising altitude
 
 elif H_m<20000:
     T1=216.65
@@ -51,11 +51,11 @@ elif H_m<20000:
     p1=22631.7
 
     T=T1+a1*(H_m)                                                               # [K] temperature at cruising altitude
-    p=p1*e**(-g/(R*T)*(H_m-11000))                                              # [Pa] pressure at cruising altitude
-    rho= rho_0*(T1/T_0)**(-g/(R*-0.0065)-1)*p/p1                                # [kg/m^3] density at cruising altitude
+    p=p1*e**(-g / (gas_constant * T) * (H_m - 11000))                                              # [Pa] pressure at cruising altitude
+    rho= rho_0 * (T1/T_0) ** (-g / (gas_constant * -0.0065) - 1) * p / p1                                # [kg/m^3] density at cruising altitude
     
 #get cruise velocities and speed of sound
-a=(gamma*R*T)**0.5                                                              # [m/s] speed of sound
+a= (gamma * gas_constant * T) ** 0.5                                                              # [m/s] speed of sound
 V_cruise=M_cruise*a                                                             # [m/s] true airspeed speed cruise
 
 
