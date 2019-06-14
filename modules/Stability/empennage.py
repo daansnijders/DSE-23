@@ -8,10 +8,10 @@ Created on Wed Jun  5 09:50:12 2019
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
-#from inputs.concept_1 import *
+from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, x_cg, thrust_max, y_engine, x_le_h, x_le_MAC, z_engine, get_b, get_Cr, get_Ct
 from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
-from modules.main_class2 import *
+from modules.main_class2 import config1_cg, config2_cg, config3_cg, config1_cg_x
 from modules.Stability.cg_weight_config2 import x_cg_min2canard_can1, x_cg_max2canard_can1, x_le_MAC_range_perccanard2_can1
 from modules.Stability.cg_weight_config3 import x_cg_min3canard_can2, x_cg_max3canard_can2, x_le_MAC_range_perccanard3_can2
 
