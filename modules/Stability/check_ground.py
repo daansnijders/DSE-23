@@ -5,7 +5,7 @@ Created on Tue Jun  4 09:17:48 2019
 @author: daansnijders
 """
 
-from inputs.concept_1 import *
+from inputs.concept_1 import tangent, b, dihedral_rad, y_engine, z_engine
 from inputs.constants import *
 
 

@@ -6,13 +6,19 @@ Created on Mon Jun  3 12:43:09 2019
 """
 
 
-from inputs.concept_1 import *
+from inputs.concept_1 import x_le_MAC, l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout
 from inputs.constants import *
+
 
 from modules.Stability.loaddiagram_detailed import *
 from modules.Stability.check_ground import *
 from modules.main_class2 import *
 from modules.CG.class2_CG import get_cg
+
+from modules.Stability.loaddiagram_detailed import Loading_diagram
+#from modules.Stability.check_ground import *
+from modules.main_class2 import config3_class2, config3_cg_x, config3_cg, config3_class2_OEW
+
 
 x_le_MAC1_can2 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
 x_le_MAC2_can2 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
