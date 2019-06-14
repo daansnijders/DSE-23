@@ -8,7 +8,7 @@ from modules.Aerodynamics import *
 from modules.sustainability.greenhousegasemissions import *
 from modules.performance.class2_performance import *
 from modules.sustainability.noise_defs import *
-
+from Structure.Wing.wing_canard_iteration import wing_struc_analysis
 """
 AERODYNAMICS
 """
@@ -303,6 +303,8 @@ frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
 """
 STRUCTURES
 """
+#Calculate fuel mass available for storage in wings (0.75 of one side of the wing)
+fuel_mass_available = wing_struc_analysis(C_l_max,V_cruise,b,Cr,Ct,S)
 
 """
 PERFORMANCE & PROPULSION

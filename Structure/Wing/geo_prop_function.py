@@ -43,8 +43,8 @@ cost_spar = 4.43
 E_skin = 72*10**9                 # Pa
 comp_strength_skin = 344*10**6      # Pa
 skin_poisson_ratio = 0.33
-density_skin = 2800                 # kgm^-3
-cost_skin = 2.8
+density_skin = 2360#2800                 # kgm^-3
+cost_skin = 415#2.8
 
 # Stringer Material: Aluminium 7150T7751
 E_stringer = 71*10**9
