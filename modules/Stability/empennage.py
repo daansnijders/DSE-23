@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
 from inputs.concept_1 import *
-from modules.Stability.cg_weight_config1 import x_cg_min1, x_cg_max1, x_le_MAC_range_perc, x_le_MAC_range
+from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
 from modules.Stability.cg_weight_loadingdiagram import x_cg_min11, x_cg_max11, weight_pass, x_cg_max22, x_cg_max33
 from modules.main_class2 import *
 from modules.Stability.cg_weight_config2 import x_cg_min2canard, x_cg_max2canard, x_le_MAC_range_perccanard2
