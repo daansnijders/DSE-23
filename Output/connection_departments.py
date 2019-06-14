@@ -144,19 +144,19 @@ SUSTAINABILITY
 #Fuel_per_pax=[get_CO2_per_passenger_per_km(M_fuel_burnt[i],N_pax[i],R[i]) for i in range(3)]
 
 
-# 'Noise'
-# phi_observer=radians(1)
-# flap_deflection=np.radians(40)
-#
-#
-# b_flap=b/2*0.4
-# c_flap=0.35*Cr
-# S_flap=b_flap*c_flap
-#
-# V_approach=64
-#
-# r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
-#
-# OSPL_dBA_tot_straight=EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-# OSPL_dBA_tot_up=EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-# OSPL_dBA_tot_down=EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+'Noise'
+phi_observer=radians(1)
+flap_deflection=np.radians(40)
+
+
+b_flap=b/2*0.4
+c_flap=0.35*Cr
+S_flap=b_flap*c_flap
+
+V_approach=64
+
+r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
+
+OSPL_dBA_tot_straight=EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_up=EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_down=EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
