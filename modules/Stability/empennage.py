@@ -126,7 +126,7 @@ class empennage:
         self.x_le_MAC_l_f = y
         self.S_h = self.Sh_S * S
         self.x_le_MAC = self.x_le_MAC_l_f * l_f[0]
-
+        self.x_le_MAC_out = [self.x_le_MAC, self.x_le_MAC +l_cutout, self.x_le_MAC  + l_cutout]
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
@@ -296,8 +296,6 @@ class empennage:
             x_cg_mincanard = x_cg_min3canard
             x_cg_maxcanard = x_cg_max3canard
             x_le_MAC_range_perccanard = x_le_MAC_range_perccanard3
-            
-        
         
         if plot:
             fig = plt.figure()
@@ -343,6 +341,7 @@ class empennage:
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.set ( ylabel = 'delta_e')
+        ax.set ( xlabel = 'angle of attack [deg]')
         ax.plot((np.rad2deg(alpha_list)), def_curve)
         plt.gca().invert_yaxis()
 
