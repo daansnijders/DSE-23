@@ -500,7 +500,7 @@ class Drag:
         ft_to_m=0.3048
         l_f_feet = self.l_f / ft_to_m        
         l_k = l_f_feet / k
-#        print (l_k)
+        print (l_k)
         #From this, the cut-off Reynolds number follows
         Re_cutoff = 10**9 
         """ From this, it follows that there is no extra drag due to surface roughness """
@@ -567,7 +567,7 @@ class Lift:
         c_prime = 1.20      #1.20*c
 
         delta_cl_flap = eta1 * cldf1 * df1_land * c_a_prime + eta2 * etat * cldf2 * df2_land * (1 + (c_prime-c_a_prime))
-#        print (delta_cl_flap) 
+        print (delta_cl_flap) 
         """
         #Lift increase due to Fowler flap
         c_f = 0.25
@@ -671,7 +671,8 @@ class Lift:
         C_L_max_w = C_L_alpha_w * (alpha_C_L_max_w - alpha_0_L_w)
         alpha_0_L_w_deg = np.rad2deg(alpha_0_L_w)
         
-        return (C_L_alpha_w, alpha_0_L_w_deg, C_L_max_w, alpha_C_L_max_w_deg)
+        C_L_w = C_L_w[1]
+        return (C_L_w, C_L_alpha_w, alpha_0_L_w_deg, C_L_max_w, alpha_C_L_max_w_deg)
 
     def Wing_lift_flaps(self, delta_C_l,C_L_alpha_w,C_l_alpha,delta_C_l_max,b_slats):
         K_b = 0.85 - 0.36           #Figure 8.51 & 8.52
@@ -800,7 +801,7 @@ class Lift:
         
         
 class Moment:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap,delta_cl_krueger, x_ref, cl_des_airfoil, wing_twist, y_MAC):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap,delta_cl_krueger, x_ref, cl_des_airfoil, wing_twist, y_MAC, C_L_w, delta_CL_w,SWF_LE, b_slat):
         self.S                  = S
         self.A                  = A
         self.rho                = rho
@@ -829,6 +830,10 @@ class Moment:
         self.cl_des_airfoil     = cl_des_airfoil
         self.wing_twist         = wing_twist
         self.y_MAC              = y_MAC
+        self.C_L_w              = C_L_w
+        self.delta_CL_w         = delta_CL_w
+        self.SWF_LE             = SWF_LE 
+        self.b_slat             = b_slat
         
     def Airfoil_moment(self):
         cm0_airfoil = -0.123        #Zero lift moment coefficient according to JAVAfoil
@@ -866,8 +871,27 @@ class Moment:
         dCm_dCl_w = ((nref - nac)/self.Cr)*(self.Cr/self.MAC)
         return(Cm0_w_sub, Cm0_w_trans, dCm_dCl_w)
         
-    def Wing_moment_flaps(self):
-        pass
+    def Wing_moment_flaps(self, Cm0_w_sub):
+        CL_w_flaps = self.C_L_w + self.delta_CL_w
+        beta = sqrt(1-self.M_cruise**2)
+        CL_alpha_wref = (2*pi*6)/(2 + sqrt(4+(6*beta/0.95)**2*(1+(np.tan(0)**2)/beta**2)))
+        delta_CLref_w = self.delta_cl_flap*(CL_alpha_wref/self.C_l_alpha)*1.05
+        KP = 0.9 - 0.21
+        deltaCM_deltaCL = -0.25
+        KLambda = 0.051 - 0.028
+        c_prime = 1.2
+        delta_Cm_w_flaps = (self.x_ref-0.25)*CL_w_flaps + KLambda*(self.A/1.5)*delta_CLref_w*np.tan(self.lambda_4_rad) + KP*(deltaCM_deltaCL*delta_CLref_w*c_prime**2) - KP*(0.25*self.C_L_w*(c_prime**2 - c_prime)) + KP*Cm0_w_sub*(c_prime**2-1)
+        
+        cmdle = -0.0007      #Figure 8.93
+        nmgc = self.y_MAC/np.tan(self.lambda_le_rad)
+        nref = self.x_ref*self.MAC + nmgc
+        nle = nmgc - 0.1*self.MAC
+        cld = 0.0015    #Figure 8.26
+        dfle = 60           #DEG
+        cbar_c = 1.1
+        
+        delta_Cm_w_krueger = (cmdle*cbar_c + (nref-nle)*cld)*(0.5*self.SWF_LE/self.S)*dfle + (Cm0_w_sub*(cbar_c**2 - 1)+0.75*self.C_L_w*(cbar_c*(cbar_c-1)))*(self.b_slat/self.b)
+        return(delta_Cm_w_flaps, delta_Cm_w_krueger)
         
 #    def Airplane_moment(self):
         
