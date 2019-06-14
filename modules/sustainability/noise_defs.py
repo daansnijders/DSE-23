@@ -346,7 +346,7 @@ def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap
     OSPL_dBA_mlg=get_overall_sound_level_general(pe_2_mlg,freq_delta,centrefreq,r_observer)
     OSPL_dBA_nlg=get_overall_sound_level_general(pe_2_nlg,freq_delta,centrefreq,r_observer)
 
-    if phi==0:
+    if phi_observer==0:
         OSPL_dBA_mlg_strut=0
         OSPL_dBA_nlg_strut=0
     else:

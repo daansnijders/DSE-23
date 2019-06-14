@@ -31,7 +31,7 @@ alpha_star_l = 10        # from -7 to 3 deg
 C_l_alpha = np.rad2deg(2/18)
 alpha_C_l_max = np.rad2deg(10.75)
 C_l_max = 1.58
-#C_l_alpha_M75 = C_l_alpha / sqrt(1 - M_cruise**2)
+C_l_alpha_M75 = C_l_alpha / sqrt(1 - M_cruise**2)
 #
 #config1_Lift = Lift(S,A,rho,rho_0,l_f[0],V_cruise,M_cruise,V_TO[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, A_h, A_c,lambda_h_2_rad[0], lambda_c_2_rad, i_c, S_h[0], S_c[0], i_h, x_le_MAC[0], b_flap, SWF)
 #config2_Lift = Lift(S,A,rho,rho_0,l_f[1],V_cruise,M_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, A_h, A_c,lambda_h_2_rad[1], lambda_c_2_rad, i_c, S_h[1], S_c[1], i_h, x_le_MAC[1], b_flap, SWF)
@@ -129,11 +129,17 @@ config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D
 SUSTAINABILITY
 """
 'Greenhouse Gas Emissions'
-#CO_2_emissions=[get_CO2_emissions(M_fuel_burnt[i]) for i in range(3)]
+#CO_2_tot=get_CO2_emissions(config1_Performance.fuel_mass_nominal)
+#Fuel_per_pax=get_CO2_per_passenger_per_km(CO_2_tot,N_pax[0],R[0]) 
 #
-#EI_NOx_phase=get_EI_NOX_fuelflow(fuel_flow)
+##EI_NOx_phase=get_EI_NOX_fuelflow(fuel_flow)
+#fuel_flow_config1=get_fuel_flow_per_phase(config1_Performance.fuel_flow_take_off, config1_Performance.fuel_flow_climb,config1_Performance.fuel_flow_cruise_breguet,config1_Performance.fuel_flow_descent, config1_Performance.fuel_flow_landing)
 #
-#
+#fuel_mass_config1=get_total_fuel_per_phase(config1_Performance.fuel_mass_take_off, config1_Performance.fuel_mass_climb,config1_Performance.fuel_mass_cruise_breguet,config1_Performance.fuel_mass_descent, config1_Performance.fuel_mass_landing)
+
+#get_tot_NOx(fuel_flow_list,M_fuel_list)
+
+
 #NOx_phase = [get_NOx_emissions_total(fuel_flow_phase,time_in_flight_phase,EI_NOx_phase)]
 #
 #
