@@ -12,6 +12,7 @@ from inputs.constants import *
 from modules.Stability.loaddiagram_detailed import *
 from modules.Stability.check_ground import *
 from modules.main_class2 import *
+from modules.CG.class2_CG import get_cg
 
 x_le_MAC1_can2 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
 x_le_MAC2_can2 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]

@@ -5,9 +5,9 @@ from inputs.concept_1 import *
 
 'department modules'
 from modules.Aerodynamics import *
-from modules.sustainability.greenhousegasemissions import *
+import modules.sustainability.greenhousegasemissions as gasemissions
 from modules.performance.class2_performance import *
-from modules.sustainability.noise_defs import *
+import modules.sustainability.noise_defs as noise
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
 """
 AERODYNAMICS
@@ -167,6 +167,8 @@ from modules.Stability.empennage import empennage
 #from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
+
+"""Stability and Control"""
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
 etah = 0.9                                                                      # [-] eta_h of aerodynamics
@@ -360,6 +362,13 @@ config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D
 SUSTAINABILITY
 """
 'Greenhouse Gas Emissions'
+
+
+config1_emissions=gasemissions.greenhousegas_emissions(config1_Performance,1)
+config1_NOx=config1_emissions.get_NOx_mass()
+config2_emissions=gasemissions.greenhousegas_emissions(config2_Performance,2)
+config3_emissions=gasemissions.greenhousegas_emissions(config3_Performance,3)
+
 #CO_2_tot=get_CO2_emissions(config1_Performance.fuel_mass_nominal)
 #Fuel_per_pax=get_CO2_per_passenger_per_km(CO_2_tot,N_pax[0],R[0]) 
 #
@@ -386,17 +395,16 @@ phi_observer=radians(1)
 flap_deflection=np.radians(40)
 
 
-b_flap=b/2*0.4
 c_flap=0.35*Cr
 S_flap=b_flap*c_flap
 
 V_approach=64
 
-r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
+r1,r2,r3,theta_1,theta_2,theta_3=noise.simulate_flight_path(V_approach)
 
-OSPL_dBA_tot_straight=EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-OSPL_dBA_tot_up=EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-OSPL_dBA_tot_down=EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_straight=noise.EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_up=noise.EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
 
-"""Stability and Control"""
+
 
