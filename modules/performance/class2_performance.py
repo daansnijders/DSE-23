@@ -52,7 +52,7 @@ class Performance:
         self.cj = self.cj()
         self.tofl, self.airport_altitude_list, self.take_off_field_length, self.take_off_velocity, self.decision_speed = self.analyze_take_off_performance()
         self.lfl, self.landing_field_length, self.approach_velocity = self.analyze_landing_performance()
-        self.fuel_table, self.fuel_mass_engine_startup, self.fuel_mass_taxi, self.fuel_mass_climb, self.fuel_mass_cruise_breguet, self.fuel_mass_descent, self.fuel_mass_loiter, self.fuel_mass_landing, self.fuel_mass_take_off_2, self.fuel_mass_climb_2, self.fuel_mass_cruise_breguet_2, self.fuel_mass_descent_2, self.fuel_mass_loiter_2, self.fuel_mass_landing_2, self.fuel_flow_take_off, self.fuel_flow_climb, self.fuel_flow_cruise_breguet, self.fuel_flow_loiter, self.fuel_flow_landing, self.fuel_flow_take_off_2, self.fuel_flow_climb_2, self.fuel_flow_cruise_breguet_2, self.fuel_flow_loiter_2, self.fuel_flow_landing_2, self.fuel_mass_total = self.analyze_fuel_consumption()
+        self.fuel_table, self.fuel_mass_engine_startup, self.fuel_mass_taxi, self.fuel_mass_climb, self.fuel_mass_cruise_breguet, self.fuel_mass_descent, self.fuel_mass_loiter, self.fuel_mass_landing, self.fuel_mass_take_off_2, self.fuel_mass_climb_2, self.fuel_mass_cruise_breguet_2, self.fuel_mass_descent_2, self.fuel_mass_loiter_2, self.fuel_mass_landing_2, self.fuel_flow_take_off, self.fuel_flow_climb, self.fuel_flow_cruise_breguet, self.fuel_flow_loiter, self.fuel_flow_landing, self.fuel_flow_take_off_2, self.fuel_flow_climb_2, self.fuel_flow_cruise_breguet_2, self.fuel_flow_loiter_2, self.fuel_flow_landing_2, self.fuel_mass_total, self.fuel_mass_nominal = self.analyze_fuel_consumption()
 
     def cj(self):
         cj = get_fuel_consumption(self.thrust_max, 1, 1)[0] / self.thrust_max
@@ -342,7 +342,7 @@ class Performance:
         mass -= fuel_mass_landing_2
         fuel_mass_total = sum(fuel_consumption['fuel_mass'])
         fuel_mass_nominal = sum([fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_take_off, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_landing])
-        return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total
+        return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total, fuel_mass_nominal
 
 
 # C_L_to = 1.9
