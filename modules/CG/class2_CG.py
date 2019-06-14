@@ -34,10 +34,10 @@ class get_cg(object):
             canard=0
         else:
             canard=self.weights.M_canard*self.x_cg_canard
-        self.x_cg_winggroup=sum([wing,engine, landinggear_main])/(sum([self.weights.M_wing,self.weights.M_landinggear_main,self.weights.M_nacelle + self.weights.M_engines_total]))
+        self.x_cg_winggroup=sum([wing,engine,landinggear_main])/(sum([self.weights.M_wing,self.weights.M_landinggear_main,self.weights.M_nacelle + self.weights.M_engines_total]))
         self.x_cg_fuselagegroup=sum([fuselage,h_tail,v_tail,canard,landinggear_nose])/sum([self.weights.M_fuselage,self.weights.M_landinggear_nose,self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_canard])
         # [m] returning location of cg 
-        return sum([wing,fuselage,h_tail,v_tail,engine,canard, landinggear_nose,landinggear_main])/(sum([self.weights.M_wing, self.weights.M_canard,self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_landinggear_main,self.weights.M_landinggear_nose,self.weights.M_nacelle + self.weights.M_engines_total]))
+        return sum([wing,fuselage,h_tail,v_tail,engine,canard,landinggear_main,landinggear_nose])/(sum([self.weights.M_wing, self.weights.M_canard,self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + self.weights.M_engines_total,self.weights.M_landinggear_nose,self.weights.M_landinggear_main]))
     
     def calc_y_cg(self):                                                        # [kg*m] mass times c.g distance of the different groups. 
         wing = self.weights.M_wing * self.y_cg_wing
@@ -51,10 +51,10 @@ class get_cg(object):
             canard=0
         else:
             canard=self.weights.M_canard*self.y_cg_canard
-        self.y_cg_winggroup=sum([wing,engine, landinggear_main])/(sum([self.weights.M_wing,self.weights.M_landinggear_main,self.weights.M_nacelle + self.weights.M_engines_total]))
+        self.y_cg_winggroup=sum([wing,engine,landinggear_main])/(sum([self.weights.M_wing,self.weights.M_landinggear_main,self.weights.M_nacelle + self.weights.M_engines_total]))
         self.y_cg_fuselagegroup=sum([fuselage,h_tail,v_tail,canard,landinggear_nose])/sum([self.weights.M_fuselage,self.weights.M_landinggear_nose,self.weights.M_canard,self.weights.M_horizontaltail,self.weights.M_verticaltail])
         # [m] returning location of cg
-        return sum([wing,fuselage,h_tail,v_tail,engine,canard, landinggear_nose,landinggear_main])/(sum([self.weights.M_wing,self.weights.M_canard, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_landinggear_main,self.weights.M_landinggear_nose,self.weights.M_nacelle +self.weights.M_engines_total]))
+        return sum([wing,fuselage,h_tail,v_tail,engine,canard,landinggear_main,landinggear_nose])/(sum([self.weights.M_wing,self.weights.M_canard, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle +self.weights.M_engines_total,self.weights.M_landinggear_nose,self.weights.M_landinggear_main]))
     
     def calc_z_cg(self):                                                        # [kg*m] mass times c.g distance of the different groups. 
         wing = self.weights.M_wing * self.z_cg_wing
@@ -71,7 +71,7 @@ class get_cg(object):
         self.z_cg_winggroup=sum([wing,engine,landinggear_main])/(sum([self.weights.M_wing,self.weights.M_landinggear_main,self.weights.M_nacelle + self.weights.M_engines_total]))
         self.z_cg_fuselagegroup=sum([fuselage,h_tail,v_tail,canard,landinggear_nose])/sum([self.weights.M_fuselage,self.weights.M_landinggear_nose,self.weights.M_canard,self.weights.M_horizontaltail,self.weights.M_verticaltail])
         # [m] returning location of cg
-        return sum([wing,fuselage,h_tail,v_tail,engine,canard ,landinggear_nose,landinggear_main])/(sum([self.weights.M_wing,self.weights.M_canard, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_landinggear_main,self.weights.M_landinggear_nose,self.weights.M_nacelle + self.weights.M_engines_total]))
+        return sum([wing,fuselage,h_tail,v_tail,engine,canard,landinggear_main,landinggear_nose ])/(sum([self.weights.M_wing,self.weights.M_canard, self.weights.M_fuselage, self.weights.M_horizontaltail,self.weights.M_verticaltail,self.weights.M_nacelle + self.weights.M_engines_total,self.weights.M_landinggear_nose,self.weights.M_landinggear_main]))
     
     
    

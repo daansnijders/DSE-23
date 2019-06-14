@@ -30,6 +30,7 @@ def get_x_mlg(z_cg,theta_rad, beta_rad, x_cg, stroke, l_f):
     x_mlg = [(tip_over[i][1] - scrape[i][1] + stroke)/(scrape[i][0] - (tip_over[i][0])) for i in range(3)] 
     return x_mlg
 
+
 def get_z_mlg(x_mlg,beta_rad,x_cg, z_cg):
     beta_rad_correct = beta_rad - np.pi/2
 
@@ -40,7 +41,6 @@ def get_z_mlg(x_mlg,beta_rad,x_cg, z_cg):
     return z_mlg
 
 def get_l_mw(x_mlg,x_cg):
-    
     return [x_mlg[i] - x_cg[i] for i in range(3)]
 
 def get_z_mlg_new(l_mw,beta_rad,z_cg):

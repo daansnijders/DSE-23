@@ -5,10 +5,11 @@ Created on Tue May 14 17:20:01 2019
 @author: Stijn
 """
 # Loading all variables
-from main import *
+from inputs.concept_1 import *
+from modules.main_class2 import *
 import csv 
 
-
+concept=1
 # Opening file
 safety_check = input('Really want to write and start a new iteration? If so, write "yes" ')
 if safety_check == 'yes':
@@ -52,14 +53,14 @@ if safety_check == 'yes':
     
     output_file.write('PROPULSION' + '\n')
     output_file.write('T_req = ' + str(T_req) + '\n')
-    output_file.write('fuel_cruise = ' + str(fuel_cruise) + '\n')
+#    output_file.write('fuel_cruise = ' + str(fuel_cruise) + '\n')
     output_file.write('d_fan = ' + str(d_fan) + '\n')
     output_file.write('d_nacel = ' + str(d_nacel) + '\n')
     output_file.write('l_eng = ' + str(l_eng) + '\n')
     output_file.write('l_nacel = ' + str(l_nacel) + '\n')
-    output_file.write('y_eng = ' + str(y_eng) + '\n')
-    output_file.write('d_eng = ' + str(d_eng) + '\n')
-    output_file.write('z_eng = ' + str(z_eng) + '\n')
+#    output_file.write('y_eng = ' + str(y_eng) + '\n')
+#    output_file.write('d_eng = ' + str(d_eng) + '\n')
+#    output_file.write('z_eng = ' + str(z_eng) + '\n')
     
     
     output_file.write('WING PARAMETERS' + '\n')
@@ -82,7 +83,7 @@ if safety_check == 'yes':
     output_file.write('V_h =' + str(V_h) + '\n')
     output_file.write('A_h  =' + str(A_h) + '\n')
     output_file.write('taper_ratio_h =' + str(taper_ratio_h) + '\n')
-    output_file.write('lambda_h_le_rad =' + str(lambda_h_le) + '\n')
+    output_file.write('lambda_h_le_rad =' + str(lambda_h_le_rad) + '\n')
     output_file.write('x_le_h =' + str(x_le_h) + '\n')
     output_file.write('S_h=' + str(S_h) + '\n')
     output_file.write('b_h =' + str(b_h) + '\n')
@@ -92,45 +93,15 @@ if safety_check == 'yes':
     output_file.write('VERTICAL TAIL PARAMETERS' + '\n')
     output_file.write('V_v =' + str(V_v) + '\n')
     output_file.write('A_v =' + str(A_v) + '\n')
-    output_file.write('lambda_v_le_rad =' + str(lambda_v_le) + '\n')
+    output_file.write('lambda_v_le_rad =' + str(lambda_v_le_rad) + '\n')
     output_file.write('x_le_v =' + str(x_le_v) + '\n')
     output_file.write('S_v  =' + str(S_v) + '\n')
     output_file.write('b_v =' + str(b_h) + '\n')
     output_file.write('Cr_v =' + str(Cr_v) + '\n')
     output_file.write('Ct_v =' + str(Ct_v) + '\n')
     
-    output_file.write('COMPONENT CG AND MASSES' + '\n')
-    output_file.write('M_wing =' + str(M_wing) + '\n')
-    output_file.write('M_eng=' + str(M_eng) + '\n')
-    output_file.write('M_wing_group =' + str(M_wing_group) + '\n')
-    output_file.write('M_fuselage =' + str(M_fuselage) + '\n')
-    output_file.write('M_tail =' + str(M_tail) + '\n')
-    output_file.write('M_fuselage_group =' + str(M_fuselage_group) + '\n')
-    output_file.write(' x_cg_fuselage=' + str( x_cg_fuselage) + '\n')
-    output_file.write('x_cg_tail =' + str(x_cg_tail) + '\n')
-    output_file.write('x_cg_wing =' + str(x_cg_wing) + '\n')
-    output_file.write('x_cg_eng =' + str(x_cg_eng) + '\n')
-    output_file.write('x_cg_wing_group =' + str(x_cg_wing_group) + '\n')
-    output_file.write('x_le_MAC =' + str(x_le_MAC) + '\n')
     
-    
-    
-    output_file.write('CG LOCATIONS' + '\n')
-    output_file.write('x_cg =' + str(x_cg) + '\n')
-    output_file.write('y_cg = ' + str(y_cg) + '\n')
-    output_file.write('z_cg = ' + str(z_cg) + '\n')
-    output_file.write('cg_loc='+ str(cg_loc)+'\n')
-    
-    output_file.write('AERODYNAMIC PARAMETERS' + '\n')
-    output_file.write('Cl_des = '+str(Cl_des) + '\n')
-    output_file.write('CLdes = '+str(CLdes) + '\n')
-    output_file.write('CL_alpha = '+str(CL_alpha) + '\n')
-    output_file.write('CLmax = '+str(CLmax) + '\n')
-    output_file.write('CLmaxto = '+str(CLmaxto) + '\n')
-    output_file.write('CD0 = '+str(CD0) + '\n')
-    output_file.write('CDcruise = '+str(CDcruise) + '\n')
-    output_file.write('L_over_D = '+str(LoverD) + '\n')
-    
+
     output_file.write('UNDERCARRIAGE PARAMETERS' + '\n')
     output_file.write('theta = ' + str(theta) + '\n')
     output_file.write('beta = ' + str(beta) + '\n')
@@ -146,20 +117,48 @@ if safety_check == 'yes':
     output_file.write('x_nlg = ' + str(x_nlg) + '\n')
     output_file.write('x_nlg = ' + str(y_mlg) + '\n')
     output_file.write('z_nlg = ' + str(z_nlg) + '\n')
+    
+    
+    output_file.write('CLASS MASS 2 ESTIMATION' + '\n')
+    output_file.write('config 1 M struct' + str(config1_M_structural)+ '\n')
+    output_file.write('config 2 M struct' + str(config2_M_structural)+ '\n')
+    output_file.write('config 3 M struct' + str(config3_M_structural)+ '\n')
+    output_file.write('config 1 M pwerplant' + str(config1_M_powerplant)+ '\n')
+    output_file.write('config 2 M pwerplant' + str(config2_M_powerplant)+ '\n')
+    output_file.write('config 3 M pwerplant' + str(config3_M_powerplant)+ '\n')
+    output_file.write('config 1 M fixedeq' + str(config1_M_fixedeq)+ '\n')
+    output_file.write('config 2 M fixedeq' + str(config2_M_fixedeq)+ '\n')
+    output_file.write('config 3 M fixedeq' + str(config3_M_fixedeq)+ '\n')
+    output_file.write('OEW config 1 CLASS 2' + str(config1_class2_OEW)+ '\n')
+    output_file.write('OEW config 2 CLASS 2' + str(config2_class2_OEW)+ '\n')
+    output_file.write('OEW config 3 CLASS 2' + str(config3_class2_OEW)+ '\n')
+    
+    
+    output_file.write('CLASS CG 2 ESTIMATION' + '\n')
+    output_file.write('config 1 X CG ' + str(config1_cg_x)+ '\n')
+    output_file.write('config 2 X CG ' + str(config2_cg_x)+ '\n')
+    output_file.write('config 3 X CG ' + str(config3_cg_x)+ '\n')
+    output_file.write('config 1 y CG ' + str(config1_cg_y)+ '\n')
+    output_file.write('config 2 y CG ' + str(config2_cg_y)+ '\n')
+    output_file.write('config 3 y CG ' + str(config3_cg_y)+ '\n')
+    output_file.write('config 1 z CG ' + str(config1_cg_z)+ '\n')
+    output_file.write('config 2 z CG ' + str(config2_cg_z)+ '\n')
+    output_file.write('config 3 z CG ' + str(config3_cg_z)+ '\n')
+      
     # Closing file
     output_file.close()
     print('Saved!')
     
 
-# Opening files
-if concept==1:
-    exec(open("./output_concept1.csv").read())
-
-if concept==2:
-    exec(open("./output_concept2.csv").read())
+    # Opening files
+    if concept==1:
+        exec(open("./output_concept1.csv").read())
     
-if concept==3:
-    exec(open("./output_concept3.csv").read())
+    if concept==2:
+        exec(open("./output_concept2.csv").read())
+        
+    if concept==3:
+        exec(open("./output_concept3.csv").read())
 
 
 

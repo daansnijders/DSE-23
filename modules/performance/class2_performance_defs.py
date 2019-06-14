@@ -52,10 +52,9 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
             else:
                 velocity -= .1
 
-            nominal_distance = get_take_off_field_length(True, rho, g, h_screen, mass, thrust_one_engine,
+            nominal_distance = get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one_engine,
                                                          thrust_transition_setting, thrust_climb_out_setting, C_L, C_D,
-                                                         S,
-                                                         mu_TO, False, velocity, reverse_thrust_factor)[0]
+                                                         S, mu_TO, False, velocity, reverse_thrust_factor)[0]
             try_distance = give_try(velocity)
             difference = nominal_distance - try_distance
             # nominal_list.append(nominal_distance)
@@ -64,10 +63,8 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
             # count_list.append(count)
         # plt.plot(count_list, nominal_list, color='C0', label='Nominal')
         # plt.plot(count_list, try_list, color='C1', label='Try')
-        # print(difference_list)
         # plt.plot(count_list, difference_list, color='C2', label='Difference')
         # plt.legend()
-        print(velocity)
         return velocity
 
     V_min = get_V_stall(mass, g, rho, S, C_L)
@@ -86,8 +83,16 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
             acceleration_1 = get_acceleration(V_1, V_liftoff, thrust_one_engine)
         distance_ground = V_1**2 / 2. / acceleration_0 + (V_liftoff**2/2. - V_1**2/2.) / acceleration_1
     else:
-        acceleration = get_acceleration(0, V_liftoff, 2 * thrust_one_engine)
-        distance_ground = V_liftoff**2 / 2. / acceleration
+        if V_1_guess:
+            V_1 = get_decision_speed(V_1)
+            acceleration_0 = get_acceleration(0, V_1, 2 * thrust_one_engine)
+            acceleration_1 = get_acceleration(V_1, V_liftoff, 2 * thrust_one_engine)
+        else:
+            acceleration_0 = get_acceleration(0, V_1, 2 * thrust_one_engine)
+            acceleration_1 = get_acceleration(V_1, V_liftoff, 2 * thrust_one_engine)
+        distance_ground = V_1 ** 2 / 2. / acceleration_0 + (V_liftoff ** 2 / 2. - V_1 ** 2 / 2.) / acceleration_1
+        # acceleration = get_acceleration(0, V_liftoff, 2 * thrust_one_engine)
+        # distance_ground = V_liftoff**2 / 2. / acceleration
     """
     Transition distance
     """
@@ -120,8 +125,7 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
         distance_total_airborne = V_liftoff**2/0.15/g*np.sin(gamma_2)
 
     distance_total = distance_ground + distance_total_airborne
-
-    return distance_total, V_liftoff
+    return distance_total, V_liftoff, V_1
 
 
 def get_friction_coefficient(force_nose, mass, x_m, x_n, x_cg, h_cg, g):
@@ -182,19 +186,20 @@ def get_fuel_consumption(thrust, distance, velocity):
 
 
 def get_energy_height():
-    V = np.linspace(0, 300, 100)
-    h = np.linspace(0, 20000, 100)
+    height_intervals = 50
+    V = np.linspace(0, 300, height_intervals)
+    h = np.linspace(0, 20000, height_intervals)
     z = []
-    for i in range(0, 100, 1):
+    for i in range(0, height_intervals, 1):
         list = []
-        for j in range(0, 100, 1):
+        for j in range(0, height_intervals, 1):
             list.append(h[i]+V[j]**2/2/9.80655)
         z.append(list)
     return V,h,z
 
 
 def get_2d_rate_of_climb(thrust_max, engines_operative, wing_surface_area, drag_coefficient, mass, g):
-    steps = 300
+    steps = 500
     V = np.linspace(0, 300, steps)
     h = np.linspace(0, 20000, steps)
     z = []
@@ -249,6 +254,8 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     import matplotlib.pyplot as plt
     import numpy as np
 
+    np.seterr(divide='ignore', invalid='ignore')
+
     def find_nearest(array, value):
         array = np.asarray(array)
         idx = (np.abs(array - value)).argmin()
@@ -257,9 +264,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     """
     inputs
     """
-    steps = 5
-    take_off_velocity = 70.
-    i = 0
+    steps = 250
     mass = mass_climb_initial
     engines_operative = 2
     climb_thrust = thrust_max * thrust_setting
@@ -268,14 +273,13 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     analysis
     """
     plt.figure()
-    a, b, rate_of_climb = get_2d_rate_of_climb(climb_thrust, engines_operative, S, CD_climb[i], mass_climb_initial[i], g)
+    a, b, rate_of_climb = get_2d_rate_of_climb(climb_thrust, engines_operative, S, CD_climb, mass_climb_initial, g)
     cp = plt.contour(a**2/2/9.80655, b, rate_of_climb, 2*steps+1)
     plt.clabel(cp, inline=False, fontsize=10)
     # inline = True looks prettier but destroys the program as gradient can not be found for inline pieces
 
-
     """"
-    finding raaklijn
+    finding tangent line
     """
     x_loc_list = []
     y_loc_list = []
@@ -293,12 +297,11 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
         gradient = np.gradient(y_list, x_list)
         rico = -1.
         value, index = find_nearest(gradient, rico)
-        if value <= rico+0.1:
-            if value >= rico-0.1:
-                x_loc = x_list[index]
-                y_loc = y_list[index]
-                x_loc_list.append(x_loc)
-                y_loc_list.append(y_loc)
+        if rico-0.1 < value < rico+0.1:
+            x_loc = x_list[index]
+            y_loc = y_list[index]
+            x_loc_list.append(x_loc)
+            y_loc_list.append(y_loc)
 
     # filtering out points below cruise altitude
     below_cruise_altitude = [item <= H_m for item in y_loc_list]
@@ -306,16 +309,18 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     V_optimal = [d for (d, remove) in zip(x_loc_list, below_cruise_altitude) if remove]
     z_optimal = []
     for a in range(0, len(h_optimal)):
-        z = get_rate_of_climb(engines_operative, thrust_max, h_optimal[a], np.sqrt(V_optimal[a]*2*g), S, CD_climb[i], mass[i], g)
+        z = get_rate_of_climb(engines_operative, thrust_max, h_optimal[a], np.sqrt(V_optimal[a]*2*g), S, CD_climb, mass, g)
         z_optimal.append(z)
     # h_optimal.append(take_off_velocity**2/2/g)
     # fn_roots = np.roots(rate_of_climb_fn-take_off_velocity**2/2/g)
     # V_optimal.append(np.real((fn_roots[np.isreal(fn_roots)])[0]))
     # z_optimal.append(get_rate_of_climb(engines_operative, thrust_max, take_off_velocity**2/2/g, np.sqrt(V_optimal[-1]*2*g), S, CD[i], mass[i], g))
 
-    h_optimal = list(np.flip(h_optimal))
-    V_optimal = list(np.flip(V_optimal))
-    z_optimal = list(np.flip(z_optimal))
+
+    h_optimal = list(np.flip(h_optimal, 0))
+    V_optimal = list(np.flip(V_optimal, 0))
+    z_optimal = list(np.flip(z_optimal, 0))
+
 
     rate_of_climb_fn = np.poly1d(np.polyfit(V_optimal, h_optimal, 2))
 
@@ -332,13 +337,10 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
         distance += ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))/np.tan(np.arcsin(((z_optimal[a]+z_optimal[a-1])/2)/((V_optimal[a]+V_optimal[a-1])/2)))
         fuel_mass_climb += ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))*(engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0])/((z_optimal[a]+z_optimal[a-1])/2)
     # plt.scatter(x_loc_list, y_loc_list)
-    print(climb_time)
-    print(V_optimal)
-    print(z_optimal)
     plt.scatter(V_optimal, h_optimal)
     polyfit_x = np.linspace(500, 2000, 1000)
     polyfit_y = rate_of_climb_fn(polyfit_x)
-    plt.plot(polyfit_x, polyfit_y)
+    # plt.plot(polyfit_x, polyfit_y)
     x, y, energy_height = get_energy_height()
     plt.contour(x**2/2/9.80655, y, energy_height, steps+1)
     plt.xlim(left=0.0)
