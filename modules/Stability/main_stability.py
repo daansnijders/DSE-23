@@ -40,19 +40,19 @@ CN_h_a    = CL_a_h                                                              
 CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
 CN_c_a    = CL_a_c                                                              # [-] C_N_c_alpha canard
 CN_h_def  = 0.5                                         #zelf                   # [-] C_N_h_de elevator deflection
-Vc_V      = 1                                           #zelf                   # [-] V_c/V velocity factors
+Vc_V      = 1.                                           #zelf                   # [-] V_c/V velocity factors
 """====================="""
 
 
 # initialize class:
 empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-empennage1 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
-x_le_w = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)                     # [m] x-location of le main wing with updated lemac
+x_le_w          = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
@@ -76,6 +76,32 @@ lambda_v_le_rad = empennage1.lambda_v_le_rad                                    
 lambda_v_2_rad  = empennage1.lambda_v_2_rad                                     # [rad] half chord sweep vtail
 lambda_v_4_rad  = empennage1.lambda_v_4_rad                                     # [rad] quarter chord sweep vtail
 x_v             = empennage1.x_v                                                # [m] x-location of ac of the vtail?
+
+taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
+lambda_h_le_rad2= empennage1.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
+t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
+Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
+S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
+A_c2            = empennage1.A_c                                                # [-] Aspect ratio of the canard
+b_c2            = empennage1.b_c                                                # [m] span canard
+Cr_c2           = empennage1.Cr_c                                               # [m] root chord length canard
+Ct_c2           = empennage1.Ct_c                                               # [m] tip chord length canard
+z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
+l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
+
+taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
+lambda_h_le_rad3= empennage2.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
+t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
+Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
+S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard
+A_c3            = empennage2.A_c                                                # [-] Aspect ratio of the canard
+b_c3            = empennage2.b_c                                                # [m] span canard
+Cr_c3           = empennage2.Cr_c                                               # [m] root chord length canard
+Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
+z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
+l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
+
+
 
 # control surfaces: (inputs still need to be worked on...)
 c_elev = get_c_elev(Cr_h, Ct_h, b_h)                                            # [m] chord length elevator

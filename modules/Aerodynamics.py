@@ -76,7 +76,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef, l_nacel, d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_elev, l_nacel, d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -138,7 +138,7 @@ class Drag:
         self.i_n            = i_n
         self.delta_C_L_h    = delta_C_L_h
         self.delta_C_L_c    = delta_C_L_c
-        self.S_ef           = S_ef
+        self.S_elev         = S_elev
         self.SWF            = SWF
         self.SWF_LE         = SWF_LE
         self.Delta_C_L_flap = Delta_C_L_flap 
@@ -481,7 +481,7 @@ class Drag:
         #It follows that 
         delta_C_D_P_lambda_4_0 = 0.015       #Figure 4.44
         
-        delta_C_D_trim_prof = delta_C_D_P_lambda_4_0 * cos(self.lambda_4_rad) * (self.S_ef / self.S_h)*(self.S_h / self.S)
+        delta_C_D_trim_prof = delta_C_D_P_lambda_4_0 * cos(self.lambda_4_rad) * (self.S_elev / self.S_h)*(self.S_h / self.S)
         
         C_D_trim = delta_C_D_trim_lift + delta_C_D_trim_prof
         
