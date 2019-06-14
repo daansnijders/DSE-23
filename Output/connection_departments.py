@@ -107,7 +107,7 @@ config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D
                                   max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
                                   H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
                                   oswald_efficiency_number, correction_factor_to, show_plots)
-#
+
 # config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW, MTOW, g,
 #                                   screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
 #                                   friction_coefficient_la, reverse_thrust_factor, engine_failure,
