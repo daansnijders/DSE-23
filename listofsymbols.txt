@@ -199,7 +199,7 @@ drag divergende mach				M_dd
 Mach number dead				M_x
 
 
-Gas constant					R
+Gas constant					gas_constant
 air specific heat 				gamma
 
 Number of seats abreast				N_sa

@@ -210,9 +210,12 @@ class Performance:
             'fuel_mass'] - fuel_consumption.loc['taxi']['fuel_mass']
 
         'climb'
-        fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance = \
-            get_climb_optimization(mass, self.thrust_max, self.C_D_cruise, self.S, self.g, self.altitude_cruise,
-                                   self.cruise_velocity, self.thrust_setting_climb)
+        fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance = get_climb_optimization(mass, self.thrust_max,
+                                                                                                  self.C_D_cruise,
+                                                                                                  self.S, self.g,
+                                                                                                  self.altitude_cruise,
+                                                                                                  self.cruise_velocity,
+                                                                                                  self.thrust_setting_climb)
         fuel_consumption.loc['climb'] = [fuel_flow_climb, fuel_mass_climb]
         mass -= fuel_mass_climb
         if self.show_plots is False:
@@ -337,6 +340,8 @@ class Performance:
         fuel_consumption.loc['landing_2'] = [fuel_flow_landing_2, fuel_mass_landing_2]
         self.fuel_consumption = fuel_consumption
         mass -= fuel_mass_landing_2
+        fuel_mass_total = sum(fuel_consumption['fuel_mass'])
+        fuel_mass_nominal = sum([fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_take_off, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_landing])
         return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2
 
 

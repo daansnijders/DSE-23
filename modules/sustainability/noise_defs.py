@@ -5,7 +5,7 @@ Created on Tue Jun  4 11:53:00 2019
 @author: Lisa
 """
 from math import *
-from inputs.concept_1 import *
+from inputs.concept_1 import pi, S, b, N_mw, N_nw, L_strut_mlg, L_strut_nlg
 from inputs.constants import mu_sl, rho_0,a_sl,D_mlg,D_nlg
 import matplotlib.pyplot as plt
 #noise definitions
