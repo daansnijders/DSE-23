@@ -9,7 +9,7 @@ from inputs.concept_1 import *
 from modules.main_class2 import *
 import csv 
 
-
+concept=1
 # Opening file
 safety_check = input('Really want to write and start a new iteration? If so, write "yes" ')
 if safety_check == 'yes':
@@ -53,7 +53,7 @@ if safety_check == 'yes':
     
     output_file.write('PROPULSION' + '\n')
     output_file.write('T_req = ' + str(T_req) + '\n')
-    output_file.write('fuel_cruise = ' + str(fuel_cruise) + '\n')
+#    output_file.write('fuel_cruise = ' + str(fuel_cruise) + '\n')
     output_file.write('d_fan = ' + str(d_fan) + '\n')
     output_file.write('d_nacel = ' + str(d_nacel) + '\n')
     output_file.write('l_eng = ' + str(l_eng) + '\n')
