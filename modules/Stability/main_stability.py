@@ -94,18 +94,32 @@ c_splr = get_c_splr(Cr, Ct, b)                                                  
 b_splr = get_b_splr(b)                                                          # [m] span spoiler
 
 
+# Update cg's DIFFERENT CONFIG'S
+# landing gear placement
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),theta_rad,beta_rad, config1_cg.calc_x_cg(), stroke,l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),theta_rad,beta_rad, config2_cg.calc_x_cg(), stroke,l_f[1])])
+x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),theta_rad,beta_rad, config3_cg.calc_x_cg(), stroke,l_f[2])])
 
-config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
-config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+z_mlg = update_z_mlg(x_mlg[0],beta_rad,config1_cg.calc_x_cg(), config1_cg.calc_z_cg())                                    # [m] z-location of the mlg
+#z_mlg=max(z_mlg)
+#
+#l_m = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
+#l_n = get_l_nw(l_m,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
+#
+#x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
+#x_nlg=min(x_nlg)
+#l_n=[x_cg[i]-x_nlg for i in range(3)]
 
 
-
-frac_min = [0,0,0]
-frac_max = [0,0,0]
-frac_min[0], frac_max[0], frac1 = config1_ground.check_equilibrium()
-frac_min[1], frac_max[1], frac2 = config2_ground.check_equilibrium()
-frac_min[2], frac_max[2], frac2 = config3_ground.check_equilibrium()
+#config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+#config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
+#config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+#
+#
+#frac = np.ones((3,2))
+#frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
+#frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
+#frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
 
 
 

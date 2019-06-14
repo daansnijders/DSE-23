@@ -183,10 +183,6 @@ tire_pressure = 430 * np.log(LCN) - 680                                         
 weight_distribution = 0.16                                                      # [-] weight percentage on nose wheel
 z_engine_clearance = z_engine - d_eng/2                                         # [m] z-location of lowest part of the engine
 
-theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
-beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
-phi_rad = np.deg2rad(phi)                                                       # [rad] tip clearance angle
-psi_rad = np.deg2rad(psi)                                                       # [rad] overturn angle
 
 P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  # [N] static loading on mw
 P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
