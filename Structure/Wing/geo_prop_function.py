@@ -341,7 +341,7 @@ def get_cross_sec_prop(chord,y_loc,span):
     Q_z = front_spar_Q_z+upper_stringer_Q_z+upper_skin_Q_z
     Q_x = front_spar_Q_x+upper_stringer_Q_x+upper_skin_Q_x
     
-    spar_height = h_front_spar
+    spar_height = h_rear_spar
     stringer_space = stringer_interval_upper
     
 #    # First moment verification by calculating it at every corner
@@ -361,8 +361,8 @@ def get_cross_sec_prop(chord,y_loc,span):
             spar_height,Q_z,stringer_space,moi_z,Q_x,min_x,max_x,E_modulus,density,cost]
 
 ##Verification
-#stuff = get_cross_sec_prop(5,1,1)
-#print(stuff)
+stuff = get_cross_sec_prop(5,1,1)
+print(stuff)
     
 """
 Get structural weight at every point of the wing
@@ -390,7 +390,8 @@ def get_wingbox_mass_cost(cross_section_lst,b_wing):
     mass = 0
     cost = 0
     for i in range(len(cross_section_lst)):
-        mass+= cross_section_lst[i,2]*cross_section_lst[i,17]*step_size
-        cost+= mass*cross_section_lst[i,18]
+        mass_i = cross_section_lst[i,2]*cross_section_lst[i,17]*step_size
+        mass += mass_i
+        cost+= mass_i*cross_section_lst[i,18]
     return [mass,cost]
     
