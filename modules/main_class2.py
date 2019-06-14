@@ -8,11 +8,11 @@ Created on Wed Jun  5 09:58:24 2019
 from modules.weight_class2.class2_weight import *
 from modules.CG.class2_CG import *
 from inputs.concept_1 import *
+from inputs.constants import *
 
 
 
-#CLASS2 WEIGHT AND CG LOCATION
-
+'CLASS 2 WEIGHT EXECUTION AND CG LOCATION ESTIMATION'
 #configuration 1 
 config1_class2     = Class2_weight(1,N_pax[0],MTOW[0],M_carried_canard_MZF[0],min(M_MZF), n_max[0],V_dive[0],M_fuel[0], max(T_req), l_f[0],d_f_inner,d_f_outer,l_cabin[0], l_h[0], S, S_c[0], b, b_c[0], S_v[0],S_h[0],Cr_t,Cr_t_c[0],lambda_2_rad,lambda_h_2_rad[0], lambda_v_2_rad[0],lambda_c_2_rad, S_fus[0])     
 
@@ -67,5 +67,8 @@ config2_cg = get_cg(x_le_MAC,config2_class2)
 config2_cg_x=config2_cg.calc_x_cg()
 config2_cg_y=config2_cg.calc_y_cg()
 config2_cg_z=config2_cg.calc_z_cg()
+
+
+
 
 

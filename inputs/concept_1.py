@@ -69,7 +69,7 @@ T_req = get_T_req(T_W, MTOW)
 
 #needed for class2 estimation
 M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
-M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
+M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]              
 M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]                                                    # [N] required thrust                          
 
 "Change this when correct length of modular part is found, implement the l_cutout here" 
@@ -88,6 +88,7 @@ e = 0.85                                                                        
 S = get_S(MTOW,W_S)                                                             # [m^2] surface area main wing
 #take canard into account
 S_c = [S[0]-S[0],S[1]-S[0],S[2]-S[0]]
+
 S = min(S)                                                                      # [m] update surface area to be the same for all config
 b = get_b(A,S)                                                                  # [m] span main wing
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad] quarter chord sweep angle main wing
