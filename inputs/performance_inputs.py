@@ -25,7 +25,9 @@ Sland=1500                  #field length in meters
 Stakeoff=2000               # field length in meters
 TOP=175*4.8824*9.81         #N/M^2
 sigma=1
-h_screen = 35 * ft_to_m         # [m] Screen height
+screen_height_to = 35 * ft_to_m
+screen_height_la = 50 * ft_to_m
+correction_factor_to = 1.15     # from cs-25
 
 Vto1 = 135  #Initial guess Vtake-off                                            # [kts]
 VL1 = 172   #Initial guess Vtake-off                                            # [kts]
