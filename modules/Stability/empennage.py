@@ -13,6 +13,7 @@ from modules.Stability.cg_weight_config1 import x_cg_min1, x_cg_max1, x_le_MAC_r
 from modules.Stability.cg_weight_loadingdiagram import x_cg_min11, x_cg_max11, weight_pass, x_cg_max22, x_cg_max33
 from modules.main_class2 import *
 
+
 V_app = 70  #estimated by RB we will get from rik (lowest speed)
 
 class empennage:
@@ -46,12 +47,16 @@ class empennage:
         self.weight = self.weight_pass[self.config][-1] * g                     # [N] MTOW config
         self.CL_c = CL_c                                                        # [-] CL canard
         self.CL_a_c  = CL_a_c                                                   # [-] CL_a canard                
-
+        
+        if (self.config == 1):
+            from modules.Stability.cg_weight_config2 import x_cg_min1canard, x_cg_max1canard, x_le_MAC_range_perccanard
+        if (self.config == 2):
+            from modules.Stability.cg_weight_config3 import x_cg_min1canard, x_cg_max1canard, x_le_MAC_range_perccanard
 
         # running class functions
         self.plot_stability_tail(False)
         self.size_canard()
-        self.plot_stability_canard(False)
+        self.plot_stability_canard(True)
         self.deflection_curve()
 
     
@@ -288,10 +293,10 @@ class empennage:
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
-            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
-            ax1.plot(x_cg_max1, x_le_MAC_range_perc)
-            ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
-            ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
+#            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
+#            ax1.plot(x_cg_max1, x_le_MAC_range_perc)
+            ax1.scatter(x_cg_min1canard, x_le_MAC_range_perccanard)
+            ax1.scatter(x_cg_max1canard, x_le_MAC_range_perccanard)
             ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
             
 #            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
@@ -328,7 +333,7 @@ class empennage:
         
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.set (ylim = [-1.5,1.0], ylabel = 'delta_e')
+        ax.set ( ylabel = 'delta_e')
         ax.plot((np.rad2deg(alpha_list)), def_curve)
         plt.gca().invert_yaxis()
 

@@ -17,8 +17,8 @@ x_le_MAC1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2]
 x_le_MAC2 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
 x_le_MAC3 = [x_le_MAC[0] + 0.1 * l_f[0], x_le_MAC[1] + 0.1 * l_f[1], x_le_MAC[2] + 0.1 * l_f[2]]
 
-x_cg_config2_range = [get_cg(x_le_MAC1,config2_class2).calc_x_cg(),get_cg(x_le_MAC2,config2_class2).calc_x_cg(),get_cg(x_le_MAC3,config2_class2).calc_x_cg()]
-x_cg_wing_config2_range = [get_cg(x_le_MAC1,config2_class2).x_cg_wing,get_cg(x_le_MAC2,config2_class2).x_cg_wing,get_cg(x_le_MAC3,config2_class2).x_cg_wing]
+x_cg_config3_range = [get_cg(x_le_MAC1,config3_class2).calc_x_cg(),get_cg(x_le_MAC2,config3_class2).calc_x_cg(),get_cg(x_le_MAC3,config3_class2).calc_x_cg()]
+x_cg_wing_config3_range = [get_cg(x_le_MAC1,config3_class2).x_cg_wing,get_cg(x_le_MAC2,config3_class2).x_cg_wing,get_cg(x_le_MAC3,config3_class2).x_cg_wing]
 
 x_le_MAC_range = [x_le_MAC1[1], x_le_MAC2[1], x_le_MAC3[1]]
 #x_le_MAC_range_perc = [x_le_MAC1[1]/l_f[1], x_le_MAC2[1]/l_f[1], x_le_MAC3[1]/l_f[1]]
@@ -26,12 +26,12 @@ x_le_MAC_range_perccanard = [x_le_MAC2[1]/l_f[1]]
 
 #config2_cg_x=config2_cg.calc_x_cg()
 
-x_cg_config2_range = [config2_cg_x - 0.1* l_f[1],config2_cg_x,config2_cg_x + 0.1* l_f[1]]
-x_cg_wing_config2_range = [config2_cg.x_cg_wing - 0.1* l_f[1], config2_cg.x_cg_wing, config2_cg.x_cg_wing + 0.1* l_f[1]]
+x_cg_config2_range = [config3_cg_x - 0.1* l_f[1],config3_cg_x,config3_cg_x + 0.1* l_f[1]]
+x_cg_wing_config2_range = [config3_cg.x_cg_wing - 0.1* l_f[1], config3_cg.x_cg_wing, config3_cg.x_cg_wing + 0.1* l_f[1]]
 
 
 #config2_load       = Loading_diagram(x_cargo[1], l_f[1], l_cabin[1], seat_pitch, N_pax[1], N_sa, config2_class2_OEW, x_cg_config2_range[0], MAC, S, b, A, Xfirst, M_payload[1], M_cargo_available[1], M_fuel[1], M_pax, M_carry_on, x_cg_wing_config2_range[0], -1, l_cutout)     
-config2_load2      = Loading_diagram(x_cargo[1], l_f[1], l_cabin[1], seat_pitch, N_pax[1], N_sa, config2_class2_OEW, x_cg_config2_range[1], MAC, S, b, A, Xfirst, M_payload[1], M_cargo_available[1], M_fuel[1], M_pax, M_carry_on, x_cg_wing_config2_range[1], 0, l_cutout)     
+config2_load2      = Loading_diagram(x_cargo[2], l_f[2], l_cabin[2], seat_pitch, N_pax[2], N_sa, config3_class2_OEW, x_cg_config3_range[1], MAC, S, b, A, Xfirst, M_payload[2], M_cargo_available[2], M_fuel[2], M_pax, M_carry_on, x_cg_wing_config3_range[1], 0, l_cutout)     
 #config2_load3      = Loading_diagram(x_cargo[1], l_f[1], l_cabin[1], seat_pitch, N_pax[1], N_sa, config2_class2_OEW, x_cg_config2_range[2], MAC, S, b, A, Xfirst, M_payload[1], M_cargo_available[1], M_fuel[1], M_pax, M_carry_on, x_cg_wing_config2_range[2], 1, l_cutout)     
 
 
