@@ -45,7 +45,7 @@ empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le
 empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V)
 
 # outputs:
-x_le_MAC        = empennage1.x_le_MAC_out                                           # [m] x-location of MAC main wing
+x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
@@ -58,6 +58,7 @@ lambda_h_le_rad = empennage1.lambda_h_le_rad                                    
 lambda_h_2_rad  = empennage1.lambda_h_2_rad                                     # [rad] half chord sweep htail
 lambda_h_4_rad  = empennage1.lambda_h_4_rad                                     # [rad] quarter chord sweep htail
 x_h             = empennage1.x_h                                                # [m] x-location of ac of the htail?
+l_h             = empennage1.l_h                                                # [m] distance between c/4 on MAC of the main wing and horizontal tail
 
 S_v             = empennage1.S_v                                                # [m^2] surface area of vtail
 A_v             = empennage1.A_v                                                # [-] aspect ratio vtail

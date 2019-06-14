@@ -867,7 +867,7 @@ class Moment:
         return(Cm0_w_sub, Cm0_w_trans, dCm_dCl_w)
         
     def Wing_moment_flaps(self):
-        
+        pass
         
 #    def Airplane_moment(self):
         
