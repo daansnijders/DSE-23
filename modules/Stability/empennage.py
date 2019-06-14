@@ -296,8 +296,6 @@ class empennage:
             x_cg_mincanard = x_cg_min3canard
             x_cg_maxcanard = x_cg_max3canard
             x_le_MAC_range_perccanard = x_le_MAC_range_perccanard3
-            
-        
         
         if plot:
             fig = plt.figure()
