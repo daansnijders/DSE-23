@@ -7,15 +7,16 @@ Created on Wed Jun 12 14:56:29 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-from inputs.concept_1 import *
+from inputs.concept_1 import x_le_MAC, MAC, l_h, S, get_le_wing, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 from inputs.constants import *
 #from modules.Stability.cg_weight_config1 import *
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
 from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
-from modules.Stability.check_ground import *
-from modules.Stability.empennage import *
-from modules.testfile_aero import *
-from modules.main_class2 import *
+from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_mlg, check_ground
+from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
+from modules.Stability.empennage import empennage
+from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
+from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
 
@@ -45,8 +46,8 @@ Vc_V      = 1.                                           #zelf                  
 
 
 # initialize class:
-empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 
 
 # outputs:
