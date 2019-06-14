@@ -150,15 +150,15 @@ if safety_check == 'yes':
     print('Saved!')
     
 
-# Opening files
-if concept==1:
-    exec(open("./output_concept1.csv").read())
-
-if concept==2:
-    exec(open("./output_concept2.csv").read())
+    # Opening files
+    if concept==1:
+        exec(open("./output_concept1.csv").read())
     
-if concept==3:
-    exec(open("./output_concept3.csv").read())
+    if concept==2:
+        exec(open("./output_concept2.csv").read())
+        
+    if concept==3:
+        exec(open("./output_concept3.csv").read())
 
 
 
