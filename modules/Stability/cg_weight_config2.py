@@ -10,45 +10,45 @@ from inputs.concept_1 import *
 from inputs.constants import *
 
 from modules.Stability.loaddiagram_detailed import *
-from modules.Stability.Check_ground import *
+from modules.Stability.check_ground import *
 from modules.main_class2 import *
 
-x_le_MAC1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
-x_le_MAC2 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
-x_le_MAC3 = [x_le_MAC[0] + 0.1 * l_f[0], x_le_MAC[1] + 0.1 * l_f[1], x_le_MAC[2] + 0.1 * l_f[2]]
+x_le_MAC1_can1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
+x_le_MAC2_can1 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
+x_le_MAC3_can1 = [x_le_MAC[0] + 0.1 * l_f[0], x_le_MAC[1] + 0.1 * l_f[1], x_le_MAC[2] + 0.1 * l_f[2]]
 
-x_cg_config2_range = [get_cg(x_le_MAC1,config2_class2).calc_x_cg(),get_cg(x_le_MAC2,config2_class2).calc_x_cg(),get_cg(x_le_MAC3,config2_class2).calc_x_cg()]
-x_cg_wing_config2_range = [get_cg(x_le_MAC1,config2_class2).x_cg_wing,get_cg(x_le_MAC2,config2_class2).x_cg_wing,get_cg(x_le_MAC3,config2_class2).x_cg_wing]
+x_cg_config2_range_can1 = [get_cg(x_le_MAC1_can1,config2_class2).calc_x_cg(),get_cg(x_le_MAC2_can1,config2_class2).calc_x_cg(),get_cg(x_le_MAC3_can1,config2_class2).calc_x_cg()]
+x_cg_wing_config2_range_can1 = [get_cg(x_le_MAC1_can1,config2_class2).x_cg_wing,get_cg(x_le_MAC2_can1,config2_class2).x_cg_wing,get_cg(x_le_MAC3_can1,config2_class2).x_cg_wing]
 
-x_le_MAC_range = [x_le_MAC1[1], x_le_MAC2[1], x_le_MAC3[1]]
+x_le_MAC_range_can1 = [x_le_MAC1_can1[1], x_le_MAC2_can1[1], x_le_MAC3_can1[1]]
 #x_le_MAC_range_perc = [x_le_MAC1[1]/l_f[1], x_le_MAC2[1]/l_f[1], x_le_MAC3[1]/l_f[1]]
-x_le_MAC_range_perccanard2 = [x_le_MAC2[1]/l_f[1]]
+x_le_MAC_range_perccanard2_can1 = [x_le_MAC2_can1[1]/l_f[1]]
 
 #config2_cg_x=config2_cg.calc_x_cg()
 
-x_cg_config2_range = [config2_cg_x - 0.1* l_f[1],config2_cg_x,config2_cg_x + 0.1* l_f[1]]
-x_cg_wing_config2_range = [config2_cg.x_cg_wing - 0.1* l_f[1], config2_cg.x_cg_wing, config2_cg.x_cg_wing + 0.1* l_f[1]]
+x_cg_config2_range_can1 = [config2_cg_x - 0.1* l_f[1],config2_cg_x,config2_cg_x + 0.1* l_f[1]]
+x_cg_wing_config2_range_can1 = [config2_cg.x_cg_wing - 0.1* l_f[1], config2_cg.x_cg_wing, config2_cg.x_cg_wing + 0.1* l_f[1]]
 
 
 #config2_load       = Loading_diagram(x_cargo[1], l_f[1], l_cabin[1], seat_pitch, N_pax[1], N_sa, config2_class2_OEW, x_cg_config2_range[0], MAC, S, b, A, Xfirst, M_payload[1], M_cargo_available[1], M_fuel[1], M_pax, M_carry_on, x_cg_wing_config2_range[0], -1, l_cutout)     
-config2_load2      = Loading_diagram(x_cargo[1], l_f[1], l_cabin[1], seat_pitch, N_pax[1], N_sa, config2_class2_OEW, x_cg_config2_range[1], MAC, S, b, A, Xfirst, M_payload[1], M_cargo_available[1], M_fuel[1], M_pax, M_carry_on, x_cg_wing_config2_range[1], 0, l_cutout)     
+config2_load2_can1      = Loading_diagram(x_cargo[1], l_f[1], l_cabin[1], seat_pitch, N_pax[1], N_sa, config2_class2_OEW, x_cg_config2_range_can1[1], MAC, S, b, A, Xfirst, M_payload[1], M_cargo_available[1], M_fuel[1], M_pax, M_carry_on, x_cg_wing_config2_range_can1[1], 0, l_cutout)     
 #config2_load3      = Loading_diagram(x_cargo[1], l_f[1], l_cabin[1], seat_pitch, N_pax[1], N_sa, config2_class2_OEW, x_cg_config2_range[2], MAC, S, b, A, Xfirst, M_payload[1], M_cargo_available[1], M_fuel[1], M_pax, M_carry_on, x_cg_wing_config2_range[2], 1, l_cutout)     
 
 
-cg1_pass = [0, 0, 0]
-cg2_pass = [0, 0, 0]
-weight_pass = [0, 0, 0]
-xcg_max = [0, 0, 0, 0, 0, 0]
-xcg_min = [0, 0, 0, 0, 0, 0]
+cg1_pass_can1 = [0, 0, 0]
+cg2_pass_can1 = [0, 0, 0]
+weight_pass_can1 = [0, 0, 0]
+xcg_max_can1 = [0, 0, 0, 0, 0, 0]
+xcg_min_can1 = [0, 0, 0, 0, 0, 0]
 #cg1_pass[0], cg2_pass[0], weight_pass[0], xcg_max[0], xcg_min[0] = config2_load.loading_diagrams_pass()
-cg1_pass[1], cg2_pass[1], weight_pass[1], xcg_max[1], xcg_min[1] = config2_load2.loading_diagrams_pass()
+cg1_pass_can1[1], cg2_pass_can1[1], weight_pass_can1[1], xcg_max_can1[1], xcg_min_can1[1] = config2_load2_can1.loading_diagrams_pass()
 #cg1_pass[2], cg2_pass[2], weight_pass[2], xcg_max[2], xcg_min[2] = config2_load3.loading_diagrams_pass()
 
-cg1_fuel = [0, 0, 0]
-cg2_fuel = [0, 0, 0]
-weight_fuel = [0, 0, 0]
+cg1_fuel_can1 = [0, 0, 0]
+cg2_fuel_can1 = [0, 0, 0]
+weight_fuel_can1 = [0, 0, 0]
 #cg1_fuel[0], cg2_fuel[0], weight_fuel[0], xcg_max[3], xcg_min[3] = config2_load.loading_diagrams_fuel()
-cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config2_load2.loading_diagrams_fuel()
+cg1_fuel_can1[1], cg2_fuel_can1[1], weight_fuel_can1[1], xcg_max_can1[4], xcg_min_can1[4] = config2_load2_can1.loading_diagrams_fuel()
 #cg1_fuel[2], cg2_fuel[2], weight_fuel[2], xcg_max[5], xcg_min[5] = config2_load3.loading_diagrams_fuel()
 
 
@@ -63,14 +63,14 @@ cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config2_load2
 #frac_min[1], frac_max[1], frac2 = config2_ground2.check_equilibrium()
 #frac_min[2], frac_max[2], frac2 = config2_ground3.check_equilibrium()
 
-x_cg_max2canard = [0]
-x_cg_min2canard = [0]
+x_cg_max2canard_can1 = [0]
+x_cg_min2canard_can1 = [0]
 
 #x_cg_max1canard[0] = max(xcg_max[0], xcg_max[3]) + 0.05*MAC
-x_cg_max2canard[0] = max(xcg_max[1], xcg_max[4]) + 0.05*MAC
+x_cg_max2canard_can1[0] = max(xcg_max_can1[1], xcg_max_can1[4]) + 0.05*MAC
 #x_cg_max1canard[2] = max(xcg_max[2], xcg_max[5]) + 0.05*MAC
 #x_cg_min1canard[0] = min(xcg_min[0], xcg_min[3]) - 0.05*MAC
-x_cg_min2canard[0] = min(xcg_min[1], xcg_min[4]) - 0.05*MAC
+x_cg_min2canard_can1[0] = min(xcg_min_can1[1], xcg_min_can1[4]) - 0.05*MAC
 #x_cg_min1canard[2] = min(xcg_min[2], xcg_min[5]) - 0.05*MAC
 
 #print ("The most aft CG position from the nose for configuration 1 during flight is: ", max(xcg_max[0], xcg_max[3]))
