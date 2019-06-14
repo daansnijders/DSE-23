@@ -13,10 +13,8 @@ from modules.Stability.cg_weight_config1 import x_cg_min1, x_cg_max1, x_le_MAC_r
 from modules.Stability.cg_weight_loadingdiagram import x_cg_min11, x_cg_max11, weight_pass, x_cg_max22, x_cg_max33
 from modules.main_class2 import *
 
-V_app = 70  #estimated by RB we will get from rik (lowest speed)
-
 class empennage:
-    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V):   
+    def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical):   
         self.config = config - 1                                                # [-] configuration selection
         self.x_ac=x_ac                                                          # [m] x-loaction of the main wing ac
         self.CL_a_h = CL_a_h                                                    # [-] CL_alpha_h
@@ -39,6 +37,7 @@ class empennage:
         self.CN_c_a = CN_c_a                                                    # [-] C_N_c_alpha canard
         self.CN_h_def = CN_h_def                                                # [-] C_N_h_de elevator deflection
         self.Vc_V = Vc_V                                                        # [-] V_c/V velocity factors
+        self.V_critical = V_critical                                            # [m/s] most critical speed wrt lateral control
         
         self.weight_pass = weight_pass                                          # [kg] mass increase per passenger
         self.additional_mass = weight_pass[self.config][-1] - weight_pass[0][-1] # [kg] mass difference between config 1 and 2/3
@@ -49,7 +48,7 @@ class empennage:
 
 
         # running class functions
-        self.plot_stability_tail(False)
+        self.plot_stability_tail(True)
         self.size_canard()
         self.plot_stability_canard(False)
         self.deflection_curve()
@@ -212,9 +211,9 @@ class empennage:
         self.l_v = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
 
         C_y_max = 0.836                                                         # [-] maximum airfoil lift coefficient
-        Y_v_max = C_y_max * 0.5*rho_0*V_app**2 * self.S_v                       # [N] force exerted by the vertical tail
+        Y_v_max = C_y_max * 0.5*rho_0*self.V_critical**2 * self.S_v                       # [N] force exerted by the vertical tail
         Y_v_req = N_e/self.l_v                                                  # [N] force required by the vertical tail
-        C_y_req = Y_v_req/(0.5*rho_0*V_app**2*self.S_v)                         # [-] lift coefficient required vtail
+        C_y_req = Y_v_req/(0.5*rho_0*self.V_critical**2*self.S_v)                         # [-] lift coefficient required vtail
         
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
@@ -310,6 +309,15 @@ class empennage:
     
     
     def deflection_curve(self, plot = False):
+        C_l_C_l_theory = 1
+        etah = 0.9
+        K_b = 0.95
+        self.CN_h_def = (K_b * C_l_C_l_theory * 4.4 * (0.6/self.CN_h_a)*1.08) * (etah * self.Sh_S * self.CN_h_a)
+        
+        
+        
+        
+        
         if self.config ==1:
             config_cg = x_cg_max22
             x_cg_wing = config2_cg.x_cg_wing
@@ -331,14 +339,3 @@ class empennage:
         ax.set (ylim = [-1.5,1.0], ylabel = 'delta_e')
         ax.plot((np.rad2deg(alpha_list)), def_curve)
         plt.gca().invert_yaxis()
-
-
-    
-#e2 = empennage(1, (11.78+0.25*3.8), 3.82, 4.90, 0.3835, 21.72, 16., 93.5, 3.8, 1., 11.78, -0.3, 1.6, x_cg_max, -0.5838, )
-    
-    
-    
-    
-    
-    
-

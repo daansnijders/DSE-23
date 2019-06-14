@@ -155,8 +155,8 @@ cl_des_airfoil = 0.651          #CL at zero angle of attack from JAVAfoil (RE = 
 config1_Moment = Moment(S,A,rho,rho_0,l_f[0],V_cruise,M_cruise,V_TO[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger1, x_ref, cl_des_airfoil)
 cm_des_airfoil1, dcm_dcl_airfoil1 = config1_Moment.Airfoil_moment()
 delta_cm_flap1, delta_cm_krueger1 = config1_Moment.Airfoil_moment_flaps(cm_des_airfoil1)
-print(cm_des_airfoil1, dcm_dcl_airfoil1)
-print(delta_cm_flap1, delta_cm_krueger1)
+#print(cm_des_airfoil1, dcm_dcl_airfoil1)
+#print(delta_cm_flap1, delta_cm_krueger1)
 
 #Configuration 2
 config2_Moment = Moment(S,A,rho,rho_0,l_f[1],V_cruise,M_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger2, x_ref, cl_des_airfoil)

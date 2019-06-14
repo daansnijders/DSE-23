@@ -500,7 +500,7 @@ class Drag:
         ft_to_m=0.3048
         l_f_feet = self.l_f / ft_to_m        
         l_k = l_f_feet / k
-        print (l_k)
+#        print (l_k)
         #From this, the cut-off Reynolds number follows
         Re_cutoff = 10**9 
         """ From this, it follows that there is no extra drag due to surface roughness """
@@ -567,7 +567,7 @@ class Lift:
         c_prime = 1.20      #1.20*c
 
         delta_cl_flap = eta1 * cldf1 * df1_land * c_a_prime + eta2 * etat * cldf2 * df2_land * (1 + (c_prime-c_a_prime))
-        print (delta_cl_flap) 
+#        print (delta_cl_flap) 
         """
         #Lift increase due to Fowler flap
         c_f = 0.25
