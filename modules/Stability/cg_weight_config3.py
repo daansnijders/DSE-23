@@ -41,14 +41,14 @@ weight_pass = [0, 0, 0]
 xcg_max = [0, 0, 0, 0, 0, 0]
 xcg_min = [0, 0, 0, 0, 0, 0]
 #cg1_pass[0], cg2_pass[0], weight_pass[0], xcg_max[0], xcg_min[0] = config2_load.loading_diagrams_pass()
-cg1_pass[1], cg2_pass[1], weight_pass[1], xcg_max[1], xcg_min[1] = config2_load2.loading_diagrams_pass(True)
+cg1_pass[1], cg2_pass[1], weight_pass[1], xcg_max[1], xcg_min[1] = config2_load2.loading_diagrams_pass()
 #cg1_pass[2], cg2_pass[2], weight_pass[2], xcg_max[2], xcg_min[2] = config2_load3.loading_diagrams_pass()
 
 cg1_fuel = [0, 0, 0]
 cg2_fuel = [0, 0, 0]
 weight_fuel = [0, 0, 0]
 #cg1_fuel[0], cg2_fuel[0], weight_fuel[0], xcg_max[3], xcg_min[3] = config2_load.loading_diagrams_fuel()
-cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config2_load2.loading_diagrams_fuel(True)
+cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config2_load2.loading_diagrams_fuel()
 #cg1_fuel[2], cg2_fuel[2], weight_fuel[2], xcg_max[5], xcg_min[5] = config2_load3.loading_diagrams_fuel()
 
 
