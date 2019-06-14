@@ -9,11 +9,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
 from inputs.concept_1 import *
-from modules.Stability.cg_weight_config1 import x_cg_min1, x_cg_max1, x_le_MAC_range_perc, x_le_MAC_range
+from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
 from modules.Stability.cg_weight_loadingdiagram import x_cg_min11, x_cg_max11, weight_pass, x_cg_max22, x_cg_max33
 from modules.main_class2 import *
-from modules.Stability.cg_weight_config2 import x_cg_min2canard, x_cg_max2canard, x_le_MAC_range_perccanard2
-from modules.Stability.cg_weight_config3 import x_cg_min3canard, x_cg_max3canard, x_le_MAC_range_perccanard3
+from modules.Stability.cg_weight_config2 import x_cg_min2canard_can1, x_cg_max2canard_can1, x_le_MAC_range_perccanard2_can1
+from modules.Stability.cg_weight_config3 import x_cg_min3canard_can2, x_cg_max3canard_can2, x_le_MAC_range_perccanard3_can2
 
 
 V_app = 70  #estimated by RB we will get from rik (lowest speed)
@@ -85,7 +85,7 @@ class empennage:
         ff = self.CL_ah / (self.CL_h*self.l_h*(self.Vh_V)**2)
         gg = (self.c*self.Cm_ac-self.CL_ah*self.x_ac)/(self.CL_h*self.l_h*(self.Vh_V)**2)
         
-        self.l = np.arange(x_le_MAC_range[0], (x_le_MAC_range[2]+self.c+0.01), 0.01)
+        self.l = np.arange(x_le_MAC_range_emp[0], (x_le_MAC_range_emp[2]+self.c+0.01), 0.01)
         self.Sh_S1 = [] #stability xnp
         self.Sh_S2 = [] #stability xcg
         self.Sh_C1 = [] #controlability xac - Cmac/CL_ah
@@ -105,8 +105,8 @@ class empennage:
             b = point1[1] - dydx * point1[0]
             return lambda x: dydx * x + b
         
-        f_min = interpolate1([x_cg_min1[0],x_le_MAC_range_perc[0]],[x_cg_min1[1],x_le_MAC_range_perc[1]])
-        f_max = interpolate1([x_cg_max1[0],x_le_MAC_range_perc[0]],[x_cg_max1[1],x_le_MAC_range_perc[1]])
+        f_min = interpolate1([x_cg_min1_emp[0],x_le_MAC_range_perc_emp[0]],[x_cg_min1_emp[1],x_le_MAC_range_perc_emp[1]])
+        f_max = interpolate1([x_cg_max1_emp[0],x_le_MAC_range_perc_emp[0]],[x_cg_max1_emp[1],x_le_MAC_range_perc_emp[1]])
         
         f_S2 = interpolate2([self.l[0],self.Sh_S2[0]],[self.l[-1],self.Sh_S2[-1]])
         f_C1 = interpolate2([self.l[0],self.Sh_C1[0]],[self.l[-1],self.Sh_C1[-1]])
@@ -117,9 +117,9 @@ class empennage:
         while (abs(diff_before) >= abs(diff_after) and abs(f_C1(f_min(y)) - f_S2(f_max(y))) > 0.000001) or abs(diff_before) > 0.1:
             diff_before = f_S2(f_max(y))-f_C1(f_min(y))
             y += 0.00001            
-            if f_min(y) > x_cg_min1[1]:
-                f_min = interpolate1([x_cg_min1[1],x_le_MAC_range_perc[1]],[x_cg_min1[2],x_le_MAC_range_perc[2]])
-                f_max = interpolate1([x_cg_max1[1],x_le_MAC_range_perc[1]],[x_cg_max1[2],x_le_MAC_range_perc[2]])
+            if f_min(y) > x_cg_min1_emp[1]:
+                f_min = interpolate1([x_cg_min1_emp[1],x_le_MAC_range_perc_emp[1]],[x_cg_min1_emp[2],x_le_MAC_range_perc_emp[2]])
+                f_max = interpolate1([x_cg_max1_emp[1],x_le_MAC_range_perc_emp[1]],[x_cg_max1_emp[2],x_le_MAC_range_perc_emp[2]])
             diff_after = f_S2(f_max(y))-f_C1(f_min(y))
 
         self.Sh_S = f_C1(f_min(y))
@@ -130,10 +130,10 @@ class empennage:
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
-            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
-            ax1.plot(x_cg_max1, x_le_MAC_range_perc)
-            ax1.scatter(x_cg_min1, x_le_MAC_range_perc)
-            ax1.scatter(x_cg_max1, x_le_MAC_range_perc)
+            ax1.plot(x_cg_min1_emp, x_le_MAC_range_perc_emp)
+            ax1.plot(x_cg_max1_emp, x_le_MAC_range_perc_emp)
+            ax1.scatter(x_cg_min1_emp, x_le_MAC_range_perc_emp)
+            ax1.scatter(x_cg_max1_emp, x_le_MAC_range_perc_emp)
             ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
             
             ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
@@ -288,14 +288,14 @@ class empennage:
             self.Sc_C1.append(ee*self.l[i]+ee*ff)
         
         if self.config == 1:
-            x_cg_mincanard = x_cg_min2canard
-            x_cg_maxcanard = x_cg_max2canard
-            x_le_MAC_range_perccanard = x_le_MAC_range_perccanard2
+            x_cg_mincanard = x_cg_min2canard_can1
+            x_cg_maxcanard = x_cg_max2canard_can1
+            x_le_MAC_range_perccanard = x_le_MAC_range_perccanard2_can1
 
         if self.config == 2:
-            x_cg_mincanard = x_cg_min3canard
-            x_cg_maxcanard = x_cg_max3canard
-            x_le_MAC_range_perccanard = x_le_MAC_range_perccanard3
+            x_cg_mincanard = x_cg_min3canard_can2
+            x_cg_maxcanard = x_cg_max3canard_can2
+            x_le_MAC_range_perccanard = x_le_MAC_range_perccanard3_can2
         
         if plot:
             fig = plt.figure()
@@ -341,6 +341,7 @@ class empennage:
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.set ( ylabel = 'delta_e')
+        ax.set ( xlabel = 'angle of attack [deg]')
         ax.plot((np.rad2deg(alpha_list)), def_curve)
         plt.gca().invert_yaxis()
 
