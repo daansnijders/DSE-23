@@ -341,6 +341,7 @@ class empennage:
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.set ( ylabel = 'delta_e')
+        ax.set ( xlabel = 'angle of attack [deg]')
         ax.plot((np.rad2deg(alpha_list)), def_curve)
         plt.gca().invert_yaxis()
 
