@@ -5,8 +5,7 @@ Created on Thu Jun  6 16:41:25 2019
 @author: Lisa
 """
 from modules.sustainability.noise_defs import *
-r_observer=120
-theta_observer=radians(90)
+
 phi_observer=radians(1)
 flap_deflection=np.radians(40)
 
