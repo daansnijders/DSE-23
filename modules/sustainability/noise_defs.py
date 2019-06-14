@@ -233,8 +233,8 @@ def get_overall_sound_level_general(p_e_squared,freq_delta,centrefreq,r):
     
     
     plt.figure()
-    plt.plot(centrefreq,PBL_absor,'-o',label=' PBL')
-    plt.plot(centrefreq,PBL_a,'-o',label='PBL-A')
+    plt.plot(centrefreq,PBL_absor,'-o',label=' PBL absoption')
+    plt.plot(centrefreq,PBL,'-o',label='PBL')
     plt.xlabel('frequency [Hz]')
     plt.ylabel('1/1 octave PBL [dB(A)]')
     plt.xscale('log')
@@ -259,7 +259,7 @@ def plot_pbl_vs_freq(p_e_squared,centrefreq,freq_delta):
     PBL         =[SPL[i]+10*log10(freq_delta[i]) for i in range(len(centrefreq))]
     delta_L_A   = [A_weighting_correction(centrefreq[i]) for i in range(len(centrefreq))]
     PBL_a = [A_weighted_sound_level(centrefreq,delta_L_A[i],PBL[i])for i in range(len(centrefreq))]
-    print(delta_L_A)
+    
     
     
 
