@@ -62,11 +62,11 @@ def get_constants_landinggear(N_mw,N_nw,D_mlg,D_nlg):
     return G_mlg, G_nlg, K_mlg,K_nlg,K_strut,a_lg
 
 def get_octave_frequency_bands():
-    number_of_bands=43
+    number_of_bands=14
     bandnumbers=list(range(1,number_of_bands+1))
-    centrefreq=[10**(bandnumbers[i]/10) for i in range(len(bandnumbers))]
-    lowerfreq=[2**(-1/6)*centrefreq[i] for i in range(len(bandnumbers))]
-    upperfreq=[2**(1/6)*centrefreq[i] for i in range(len(bandnumbers))]
+    centrefreq=[10**(3*bandnumbers[i]/10) for i in range(len(bandnumbers))]
+    lowerfreq=[2**(-0.5)*centrefreq[i] for i in range(len(bandnumbers))]
+    upperfreq=[2**(0.5)*centrefreq[i] for i in range(len(bandnumbers))]
     freq_delta=[upperfreq[i]-lowerfreq[i] for i in range(len(bandnumbers))]
     return centrefreq,freq_delta
 
@@ -195,7 +195,10 @@ def correction_for_thirdbandwidth(SPL,freq_delta):
     SPL_bandwidth=SPL+10*log10(freq_delta)
     return SPL_bandwidth
 
-
+def atmospheric_absorption(SPL_bandwidth,r,centrefreq):
+    absorp_coeff=[0,0,0,0,0,0.122,0.440,1.31,2.73,4.67,9.9,29.7,106,364]
+    SPL_bandwidth=[SPL_bandwidth[i]-absorp_coeff[i]*r/1000  for i in range(len(centrefreq))]
+    return SPL_bandwidth
 
 
 
@@ -218,11 +221,13 @@ def A_weighted_overall_sound_level(centrefreq,L_A_perfreq):
 
 
 'perform all in one'
-def get_overall_sound_level_general(p_e_squared,freq_delta,centrefreq):
+def get_overall_sound_level_general(p_e_squared,freq_delta,centrefreq,r):
     SPL         =[get_sound_pressure_level(p_e_squared[i]) for i in range(len(centrefreq))]
-    PBL         =[SPL[i]+10*log10(freq_delta[i]) for i in range(len(centrefreq))]
+    PBL         =[correction_for_thirdbandwidth(SPL[i],freq_delta[i]) for i in range(len(centrefreq))]
+    PBL_absor         = atmospheric_absorption(PBL,r,centrefreq)
+    print(PBL_absor)
     delta_L_A   = [A_weighting_correction(centrefreq[i]) for i in range(len(centrefreq))]
-    PBL_a = [A_weighted_sound_level(centrefreq,delta_L_A[i],PBL[i])for i in range(len(centrefreq))]
+    PBL_a = [A_weighted_sound_level(centrefreq,delta_L_A[i],PBL_absor[i])for i in range(len(centrefreq))]
     
     OSPL_A      =A_weighted_overall_sound_level(centrefreq,PBL_a)
     
@@ -326,23 +331,23 @@ def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap
     pe_2_strut_nose= [get_effective_pressure_strut(f,rho_0,a_sl,M,r_observer,theta_observer,phi_observer,K_strut,L_strut_nlg,a_lg,G_nlg)for f in centrefreq]
 
 
-    OSPL_dBA_flap=get_overall_sound_level_general(pe_2_flap,freq_delta,centrefreq)
-    OSPL_dBA_slat=get_overall_sound_level_general(pe_2_slat,freq_delta,centrefreq)
-    OSPL_dBA_wing=get_overall_sound_level_general(pe_2_wing,freq_delta,centrefreq)
-    OSPL_dBA_mlg=get_overall_sound_level_general(pe_2_mlg,freq_delta,centrefreq)
-    OSPL_dBA_nlg=get_overall_sound_level_general(pe_2_nlg,freq_delta,centrefreq)
+    OSPL_dBA_flap=get_overall_sound_level_general(pe_2_flap,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_slat=get_overall_sound_level_general(pe_2_slat,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_wing=get_overall_sound_level_general(pe_2_wing,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_mlg=get_overall_sound_level_general(pe_2_mlg,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_nlg=get_overall_sound_level_general(pe_2_nlg,freq_delta,centrefreq,r_observer)
 
     if phi==0:
         OSPL_dBA_mlg_strut=0
         OSPL_dBA_nlg_strut=0
     else:
-        OSPL_dBA_mlg_strut=get_overall_sound_level_general(pe_2_strut_main,freq_delta,centrefreq)
-        OSPL_dBA_nlg_strut=get_overall_sound_level_general(pe_2_strut_nose,freq_delta,centrefreq)
+        OSPL_dBA_mlg_strut=get_overall_sound_level_general(pe_2_strut_main,freq_delta,centrefreq,r_observer)
+        OSPL_dBA_nlg_strut=get_overall_sound_level_general(pe_2_strut_nose,freq_delta,centrefreq,r_observer)
 
 
     pe_tot=[pe_2_flap [i]+pe_2_slat[i] + pe_2_wing[i] +pe_2_mlg[i]+pe_2_nlg[i] +pe_2_strut_main[i]+ pe_2_strut_nose[i]for i in range(len(centrefreq))] 
 
-    OSPL_dBA_tot=get_overall_sound_level_general(pe_tot,freq_delta,centrefreq)
+    OSPL_dBA_tot=get_overall_sound_level_general(pe_tot,freq_delta,centrefreq,r_observer)
 
 
 
