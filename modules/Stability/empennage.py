@@ -10,11 +10,10 @@ import matplotlib.pyplot as plt
 from inputs.constants import *
 from inputs.concept_1 import *
 from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
-from modules.Stability.cg_weight_loadingdiagram import x_cg_min11, x_cg_max11, weight_pass, x_cg_max22, x_cg_max33
+from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.main_class2 import *
 from modules.Stability.cg_weight_config2 import x_cg_min2canard_can1, x_cg_max2canard_can1, x_le_MAC_range_perccanard2_can1
 from modules.Stability.cg_weight_config3 import x_cg_min3canard_can2, x_cg_max3canard_can2, x_le_MAC_range_perccanard3_can2
-
 
 V_app = 70  #estimated by RB we will get from rik (lowest speed)
 
@@ -323,10 +322,10 @@ class empennage:
     
     def deflection_curve(self, plot = False):
         if self.config ==1:
-            config_cg = x_cg_max22
+            config_cg = x_cg_max_flight2
             x_cg_wing = config2_cg.x_cg_wing
         if self.config ==2:
-            config_cg = x_cg_max33
+            config_cg = x_cg_max_flight3
             x_cg_wing = config3_cg.x_cg_wing
             
         self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
