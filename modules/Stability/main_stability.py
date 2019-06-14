@@ -32,7 +32,7 @@ CL_ah     = CL_max_w1                                                           
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
 CL_c      = 1.3                                         #zelf                   # [-] lift coefficient canard
-CL_a_c    = CL_alpha_c2                                 #TBD                    # [-] CL_alpha_canard
+CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 a_0       = alpha_0_l                                                           # [rad] zero lift angle of attack
 i_h       = 0                                                                   # [rad] incidence angle htail
 i_c       = 0                                                                   # [rad] incidence angle canard
@@ -40,7 +40,7 @@ CN_h_a    = CL_a_h                                                              
 CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
 CN_c_a    = CL_a_c                                                              # [-] C_N_c_alpha canard
 CN_h_def  = 0.5                                         #zelf                   # [-] C_N_h_de elevator deflection
-Vc_V      = 1                                           #zelf                   # [-] V_c/V velocity factors
+Vc_V      = 1.                                           #zelf                   # [-] V_c/V velocity factors
 """====================="""
 
 
