@@ -5,7 +5,7 @@ Created on Tue May 14 17:20:01 2019
 @author: Stijn
 """
 # Loading all variables
-from modules.concept_1 import *
+from inputs.concept_1 import *
 from modules.main_class2 import *
 import csv 
 
@@ -150,15 +150,15 @@ if safety_check == 'yes':
     print('Saved!')
     
 
-# Opening files
-if concept==1:
-    exec(open("./output_concept1.csv").read())
-
-if concept==2:
-    exec(open("./output_concept2.csv").read())
+    # Opening files
+    if concept==1:
+        exec(open("./output_concept1.csv").read())
     
-if concept==3:
-    exec(open("./output_concept3.csv").read())
+    if concept==2:
+        exec(open("./output_concept2.csv").read())
+        
+    if concept==3:
+        exec(open("./output_concept3.csv").read())
 
 
 
