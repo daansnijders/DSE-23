@@ -18,8 +18,6 @@ import numpy as np
 import geo_prop_function as gpf
 import fuel_force_function as fff
 
-import sys
-sys.path.insert(0,'/Users/thong/Documents/TU Delft DSE/DSE-23')
 import inputs.concept_1 as c1
 
 """

@@ -5,10 +5,8 @@ Created on Thu Jun 13 11:59:33 2019
 @author: thong
 """
 
-import lift_surface_function as lsf
+import Structure.Wing.lift_surface_function as lsf
 import numpy as np
-import sys
-sys.path.insert(0,'/Users/thong/Documents/TU Delft DSE/DSE-23')
 import inputs.constants as c
 
 rho = c.rho_0
@@ -18,7 +16,7 @@ def wing_struc_analysis(CL_max,velocity_max,span,root_chord,tip_chord,surface_ar
     """Obtain Lift at every point of the wing"""
     lift = 0.5*rho*CL_max*surface_area*velocity_max**2
     q_lift = lift/surface_area
-    print(lift/9.81)
+
     N = 100
     step_size = span/(2*N)
     force_lst = []
@@ -81,14 +79,12 @@ def wing_struc_analysis(CL_max,velocity_max,span,root_chord,tip_chord,surface_ar
                             (height/2)**2
             moi_total = moi+moi_stringer
             stress = moment*height/(2*moi_total)
-            print(moi_total)
             
         enclosed_area = length*height
         material_area = 2*(length*t_skin+height*t_spar)+stringer_area*(top_stringer+\
                           bottom_stringer)
         fuel_area = enclosed_area-material_area
         geo_prop_lst.append([enclosed_area,material_area,fuel_area,top_stringer,bottom_stringer])
-    print("Done 2")
     geo_prop_lst = np.array(geo_prop_lst)
     
     """ Obtain mass """
@@ -100,7 +96,7 @@ def wing_struc_analysis(CL_max,velocity_max,span,root_chord,tip_chord,surface_ar
     
     return fuel_mass_available
 
-print(wing_struc_analysis(1.584,240,35.44,5.698,1.763,132.211))
+#print(wing_struc_analysis(1.584,240,35.44,5.698,1.763,132.211))
         
         
         
