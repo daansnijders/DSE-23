@@ -126,7 +126,7 @@ class empennage:
         self.x_le_MAC_l_f = y
         self.S_h = self.Sh_S * S
         self.x_le_MAC = self.x_le_MAC_l_f * l_f[0]
-
+        self.x_le_MAC_out = [self.x_le_MAC, self.x_le_MAC +l_cutout, self.x_le_MAC  + l_cutout]
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
