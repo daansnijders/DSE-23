@@ -78,3 +78,25 @@ class check_ground():
     
     
     
+def update_x_mlg(z_cg,theta_rad, beta_rad, x_cg, stroke, l_f):
+    beta_rad_correct = beta_rad- np.pi/2
+    
+    scrape = tangent(l_f,z_cg,theta_rad)
+    tip_over = tangent(x_cg,z_cg,beta_rad_correct)
+    
+    x_mlg = (tip_over[1] - scrape[1] + stroke)/(scrape[0] - (tip_over[0])) 
+    
+    return x_mlg
+
+def update_z_mlg(x_mlg,beta_rad,x_cg, z_cg):
+    beta_rad_correct = beta_rad - np.pi/2
+
+    tip_over = tangent(x_cg,z_cg,beta_rad_correct)
+    
+    
+    z_mlg = tip_over[0] * x_mlg + tip_over[1]
+    return z_mlg
+
+    
+    
+    

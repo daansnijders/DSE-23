@@ -6,6 +6,7 @@ Created on Tue May 14 09:27:30 2019
 """
 
 from math import * 
+import numpy as np
 
 #conversion
 inch_to_m=0.0254                                                                # [m/in] inches to metres
@@ -113,10 +114,15 @@ w_mlg = 15.5*inch_to_m
 LCN = 45                                                                        # [-] load classification number    
  
 #angles clearance
-theta = 15                                                                      # [deg] scrape angle
-beta = 17                                                                       # [deg] tip-back angle
+theta = 12.75                                                                   # [deg] scrape angle
+beta = 15                                                                       # [deg] tip-back angle
 phi = 5                                                                         # [deg] tip clearance angle
 psi = 55                                                                        # [deg] overturn angle
+
+theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
+beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
+phi_rad = np.deg2rad(phi)                                                       # [rad] tip clearance angle
+psi_rad = np.deg2rad(psi)                                                       # [rad] overturn angle
 
 #constants used for Class-II                     
 K_fsp = 6.55                                                                    # [lbs/gal] see page 91 from torenbeek V
