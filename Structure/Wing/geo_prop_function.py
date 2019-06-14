@@ -17,7 +17,7 @@ Parameters
 t_spar = 0.015
 
 # Skin thickness [m]
-t_skin = 0.005
+t_skin = 0.0035
 
 # Front spar location/chord [-]
 spar_front = 0.15#0.1
@@ -116,9 +116,9 @@ Obtain skin buckling stress
 """
 kc = pd.read_excel('wing_box_design.xlsx','kc_ss_c')
 
-E_skin = 71*10**9
-comp_strength_skin = 510*10**6
-skin_poisson_ratio = 0.33
+E_skin = 67.6*10**9
+comp_strength_skin = 345*10**6
+skin_poisson_ratio = 0.239
 
 def get_skin_buckling(y_loc,stringer_space, span):
     y_frac = y_loc/(span/2)
