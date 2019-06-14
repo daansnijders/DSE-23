@@ -7,10 +7,6 @@ Created on Wed Jun  5 09:58:24 2019
 
 from modules.weight_class2.class2_weight import *
 from modules.CG.class2_CG import *
-from inputs.concept_1 import *
-from inputs.constants import *
-
-
 
 'CLASS 2 WEIGHT EXECUTION AND CG LOCATION ESTIMATION'
 #configuration 1 
@@ -57,6 +53,7 @@ config3_cg_z=config3_cg.calc_z_cg()
 config2_class2     = Class2_weight(2,N_pax[1],MTOW[1],M_carried_canard_MZF[1],min(M_MZF), n_max[1],V_dive[1],M_fuel[1], max(T_req), l_f[1],d_f_inner,d_f_outer,l_cabin[1], l_h[1], S, S_c[1], b, b_c[1], S_v[1],S_h[1],Cr_t,Cr_t_c[1],lambda_2_rad,lambda_h_2_rad[1], lambda_v_2_rad[1],lambda_c_2_rad, S_fus[1])
 config2_M_structural            =config2_class2.structural_mass()
 config2_M_powerplant            =config2_class2.powerplant_mass()
+config2_M_powerplant            =config3_M_powerplant
 config2_M_fixedeq               =config3_M_fixedeq                                  #needed as the fixed equipment needs to be the same for both
    
 config2_M_winggroup             =config2_class2.get_wing_group_mass()
