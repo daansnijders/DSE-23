@@ -326,11 +326,11 @@ class empennage:
         self.Sc_S = 0.2                                                         # [-] Ratio area canard (assumed for now)
         self.S_c = self.Sc_S * self.S                                            # [m^2] Surface area of the canard
         self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
-        self.b_c = get_b(self.S_c, self.A_c)                                    # [m] span horizontal tail
-        self.Cr_c = get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length horizontal tail
-        self.Ct_c = get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length horizontal tail
-        self.z_c = 0.05 * d_f_outer                                             # [m] height of the vertical tail
-        self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)        
+        self.b_c = get_b(self.S_c, self.A_c)                                    # [m] span canard
+        self.Cr_c = get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
+        self.Ct_c = get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard
+        self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
+        self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard        
     
     def deflection_curve(self, plot = False):
         C_l_C_l_theory = 1
