@@ -9,15 +9,19 @@ import matplotlib.pyplot as plt
 
 from inputs.concept_1 import *
 from inputs.constants import *
-from modules.main_class2 import *
-from modules.Stability.cg_weight_loadingdiagram import *
 from modules.Stability.cg_weight_config1 import *
+from modules.Stability.cg_weight_loadingdiagram import *
 from modules.Stability.control_surf_func import *
+from modules.Stability.check_ground import *
 from modules.Stability.empennage import *
 from modules.testfile_aero import *
+from modules.main_class2 import *
+
 
 
 """NEED FROM OTHER FILES"""
+V_critical = 70                                                                 # [m/s] V1 speed/V_app
+etah = 0.9                                                                      # [-] eta_h of aerodynamics
 x_ac      = (x_le_MAC[0]+0.25*MAC)                                              # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
@@ -32,21 +36,23 @@ CL_a_c    = CL_alpha_c2                                                         
 a_0       = alpha_0_l                                                           # [rad] zero lift angle of attack
 i_h       = 0                                                                   # [rad] incidence angle htail
 i_c       = 0                                                                   # [rad] incidence angle canard
-CN_h_a    = 0.5                                         #zelf                   # [-] C_N_h_alpha htail
-CN_w_a    = 0.5                                         #zelf                   # [-] C_N_w_alpha main wing
-CN_c_a    = 0.5                                         #zelf                   # [-] C_N_c_alpha canard
+CN_h_a    = CL_a_h                                                              # [-] C_N_h_alpha htail
+CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
+CN_c_a    = CL_a_c                                                              # [-] C_N_c_alpha canard
 CN_h_def  = 0.5                                         #zelf                   # [-] C_N_h_de elevator deflection
-Vc_V      = 1                                                                   # [-] V_c/V velocity factors
+Vc_V      = 1                                           #zelf                   # [-] V_c/V velocity factors
 """====================="""
 
 
 # initialize class:
-empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V)
-empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V)
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage1 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+
 
 # outputs:
-x_le_MAC        = empennage1.x_le_MAC_out                                           # [m] x-location of MAC main wing
+x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
+x_le_w = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)                     # [m] x-location of le main wing with updated lemac
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
@@ -58,6 +64,7 @@ lambda_h_le_rad = empennage1.lambda_h_le_rad                                    
 lambda_h_2_rad  = empennage1.lambda_h_2_rad                                     # [rad] half chord sweep htail
 lambda_h_4_rad  = empennage1.lambda_h_4_rad                                     # [rad] quarter chord sweep htail
 x_h             = empennage1.x_h                                                # [m] x-location of ac of the htail?
+l_h             = empennage1.l_h                                                # [m] distance between c/4 on MAC of the main wing and horizontal tail
 
 S_v             = empennage1.S_v                                                # [m^2] surface area of vtail
 A_v             = empennage1.A_v                                                # [-] aspect ratio vtail
@@ -85,3 +92,20 @@ b_ail = get_b_ail(b)                                                            
 
 c_splr = get_c_splr(Cr, Ct, b)                                                  # [m] chord length spoiler
 b_splr = get_b_splr(b)                                                          # [m] span spoiler
+
+
+
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+
+
+
+frac_min = [0,0,0]
+frac_max = [0,0,0]
+frac_min[0], frac_max[0], frac1 = config1_ground.check_equilibrium()
+frac_min[1], frac_max[1], frac2 = config2_ground.check_equilibrium()
+frac_min[2], frac_max[2], frac2 = config3_ground.check_equilibrium()
+
+
+

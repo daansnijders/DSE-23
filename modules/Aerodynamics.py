@@ -892,6 +892,7 @@ class Moment:
         
         delta_Cm_w_krueger = (cmdle*cbar_c + (nref-nle)*cld)*(0.5*self.SWF_LE/self.S)*dfle + (Cm0_w_sub*(cbar_c**2 - 1)+0.75*self.C_L_w*(cbar_c*(cbar_c-1)))*(self.b_slat/self.b)
         return(delta_Cm_w_flaps, delta_Cm_w_krueger)
+        
 #    def Airplane_moment(self):
         
         
