@@ -16,7 +16,6 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
         idx = (np.abs(array - value)).argmin()
         return array[idx], idx
 
-
     """
     inputs
     """

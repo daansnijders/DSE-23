@@ -128,7 +128,7 @@ class HLD_class:
         return(SWF, b_flap, SWF_LE, b_slat)
         
 class Drag:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef, l_nacel, d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_elev, l_nacel, d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap):
         self.S              = S
         self.A              = A
         self.rho            = rho
@@ -190,7 +190,7 @@ class Drag:
         self.i_n            = i_n
         self.delta_C_L_h    = delta_C_L_h
         self.delta_C_L_c    = delta_C_L_c
-        self.S_ef           = S_ef
+        self.S_elev         = S_elev
         self.SWF            = SWF
         self.SWF_LE         = SWF_LE
         self.Delta_C_L_flap = Delta_C_L_flap 
@@ -533,7 +533,7 @@ class Drag:
         #It follows that 
         delta_C_D_P_lambda_4_0 = 0.015       #Figure 4.44
         
-        delta_C_D_trim_prof = delta_C_D_P_lambda_4_0 * cos(self.lambda_4_rad) * (self.S_ef / self.S_h)*(self.S_h / self.S)
+        delta_C_D_trim_prof = delta_C_D_P_lambda_4_0 * cos(self.lambda_4_rad) * (self.S_elev / self.S_h)*(self.S_h / self.S)
         
         C_D_trim = delta_C_D_trim_lift + delta_C_D_trim_prof
         
@@ -722,7 +722,8 @@ class Lift:
         C_L_max_w = C_L_alpha_w * (alpha_C_L_max_w - alpha_0_L_w)
         alpha_0_L_w_deg = np.rad2deg(alpha_0_L_w)
         
-        return (C_L_alpha_w, alpha_0_L_w_deg, C_L_max_w, alpha_C_L_max_w_deg)
+        C_L_w = C_L_w[1]
+        return (C_L_w, C_L_alpha_w, alpha_0_L_w_deg, C_L_max_w, alpha_C_L_max_w_deg)
 
     def Wing_lift_flaps(self, delta_C_l,C_L_alpha_w,C_l_alpha,delta_C_l_max,b_slats):
         K_b = 0.75 - 0.15           #Figure 8.51 & 8.52
@@ -853,7 +854,11 @@ class Lift:
         
         
 class Moment:
+<<<<<<< HEAD
     def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap,delta_cl_krueger, x_ref, cl_des_airfoil,l_cockpit,l_cabin,l_tail):
+=======
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap,delta_cl_krueger, x_ref, cl_des_airfoil, wing_twist, y_MAC, C_L_w, delta_CL_w,SWF_LE, b_slat):
+>>>>>>> ce3fadb706ec706f7a12f2856962d3d0ca19b68c
         self.S                  = S
         self.A                  = A
         self.rho                = rho
@@ -880,9 +885,18 @@ class Moment:
         self.delta_cl_krueger   = delta_cl_krueger
         self.x_ref              = x_ref
         self.cl_des_airfoil     = cl_des_airfoil
+<<<<<<< HEAD
         self.l_cockpit          = l_cockpit
         self.l_cabin            = l_cabin
         self.l_tail             = l_tail
+=======
+        self.wing_twist         = wing_twist
+        self.y_MAC              = y_MAC
+        self.C_L_w              = C_L_w
+        self.delta_CL_w         = delta_CL_w
+        self.SWF_LE             = SWF_LE 
+        self.b_slat             = b_slat
+>>>>>>> ce3fadb706ec706f7a12f2856962d3d0ca19b68c
         
     def Airfoil_moment(self):
         cm0_airfoil = -0.123        #Zero lift moment coefficient according to JAVAfoil
@@ -905,11 +919,42 @@ class Moment:
         delta_cm_krueger = cmdle*c_prime**2*dfle + (self.x_ref + (c_prime-1))*self.delta_cl_krueger + cm_des_airfoil*(c_prime**2 -1) + 0.75*self.cl_des_airfoil*c_prime*(c_prime-1)
         return(delta_cm_flap, delta_cm_krueger)
         
-#    def Wing_moment(self):
+    def Wing_moment(self):
+        cm0_tip = -0.123        #Zero lift moment coefficient at tip according to JAVAfoil
+        cm0_root = -0.123       #Zero lift moment coefficient at root according to JAVAfoil
+        delta_cm0_et = -0.005 + (-0.009 - -0.005)/5 * 3
+        Cm0_w_sub = ((self.A*np.cos(self.lambda_4_rad)**2)/(self.A + 2*cos(self.lambda_4_rad)))*(cm0_tip+cm0_root)/2 + delta_cm0_et*self.wing_twist
         
-         
-#    def Wing_moment_flaps(self):
+        Cm0M_Cm0 = 1.23
+        Cm0_w_trans = Cm0_w_sub*Cm0M_Cm0
         
+        nmgc = self.y_MAC/np.tan(self.lambda_le_rad)
+        nref = self.x_ref*self.MAC + nmgc
+        nac = nmgc + 0.25*self.MAC
+        dCm_dCl_w = ((nref - nac)/self.Cr)*(self.Cr/self.MAC)
+        return(Cm0_w_sub, Cm0_w_trans, dCm_dCl_w)
+        
+    def Wing_moment_flaps(self, Cm0_w_sub):
+        CL_w_flaps = self.C_L_w + self.delta_CL_w
+        beta = sqrt(1-self.M_cruise**2)
+        CL_alpha_wref = (2*pi*6)/(2 + sqrt(4+(6*beta/0.95)**2*(1+(np.tan(0)**2)/beta**2)))
+        delta_CLref_w = self.delta_cl_flap*(CL_alpha_wref/self.C_l_alpha)*1.05
+        KP = 0.9 - 0.21
+        deltaCM_deltaCL = -0.25
+        KLambda = 0.051 - 0.028
+        c_prime = 1.2
+        delta_Cm_w_flaps = (self.x_ref-0.25)*CL_w_flaps + KLambda*(self.A/1.5)*delta_CLref_w*np.tan(self.lambda_4_rad) + KP*(deltaCM_deltaCL*delta_CLref_w*c_prime**2) - KP*(0.25*self.C_L_w*(c_prime**2 - c_prime)) + KP*Cm0_w_sub*(c_prime**2-1)
+        
+        cmdle = -0.0007      #Figure 8.93
+        nmgc = self.y_MAC/np.tan(self.lambda_le_rad)
+        nref = self.x_ref*self.MAC + nmgc
+        nle = nmgc - 0.1*self.MAC
+        cld = 0.0015    #Figure 8.26
+        dfle = 60           #DEG
+        cbar_c = 1.1
+        
+        delta_Cm_w_krueger = (cmdle*cbar_c + (nref-nle)*cld)*(0.5*self.SWF_LE/self.S)*dfle + (Cm0_w_sub*(cbar_c**2 - 1)+0.75*self.C_L_w*(cbar_c*(cbar_c-1)))*(self.b_slat/self.b)
+        return(delta_Cm_w_flaps, delta_Cm_w_krueger)
         
     def Airplane_moment(self, cm0_w, x_cg_aft, x_h, x_c, C_L_0_c, C_L_0_h):
         

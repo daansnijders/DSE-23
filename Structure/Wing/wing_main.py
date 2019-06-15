@@ -18,8 +18,6 @@ import numpy as np
 import geo_prop_function as gpf
 import fuel_force_function as fff
 
-import sys
-sys.path.insert(0,'/Users/thong/Documents/TU Delft DSE/DSE-23')
 import inputs.concept_1 as c1
 
 """
@@ -111,6 +109,18 @@ check = sum(np.array(fuel_force_lst)[:,-1])/load_factor/9.81
 print(check)
 
 """
+Calculate structural weight force
+"""
+struc_force_lst = gpf.get_struc_force(cross_section_lst,load_factor,sweep_LE,wing_span,\
+                                      chord_root,chord_tip)
+ 
+"""
+Calculate total cost and mass of wing box
+"""
+mass_cost = gpf.get_wingbox_mass_cost(cross_section_lst,wing_span)
+print("Wing box mass [kg] = ", mass_cost[0])
+print("Wing box cost [USD] = ", mass_cost[1])
+"""
 Form list of external forces
 [x,y,z,Fx,Fy,Fz]
 -------------------------------------------------------------------------------
@@ -124,6 +134,7 @@ force_lst.extend(aero_force_lst)
 force_lst.extend([mlg])
 force_lst.extend([engine])
 force_lst.extend(fuel_force_lst)
+force_lst.extend(struc_force_lst)
 force_lst = np.array(force_lst)
 force_lst=force_lst[np.argsort(force_lst[:,1])]
 

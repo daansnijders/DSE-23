@@ -11,13 +11,6 @@ from math import *
 from inputs.constants import *
 from inputs.performance_inputs import *
 
-def dragcoefficient(Cfe, Swet_S):
-    CD0=Cfe*Swet_S
-    CD0_TO=CD0+d_CD0_to
-    CD0_land=CD0+d_CD0_landing
-    
-    return CD0, CD0_TO, CD0_land
-
 
 def stallspeedlanding(fieldlenghtlanding):
         V_a=(fieldlenghtlanding/0.3)**0.5*0.5144444

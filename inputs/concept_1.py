@@ -69,7 +69,7 @@ T_req = get_T_req(T_W, MTOW)
 
 #needed for class2 estimation
 M_MZF    = [MTOW[i]-M_fuel[i] for i in range(3)]
-M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
+M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]              
 M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]                                                    # [N] required thrust                          
 
 "Change this when correct length of modular part is found, implement the l_cutout here" 
@@ -88,6 +88,7 @@ e = 0.85                                                                        
 S = get_S(MTOW,W_S)                                                             # [m^2] surface area main wing
 #take canard into account
 S_c = [S[0]-S[0],S[1]-S[0],S[2]-S[0]]
+
 S = min(S)                                                                      # [m] update surface area to be the same for all config
 b = get_b(A,S)                                                                  # [m] span main wing
 lambda_4_rad = get_lambda_4_rad(M_cruise,M_x)                                   # [rad] quarter chord sweep angle main wing
@@ -182,10 +183,6 @@ tire_pressure = 430 * np.log(LCN) - 680                                         
 weight_distribution = 0.16                                                      # [-] weight percentage on nose wheel
 z_engine_clearance = z_engine - d_eng/2                                         # [m] z-location of lowest part of the engine
 
-theta_rad = np.deg2rad(theta)                                                   # [rad] scrape angle
-beta_rad = np.deg2rad(beta)                                                     # [rad] tip-back angle
-phi_rad = np.deg2rad(phi)                                                       # [rad] tip clearance angle
-psi_rad = np.deg2rad(psi)                                                       # [rad] overturn angle
 
 P_mw = get_P_mw(MTOW,N_mw,weight_distribution)                                  # [N] static loading on mw
 P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  # [N] static loading on nw
@@ -193,7 +190,7 @@ P_nw = get_P_nw(MTOW,N_nw,weight_distribution)                                  
 x_mlg = get_x_mlg(z_cg,theta_rad,beta_rad, x_cg, stroke,l_f)                    # [m] x-location of the mlg
 x_mlg[1]=min(x_mlg)+l_cutout
 x_mlg[2]=min(x_mlg)+l_cutout
-z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg)                               # [m] z-location of the mlg
+z_mlg = get_z_mlg(x_mlg,beta_rad,x_cg, z_cg)                                    # [m] z-location of the mlg
 z_mlg=max(z_mlg)
 
 

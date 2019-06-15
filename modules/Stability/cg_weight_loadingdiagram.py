@@ -5,12 +5,10 @@ Created on Mon Jun  3 12:43:09 2019
 @author: daansnijders
 """
 
-from inputs.concept_1 import *
+from inputs.concept_1 import S, b, MAC, N_pax, l_cabin, l_f, x_cargo, A, M_payload, M_cargo_available, M_fuel, l_cutout
 from inputs.constants import *
-
-from modules.Stability.loaddiagram_detailed import *
-from modules.Stability.Check_ground import *
-from modules.main_class2 import *
+from modules.Stability.loaddiagram_detailed import Loading_diagram
+from modules.main_class2 import config1_cg_x, config1_cg, config1_class2_OEW, config2_class2_OEW, config2_cg_x, config2_cg, config3_class2_OEW, config3_cg_x, config3_cg
 
 x_cg_config1_range = [config1_cg_x - 0.1* l_f[0],config1_cg_x,config1_cg_x + 0.1* l_f[0]]
 x_cg_wing_config1_range = [config1_cg.x_cg_wing - 0.1* l_f[0], config1_cg.x_cg_wing, config1_cg.x_cg_wing + 0.1* l_f[0]]
@@ -36,24 +34,14 @@ cg1_fuel[0], cg2_fuel[0], weight_fuel[0], xcg_max[3], xcg_min[3] = config1_load.
 cg1_fuel[1], cg2_fuel[1], weight_fuel[1], xcg_max[4], xcg_min[4] = config2_load.loading_diagrams_fuel()
 cg1_fuel[2], cg2_fuel[2], weight_fuel[2], xcg_max[5], xcg_min[5] = config3_load.loading_diagrams_fuel()
 
-x_cg_max11 = max(xcg_max[0], xcg_max[3]) + 0.05*MAC
-x_cg_max22 = max(xcg_max[1], xcg_max[4]) + 0.05*MAC
-x_cg_max33 = max(xcg_max[2], xcg_max[5]) + 0.05*MAC
-x_cg_min11 = min(xcg_min[0], xcg_min[3]) - 0.05*MAC
-x_cg_min22 = min(xcg_min[1], xcg_min[4]) - 0.05*MAC
-x_cg_min33 = min(xcg_min[2], xcg_min[5]) - 0.05*MAC
+x_cg_max_flight1 = max(xcg_max[0], xcg_max[3]) + 0.05*MAC
+x_cg_max_flight2 = max(xcg_max[1], xcg_max[4]) + 0.05*MAC
+x_cg_max_flight3 = max(xcg_max[2], xcg_max[5]) + 0.05*MAC
+x_cg_min_flight1 = min(xcg_min[0], xcg_min[3]) - 0.05*MAC
+x_cg_min_flight2 = min(xcg_min[1], xcg_min[4]) - 0.05*MAC
+x_cg_min_flight3 = min(xcg_min[2], xcg_min[5]) - 0.05*MAC
 
 
-#config1_ground      = Stability_check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-#config2_ground      = Stability_check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
-#config3_ground      = Stability_check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
-
-
-#frac_min = [0,0,0]
-#frac_max = [0,0,0]
-#frac_min[0], frac_max[0], frac1 = config1_ground.check_equilibrium()
-#frac_min[1], frac_max[1], frac2 = config2_ground.check_equilibrium()
-#frac_min[2], frac_max[2], frac2 = config3_ground.check_equilibrium()
 
 
 
