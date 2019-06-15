@@ -5,10 +5,10 @@ Created on Tue Jun  4 09:32:22 2019
 @author: Sybren
 """
 
-from inputs.constants import *
-from inputs.performance_inputs import *
-from inputs.concept_1 import *
-from modules.Aerodynamics import *
+import inputs.constants as const
+import inputs.performance_inputs as perf
+import inputs.concept_1 as conc1
+import modules.Aerodynamics as aero
 
 """ Yet unknown values needed to start the simulation """
 D_nlg = 0.5
@@ -34,8 +34,8 @@ delta_C_L_c = 0.25
 Delta_C_L_flap = 2.4 - 1.5          #Cl_land - Cl_clean from performanca_input
 
 """ HLD design """
-config1_HLD = HLD_class(Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer)
-SWF, b_flap, SWF_LE, b_slat = config1_HLD.HLD()
+config1_HLD = aero.HLD_class(Cl_land,Cl_clean,S,A,lambda_4_rad,taper_ratio,CL_alpha,lambda_le_rad,Cr,d_f_outer)
+SWF, b_flap, SWF_LE, b_slat = aero.config1_HLD.HLD()
 #print(SWF, b_flap, SWF_LE, b_slat)
 
 """ Drag classII estimations """
@@ -152,11 +152,7 @@ x_ref = 0.5                     #Own decision based on nothing
 cl_des_airfoil = 0.651          #CL at zero angle of attack from JAVAfoil (RE = 17*10^6, 65-615)
 
 #Configuration 1
-<<<<<<< HEAD
-config1_Moment = Moment(S,A,rho,rho_0,l_f[0],V_cruise,M_cruise,V_TO[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger1, x_ref, cl_des_airfoil, l_cockpit, l_cabin[0], l_tail)
-=======
-config1_Moment = Moment(S,A,rho,rho_0,l_f[0],V_cruise,M_cruise,V_TO[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger1, x_ref, cl_des_airfoil, wing_twist, y_MAC, C_L_w1, delta_CL_w1, SWF_LE, b_slat)
->>>>>>> ce3fadb706ec706f7a12f2856962d3d0ca19b68c
+config1_Moment = Moment(S,A,rho,rho_0,l_f[0],V_cruise,M_cruise,V_TO[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger1, x_ref, cl_des_airfoil, wing_twist, y_MAC, C_L_w1, delta_CL_w1, SWF_LE, b_slat, l_cockpit, l_cabin[0], l_tail)
 cm_des_airfoil1, dcm_dcl_airfoil1 = config1_Moment.Airfoil_moment()
 delta_cm_flap1, delta_cm_krueger1 = config1_Moment.Airfoil_moment_flaps(cm_des_airfoil1)
 Cm0_w_sub1, Cm0_w_trans1, dCm_dCl_w1 = config1_Moment.Wing_moment()
@@ -168,22 +164,14 @@ print(delta_Cm_w_flaps1, delta_Cm_w_krueger1)
 
 
 #Configuration 2
-<<<<<<< HEAD
-config2_Moment = Moment(S,A,rho,rho_0,l_f[1],V_cruise,M_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger2, x_ref, cl_des_airfoil, l_cockpit, l_cabin[0], l_tail)
-=======
-config2_Moment = Moment(S,A,rho,rho_0,l_f[1],V_cruise,M_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger2, x_ref, cl_des_airfoil, wing_twist, y_MAC, C_L_w2, delta_CL_w2, SWF_LE, b_slat)
->>>>>>> ce3fadb706ec706f7a12f2856962d3d0ca19b68c
+config2_Moment = Moment(S,A,rho,rho_0,l_f[1],V_cruise,M_cruise,V_TO[1],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger2, x_ref, cl_des_airfoil, wing_twist, y_MAC, C_L_w2, delta_CL_w2, SWF_LE, b_slat, l_cockpit, l_cabin[1], l_tail)
 cm_des_airfoil2, dcm_dcl_airfoil2 = config2_Moment.Airfoil_moment()
 delta_cm_flap2, delta_cm_krueger2 = config2_Moment.Airfoil_moment_flaps(cm_des_airfoil2)
 Cm0_w_sub2, Cm0_w_trans2, dCm_dCl_w2 = config2_Moment.Wing_moment()
 delta_Cm_w_flaps2, delta_Cm_w_krueger2 = config2_Moment.Wing_moment_flaps(Cm0_w_sub2)
 
 #Configuration 3
-<<<<<<< HEAD
-config3_Moment = Moment(S,A,rho,rho_0,l_f[2],V_cruise,M_cruise,V_TO[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger3, x_ref, cl_des_airfoil, l_cockpit, l_cabin[0], l_tail)
-=======
-config3_Moment = Moment(S,A,rho,rho_0,l_f[2],V_cruise,M_cruise,V_TO[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger3, x_ref, cl_des_airfoil, wing_twist, y_MAC, C_L_w3, delta_CL_w3, SWF_LE, b_slat)
->>>>>>> ce3fadb706ec706f7a12f2856962d3d0ca19b68c
+config3_Moment = Moment(S,A,rho,rho_0,l_f[2],V_cruise,M_cruise,V_TO[2],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger3, x_ref, cl_des_airfoil, wing_twist, y_MAC, C_L_w3, delta_CL_w3, SWF_LE, b_slat, l_cockpit, l_cabin[2], l_tail)
 cm_des_airfoil3, dcm_dcl_airfoil3 = config3_Moment.Airfoil_moment()
 delta_cm_flap3, delta_cm_krueger3 = config3_Moment.Airfoil_moment_flaps(cm_des_airfoil3)
 Cm0_w_sub3, Cm0_w_trans3, dCm_dCl_w3 = config3_Moment.Wing_moment()
