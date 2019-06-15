@@ -75,6 +75,58 @@ class HLD_class:
         
         return(SWF, b_flap, SWF_LE, b_slat)
         
+    def HLD_Fowler(self):
+        Delta_CLmax = self.Cl_land - self.Cl_clean    #[-i + self.Cl_land for i in self.Cl_clean]
+        hl = 0.65              # Location hinge line on chord
+        lambda_hl_rad = np.arctan(np.tan(self.lambda_4_rad)-(4/self.A)*(hl-1/4)*(1-self.taper_ratio)/(1+self.taper_ratio))
+        c_prime = 1 + 0.59*(1-hl)
+        Delta_cl = 1.3*(c_prime)
+        SWF = (Delta_CLmax *self.S)/(0.9*Delta_cl*np.cos(lambda_hl_rad))
+        #[(x *self.S)/(0.9*Delta_cl*np.cos(lambda_hl_rad)) for x in Delta_CLmax]
+        SWF_S = SWF/self.S
+        delta_alpha = np.deg2rad(-15) * SWF_S * np.cos(lambda_hl_rad)
+        
+        Sprime_S = 1 + SWF_S * (c_prime - 1)
+        
+        CL_alpha_flapped = Sprime_S * self.CL_alpha_clean
+        
+        HLD_clearance = 0.1     #Clearance between fuselage and the HLD's 
+        
+        """ Calculate span of the flap """
+        #x, h1, h2, and h3 are only used for calculation purposes
+        x = self.taper_ratio * self.b/2 / (1 - self.taper_ratio)
+        h2 = self.b / 2 + x
+        S_wet = 0
+        h1 = h2 - self.d_f_outer/2 - HLD_clearance
+        c_flap_start = h1/h2*self.Cr
+        i = 1
+        while S_wet <= SWF :
+            h3 = h1 - i*0.001
+            c_flap_end = h3/h2*self.Cr
+            S_wet = 2*((c_flap_start + c_flap_end) / 2 * (i*0.001))
+            i += 1
+        b_flap = h1 - h3
+        
+        HLD_clearance = 0.5
+        
+        SWF_LE = (0.1*self.S)/(0.9*0.3*self.lambda_le_rad)
+        """ Calculate span of the slat """
+        #x, h1, h2, and h3 are only used for calculation purposes
+        x = self.taper_ratio * self.b/2 / (1 - self.taper_ratio)
+        h2 = self.b / 2 + x
+        S_wet = 0
+        h1 = h2 - self.d_f_outer/2 - HLD_clearance
+        c_slat_start = h1/h2*self.Cr
+        i = 1
+        while S_wet <= SWF_LE :
+            h3 = h1 - i*0.001
+            c_slat_end = h3/h2*self.Cr
+            S_wet = 2*((c_slat_start + c_slat_end) / 2 * (i*0.001))
+            i += 1
+        b_slat = h1 - h3
+        
+        return(SWF, b_flap, SWF_LE, b_slat)
+        
 class Drag:
     def __init__(self,S,A,rho,rho_0,l_f,V_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,CLdes,CL_alpha,l_cockpit, l_cabin, l_tail,lambda_2_rad,lambda_4_rad,x_nlg,z_nlg,D_nlg,b_nlg,D_strutt_nlg,x_mlg,z_mlg,D_mlg,b_mlg,D_strutt_mlg,lambda_h_2_rad,lambda_v_2_rad, MAC_c, Cr_v, Ct_v, Cr_h, Ct_h, S_h, S_v, S_c, CL_alpha_h, de_da, i_h, alpha0L_h, A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c,S_ef, l_nacel, d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap):
         self.S              = S
@@ -171,7 +223,7 @@ class Drag:
         C_D_0_w = R_wf * R_LS * C_f_w * (1 + L_prime * (t_c) + 100 * (t_c)**4) * S_wet/self.S
         
         """ C_D_L_w """
-        r_LE = 0.687                  #Leading Edge radius
+        r_LE = 0.01753                  #Leading Edge radius
         RE_LER = self.rho * self.V_cruise * r_LE / self.mu_37
         R_par = RE_LER * 1/(tan(self.lambda_le_rad)) * sqrt(1 - (self.M*cos(self.lambda_le_rad))**2)
         R_par2 = self.A * self.taper_ratio / cos(self.lambda_le_rad) 
@@ -500,7 +552,6 @@ class Drag:
         ft_to_m=0.3048
         l_f_feet = self.l_f / ft_to_m        
         l_k = l_f_feet / k
-        print (l_k)
         #From this, the cut-off Reynolds number follows
         Re_cutoff = 10**9 
         """ From this, it follows that there is no extra drag due to surface roughness """
@@ -567,7 +618,7 @@ class Lift:
         c_prime = 1.20      #1.20*c
 
         delta_cl_flap = eta1 * cldf1 * df1_land * c_a_prime + eta2 * etat * cldf2 * df2_land * (1 + (c_prime-c_a_prime))
-        print (delta_cl_flap) 
+         
         """
         #Lift increase due to Fowler flap
         c_f = 0.25
@@ -585,13 +636,13 @@ class Lift:
         
         #Lift increase due to Krueger flaps
         cld = 0.0015    #Figure 8.26
-        df = 60         #Wild guess
+        df = 10         #Wild guess
         c_prime_k = 1.1   
         
         delta_cl_krueger = cld*df*c_prime_k
         
         #lift curve slope
-        c_prime_tot = 1.3 #c_prime and c_prime_k
+        c_prime_tot = 1.33 #c_prime and c_prime_k
         clalpha_flaps = c_prime_tot*self.C_l_alpha
         
         #Cl max increase due to TE and LE devices
@@ -602,8 +653,8 @@ class Lift:
         delta_clmax_flap = delclmax_base*k1*k2*k3
         
         cldmax = 1.2            #Figure 8.35
-        r_LE = 0.687            #Leading Edge radius
-        eta_max = 0.82          #Figure 8.36
+        r_LE = 0.01753          #Leading Edge radius http://www.pdas.com/sections6.html#s65618
+        eta_max = 0.75          #Figure 8.36
         df_rad = np.deg2rad(df) 
         
         delta_clmax_krueger = cldmax*eta_max*df_rad*c_prime_k
@@ -674,12 +725,13 @@ class Lift:
         return (C_L_alpha_w, alpha_0_L_w_deg, C_L_max_w, alpha_C_L_max_w_deg)
 
     def Wing_lift_flaps(self, delta_C_l,C_L_alpha_w,C_l_alpha,delta_C_l_max,b_slats):
-        K_b = 0.85 - 0.36           #Figure 8.51 & 8.52
+        K_b = 0.75 - 0.15           #Figure 8.51 & 8.52
         alpha_delta_CL_Cl = 1.03    #Figure 8.53
         delta_C_L_w = K_b * (delta_C_l) * (C_L_alpha_w / C_l_alpha) * alpha_delta_CL_Cl
+        
         c_prime = 1.20      #Based on airfoil lift
         
-        delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime - 1)* self.SWF/self.S )
+        delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime - 1) * self.SWF/self.S )
         
         K_delta = (1 - 0.08*(cos(self.lambda_4_rad))**2)*(cos(self.lambda_4_rad))**(0.75)   #Compare to Figure 8.55
         delta_C_L_max_w_TE = delta_C_l_max * self.SWF / self.S * K_delta
@@ -688,7 +740,7 @@ class Lift:
         b_LE_e = b_slats / (self.b / 2)                 #Figure 8.57
         
         delta_C_L_max_w_LE = 7.11 * c_f_c * (b_LE_e)**2 * (cos(self.lambda_4_rad))**2
-        
+                
         delta_C_L_max_w = delta_C_L_max_w_LE + delta_C_L_max_w_TE
         
         return (delta_C_L_w, delta_C_L_alpha_w, delta_C_L_max_w)
@@ -725,12 +777,12 @@ class Lift:
         return(CL_alpha_h, CL_alpha_c, CL_alpha, alpha_0_L, CL_max, de_da, de_da_c, alpha_CL_max)
 
     def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c, delta_CL_alpha_w, de_da, delta_CL_max_w): 
-        Kcw = 1
+        Kcw = 0.95
         etah = 0.9      #Source internet
         etac = 1.0
-        delta_ef = np.deg2rad(18.5*delta_CL_w*self.b)/(self.A*self.b_flap)
+        delta_ef = np.deg2rad(18.5*delta_CL_w*self.b)/(self.A*2*self.b_flap)
         delta_CL = Kcw*delta_CL_w - CL_alpha_h*etah*(self.S_h/self.S)*delta_ef
-        
+                
         Kwf = 1 + 0.025*(self.d_f_outer/self.b) - 0.25*(self.d_f_outer/self.b)**2
         de_da_c = 0.15  #Figure 8.67
         
@@ -738,6 +790,7 @@ class Lift:
         
         delta_alpha_wc = np.deg2rad(3) 
         delta_CL_max = Kcw*delta_CL_max_w - delta_CL_alpha_w*delta_alpha_wc + (self.S_h/self.S)*CL_alpha_h*((1-de_da)+self.i_h - delta_ef)
+                
         return(delta_CL, delta_CL_alpha, delta_CL_max)
         
     def CL_alpha_plot(self, CL_alpha, alpha_0_L, CL_max, alpha_CL_max, delta_CL, delta_CL_alpha, delta_CL_max):
@@ -800,7 +853,7 @@ class Lift:
         
         
 class Moment:
-    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap,delta_cl_krueger, x_ref, cl_des_airfoil):
+    def __init__(self,S,A,rho,rho_0,l_f,V_cruise,M_cruise,V_TO,mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad, t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap,delta_cl_krueger, x_ref, cl_des_airfoil,l_cockpit,l_cabin,l_tail):
         self.S                  = S
         self.A                  = A
         self.rho                = rho
@@ -827,6 +880,9 @@ class Moment:
         self.delta_cl_krueger   = delta_cl_krueger
         self.x_ref              = x_ref
         self.cl_des_airfoil     = cl_des_airfoil
+        self.l_cockpit          = l_cockpit
+        self.l_cabin            = l_cabin
+        self.l_tail             = l_tail
         
     def Airfoil_moment(self):
         cm0_airfoil = -0.123        #Zero lift moment coefficient according to JAVAfoil
@@ -855,7 +911,43 @@ class Moment:
 #    def Wing_moment_flaps(self):
         
         
-#    def Airplane_moment(self):
+    def Airplane_moment(self, cm0_w, x_cg_aft, x_h, x_c, C_L_0_c, C_L_0_h):
+        
+        if self.l_f < 33:
+            k1_k2 = 0.91        #Figure 8.111
+            delta_x_i = l_f / 13
+            w_f = [(d_f_outer * (0.5*delta_x_i / l_cockpit)),d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,(d_f_outer * (2.5*delta_x_i / l_tail)),(d_f_outer * (1.5*delta_x_i / l_tail)),(d_f_outer * (0.5*delta_x_i / l_tail))]
+        
+        elif self.l_f > 33:
+            k1_k2 = 0.925       #Figure 8.111
+            delta_x_i = l_f / 13
+            w_f = [(d_f_outer * (0.5*delta_x_i / l_cockpit)),d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,d_f_outer,(d_f_outer * (2.5*delta_x_i / l_tail)),(d_f_outer * (1.5*delta_x_i / l_tail)),(d_f_outer * (0.5*delta_x_i / l_tail))]
+        
+        i_cl_f = [0,0,0,0,0,0,0,0,0,0,np.deg2rad(-10),np.deg2rad(-10),np.deg2rad(-10)]     #wild guess
+        c_bar = (self.b / self.A)
+        cm0_f = (k1_k2 / (36.5 * self.S * c_bar))
+        for i in range(13):
+            cm0_f += w_f[i]**2 * (self.i_w + self.alpha_0_L_w + i_cl_f[i]) * delta_x_i
+            
+        cm0_M0  = -0.135        #Zero lift moment coefficient according to JAVAfoil
+        cm0_M75 = -0.123        #Zero lift moment coefficient according to JAVAfoil
+        cm0_wf = (cm0_w + cm0_f) * (cm0_M75 / cm0_M0)
+        
+        x_ref = x_cg_aft
+        x_ac_h = x_h - x_ref
+        x_ac_c = x_ref - x_c
+        
+        
+        cm0_c = (x_ac_c + self.x_ref / c_bar) * C_L_0_c
+        cm0_h = (x_ac_h - self.x_ref / c_bar) * C_L_0_h
+        
+        cm0_airplane = cm0_wf + cm0_c - cm0_h
+        
+        """ Determine dC_m / dC_L """
+        
+        x_ac_A = 1
+        
+        return(cm0_airplane)
         
         
 #    def Airplane_moment_flaps(self):
