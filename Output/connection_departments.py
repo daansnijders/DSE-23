@@ -5,9 +5,12 @@ from inputs.concept_1 import *
 
 'department modules'
 from modules.Aerodynamics import *
+
 import modules.sustainability.greenhousegasemissions as gasemissions
-from modules.performance.class2_performance import *
 import modules.sustainability.noise_defs as noise
+
+from modules.performance.class2_performance import *
+
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
 """
 AERODYNAMICS
@@ -402,9 +405,9 @@ V_approach=64
 
 r1,r2,r3,theta_1,theta_2,theta_3=noise.simulate_flight_path(V_approach)
 
-OSPL_dBA_tot_straight=noise.EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-OSPL_dBA_tot_up=noise.EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_straight=noise.EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection,b_slat )
+OSPL_dBA_tot_up=noise.EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection,b_slat )
+OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection, b_slat )
 
 
 

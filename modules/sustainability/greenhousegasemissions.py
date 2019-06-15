@@ -26,7 +26,7 @@ Dp_Foo_NOx_character=39.8       #charachteristic value
 NOx_n_test=3
 NOx_n_engines_tested=3
 
-NOx_total_mass=4125 #[g], for the reference take-off and landing cycle (trivial)
+NOx_total_mass=4125 #[g], for the reference take-off and landing cycle 
 fuel_burnt_ref= 299   #[kg]
 
 pressure_ratio=38.67   #ratio of the end of the combustor and the beginning of the combustor (at ISA and take-off conditions)
@@ -54,7 +54,9 @@ class greenhousegas_emissions(object):
         
     def get_CO2_per_passenger_per_km(self):
         print(self.performance.fuel_mass_nominal)
-        return self.performance.fuel_mass_nominal/c1.N_pax[self.configuration]/c1.R[self.configuration]
+        self.fuel_per_pax=self.performance.fuel_mass_nominal/c1.N_pax[self.configuration]/c1.R[self.configuration]*1000
+        self.CO2_reduction=(0.021-self.fuel_per_pax)/0.021*100
+        return self.fuel_per_pax, self.CO2_reduction
     
     def get_CO2_emissions(self):
         return 3.15*self.performance.fuel_mass_nominal
@@ -75,8 +77,7 @@ class greenhousegas_emissions(object):
 #def get_NOx_reduction_CAEP(Dp_Foo_NOx_caep,Dp_Foo_flight):  #should come to 45%
 #    return (Dp_Foo_NOx_caep-Dp_Foo_flight)/Dp_Foo_NOx_caep*100
 #
-#def get_requirement_CO2_check(M_fuel_burnt):
-#    return (M_fuel_burnt-fuel_target_1500)/fuel_target_1500*100
+
 
 
 

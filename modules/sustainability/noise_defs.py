@@ -5,7 +5,7 @@ Created on Tue Jun  4 11:53:00 2019
 @author: Lisa
 """
 from math import *
-from inputs.concept_1 import pi, S, b, N_mw, N_nw, L_strut_mlg, L_strut_nlg
+from inputs.concept_1 import S, b, N_mw, N_nw, L_strut_mlg, L_strut_nlg
 from inputs.constants import mu_sl, rho_0,a_sl,D_mlg,D_nlg
 import matplotlib.pyplot as plt
 #noise definitions
@@ -28,6 +28,8 @@ def simulate_flight_path(V_approach):
     theta_2=pi/2
     theta_3=93*pi/180
     
+    print(h_2,h_1,h_3)
+    
     return r1,r2,r3,theta_1,theta_2,theta_3
 
 def get_constants_wing(M):
@@ -37,9 +39,9 @@ def get_constants_wing(M):
     a_wing=5
     return G_wing,L_wing,K_wing,a_wing
 
-def get_constants_slats(M):
-    G_slat=0.37*S/b**2*((rho_0*M*a_sl*S)/(mu_sl*b))**-0.2
-    L_slat=G_slat*b
+def get_constants_slats(M,b_slat):
+    G_slat=0.37*S/b_slat**2*((rho_0*M*a_sl*S)/(mu_sl*b_slat))**-0.2
+    L_slat=G_slat*b_slat
     K_slat=4.464E-5 
     a_slat=5
     return G_slat,L_slat,K_slat,a_slat
@@ -62,11 +64,11 @@ def get_constants_landinggear(N_mw,N_nw,D_mlg,D_nlg):
     return G_mlg, G_nlg, K_mlg,K_nlg,K_strut,a_lg
 
 def get_octave_frequency_bands():
-    number_of_bands=14
+    number_of_bands=43
     bandnumbers=list(range(1,number_of_bands+1))
-    centrefreq=[10**(3*bandnumbers[i]/10) for i in range(len(bandnumbers))]
-    lowerfreq=[2**(-0.5)*centrefreq[i] for i in range(len(bandnumbers))]
-    upperfreq=[2**(0.5)*centrefreq[i] for i in range(len(bandnumbers))]
+    centrefreq=[10**(bandnumbers[i]/10) for i in range(len(bandnumbers))]
+    lowerfreq=[2**(-1/6)*centrefreq[i] for i in range(len(bandnumbers))]
+    upperfreq=[2**(1/6)*centrefreq[i] for i in range(len(bandnumbers))]
     freq_delta=[upperfreq[i]-lowerfreq[i] for i in range(len(bandnumbers))]
     return centrefreq,freq_delta
 
@@ -196,8 +198,11 @@ def correction_for_thirdbandwidth(SPL,freq_delta):
     return SPL_bandwidth
 
 def atmospheric_absorption(SPL_bandwidth,r,centrefreq):
-    absorp_coeff=[0,0,0,0,0,0.122,0.440,1.31,2.73,4.67,9.9,29.7,106,364]
-    SPL_bandwidth=[SPL_bandwidth[i]-absorp_coeff[i]*r/1000  for i in range(len(centrefreq))]
+    absorp_coeff=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                  0.001,0.001,0.001,0.002,0.0021,0.003,0.003,0.004,
+                  0.005,0.006,0.007,0.01,0.014,0.02,0.029,0.044,0.068,
+                  0.104,0.159,0.241,0.359,0.522]
+    SPL_bandwidth=[SPL_bandwidth[i]-absorp_coeff[i]*r  for i in range(len(centrefreq))]
     return SPL_bandwidth
 
 
@@ -233,22 +238,24 @@ def get_overall_sound_level_general(p_e_squared,freq_delta,centrefreq,r):
     
     
     plt.figure()
-    plt.plot(centrefreq,PBL_absor,'-o',label=' PBL absoption')
-    plt.plot(centrefreq,PBL,'-o',label='PBL')
+    plt.plot(centrefreq,PBL_absor,'-o',label=' PBL with atmospheric absoption')
+    plt.plot(centrefreq,PBL_a,'-o',label='PBL with a weighted level and atmos. absorption')
     plt.xlabel('frequency [Hz]')
-    plt.ylabel('1/1 octave PBL [dB(A)]')
+    plt.ylabel('1/3 octave PBL [dB(A)]')
     plt.xscale('log')
-    plt.title('1/1 octave Pressure Band Level ')
+    plt.xlim([10,10**4])
+    plt.title('1/3 octave Pressure Band Level ')
     plt.legend()
     plt.show()
-    
-    plt.figure()
-    plt.plot(centrefreq,delta_L_A)
-    plt.xlabel('frequency [Hz]')
-    plt.ylabel('$\\Delta$ L_A')
-    plt.xscale('log')
-    plt.xlim([100,10**4])
-    plt.show()
+#    
+#    plt.figure()
+#    plt.plot(centrefreq,delta_L_A,'-o')
+#    plt.xlabel('frequency [Hz]')
+#    plt.ylabel('$\\Delta$ L_A')
+#    plt.xscale('log')
+#    plt.ylim([-30,5])
+#    plt.xlim([50,10**4])
+#    plt.show()
     
     return OSPL_A
 
@@ -304,7 +311,7 @@ def doppler_effect_moving_towards(f,V_approach):
     f=f/(1-V_approach/a_sl)
     return f 
 
-def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap, b_flap,flap_deflection ):
+def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap, b_flap,flap_deflection,b_slat ):
     
     
     
@@ -320,7 +327,7 @@ def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap
     
 
     G_wing,L_wing,K_wing,a_wing=get_constants_wing(M)
-    G_slat,L_slat,K_slat,a_slat=get_constants_slats(M)
+    G_slat,L_slat,K_slat,a_slat=get_constants_slats(M,b_slat)
     G_flap,L_flap,K_flap,a_flap=get_constants_flaps(M,flap_deflection,S_flap,b_flap)
     G_mlg, G_nlg, K_mlg,K_nlg,K_strut,a_lg=get_constants_landinggear(N_mw,N_nw,D_mlg,D_nlg)
 
@@ -340,18 +347,18 @@ def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap
     pe_2_strut_nose= [get_effective_pressure_strut(f,rho_0,a_sl,M,r_observer,theta_observer,phi_observer,K_strut,L_strut_nlg,a_lg,G_nlg)for f in centrefreq]
 
 
-    OSPL_dBA_flap=get_overall_sound_level_general(pe_2_flap,freq_delta,centrefreq,r_observer)
-    OSPL_dBA_slat=get_overall_sound_level_general(pe_2_slat,freq_delta,centrefreq,r_observer)
-    OSPL_dBA_wing=get_overall_sound_level_general(pe_2_wing,freq_delta,centrefreq,r_observer)
-    OSPL_dBA_mlg=get_overall_sound_level_general(pe_2_mlg,freq_delta,centrefreq,r_observer)
-    OSPL_dBA_nlg=get_overall_sound_level_general(pe_2_nlg,freq_delta,centrefreq,r_observer)
+#    OSPL_dBA_flap=get_overall_sound_level_general(pe_2_flap,freq_delta,centrefreq,r_observer)
+#    OSPL_dBA_slat=get_overall_sound_level_general(pe_2_slat,freq_delta,centrefreq,r_observer)
+#    OSPL_dBA_wing=get_overall_sound_level_general(pe_2_wing,freq_delta,centrefreq,r_observer)
+#    OSPL_dBA_mlg=get_overall_sound_level_general(pe_2_mlg,freq_delta,centrefreq,r_observer)
+#    OSPL_dBA_nlg=get_overall_sound_level_general(pe_2_nlg,freq_delta,centrefreq,r_observer)
 
-    if phi_observer==0:
-        OSPL_dBA_mlg_strut=0
-        OSPL_dBA_nlg_strut=0
-    else:
-        OSPL_dBA_mlg_strut=get_overall_sound_level_general(pe_2_strut_main,freq_delta,centrefreq,r_observer)
-        OSPL_dBA_nlg_strut=get_overall_sound_level_general(pe_2_strut_nose,freq_delta,centrefreq,r_observer)
+#    if phi_observer==0:
+#        OSPL_dBA_mlg_strut=0
+#        OSPL_dBA_nlg_strut=0
+#    else:
+#        OSPL_dBA_mlg_strut=get_overall_sound_level_general(pe_2_strut_main,freq_delta,centrefreq,r_observer)
+#        OSPL_dBA_nlg_strut=get_overall_sound_level_general(pe_2_strut_nose,freq_delta,centrefreq,r_observer)
 
 
     pe_tot=[pe_2_flap [i]+pe_2_slat[i] + pe_2_wing[i] +pe_2_mlg[i]+pe_2_nlg[i] +pe_2_strut_main[i]+ pe_2_strut_nose[i]for i in range(len(centrefreq))] 
@@ -360,13 +367,13 @@ def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap
 
 
 
-    print('flap',OSPL_dBA_flap, 'dBA' )
-    print('slat',OSPL_dBA_slat, 'dBA'  )
-    print('wing',OSPL_dBA_wing, 'dBA'  )
-    print('mlg',OSPL_dBA_mlg , 'dBA' )
-    print('nlg',OSPL_dBA_nlg , 'dBA' )
-    print('m strut',OSPL_dBA_mlg_strut, 'dBA'  )
-    print('n strut',OSPL_dBA_nlg_strut, 'dBA' )
+#    print('flap',OSPL_dBA_flap, 'dBA' )
+#    print('slat',OSPL_dBA_slat, 'dBA'  )
+#    print('wing',OSPL_dBA_wing, 'dBA'  )
+#    print('mlg',OSPL_dBA_mlg , 'dBA' )
+#    print('nlg',OSPL_dBA_nlg , 'dBA' )
+#    print('m strut',OSPL_dBA_mlg_strut, 'dBA'  )
+#    print('n strut',OSPL_dBA_nlg_strut, 'dBA' )
 
     print('overall dBA',OSPL_dBA_tot, 'dBA' )
     
