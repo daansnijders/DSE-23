@@ -18,7 +18,7 @@ class get_cg(object):
         self.x_cg_htail,self.y_cg_htail,self.z_cg_htail=cgcomp.get_cg_hwing( c1.b_h[self.config], c1.Cr_h[self.config], c1.Ct_h[self.config], c1.lambda_h_le_rad, c1.x_le_h[self.config],c1.d_f_outer) # [m] x,y,z-location of the htail
         self.x_cg_vtail,self.y_cg_vtail,self.z_cg_vtail= cgcomp.get_cg_vwing( c1.b_v[self.config], c1.Cr_v[self.config], c1.Ct_v[self.config], c1.lambda_v_le_rad, c1.x_le_v[self.config], c1.d_f_outer) # [m] x,y,z-location of the vtail
         self.x_cg_engines,self.y_cg_engines,self.z_cg_engines=cgcomp.get_cg_engines( c1.x_cg_eng[self.config]) # [m] x,y,z-location of the engines
-        self.x_cg_canard,self.y_cg_canard,self.z_cg_canard=cgcomp.get_cg_canard( c1.Cr_c[self.config], c1.t_c_c[self.config], c1.l_cutout, c1.l_cockpit) # [m] x,y,z-location of the canard
+        self.x_cg_canard,self.y_cg_canard,self.z_cg_canard=cgcomp.get_cg_canard( c1.Cr_c[self.config], c1.t_c_c[self.config], c1.l_cutout, const.l_cockpit) # [m] x,y,z-location of the canard
         self.x_cg_landinggear_main, self.y_cg_landinggear_main, self.z_cg_landinggear_main = cgcomp.get_cg_landinggear_main( c1.z_mlg, c1.x_mlg[self.config]) # [m] x,y,z-location of the mlg
         self.x_cg_landinggear_nose, self.y_cg_landinggear_nose, self.z_cg_landinggear_nose = cgcomp.get_cg_landinggear_nose( c1.z_nlg, c1.x_nlg) # [m] x,y,z-location of the nlg
         

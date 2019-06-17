@@ -4,7 +4,7 @@ import pandas as pd
 
 from Structure.Wing.isa import isa
 from modules.performance.class2_performance_defs import get_take_off_field_length, get_landing_field_length,\
-    get_fuel_consumption, get_climb_optimization, get_fuel_burned_breguet, get_thrust_required
+    get_fuel_consumption, get_climb_optimization, get_fuel_burned_breguet, get_thrust_required, get_rate_of_climb
 from modules.performance.serviceable_airports import *
 
 
@@ -55,7 +55,18 @@ class Performance:
         self.cj = self.cj()
         self.tofl, self.airport_altitude_list, self.take_off_field_length, self.take_off_velocity, self.decision_speed = self.analyze_take_off_performance()
         self.lfl, self.landing_field_length, self.approach_velocity = self.analyze_landing_performance()
-        self.fuel_table, self.fuel_mass_engine_startup, self.fuel_mass_taxi, self.fuel_mass_climb, self.fuel_mass_cruise_breguet, self.fuel_mass_descent, self.fuel_mass_loiter, self.fuel_mass_landing, self.fuel_mass_take_off_2, self.fuel_mass_climb_2, self.fuel_mass_cruise_breguet_2, self.fuel_mass_descent_2, self.fuel_mass_loiter_2, self.fuel_mass_landing_2, self.fuel_flow_take_off, self.fuel_flow_climb, self.fuel_flow_cruise_breguet, self.fuel_flow_loiter, self.fuel_flow_landing, self.fuel_flow_take_off_2, self.fuel_flow_climb_2, self.fuel_flow_cruise_breguet_2, self.fuel_flow_loiter_2, self.fuel_flow_landing_2, self.fuel_mass_total, self.fuel_mass_nominal, self.fuel_fraction_total, self.fuel_flow_descent, self.fuel_flow_descent_2 = self.analyze_fuel_consumption()
+        self.fuel_table, self.fuel_mass_engine_startup, self.fuel_mass_taxi, self.fuel_mass_climb,\
+        self.fuel_mass_cruise_breguet, self.fuel_mass_descent, self.fuel_mass_loiter, self.fuel_mass_landing,\
+        self.fuel_mass_take_off_2, self.fuel_mass_climb_2, self.fuel_mass_cruise_breguet_2, self.fuel_mass_descent_2,\
+        self.fuel_mass_loiter_2, self.fuel_mass_landing_2, self.fuel_flow_take_off, self.fuel_flow_climb,\
+        self.fuel_flow_cruise_breguet, self.fuel_flow_loiter, self.fuel_flow_landing, self.fuel_flow_take_off_2,\
+        self.fuel_flow_climb_2, self.fuel_flow_cruise_breguet_2, self.fuel_flow_loiter_2, self.fuel_flow_landing_2,\
+        self.fuel_mass_total, self.fuel_mass_nominal, self.fuel_fraction_total, self.fuel_flow_descent,\
+        self.fuel_flow_descent_2, self.fuel_mass_take_off, self.fuel_fraction_take_off, self.fuel_fraction_climb,\
+        self.fuel_fraction_cruise_breguet, self.fuel_fraction_descent, self.fuel_fraction_loiter,\
+        self.fuel_fraction_landing, self.fuel_fraction_take_off, self.fuel_fraction_climb_2,\
+        self.fuel_fraction_cruise_breguet_2, self.fuel_fraction_descent_2, self.fuel_fraction_loiter_2,\
+        self.fuel_fraction_landing_2 = self.analyze_fuel_consumption()
 
     def cj(self):
         cj = get_fuel_consumption(self.thrust_max, 1, 1)[0] / self.thrust_max
@@ -212,7 +223,7 @@ class Performance:
             'fuel_mass'] - fuel_consumption.loc['taxi']['fuel_mass']
 
         'climb'
-        fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance = get_climb_optimization(mass, self.thrust_max,
+        fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance_climb = get_climb_optimization(mass, self.thrust_max,
                                                                                                   self.C_D_cruise,
                                                                                                   self.S, self.g,
                                                                                                   self.altitude_cruise,
@@ -222,10 +233,8 @@ class Performance:
         mass -= fuel_mass_climb
         if self.show_plots is False:
             plt.close()
-
         'cruise_breguet'
-        # range_leftover = R[i] - distance
-        range_leftover = self.flying_range
+        range_leftover = self.flying_range - distance_climb
         fuel_mass_cruise_breguet = get_fuel_burned_breguet(mass, range_leftover, self.cruise_velocity, self.cj, self.g,
                                                            self.lift_over_drag)
         fuel_flow_cruise_breguet = fuel_mass_cruise_breguet * self.cruise_velocity / range_leftover
@@ -235,7 +244,7 @@ class Performance:
 
         'cruise_non_breguet'
         cruise_thrust = get_thrust_required(isa(self.altitude_cruise)[2], self.cruise_velocity, self.S, self.C_D_cruise) / 2
-        fuel_flow_cruise, fuel_mass_cruise = get_fuel_consumption(cruise_thrust, self.flying_range, self.cruise_velocity)
+        fuel_flow_cruise, fuel_mass_cruise = get_fuel_consumption(cruise_thrust, range_leftover, self.cruise_velocity)
 
         if pick_breguet:
             mass -= fuel_consumption.loc['cruise_breguet']['fuel_mass']
@@ -246,6 +255,8 @@ class Performance:
         'descent'
         fuel_fraction_descent = 0.990
         fuel_mass_descent = (1 - fuel_fraction_descent) * self.MTOW
+
+
         fuel_flow_descent = get_fuel_consumption(self.thrust_setting_descent * self.thrust_max, 1, 1)[0]
         fuel_consumption.loc['descent'] = [fuel_flow_descent, fuel_mass_descent]
 
@@ -292,7 +303,7 @@ class Performance:
         fuel_consumption.loc['take_off_2'] = [fuel_flow_take_off_2, fuel_mass_take_off_2]
 
         'climb_2'
-        fuel_flow_climb_2, fuel_mass_climb_2, climb_2_final_velocity, distance_2 = \
+        fuel_flow_climb_2, fuel_mass_climb_2, climb_2_final_velocity, distance_climb_2 = \
             get_climb_optimization(mass, self.thrust_max, self.C_D_cruise, self.S, self.g, altitude_cruise_2,
                                    self.cruise_velocity, self.thrust_setting_climb)
         fuel_consumption.loc['climb_2'] = [fuel_flow_climb_2, fuel_mass_climb_2]
@@ -347,7 +358,18 @@ class Performance:
         fuel_mass_total = sum(fuel_consumption['fuel_mass'])
         fuel_mass_nominal = sum([fuel_mass_engine_startup, fuel_mass_take_off, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_landing])
         fuel_fraction_total = fuel_mass_total/self.MTOW
-        return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total, fuel_mass_nominal, fuel_fraction_total, fuel_flow_descent, fuel_flow_descent_2
+        fuel_consumption['fuel_fraction'] = fuel_consumption['fuel_mass'] / self.MTOW
+        fuel_fraction_take_off = fuel_mass_take_off / self.MTOW
+        fuel_fraction_climb = fuel_mass_climb / self.MTOW
+        fuel_fraction_cruise_breguet = fuel_mass_cruise_breguet / self.MTOW
+        fuel_fraction_loiter = fuel_mass_loiter / self.MTOW
+        fuel_fraction_landing = fuel_mass_landing / self.MTOW
+        fuel_fraction_take_off_2 = fuel_mass_take_off_2 / self.MTOW
+        fuel_fraction_climb_2 = fuel_mass_climb_2 / self.MTOW
+        fuel_fraction_cruise_breguet_2 = fuel_mass_cruise_breguet_2 / self.MTOW
+        fuel_fraction_loiter_2 = fuel_mass_loiter_2 / self.MTOW
+        fuel_fraction_landing_2 = fuel_mass_landing_2 / self.MTOW
+        return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total, fuel_mass_nominal, fuel_fraction_total, fuel_flow_descent, fuel_flow_descent_2, fuel_mass_take_off, fuel_fraction_take_off, fuel_fraction_climb, fuel_fraction_cruise_breguet, fuel_fraction_descent, fuel_fraction_loiter, fuel_fraction_landing, fuel_fraction_take_off, fuel_fraction_climb_2, fuel_fraction_cruise_breguet_2, fuel_fraction_descent_2, fuel_fraction_loiter_2, fuel_fraction_landing_2
 
     def get_serviceable_airports(self):
         serviceable_airports(self.landing_field_length, self.airport_altitude_list, self.flying_range, self.show_airport_plots)
