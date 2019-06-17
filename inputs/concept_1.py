@@ -30,6 +30,9 @@ T_W    = [0.29,0.29,0.29]                                                       
 W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
 OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
+
+
+
 d_OEW1,d_OEW2=initialw.get_mass_efficiency(OEW)
 
 
@@ -122,7 +125,7 @@ MAC_c = [0]+initialplanform.get_MAC_canard(Cr_c, taper_ratio_c)                 
 y_MAC_c = [0]+initialplanform.get_y_MAC_canard(b_c, Cr_c, MAC_c, Ct_c)                          # [m] y-location of the MAC of the canard
 
 
-#cg and masses of components
+#cg and masses of components Delete this later on 
 #NEED L_H FOR CLASS 2 (DAAAN EN STIJJN)
 M_wing, M_eng, M_wing_group=initialcg.get_mass_winggroup(MTOW)
 M_fuselage, x_cg_fuselage=initialcg.get_mass_fuselage(MTOW,l_f)
@@ -217,8 +220,8 @@ z_nlg = z_mlg                                                                   
 
 L_strut_mlg= -z_mlg-const.D_mlg/2
 L_strut_nlg= -z_nlg-const.D_nlg/2
-D_strut_mlg=( max(P_mw)*2*1.5*4/(423*10**6))**0.5
-D_strut_nlg=( max(P_nw)*2*1.5*4/(423*10**6))**0.5
+D_strut_mlg= initialunderc.get_d_lg(max(P_mw)*2,L_strut_mlg)
+D_strut_nlg= initialunderc.get_d_lg(max(P_nw)*2,L_strut_nlg)
 #MAKE THIS ITERABLE WITH THE LOADING DIAGRAM
 # Airfoil Cl,max from javafoil for Re = [9*10^6, 17*10^6, 20*10^6]
 

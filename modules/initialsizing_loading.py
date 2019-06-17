@@ -12,9 +12,9 @@ import inputs.constants as const
 
 
 def stallspeedlanding(fieldlenghtlanding):
-        V_a=(fieldlenghtlanding/0.3)**0.5*0.5144444
-        V_s=V_a/1.3
-        return V_s
+    V_a=(fieldlenghtlanding/0.3)**0.5*0.5144444
+    V_s=V_a/1.3
+    return V_s
     
 def wingloading_landing(CL,V):
     WS=0.5*const.rho_0*V**2*CL
