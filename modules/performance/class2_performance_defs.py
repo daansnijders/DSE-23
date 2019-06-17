@@ -46,12 +46,13 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
         # difference_list = []
         # count_list = []
         while abs(difference)>5:
-            if abs(difference)>50:
+            print(velocity, difference)
+            if abs(difference)>20:
                 step_size = 1
             else:
                 step_size = 0.1
             count += 1
-            if difference > 0:
+            if difference < 0:
                 velocity += step_size
 
             else:

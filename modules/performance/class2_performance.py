@@ -93,7 +93,7 @@ class Performance:
                                                                                       self.thrust_setting_climb_out,
                                                                                       self.C_L_to, self.C_D_to, self.S,
                                                                                       self.friction_coefficient_to,
-                                                                                      True, 30,
+                                                                                      True, 100,
                                                                                       self.reverse_thrust_factor)
                 take_off_field_length_list.append(length * self.correction_factor_to)
                 take_off_velocity_list.append(take_off_velocity)
