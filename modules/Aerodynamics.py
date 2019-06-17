@@ -758,6 +758,7 @@ class Lift:
         CL_alpha_wf = Kwf*CL_alpha_w
         
         CL0 = (self.i_w - np.deg2rad(alpha_0_L_w))*CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)*(self.i_h) + CL_alpha_c*etac*(self.S_c/self.S)*(self.i_c)
+#        print(CL0)
         KA = (1/self.A) - 1/(1 + self.A**1.7)
         KL = (10 - 3*self.taper_ratio)/7
         l_h = 0.9*self.l_f - self.x_le_MAC - 0.25*self.MAC
@@ -770,12 +771,13 @@ class Lift:
         CL_alpha = CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)*(1 - de_da) + CL_alpha_c*etac*(self.S_c/self.S)*(1 + de_da_c)
         
         alpha_0_L = (-CL0)/CL_alpha
+#        print(np.rad2deg(alpha_0_L))
         
         delta_alpha_wc = np.deg2rad(3)          #rad
         alpha_CL_max = np.deg2rad(alpha_CL_max_w) - self.i_w - delta_alpha_wc
         
         CL_max = CL_max_w - CL_alpha_wf*delta_alpha_wc + CL_alpha_h*(self.S_h/self.S)*(alpha_CL_max*(1-de_da) + self.i_h) + CL_alpha_c*(self.S_c/self.S)*(alpha_CL_max*(1+de_da_c) + self.i_c)
-        return(CL_alpha_h, CL_alpha_c, CL_alpha, alpha_0_L, CL_max, de_da, de_da_c, alpha_CL_max)
+        return(CL_alpha_h, CL_alpha_c, CL_alpha, np.rad2deg(alpha_0_L), CL_max, de_da, de_da_c, alpha_CL_max)
 
     def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c, delta_CL_alpha_w, de_da, delta_CL_max_w): 
         Kcw = 0.95
