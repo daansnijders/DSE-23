@@ -90,7 +90,7 @@ z_c2            = empennage1.z_c                                                
 l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
-lambda_h_le_rad3= empennage2.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
+lambda_c_le_rad3= empennage2.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
 t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard
