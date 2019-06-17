@@ -233,10 +233,8 @@ class Performance:
         mass -= fuel_mass_climb
         if self.show_plots is False:
             plt.close()
-
         'cruise_breguet'
-        # range_leftover = R[i] - distance_climb
-        range_leftover = self.flying_range
+        range_leftover = self.flying_range - distance_climb
         fuel_mass_cruise_breguet = get_fuel_burned_breguet(mass, range_leftover, self.cruise_velocity, self.cj, self.g,
                                                            self.lift_over_drag)
         fuel_flow_cruise_breguet = fuel_mass_cruise_breguet * self.cruise_velocity / range_leftover
@@ -246,7 +244,7 @@ class Performance:
 
         'cruise_non_breguet'
         cruise_thrust = get_thrust_required(isa(self.altitude_cruise)[2], self.cruise_velocity, self.S, self.C_D_cruise) / 2
-        fuel_flow_cruise, fuel_mass_cruise = get_fuel_consumption(cruise_thrust, self.flying_range, self.cruise_velocity)
+        fuel_flow_cruise, fuel_mass_cruise = get_fuel_consumption(cruise_thrust, range_leftover, self.cruise_velocity)
 
         if pick_breguet:
             mass -= fuel_consumption.loc['cruise_breguet']['fuel_mass']
