@@ -20,7 +20,6 @@ import fuel_force_function as fff
 
 import inputs.concept_1 as c1
 
-
 """
 Parameters
 ------------------------------------------------------------------------------
