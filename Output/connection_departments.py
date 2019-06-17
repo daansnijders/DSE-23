@@ -96,10 +96,10 @@ config3_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[2],cons
 
 #Drag outputs
 CD_w_sub1, CD_w_trans1, CD0_w1 = config1_Drag.wing_drag()
-CCD0_fus1, D_fus_sub1, CD_fus_trans1 = config1_Drag.fuse_drag()
+CD0_fus1, CD_fus_sub1, CD_fus_trans1 = config1_Drag.fuse_drag()
 CD0_h_tail1, CD0_v_tail1, CD0_c_tail1, CD_h_sub1, CD_v_sub1, CD_c_sub1, CD_h_trans1, CD_v_trans1, CD_c_trans1 = config1_Drag.empennage_drag()
 CD0_nacel1, CD_nacel_sub1, CD_nacel_trans1 = config1_Drag.nacelle_drag()
-CD_flap_TO1, CD_flap_land1, CD_slat1 = config1_Drag.flaps_drag(CD_0_w1)
+CD_flap_TO1, CD_flap_land1, CD_slat1 = config1_Drag.flaps_drag(CD0_w1)
 CD_gear1 = config1_Drag.landinggear_drag()
 CD_ws1 = config1_Drag.windshield_drag()
 CD0_store1, CD_store_sub1, C_D_store_trans1 = config1_Drag.store_drag()
@@ -111,11 +111,11 @@ CD_TO1 = CD_w_sub1 + CD_fus_sub1 + CD_h_sub1 + CD_v_sub1 + CD_c_sub1 + CD_flap_T
 CD_land1 = CD_w_sub1 + CD_fus_sub1 + CD_h_sub1 + CD_v_sub1 + CD_c_sub1 + CD_flap_land1 + CD_slat1 + CD_gear1 + CD_ws1 + CD_store_sub1 + CD_trim1
 CD0_1 = CD0_w1 + CD0_fus1 + CD0_h_tail1 + CD0_v_tail1 + CD0_c_tail1 + CD0_nacel1 + CD0_store1
 
-CD_w_sub2, CD_w_trans2, CD_0_w2 = config2_Drag.wing_drag()
+CD_w_sub2, CD_w_trans2, CD0_w2 = config2_Drag.wing_drag()
 CD0_fus2, CD_fus_sub2, CD_fus_trans2 = config2_Drag.fuse_drag()
 CD0_h_tail2, CD0_v_tail2, CD0_c_tail2, CD_h_sub2, CD_v_sub2, CD_c_sub2, CD_h_trans2, CD_v_trans2, CD_c_trans2 = config2_Drag.empennage_drag()
 CD0_nacel2, CD_nacel_sub2, CD_nacel_trans2 = config2_Drag.nacelle_drag()
-CD_flap_TO2, CD_flap_land2, CD_slat2 = config2_Drag.flaps_drag(CD_0_w2)
+CD_flap_TO2, CD_flap_land2, CD_slat2 = config2_Drag.flaps_drag(CD0_w2)
 CD_gear2 = config2_Drag.landinggear_drag()
 CD_ws2 = config2_Drag.windshield_drag()
 CD0_store2, CD_store_sub2, C_D_store_trans2 = config2_Drag.store_drag()
@@ -131,7 +131,7 @@ CD_w_sub3, CD_w_trans3, CD0_w3 = config3_Drag.wing_drag()
 CD0_fus3, CD_fus_sub3, CD_fus_trans3 = config3_Drag.fuse_drag()
 CD0_h_tail3, CD0_v_tail3, CD0_c_tail3, CD_h_sub3, CD_v_sub3, CD_c_sub3, CD_h_trans3, CD_v_trans3, CD_c_trans3 = config3_Drag.empennage_drag()
 CD0_nacel3, CD_nacel_sub3, CD_nacel_trans3 = config3_Drag.nacelle_drag()
-CD_flap_TO3, CD_flap_land3, CD_slat3 = config3_Drag.flaps_drag(CD_0_w3)
+CD_flap_TO3, CD_flap_land3, CD_slat3 = config3_Drag.flaps_drag(CD0_w3)
 CD_gear3 = config3_Drag.landinggear_drag()
 CD_ws3 = config3_Drag.windshield_drag()
 CD0_store3, CD_store_sub3, C_D_store_trans3 = config3_Drag.store_drag()
@@ -141,7 +141,7 @@ CD_spoiler3 = config3_Drag.spoiler_drag()
 CD_cruise3 = CD_w_trans3 + CD_fus_trans3 + CD_h_trans3 + CD_v_trans3 + CD_c_trans3 + CD_nacel_trans3 + CD_ws3 + C_D_store_trans3 + CD_trim3
 CD_TO3 = CD_w_sub3 + CD_fus_sub3 + CD_h_sub3 + CD_v_sub3 + CD_c_sub3 + CD_flap_TO3 + CD_gear3 + CD_ws3 + CD_store_sub3 + CD_trim3
 CD_land3 = CD_w_sub3 + CD_fus_sub3 + CD_h_sub3 + CD_v_sub3 + CD_c_sub3 + CD_flap_land3 + CD_slat3 + CD_gear3 + CD_ws3 + CD_store_sub3 + CD_trim3
-CD_0_3 = CD0_w3 + CD0_fus3 + CD0_h_tail3 + CD0_v_tail3 + CD0_c_tail3 + CD0_nacel3 + CD0_store3
+CD0_3 = CD0_w3 + CD0_fus3 + CD0_h_tail3 + CD0_v_tail3 + CD0_c_tail3 + CD0_nacel3 + CD0_store3
 
 'Moments'
 #Initial values
@@ -201,7 +201,7 @@ oswald_efficiency_number = conc1.e
 
 'analysis'
 
-config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
+config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, CD0_1, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
                                   conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -214,7 +214,7 @@ config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, C_D_0, CD_TO1, CD_
 
 print('check between conc')
 
-config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, C_D_0, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
+config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -224,8 +224,7 @@ config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, C_D_0, CD_TO2, CD_
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, C_D_0, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
-                                  conc1.S, conc1.OEW[1],
+config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -407,17 +406,17 @@ SUSTAINABILITY
 
 
 config1_emissions   =gasemissions.greenhousegas_emissions(config1_Performance,1)
-config1_NOx         =config1_emissions.get_NOx_mass()
-config1_CO2         =config1_emissions.get_CO_2_per_pax_per_km()
+#config1_NOx         =config1_emissions.get_NOx_mass()
+#config1_CO2         =config1_emissions.get_CO_2_per_pax_per_km()
 
 
 config2_emissions   =gasemissions.greenhousegas_emissions(config2_Performance,2)
-config2_NOx         =config2_emissions.get_NOx_mass()
-config2_CO2         =config2_emissions.get_CO_2_per_pax_per_km()
+#config2_NOx         =config2_emissions.get_NOx_mass()
+#config2_CO2         =config2_emissions.get_CO_2_per_pax_per_km()
 
 config3_emissions   =gasemissions.greenhousegas_emissions(config3_Performance,3)
 config3_NOx         =config3_emissions.get_NOx_mass()
-config3_CO2         =config3_emissions.get_CO_2_per_pax_per_km()
+#config3_CO2         =config3_emissions.get_CO_2_per_pax_per_km()
 
 
 
