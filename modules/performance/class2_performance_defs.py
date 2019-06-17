@@ -322,7 +322,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     z_optimal = list(np.flip(z_optimal, 0))
 
 
-    rate_of_climb_fn = np.poly1d(np.polyfit(V_optimal, h_optimal, 2))
+    # rate_of_climb_fn = np.poly1d(np.polyfit(V_optimal, h_optimal, 2))
 
     # z_optimal.append(get_rate_of_climb(engines_operative, climb_thrust, V_optimal[-1], np.sqrt(V_optimal[-1] * 2 * g), S, CD_climb[i], mass[i], g))
     # h_optimal.append(H_m)
@@ -338,8 +338,8 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
         fuel_mass_climb += ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))*(engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0])/((z_optimal[a]+z_optimal[a-1])/2)
     # plt.scatter(x_loc_list, y_loc_list)
     plt.scatter(V_optimal, h_optimal)
-    polyfit_x = np.linspace(500, 2000, 1000)
-    polyfit_y = rate_of_climb_fn(polyfit_x)
+    # polyfit_x = np.linspace(500, 2000, 1000)
+    # polyfit_y = rate_of_climb_fn(polyfit_x)
     # plt.plot(polyfit_x, polyfit_y)
     x, y, energy_height = get_energy_height()
     plt.contour(x**2/2/9.80655, y, energy_height, steps+1)
