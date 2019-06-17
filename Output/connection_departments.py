@@ -67,6 +67,11 @@ delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3 = config3_Lift.Wing_lift_flaps(d
 CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alpha_CL_max3 = config3_Lift.Airplane_lift(CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3)
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
 
+Cl_TO=
+Cl_cruise=
+Cl_land= 
+
+
 'Drag'
 #Values that must come from other departments
 D_strutt_nlg = 0.15
@@ -188,9 +193,10 @@ lift_over_drag = conc1.LoverD[0]
 
 aspect_ratio = conc1.A
 oswald_efficiency_number = conc1.e
+print('check 1')
 
 'analysis'
-config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
+config1_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
                                   conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -200,7 +206,9 @@ config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO1, CD_
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
+print('check between conc')
+
+config2_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -210,7 +218,7 @@ config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO2, CD_
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
+config3_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -241,7 +249,7 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
 """NEED FROM OTHER FILES"""
-V_critical = config1_Performance.decision_speed/config1_Performance.approach_speed                                                               # [m/s] V1 speed/V_app
+V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                                                              # [m/s] V1 speed/V_app
 etah       = 0.9                                                                      # [-] eta_h of aerodynamics
 x_ac      = (conc1.x_le_MAC[0]+0.25*conc1.MAC)                                              # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
@@ -264,14 +272,14 @@ Vc_V      = 1.                                          #zelf                   
 
 
 # initialize class:
-empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
-x_le_w          = initialplanform.get_le_wing(y_MAC,conc1.x_le_MAC, conc1.lambda_2_rad, conc1.MAC, conc1.Cr)            # [m] x-location of le main wing with updated lemac
+x_le_w          = initialplanform.get_le_wing(conc1.y_MAC,x_le_MAC, conc1.lambda_2_rad, conc1.MAC, conc1.Cr)            # [m] x-location of le main wing with updated lemac
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
@@ -297,7 +305,7 @@ lambda_v_4_rad  = empennage1.lambda_v_4_rad                                     
 x_v             = empennage1.x_v                                                # [m] x-location of ac of the vtail?
 
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
-lambda_c_le_rad2= empennage1.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
+lambda_h_le_rad2= empennage1.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
 t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
