@@ -807,20 +807,20 @@ class Lift:
         for i in range(len(alpha)): 
             
             if alpha[i] <= 7:
-                C_L_i = CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)
+                C_L_i = CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))
                 C_L.append(C_L_i)
                 
             elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/math.pi : 
                 j = alpha.index(7)
                 k = alpha.index(alpha_CL_max*180/math.pi)
-                C_L_i = (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L)) + ((CL_max - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L))) / (k - j)) * (i - j)
+                C_L_i = (CL_alpha * (np.deg2rad(alpha[j]) - np.deg2rad(alpha_0_L))) + ((CL_max - (CL_alpha * (np.deg2rad(alpha[j]) - np.deg2rad(alpha_0_L)))) / (k - j)) * (i - j)
                 C_L.append(C_L_i)
                 
             elif alpha[i] == alpha_CL_max*180/math.pi:
                 C_L_i = CL_max
                 C_L.append(C_L_i)
             else:
-                C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)))**2
+                C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))))**2
                 C_L.append(C_L_i)
         
         
@@ -834,20 +834,20 @@ class Lift:
         for i in range(len(alpha)): 
             
             if alpha[i] <= 3:
-                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)
+                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L_flaps))
                 C_L_flaps.append(C_L_i)
                 
             elif alpha[i] > 3 and alpha[i]<alpha_CL_max*180/math.pi : 
                 j = alpha.index(3)
                 k = alpha.index(alpha_CL_max*180/math.pi)
-                C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps)) + (((CL_max + delta_CL_max) - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
+                C_L_i = (delta_CL_alpha * np.deg2rad((alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (CL_alpha * np.deg2rad((alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
                 C_L_flaps.append(C_L_i)
                 
             elif alpha[i] == alpha_CL_max*180/math.pi:
                 C_L_i = CL_max + delta_CL_max
                 C_L_flaps.append(C_L_i)
             else:
-                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
+                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * np.deg2rad((alpha[i]) - alpha_0_L_flaps)))**2
                 C_L_flaps.append(C_L_i)
         
         plt.plot(alpha, C_L_flaps, "k-")
