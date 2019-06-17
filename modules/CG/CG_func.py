@@ -5,7 +5,7 @@ Created on Wed May 29 14:44:46 2019
 @author: Niels
 """
 #from inputs.constants import *
-from inputs.concept_1 import *
+#import inputs.concept_1 import 
 import numpy as np
 
 def chordlength(y_loc, Cr, Ct,b):

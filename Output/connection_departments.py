@@ -5,10 +5,13 @@ from inputs.concept_1 import *
 
 'department modules'
 from modules.Aerodynamics import *
-from modules.sustainability.greenhousegasemissions import *
-from modules.performance.class2_performance import *
-from modules.sustainability.noise_defs import *
 
+import modules.sustainability.greenhousegasemissions as gasemissions
+import modules.sustainability.noise_defs as noise
+
+from modules.performance.class2_performance import *
+
+from Structure.Wing.wing_canard_iteration import wing_struc_analysis
 """
 AERODYNAMICS
 """
@@ -33,7 +36,8 @@ alpha_star_l = 10        # from -7 to 3 deg
 C_l_alpha = np.rad2deg(2/18)
 alpha_C_l_max = np.rad2deg(10.75)
 C_l_max = 1.58
-#C_l_alpha_M75 = C_l_alpha / sqrt(1 - M_cruise**2)
+C_l_alpha_M75 = C_l_alpha / sqrt(1 - M_cruise**2)
+
 
 #Set up different configurations
 config1_Lift = Lift(S,A,rho,rho_0,l_f[0],V_cruise,M_cruise,V_TO[0],mu_37,mu_sl,MAC,Cr,Ct,b,taper_ratio,d_f_outer,lambda_le_rad,lambda_4_rad,lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, A_h, A_c,lambda_h_2_rad[0], lambda_c_2_rad, i_c, S_h[0], S_c[0], i_h, x_le_MAC[0], b_flap, SWF)
@@ -58,6 +62,8 @@ C_L_w3, CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3  = config3_Lift.Wi
 delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3 = config3_Lift.Wing_lift_flaps(delta_cl_flap3,CL_alpha_w3,C_l_alpha,(delta_clmax_flap3 + delta_clmax_krueger3),b_slat)
 CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alpha_CL_max3 = config3_Lift.Airplane_lift(CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3)
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
+
+C_l_alpha_M75 = C_l_alpha / sqrt(1 - M_cruise**2)
 
 'Drag'
 #Values that must come from other departments
@@ -164,13 +170,15 @@ from modules.Stability.empennage import empennage
 #from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
+
+"""Stability and Control"""
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
 etah = 0.9                                                                      # [-] eta_h of aerodynamics
 x_ac      = (x_le_MAC[0]+0.25*MAC)                                              # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
-CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
-de_da     = de_da                                                               # [-] downwash
+CL_a_ah   = CL_alpha_w1                                 #TBD                    # [-] CL_alpha_(A-h)
+de_da     = 0                                                             # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
 Cm_ac     = -0.3                                        #TBD                    # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
@@ -300,6 +308,8 @@ frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
 """
 STRUCTURES
 """
+#Calculate fuel mass available for storage in wings (0.75 of one side of the wing)
+fuel_mass_available = wing_struc_analysis(C_l_max,V_cruise,b,Cr,Ct,S)
 
 """
 PERFORMANCE & PROPULSION
@@ -355,11 +365,24 @@ config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D
 SUSTAINABILITY
 """
 'Greenhouse Gas Emissions'
-#CO_2_emissions=[get_CO2_emissions(M_fuel_burnt[i]) for i in range(3)]
+
+
+config1_emissions=gasemissions.greenhousegas_emissions(config1_Performance,1)
+config1_NOx=config1_emissions.get_NOx_mass()
+config2_emissions=gasemissions.greenhousegas_emissions(config2_Performance,2)
+config3_emissions=gasemissions.greenhousegas_emissions(config3_Performance,3)
+
+#CO_2_tot=get_CO2_emissions(config1_Performance.fuel_mass_nominal)
+#Fuel_per_pax=get_CO2_per_passenger_per_km(CO_2_tot,N_pax[0],R[0]) 
 #
-#EI_NOx_phase=get_EI_NOX_fuelflow(fuel_flow)
+##EI_NOx_phase=get_EI_NOX_fuelflow(fuel_flow)
+#fuel_flow_config1=get_fuel_flow_per_phase(config1_Performance.fuel_flow_take_off, config1_Performance.fuel_flow_climb,config1_Performance.fuel_flow_cruise_breguet,config1_Performance.fuel_flow_descent, config1_Performance.fuel_flow_landing)
 #
-#
+#fuel_mass_config1=get_total_fuel_per_phase(config1_Performance.fuel_mass_take_off, config1_Performance.fuel_mass_climb,config1_Performance.fuel_mass_cruise_breguet,config1_Performance.fuel_mass_descent, config1_Performance.fuel_mass_landing)
+
+#get_tot_NOx(fuel_flow_list,M_fuel_list)
+
+
 #NOx_phase = [get_NOx_emissions_total(fuel_flow_phase,time_in_flight_phase,EI_NOx_phase)]
 #
 #
@@ -375,17 +398,16 @@ phi_observer=radians(1)
 flap_deflection=np.radians(40)
 
 
-b_flap=b/2*0.4
 c_flap=0.35*Cr
 S_flap=b_flap*c_flap
 
 V_approach=64
 
-r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
+r1,r2,r3,theta_1,theta_2,theta_3=noise.simulate_flight_path(V_approach)
 
-OSPL_dBA_tot_straight=EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-OSPL_dBA_tot_up=EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
-OSPL_dBA_tot_down=EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection )
+OSPL_dBA_tot_straight=noise.EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection,b_slat )
+OSPL_dBA_tot_up=noise.EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection,b_slat )
+OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection, b_slat )
 
-"""Stability and Control"""
+
 
