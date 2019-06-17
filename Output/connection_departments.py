@@ -243,11 +243,11 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 """NEED FROM OTHER FILES"""
 V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                                                              # [m/s] V1 speed/V_app
-etah       = 0.9                                                                      # [-] eta_h of aerodynamics
-x_ac      = (conc1.x_le_MAC[0]+0.25*conc1.MAC)                                              # [m] x-location of the main wing ac
+etah       = 0.9                                                                # [-] eta_h of aerodynamics
+x_ac      = (conc1.x_le_MAC[0]+0.25*conc1.MAC)                                  # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
-de_da     = de_da1                                                             # [-] downwash
+de_da     = de_da1                                                              # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
 Cm_ac     = Cm0_w_trans1                                                        # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
