@@ -15,7 +15,7 @@ from inputs.constants import n_max,V_dive
 
 'CLASS 2 WEIGHT EXECUTION AND CG LOCATION ESTIMATION'
 #configuration 1 
-config1_class2     = c2m.Class2_weight(1,c1.N_pax[0],c1.MTOW[0],max(c1.MTOW),c1.M_carried_canard_MZF[0],min(c1.M_MZF), n_max[0],V_dive[0],c1.M_fuel[0], max(c1.T_req), c1.l_f[0],c1.d_f_inner,c1.d_f_outer,c1.l_cabin[0], detailedsizing.l_h[0], c1.S, detailedsizing.S_c[0], c1.b, detailedsizing.b_c[0], detailedsizing.S_v[0],detailedsizing.S_h[0],c1.Cr_t,detailedsizing.Cr_t_c[0],c1.lambda_2_rad,detailedsizing.lambda_h_2_rad[0], detailedsizing.lambda_v_2_rad[0],detailedsizing.lambda_c_2_rad, c1.S_fus[0])     
+config1_class2     = c2m.Class2_weight(1,c1.N_pax[0],c1.MTOW[0],max(c1.MTOW),c1.M_carried_canard_MZF[0],min(c1.M_MZF), n_max[0],V_dive[0],c1.M_fuel[0], max(c1.T_req), c1.l_f[0],c1.d_f_inner,c1.d_f_outer,c1.l_cabin[0], detailedsizing.l_h, c1.S, detailedsizing.S_c[0], c1.b, detailedsizing.b_c[0], detailedsizing.S_v[0],detailedsizing.S_h[0],c1.Cr_t,detailedsizing.Cr_t_c[0],c1.lambda_2_rad,detailedsizing.lambda_h_2_rad[0], detailedsizing.lambda_v_2_rad[0],detailedsizing.lambda_c_2_rad, c1.S_fus[0])     
 
 
 config1_M_structural            =config1_class2.structural_mass()
@@ -36,7 +36,7 @@ config1_cg_z=config1_cg.calc_z_cg()
 
 #configuration 3
 #masses
-config3_class2     = c2m.Class2_weight(3,c1.N_pax[2],c1.MTOW[2],max(c1.MTOW),c1.M_carried_canard_MZF[2],min(c1.M_MZF), n_max[2],V_dive[2],c1.M_fuel[2], max(c1.T_req), c1.l_f[2],c1.d_f_inner,c1.d_f_outer,c1.l_cabin[2], detailedsizing.l_h[2], c1.S, detailedsizing.S_c[2], c1.b, detailedsizing.b_c2, detailedsizing.S_v, detailedsizing.S_h,c1.Cr_t,c1.Cr_t_c[2],c1.lambda_2_rad,detailedsizing.lambda_h_2_rad, detailedsizing.lambda_v_2_rad,detailedsizing.lambda_c_2_rad, c1.S_fus[2])
+config3_class2     = c2m.Class2_weight(3,c1.N_pax[2],c1.MTOW[2],max(c1.MTOW),c1.M_carried_canard_MZF[2],min(c1.M_MZF), n_max[2],V_dive[2],c1.M_fuel[2], max(c1.T_req), c1.l_f[2],c1.d_f_inner,c1.d_f_outer,c1.l_cabin[2], detailedsizing.l_h, c1.S, detailedsizing.S_c3, c1.b, detailedsizing.b_c3, detailedsizing.S_v, detailedsizing.S_h,c1.Cr_t,c1.Cr_t_c3,c1.lambda_2_rad,detailedsizing.lambda_h_2_rad, detailedsizing.lambda_v_2_rad,detailedsizing.lambda_c_le_rad3, c1.S_fus[2])
 
 config3_M_structural            =config3_class2.structural_mass()
 config3_M_powerplant            =config3_class2.powerplant_mass()
@@ -55,7 +55,7 @@ config3_cg_z=config3_cg.calc_z_cg()
 
 
 #configuration 2
-config2_class2     = c2m.Class2_weight(2,c1.N_pax[1],c1.MTOW[1],max(c1.MTOW),c1.M_carried_canard_MZF[1],min(c1.M_MZF), n_max[1],V_dive[1],c1.M_fuel[1], max(c1.T_req), c1.l_f[1],c1.d_f_inner,c1.d_f_outer,c1.l_cabin[1], detailedsizing.l_h, c1.S, detailedsizing.S_c2, c1.b, detailedsizing.b_c2, detailedsizing.S_v[1],detailedsizing.S_h[1],c1.Cr_t,detailedsizing.Cr_t_c,c1.lambda_2_rad,detailedsizing.lambda_h_2_rad, detailedsizing.lambda_v_2_rad,detailedsizing.lambda_c_2_rad, c1.S_fus[1])
+config2_class2     = c2m.Class2_weight(2,c1.N_pax[1],c1.MTOW[1],max(c1.MTOW),c1.M_carried_canard_MZF[1],min(c1.M_MZF), n_max[1],V_dive[1],c1.M_fuel[1], max(c1.T_req), c1.l_f[1],c1.d_f_inner,c1.d_f_outer,c1.l_cabin[1], detailedsizing.l_h, c1.S, detailedsizing.S_c2, c1.b, detailedsizing.b_c2, detailedsizing.S_v,detailedsizing.S_h,c1.Cr_t,detailedsizing.Cr_t_c2,c1.lambda_2_rad,detailedsizing.lambda_h_2_rad, detailedsizing.lambda_v_2_rad,detailedsizing.lambda_c_le_rad2, c1.S_fus[1])
 config2_M_structural            =config2_class2.structural_mass()
 config2_M_powerplant            =config2_class2.powerplant_mass()
 config2_M_powerplant            =config3_M_powerplant
