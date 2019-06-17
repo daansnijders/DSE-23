@@ -7,9 +7,8 @@ Created on Wed May  8 12:16:32 2019
 
 import numpy as np
 import matplotlib.pyplot as plt
-from math import * 
-from inputs.constants import *
-from inputs.performance_inputs import *
+import inputs.constants as const
+
 
 
 def stallspeedlanding(fieldlenghtlanding):
@@ -18,11 +17,11 @@ def stallspeedlanding(fieldlenghtlanding):
         return V_s
     
 def wingloading_landing(CL,V):
-    WS=0.5*rho_0*V**2*CL
+    WS=0.5*const.rho_0*V**2*CL
     return WS
 
 def wingloading_takeoff(fieldlenghtlanding, CL,f):
-    WS_TO=(CL*rho_0*fieldlenghtlanding*0.3048/0.5915)/(2*f)
+    WS_TO=(CL*const.rho_0*fieldlenghtlanding*0.3048/0.5915)/(2*f)
     
     return WS_TO
 
@@ -31,14 +30,14 @@ def thurstloading_takeoff(TOP,sigma,CL,WSrange):
     return TW_TO
 
 def thrustloading_cruise(CD0,WSrange):
-    TW_cruise=(rho_0/rho)**0.75*(CD0*0.5*rho*V_cruise**2/(WSrange)+(WSrange)*1/(pi*A*e*0.5*rho*V_cruise**2))
+    TW_cruise=(const.rho_0/const.rho)**0.75*(CD0*0.5*const.rho*const.V_cruise**2/(WSrange)+(WSrange)*1/(m.pi*A*e*0.5*const.rho*const.V_cruise**2))
     return TW_cruise
 
 def thrustloading_climbrate(c,CL,CD,WSrange):
-    TW_climb=c/(WSrange*2/(rho_0*CL))**0.5 + CD/CL
+    TW_climb=c/(WSrange*2/(const.rho_0*CL))**0.5 + CD/CL
     return TW_climb
-def thrustloading_climbgradient(c,V,CD0):
-    TW_cV=c/(V)+2*(CD0/(pi*A*e))**0.5
+def thrustloading_climbgradient(c,V,CD0,A,e):
+    TW_cV=c/(V)+2*(CD0/(np.pi*A*e))**0.5
     return TW_cV
 
 def get_WSrange(WSstart,WSend,D_WS):
@@ -46,7 +45,7 @@ def get_WSrange(WSstart,WSend,D_WS):
 
 
     
-def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0,WSstart,WSend,D_Ws):
+def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0,A,e,WSstart,WSend,D_Ws):
     
     CD_climb=4*CD0
     Cl_climb=(3*CD0*pi*A*e)**0.5
@@ -62,7 +61,7 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0
     TW_cruise=thrustloading_cruise(CD0,WSrange)
     
     TW_climb=thrustloading_climbrate(c,Cl_climb,CD_climb,WSrange)
-    TW_cV= thrustloading_climbgradient(c,V_climb,CD0)
+    TW_cV= thrustloading_climbgradient(c,V_climb,CD0,A,e)
     
     fig = plt.figure(figsize = (12,5))
     ax = fig.add_subplot(111)
