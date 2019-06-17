@@ -67,11 +67,6 @@ delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3 = config3_Lift.Wing_lift_flaps(d
 CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alpha_CL_max3 = config3_Lift.Airplane_lift(CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3)
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
 
-Cl_TO=
-Cl_cruise=
-Cl_land= 
-
-
 'Drag'
 #Values that must come from other departments
 D_strutt_nlg = 0.15
@@ -193,10 +188,9 @@ lift_over_drag = conc1.LoverD[0]
 
 aspect_ratio = conc1.A
 oswald_efficiency_number = conc1.e
-print('check 1')
 
 'analysis'
-config1_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
+config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
                                   conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -206,9 +200,7 @@ config1_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO1, CD_l
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-print('check between conc')
-
-config2_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
+config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -218,7 +210,7 @@ config2_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO2, CD_l
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-config3_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
+config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -228,7 +220,8 @@ config3_Performance = Performance(CL_TO, CL_land, CL_cruise, C_D_0, CD_TO3, CD_l
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-print('PP DONE')
+print('P&P DONE')
+
 """
 CONTROL AND STABILITY
 """
