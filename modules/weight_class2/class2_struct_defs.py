@@ -6,6 +6,7 @@ Created on Fri May 24 09:30:42 2019
 """
 #
 from inputs.constants import *
+from math import *
 
 def get_wing_mass(M_MZF,b,S,Cr_t,lambda_2_rad,n_ult):
     return 0.0017*M_MZF*kg_to_lbs*(b*m_to_ft/cos(lambda_2_rad))**0.75*(1+(6.3*cos(lambda_2_rad)/(b*m_to_ft))**0.5)*n_ult**0.55*(b*m_to_ft*S*m_to_ft**2/(M_MZF*kg_to_lbs*cos(lambda_2_rad)*(Cr_t*m_to_ft)))**0.3

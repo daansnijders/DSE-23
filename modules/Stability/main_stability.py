@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from inputs.concept_1 import x_le_MAC, MAC, l_h, S, get_le_wing, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
-from inputs.constants import *
+import inputs.constants as const
 #from modules.Stability.cg_weight_config1 import *
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
 from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
@@ -17,7 +17,6 @@ from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_fl
 from modules.Stability.empennage import empennage
 from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
-
 
 
 """NEED FROM OTHER FILES"""
