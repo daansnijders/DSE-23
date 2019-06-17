@@ -160,8 +160,9 @@ CONTROL AND STABILITY
 import numpy as np
 import matplotlib.pyplot as plt
 
-from inputs.concept_1 import x_le_MAC, MAC, l_h, S, get_le_wing, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
+from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 import inputs.constants as const
+import modules.initialsizing_planform as initialplanform
 #from modules.Stability.cg_weight_config1 import *
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
 from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
@@ -172,19 +173,20 @@ from modules.Stability.empennage import empennage
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
+
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
 etah = 0.9                                                                      # [-] eta_h of aerodynamics
 x_ac      = (x_le_MAC[0]+0.25*MAC)                                              # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
-de_da     = 0.                                                                  # [-] downwash
+de_da     = de_da                                                               # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
-Cm_ac     = -0.3                                        #TBD                    # [-] moment coefficient of main wing ac
+Cm_ac     = -0.0755159519128478                         #TBD                    # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 1.3                                         #zelf                   # [-] lift coefficient canard
+CL_c      = 0.8                                         #zelf                   # [-] lift coefficient canard
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 a_0       = alpha_0_l                                                           # [rad] zero lift angle of attack
 i_h       = 0                                                                   # [rad] incidence angle htail
@@ -205,7 +207,7 @@ empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
-x_le_w          = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
+x_le_w          = initialplanform.get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
@@ -306,6 +308,7 @@ frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
 frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
 
 
+
 # Update cg's DIFFERENT CONFIG'S
 # landing gear placement
 x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
@@ -328,9 +331,42 @@ l_n3 = x_cg_max_flight3 - x_nlg
 
 y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
 
-config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
-config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])
+
+
+frac = np.ones((3,2))
+frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
+frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
+frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
+
+
+# Update cg's DIFFERENT CONFIG'S
+# landing gear placement
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,l_f[1])])
+x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,l_f[2])])
+
+z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
+
+x_nlg = 2
+
+l_m1 = x_cg_max_flight1 - x_mlg[0]
+l_m2 = x_cg_max_flight1 - x_mlg[1]
+l_m3 = x_cg_max_flight1 - x_mlg[2]
+
+
+l_n1 = x_cg_max_flight1 - x_nlg
+l_n2 = x_cg_max_flight2 - x_nlg
+l_n3 = x_cg_max_flight3 - x_nlg
+
+
+y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
+
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])
 
 
 frac = np.ones((3,2))
@@ -356,7 +392,7 @@ mass_resolution = 20  # resolution of plotting mass vs take-off field length
 'general inputs'
 engine_failure = False
 show_performance_plots = False
-show_airport_plots = True
+show_airport_plots = False
 
 # temporary values, will be removed as soon as aerodynamics inputs are ready
 C_L_to = 1.9
@@ -366,35 +402,43 @@ C_D_to = 0.19542078310015343
 C_D_la = 0.28017202214599246
 C_L_cruise = 0.8
 C_D_cruise = 0.05
-lift_over_drag = LoverD[0]
+
+
+lift_over_drag = conc1.LoverD[0]
+
 aspect_ratio = conc1.A
 oswald_efficiency_number = conc1.e
 
 'analysis'
-config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[0], MTOW[0], g,
-                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
-                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
-                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[0], M_fuel[0],
-                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio, oswald_efficiency_number,
-                                  correction_factor_to, show_performance_plots, show_airport_plots, thrust_setting_descent)
+config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, conc1.OEW[0],
+                                  conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
+                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
+                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
+                                  perf.thrust_setting_transition, conc1.M_payload[0], conc1.M_fuel[0],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
+                                  const.H_m, const.V_cruise, conc1.R[0], lift_over_drag, aspect_ratio,
+                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
+                                  show_airport_plots, perf.thrust_setting_descent)
 
-config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[1], MTOW[1], g,
-                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
-                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
-                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[1], M_fuel[1],
-                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio, oswald_efficiency_number,
-                                  correction_factor_to, show_performance_plots, show_airport_plots, thrust_setting_descent)
+config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, conc1.OEW[1],
+                                  conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
+                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
+                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
+                                  perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
+                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag, aspect_ratio,
+                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
+                                  show_airport_plots, perf.thrust_setting_descent)
 
-config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[2], MTOW[2], g,
-                                  screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
-                                  friction_coefficient_la, reverse_thrust_factor, engine_failure,
-                                  thrust_setting_climb_out, thrust_setting_transition, M_payload[2], M_fuel[2],
-                                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio, oswald_efficiency_number,
-                                  correction_factor_to, show_performance_plots, show_airport_plots, thrust_setting_descent)
-
+config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, conc1.OEW[1],
+                                  conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
+                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
+                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
+                                  perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
+                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag, aspect_ratio,
+                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
+                                  show_airport_plots, perf.thrust_setting_descent)
 
 """
 SUSTAINABILITY
@@ -443,6 +487,5 @@ r1,r2,r3,theta_1,theta_2,theta_3=noise.simulate_flight_path(V_approach)
 OSPL_dBA_tot_straight=noise.EPNdB_calculations(r2,theta_2,phi_observer,V_approach, S_flap, b_flap,flap_deflection,b_slat )
 OSPL_dBA_tot_up=noise.EPNdB_calculations(r1,theta_1,phi_observer,V_approach, S_flap, b_flap,flap_deflection,b_slat )
 OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,V_approach, S_flap, b_flap,flap_deflection, b_slat )
-
 
 
