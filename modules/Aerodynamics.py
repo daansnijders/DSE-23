@@ -831,14 +831,14 @@ class Lift:
                 
         for i in range(len(alpha)): 
             
-            if alpha[i] <= 3:
+            if alpha[i] <= 7:
                 C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)
                 C_L_flaps.append(C_L_i)
                 
-            elif alpha[i] > 3 and alpha[i]<alpha_CL_max*180/math.pi : 
-                j = alpha.index(3)
+            elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/math.pi : 
+                j = alpha.index(7)
                 k = alpha.index(alpha_CL_max*180/math.pi)
-                C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
+                C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
                 C_L_flaps.append(C_L_i)
 #                print (C_L_i)
                 
@@ -856,18 +856,23 @@ class Lift:
     
     
     def get_CL(self, CL_alpha, alpha_0_L, CL_max, alpha_CL_max, delta_CL, delta_CL_alpha, delta_CL_max, alpha):
-        if alpha <= 3:
-            C_L = CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))
+        alpha_0_L_flaps = (delta_CL - CL_alpha * np.deg2rad(alpha_0_L)) / -delta_CL_alpha
+        
+        if alpha <= 7:
+            C_L = CL_alpha * (np.deg2rad(alpha) - np.deg2rad(alpha_0_L))
+            C_L_flaps = delta_CL_alpha * (np.deg2rad(alpha) - alpha_0_L_flaps)
             
-        elif alpha > 3 and alpha < alpha_CL_max*180/math.pi : 
-            C_L = (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L))) + ((CL_max - (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L)))) / (k - j)) * (i - j)
-            
+        elif alpha > 7 and alpha < alpha_CL_max*180/math.pi : 
+            C_L = (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L))) + ((CL_max - (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L)))) / (np.deg2rad(alpha_CL_max - 7)) * np.deg2rad(alpha - 7))
+            C_L_flaps = (delta_CL_alpha * (np.deg2rad(alpha) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha) - alpha_0_L_flaps))) / (np.deg2rad(alpha_CL_max - 7)) * np.deg2rad(alpha - 7))
         elif alpha == alpha_CL_max*180/math.pi:
             C_L = CL_max
-
+            C_L_flaps = CL_max + delta_CL_max
         else:
-            C_L = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))))**2
-                    
+            C_L = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha) - np.deg2rad(alpha_0_L))))**2
+            C_L_flaps = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha) - alpha_0_L_flaps)))**2       
+        
+        return (C_L, C_L_flaps)
         
         
 class Moment:
