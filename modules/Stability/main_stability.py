@@ -53,6 +53,7 @@ empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
+x_ac            = empennage1.x_ac                                               # [m] x-location of the aerodynamic centre of the main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
 x_le_w          = initialplanform.get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
 
@@ -80,7 +81,7 @@ lambda_v_4_rad  = empennage1.lambda_v_4_rad                                     
 x_v             = empennage1.x_v                                                # [m] x-location of ac of the vtail?
 
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
-lambda_h_le_rad2= empennage1.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
+lambda_c_le_rad2= empennage1.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
 t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard

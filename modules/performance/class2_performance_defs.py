@@ -46,17 +46,25 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
         # difference_list = []
         # count_list = []
         while abs(difference)>5:
+            if abs(difference)>50:
+                step_size = 1
+            else:
+                step_size = 0.1
             count += 1
             if difference > 0:
-                velocity += .1
-            else:
-                velocity -= .1
+                velocity += step_size
 
+            else:
+                velocity -= step_size
             nominal_distance = get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one_engine,
                                                          thrust_transition_setting, thrust_climb_out_setting, C_L, C_D,
                                                          S, mu_TO, False, velocity, reverse_thrust_factor)[0]
             try_distance = give_try(velocity)
             difference = nominal_distance - try_distance
+            if count>1000:
+                print('ALERT - decision speed does not converge, check input values')
+                velocity = 30
+                break
             # nominal_list.append(nominal_distance)
             # try_list.append(try_distance)
             # difference_list.append(difference)
@@ -186,7 +194,7 @@ def get_fuel_consumption(thrust, distance, velocity):
 
 
 def get_energy_height():
-    height_intervals = 50
+    height_intervals = 10
     V = np.linspace(0, 300, height_intervals)
     h = np.linspace(0, 20000, height_intervals)
     z = []
@@ -199,13 +207,14 @@ def get_energy_height():
 
 
 def get_2d_rate_of_climb(thrust_max, engines_operative, wing_surface_area, drag_coefficient, mass, g):
-    steps = 500
-    V = np.linspace(0, 300, steps)
-    h = np.linspace(0, 20000, steps)
+    steps_V = 100
+    steps_h = 1000
+    V = np.linspace(0, 300, steps_V)
+    h = np.linspace(0, 20000, steps_h)
     z = []
-    for i in range(0, steps, 1):
+    for i in range(0, steps_h, 1):
         list = []
-        for j in range(0, steps, 1):
+        for j in range(0, steps_V, 1):
             list.append(get_rate_of_climb(engines_operative, thrust_max, h[i], V[j], wing_surface_area, drag_coefficient, mass, g))
         z.append(list)
 
@@ -350,3 +359,25 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     climb_final_velocity = V_optimal[-1]
 
     return fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance
+
+
+def get_descent(max_altitude, cruise_velocity, approach_velocity, engines_operative, thrust_descent, S, drag_coefficient, mass, g):
+    fuel_flow_descent = get_fuel_consumption(thrust_descent, 1, 1)[0]
+
+    steps = 10
+    descent_time = 0
+    descent_distance = 0
+    fuel_mass_descent = 0
+    ROC_list = []
+    altitide_list = np.linspace(max_altitude, 0, steps)
+    velocity_list = np.linspace(cruise_velocity, approach_velocity, steps)
+    for altitude in altitide_list:
+        for velocity in velocity_list:
+            ROC = get_rate_of_climb(engines_operative, thrust_descent, altitude, velocity, S, drag_coefficient, mass, g)
+            ROC_list.append(ROC)
+    for a in range(1, len(altitide_list)):
+        time_add = ((altitide_list[a]+velocity_list[a]**2/2/g)-(altitide_list[a-1]+velocity_list[a-1]**2/2/g))/((ROC_list[a]+ROC_list[a-1])/2)
+        descent_time += time_add
+        descent_distance += ((altitide_list[a]+velocity_list[a]**2/2/g)-(altitide_list[a-1]+velocity_list[a-1]**2/2/g))/np.tan(np.arcsin(((ROC_list[a]+ROC_list[a-1])/2)/((velocity_list[a]+velocity_list[a-1])/2)))
+        fuel_mass_descent += ((altitide_list[a]+velocity_list[a]**2/2/g)-(altitide_list[a-1]+velocity_list[a-1]**2/2/g))*(engines_operative*fuel_flow_descent)/((ROC_list[a]+ROC_list[a-1])/2)
+    return fuel_mass_descent, descent_distance

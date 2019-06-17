@@ -39,10 +39,10 @@ spar_poisson_ratio = 0.33
 density_spar = 2810
 cost_spar = 4.43
 
-# Skin Material: Aluminium 2224A,T351 
-E_skin = 72*10**9                 # Pa
-comp_strength_skin = 344*10**6      # Pa
-skin_poisson_ratio = 0.33
+# Skin Material: AA7075 T761 Aluminium/aramid fiber  
+E_skin = 67.6*10**9                 # Pa
+comp_strength_skin = 345*10**6      # Pa
+skin_poisson_ratio = 0.35
 density_skin = 2360#2800                 # kgm^-3
 cost_skin = 415#2.8
 

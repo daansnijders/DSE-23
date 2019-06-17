@@ -77,7 +77,7 @@ class empennage:
         return self.Cm    
     
     
-    def plot_stability_tail(self, plot = False):
+    def plot_stability_tail(self, plot = True):
         """Stability excluding margin"""
         aa = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
         bb = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
@@ -132,6 +132,7 @@ class empennage:
         self.S_h = self.Sh_S * S
         self.x_le_MAC = self.x_le_MAC_l_f * l_f[0]
         self.x_le_MAC_out = [self.x_le_MAC, self.x_le_MAC +l_cutout, self.x_le_MAC  + l_cutout]
+        self.x_ac = self.x_le_MAC + 0.25*MAC 
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
@@ -214,7 +215,7 @@ class empennage:
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
 
         # engine inoperative case
-        N_e = inputperf.thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
+        N_e = inputperf.thrust_max * y_engine                                           # [N*m] moment caused by engine inoperative
 
         self.l_v = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
 
@@ -226,8 +227,9 @@ class empennage:
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
         N_v_max = - Y_v_max * self.l_v                                          # [N*m] moment caused by the vertical tail
-
-        assert N_e < -N_v_max                                                   # check if tail is capable enough
+        print (N_e)
+        print (-N_v_max)
+        #assert ( N_e < -N_v_max   )                                                # check if tail is capable enough
 
     def size_canard(self):
         # determine airfoil/angle of attack during cruise
@@ -320,6 +322,7 @@ class empennage:
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_C1)
             ax2.set( ylim = [-1.4,0.8], ylabel = 'S_c/S')
+            plt.show()
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
@@ -327,7 +330,7 @@ class empennage:
         self.taper_ratio_c = 0.8                                                # [-] taper ratio canard
         self.lambda_c_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
         self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
-        self.Sc_S = 0.2                                                         # [-] Ratio area canard (assumed for now)
+        self.Sc_S = input("Enter the Sc_S ratio needed: ")                      # [-] Ratio area canard (assumed for now)
         self.S_c = self.Sc_S * self.S                                            # [m^2] Surface area of the canard
         self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
         self.b_c = initialplanform.get_b(self.S_c, self.A_c)                                    # [m] span canard
@@ -336,7 +339,7 @@ class empennage:
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard        
     
-    def deflection_curve(self, plot = True):
+    def deflection_curve(self, plot = False):
         C_l_C_l_theory = 1
         etah = 0.9
         K_b = 0.95
