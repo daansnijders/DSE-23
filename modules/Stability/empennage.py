@@ -315,7 +315,7 @@ class empennage:
             ax2.plot(self.l, self.Sc_S1)
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_C1)
-            ax2.set( ylim = [0,0.2565], ylabel = 'S_c/S')
+            ax2.set( ylim = [-1.4,0.2565], ylabel = 'S_c/S')
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
