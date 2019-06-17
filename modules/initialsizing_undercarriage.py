@@ -77,6 +77,7 @@ def get_y_mlg(b,dihedral_rad,psi_rad,phi_rad,z_cg,z_mlg,l_n,l_w,y_eng,z_eng,d_en
 
 # Get diameter of landing gear strut
 # Input: force on landing gear [N], length of strut [m]
+# Output: Diameter of landing gear [m]
 def get_d_lg(force,length):
     d = 0.01                       #[m]
     #Material: Low alloy steel, 300M, quenched and tempered
