@@ -122,11 +122,11 @@ b_splr = get_b_splr(b)                                                          
 
 # Update cg's DIFFERENT CONFIG'S
 # landing gear placement
-x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flight1, stroke,l_f[0]) # [m] x-location of the mlg
-x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flight2, stroke,l_f[1])])
-x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flight3, stroke,l_f[2])])
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,l_f[1])])
+x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,l_f[2])])
 
-z_mlg = update_z_mlg(x_mlg[0],beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
+z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
 
 x_nlg = 2
 
