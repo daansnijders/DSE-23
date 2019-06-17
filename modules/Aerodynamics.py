@@ -669,11 +669,11 @@ class Lift:
         M_wing = self.M_cruise / math.cos(self.lambda_4_rad)
 #        print (alpha_w)
                 
-        alpha_0_l_m75_m30 = 0.033               #Figure 8.42
+        alpha_0_l_m75_m30 = 0.1               #Figure 8.42
         
         delta_alpha_0 = (-0.343 - 0.398)/2      #Figure 8.41
-        alpha_0_L_w = (self.alpha_0_l + delta_alpha_0 * self.wing_twist) * (alpha_0_l_m75_m30)
-#        print (alpha_0_L_w)
+        alpha_0_L_w = (self.alpha_0_l + delta_alpha_0 * self.wing_twist)
+#        print (np.rad2deg(self.alpha_0_l + delta_alpha_0 * self.wing_twist))
                 
         C_l_alpha_Mwing = self.C_l_alpha / math.sqrt(1 - M_wing**2)
         beta = math.sqrt(1-M_wing**2)      # Prandtl-Glauert compressibility correction factor
