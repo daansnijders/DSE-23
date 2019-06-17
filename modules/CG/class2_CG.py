@@ -4,7 +4,7 @@ Created on Wed May 29 15:09:22 2019
 
 @author: Stijn
 """
-from inputs.constants import *
+import inputs.constants as const
 import inputs.concept_1 as c1
 import modules.CG.CG_func as cgcomp
 

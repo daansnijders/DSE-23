@@ -7,7 +7,7 @@ Created on Fri May 24 09:06:58 2019
 import modules.weight_class2.class2_struct_defs as c2struc
 import modules.weight_class2.class2_powerplant_defs as c2pp
 import modules.weight_class2.class2_fixedequipment_defs as c2fq
-from inputs.constants import *
+import inputs.constants as const
 
 #from inputs.concept_1 import *
 #from inputs.performance_inputs import 
@@ -46,20 +46,20 @@ class Class2_weight:
         self.M_carried_canard_MZF= M_carried_canard_MZF
         
     def structural_mass(self):
-        self.M_wing          =c2struc.get_wing_mass(self.M_MZF,self.b,self.S,self.Cr_t,self.lambda_2_rad,self.n_ult)*0.95*lbs_to_kg
-        self.M_fuselage      =c2struc.get_fuselage_mass(self.V_dive, self.l_h, self.w_fus, self.h_fus, self.S_fus)*lbs_to_kg
-        self.M_nacelle       = c2struc.get_nacelle_mass(self.T_req_TO)*lbs_to_kg   #TOTAL NACELLE
+        self.M_wing          =c2struc.get_wing_mass(self.M_MZF,self.b,self.S,self.Cr_t,self.lambda_2_rad,self.n_ult)*0.95*const.lbs_to_kg
+        self.M_fuselage      =c2struc.get_fuselage_mass(self.V_dive, self.l_h, self.w_fus, self.h_fus, self.S_fus)*const.lbs_to_kg
+        self.M_nacelle       = c2struc.get_nacelle_mass(self.T_req_TO)*const.lbs_to_kg   #TOTAL NACELLE
         if self.config==1:
             self.M_canard    =0
         else:
-            self.M_canard    =c2struc.get_wing_mass(self.M_carried_canard_MZF,self.b_c,self.S_c,self.Cr_t_c,self.lambda_c_2_rad,self.n_ult)*lbs_to_kg
+            self.M_canard    =c2struc.get_wing_mass(self.M_carried_canard_MZF,self.b_c,self.S_c,self.Cr_t_c,self.lambda_c_2_rad,self.n_ult)*const.lbs_to_kg
         
-        self.M_horizontaltail   =c2struc.get_horizontaltail_mass(K_h,self.S_h,self.V_dive,self.lambda_h_2_rad)*lbs_to_kg
-        self.M_verticaltail     =c2struc.get_verticaltail_mass(K_v,self.S_v,self.V_dive,self.lambda_v_2_rad)*lbs_to_kg
+        self.M_horizontaltail   =c2struc.get_horizontaltail_mass(const.K_h,self.S_h,self.V_dive,self.lambda_h_2_rad)*const.lbs_to_kg
+        self.M_verticaltail     =c2struc.get_verticaltail_mass(const.K_v,self.S_v,self.V_dive,self.lambda_v_2_rad)*const.lbs_to_kg
         #add canard for the configguration 2 and 3 
         
-        self.M_landinggear_nose      =c2struc.get_landinggear_mass(K_gr,Ag_nose,Bg_nose,Cg_nose,Dg_nose,self.maxMTOW)*lbs_to_kg
-        self.M_landinggear_main      =c2struc.get_landinggear_mass(K_gr,Ag_main,Bg_main,Cg_main,Dg_main,self.maxMTOW)*lbs_to_kg
+        self.M_landinggear_nose      =c2struc.get_landinggear_mass(const.K_gr,const.Ag_nose,const.Bg_nose,const.Cg_nose,const.Dg_nose,self.maxMTOW)*const.lbs_to_kg
+        self.M_landinggear_main      =c2struc.get_landinggear_mass(const.K_gr,const.Ag_main,const.Bg_main,const.Cg_main,const.Dg_main,self.maxMTOW)*const.lbs_to_kg
         self.M_landinggear           =(self.M_landinggear_nose+self.M_landinggear_main)
         
         M_structure =c2struc.get_structural_mass(self.M_wing,self.M_fuselage,self.M_nacelle,self.M_horizontaltail,self.M_verticaltail,self.M_landinggear, self.M_canard)
@@ -69,10 +69,10 @@ class Class2_weight:
         
     
     def powerplant_mass(self):
-        self.M_engines_total          = c2pp.get_engine_mass()*lbs_to_kg
-        self.M_airinduction          = c2pp.get_airinduction_mass()* lbs_to_kg
-        self.M_fuelsystem            = c2pp.get_fuelsystem_mass(self.M_fuel,K_fsp)* lbs_to_kg
-        self.M_propulsionsystem      = c2pp.get_propulsionsystem_mass(self.l_f,self.b)* lbs_to_kg
+        self.M_engines_total          = c2pp.get_engine_mass()*const.lbs_to_kg
+        self.M_airinduction          = c2pp.get_airinduction_mass()* const.lbs_to_kg
+        self.M_fuelsystem            = c2pp.get_fuelsystem_mass(self.M_fuel,const.K_fsp)* const.lbs_to_kg
+        self.M_propulsionsystem      = c2pp.get_propulsionsystem_mass(self.l_f,self.b)* const.lbs_to_kg
         
         M_powerplant            = c2pp.get_totalpowerplant_mass(self.M_engines_total,self.M_airinduction,self.M_fuelsystem, self.M_propulsionsystem)
         
@@ -87,18 +87,18 @@ class Class2_weight:
         return M_fuselage_group
         
     def fixed_equipment_mass(self):
-        M_fc         = c2fq.get_flightcontrolsystem_mass(self.M_TO)* lbs_to_kg
-        M_hydr       = c2fq.get_hydraulic_pneumatic_mass(self.M_TO)* lbs_to_kg
-        M_els        = c2fq.get_electricalsystem_mass(self.d_f_inner, self.l_cabin)* lbs_to_kg
-        M_avion      = c2fq.get_avioncis_mass(self.M_TO)* lbs_to_kg
-        M_environ    = c2fq.get_environmentsystem_mass(self.l_cabin)* lbs_to_kg
-        M_oxygen     = c2fq.get_oxygensystem_mass(self.N_pax)* lbs_to_kg
-        M_apu        = c2fq.get_apu_mass(self.M_TO)* lbs_to_kg
-        M_furnish    = c2fq.get_furnish_mass(self.M_TO, self.M_fuel)* lbs_to_kg
-        M_cargohand  = c2fq.get_cargohandling_mass(self.l_cabin)* lbs_to_kg
-        M_operation  = c2fq.get_operationitems_mass()* lbs_to_kg
-        M_flighttest = c2fq.get_flighttestinstrumentation_mass()* lbs_to_kg
-        M_paint      = c2fq.get_paint_mass(self.M_TO)* lbs_to_kg
+        M_fc         = c2fq.get_flightcontrolsystem_mass(self.M_TO)* const.lbs_to_kg
+        M_hydr       = c2fq.get_hydraulic_pneumatic_mass(self.M_TO)* const.lbs_to_kg
+        M_els        = c2fq.get_electricalsystem_mass(self.d_f_inner, self.l_cabin)*const. lbs_to_kg
+        M_avion      = c2fq.get_avioncis_mass(self.M_TO)* const.lbs_to_kg
+        M_environ    = c2fq.get_environmentsystem_mass(self.l_cabin)*const.lbs_to_kg
+        M_oxygen     = c2fq.get_oxygensystem_mass(self.N_pax)* const.lbs_to_kg
+        M_apu        = c2fq.get_apu_mass(self.M_TO)* const.lbs_to_kg
+        M_furnish    = c2fq.get_furnish_mass(self.M_TO, self.M_fuel)* const.lbs_to_kg
+        M_cargohand  = c2fq.get_cargohandling_mass(self.l_cabin)* const.lbs_to_kg
+        M_operation  = c2fq.get_operationitems_mass()* const.lbs_to_kg
+        M_flighttest = c2fq.get_flighttestinstrumentation_mass()* const.lbs_to_kg
+        M_paint      = c2fq.get_paint_mass(self.M_TO)* const.lbs_to_kg
         
         M_fixedequipment= c2fq.get_fixedequipment_mass(M_fc,M_hydr,M_els,M_avion,M_environ,M_oxygen,M_apu,M_furnish,M_cargohand,M_operation,M_flighttest,M_paint)
 
