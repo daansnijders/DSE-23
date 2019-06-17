@@ -373,7 +373,7 @@ def get_struc_force(cross_section_lst,load_factor,sweep_LE,b_wing,Cr,Ct):
     struc_force_lst = []
     for i in range(len(cross_section_lst)):
         yi = cross_section_lst[i,0]
-        xi = yi*np.tan(sweep_LE/180*np.pi)+(spar_front+spar_rear)/2*lsf.get_chord(yi,b_wing,Cr,Ct) 
+        xi = yi*np.tan(sweep_LE/180*np.pi)+cross_section_lst[i,4]
         zi = 0
         Fx = 0
         Fy = 0
