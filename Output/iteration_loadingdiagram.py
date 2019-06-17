@@ -14,4 +14,6 @@ import inputs.constant as const
 
 import outputs.connection_departments as detailedsizing
 
-plotdiagram=loadingdiagram.plot_loadingdiagram((perf.Sland,detailedsizing.Cl_TO,deltailedsizing.Cl_cruise,detailedsizing.Cl_land,detailedsizing.V_climb,detailedsizing.c,detailedsizing.f,perf.sigma, perf.TOP, CD0,conc1.A,conc1.e,1000,7000,100)
+config1_plotdiagram=loadingdiagram.plot_loadingdiagram((perf.Sland,detailedsizing.Cl_TO,deltailedsizing.Cl_cruise1,detailedsizing.Cl_land,detailedsizing.V_climb,detailedsizing.c,detailedsizing.f,perf.sigma, perf.TOP, detailedsizing.CD0_1,conc1.A,conc1.e,1000,7000,100)
+config2_plotdiagram=loadingdiagram.plot_loadingdiagram((perf.Sland,detailedsizing.Cl_TO,deltailedsizing.Cl_cruise2,detailedsizing.Cl_land,detailedsizing.V_climb,detailedsizing.c,detailedsizing.f,perf.sigma, perf.TOP, detailedsizing.CD0_2,conc1.A,conc1.e,1000,7000,100)
+config3_plotdiagram=loadingdiagram.plot_loadingdiagram((perf.Sland,detailedsizing.Cl_TO,deltailedsizing.Cl_cruise3,detailedsizing.Cl_land,detailedsizing.V_climb,detailedsizing.c,detailedsizing.f,perf.sigma, perf.TOP, detailedsizing.CD0_3,conc1.A,conc1.e,1000,7000,100)
