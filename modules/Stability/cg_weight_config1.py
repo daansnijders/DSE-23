@@ -10,7 +10,10 @@ from inputs.concept_1 import x_le_MAC, l_f, x_cargo, l_cabin, N_pax, MAC, S, b, 
 from inputs.constants import *
 
 from modules.Stability.loaddiagram_detailed import Loading_diagram
-from modules.main_class2 import get_cg, config1_class2, config1_cg_x, config1_cg, config1_class2_OEW
+from modules.main_class2 import config1_class2, config1_cg_x, config1_cg, config1_class2_OEW
+from modules.CG.class2_CG import get_cg
+
+
 
 x_le_MAC1_emp = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
 x_le_MAC2_emp = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]

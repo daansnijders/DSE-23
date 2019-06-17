@@ -8,7 +8,6 @@ Tool for other programs
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from inputs.concept_1 import *
 from inputs.constants import *
 
 class Loading_diagram:
