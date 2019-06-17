@@ -306,8 +306,13 @@ def get_the_limit_for_lateral(MTOW):
 
 
 'redundant definitions for now '
-def get_overall_sound_pressure_level(SPL,centrefreq):
-    OSPL=10*log10(sum(10**(SPL/10)))
+def get_overall_sound_pressure_level(SPL_list):
+    exponent=[10**(SPL_list[i]/10) for i in range(7)]
+    sum_exponent=sum(exponent)
+    OSPL_A=10*log10(sum_exponent)
+
+    return OSPL_A
+    OSPL=10*log10(sum(10**(SPL[i]/10)))
     return OSPL
     
 def get_perceived_noise_level(N):
@@ -347,25 +352,25 @@ def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap
     G_flap,L_flap,K_flap,a_flap=get_constants_flaps(M,flap_deflection,S_flap,b_flap)
     G_mlg, G_nlg, K_mlg,K_nlg,K_strut,a_lg=get_constants_landinggear(N_mw,N_nw,D_mlg,D_nlg)
     
-    S_flap=[get_strouhal_number(f,L_flap,M,theta_observer,a_sl) for f in centrefreq]
-    print('Strouhal flap.',S_flap)
-    F_flap= [get_spectrical_function_flap(S_flap[i]) for i in range(len(S_flap))]
-    print('spectrum flap', F_flap)
-    S_slat= [get_strouhal_number(f,L_slat,M,theta_observer,a_sl) for f in centrefreq]
-    F_slat =[ get_spectrical_function_slat(S_slat[i])  for i in range(len(S_flap))]
-    
-    S_wing=[get_strouhal_number(f,L_wing,M,theta_observer,a_sl) for f in centrefreq]
-    F_wing = [get_spectrical_function_wing(S_wing[i])  for i in range(len(S_flap))]
-    
-    S_mlg=[get_strouhal_number(f,D_mlg,M,theta_observer,a_sl)for f in centrefreq]
-    S_nlg=[get_strouhal_number(f,D_nlg,M,theta_observer,a_sl)for f in centrefreq]
-    F_mlg=[get_spectrical_function_landinggear(S_mlg[i]) for i in range(len(S_flap))]
-    F_nlg=[get_spectrical_function_landinggear(S_nlg[i]) for i in range(len(S_flap))]
-    
-    S_strut_mlg=[get_strouhal_number(f,L_strut_mlg,M,theta_observer,a_sl)for f in centrefreq]
-    S_strut_nlg=[get_strouhal_number(f,L_strut_nlg,M,theta_observer,a_sl)for f in centrefreq]
-    F_strut_mlg=[get_spectrical_function_landinggear(S_strut_mlg[i]) for i in range(len(S_flap))]
-    F_strut_nlg=[get_spectrical_function_landinggear(S_strut_nlg[i]) for i in range(len(S_flap))]
+#    S_flap=[get_strouhal_number(f,L_flap,M,theta_observer,a_sl) for f in centrefreq]
+#    print('Strouhal flap.',S_flap)
+#    F_flap= [get_spectrical_function_flap(S_flap[i]) for i in range(len(S_flap))]
+#    print('spectrum flap', F_flap)
+#    S_slat= [get_strouhal_number(f,L_slat,M,theta_observer,a_sl) for f in centrefreq]
+#    F_slat =[ get_spectrical_function_slat(S_slat[i])  for i in range(len(S_flap))]
+#    
+#    S_wing=[get_strouhal_number(f,L_wing,M,theta_observer,a_sl) for f in centrefreq]
+#    F_wing = [get_spectrical_function_wing(S_wing[i])  for i in range(len(S_flap))]
+#    
+#    S_mlg=[get_strouhal_number(f,D_mlg,M,theta_observer,a_sl)for f in centrefreq]
+#    S_nlg=[get_strouhal_number(f,D_nlg,M,theta_observer,a_sl)for f in centrefreq]
+#    F_mlg=[get_spectrical_function_landinggear(S_mlg[i]) for i in range(len(S_flap))]
+#    F_nlg=[get_spectrical_function_landinggear(S_nlg[i]) for i in range(len(S_flap))]
+#    
+#    S_strut_mlg=[get_strouhal_number(f,L_strut_mlg,M,theta_observer,a_sl)for f in centrefreq]
+#    S_strut_nlg=[get_strouhal_number(f,L_strut_nlg,M,theta_observer,a_sl)for f in centrefreq]
+#    F_strut_mlg=[get_spectrical_function_landinggear(S_strut_mlg[i]) for i in range(len(S_flap))]
+#    F_strut_nlg=[get_spectrical_function_landinggear(S_strut_nlg[i]) for i in range(len(S_flap))]
 
     pe_2_flap =[get_effective_pressure_flap(f,rho_0,a_sl,M,r_observer,theta_observer,phi_observer,L_flap,K_flap,a_flap,G_flap,flap_deflection) for f in centrefreq]
 
@@ -382,66 +387,66 @@ def EPNdB_calculations(r_observer,theta_observer,phi_observer,V_approach, S_flap
     pe_2_strut_nose= [get_effective_pressure_strut(f,rho_0,a_sl,M,r_observer,theta_observer,phi_observer,K_strut,L_strut_nlg,a_lg,G_nlg)for f in centrefreq]
 
 
-#    OSPL_dBA_flap=get_overall_sound_level_general(pe_2_flap,freq_delta,centrefreq,r_observer)
-#    OSPL_dBA_slat=get_overall_sound_level_general(pe_2_slat,freq_delta,centrefreq,r_observer)
-#    OSPL_dBA_wing=get_overall_sound_level_general(pe_2_wing,freq_delta,centrefreq,r_observer)
-#    OSPL_dBA_mlg=get_overall_sound_level_general(pe_2_mlg,freq_delta,centrefreq,r_observer)
-#    OSPL_dBA_nlg=get_overall_sound_level_general(pe_2_nlg,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_flap=get_overall_sound_level_general(pe_2_flap,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_slat=get_overall_sound_level_general(pe_2_slat,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_wing=get_overall_sound_level_general(pe_2_wing,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_mlg=get_overall_sound_level_general(pe_2_mlg,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_nlg=get_overall_sound_level_general(pe_2_nlg,freq_delta,centrefreq,r_observer)
 
-#    if phi_observer==0:
-#        OSPL_dBA_mlg_strut=0
-#        OSPL_dBA_nlg_strut=0
-#    else:
-#        OSPL_dBA_mlg_strut=get_overall_sound_level_general(pe_2_strut_main,freq_delta,centrefreq,r_observer)
-#        OSPL_dBA_nlg_strut=get_overall_sound_level_general(pe_2_strut_nose,freq_delta,centrefreq,r_observer)
+    if phi_observer==0:
+        OSPL_dBA_mlg_strut=0
+        OSPL_dBA_nlg_strut=0
+    else:
+        OSPL_dBA_mlg_strut=get_overall_sound_level_general(pe_2_strut_main,freq_delta,centrefreq,r_observer)
+        OSPL_dBA_nlg_strut=get_overall_sound_level_general(pe_2_strut_nose,freq_delta,centrefreq,r_observer)
 
 
-    pe_tot=[pe_2_flap [i]+pe_2_slat[i] + pe_2_wing[i] +pe_2_mlg[i]+pe_2_nlg[i] +pe_2_strut_main[i]+ pe_2_strut_nose[i]for i in range(len(centrefreq))] 
+#    pe_tot=[pe_2_flap [i]+pe_2_slat[i] + pe_2_wing[i] +pe_2_mlg[i]+pe_2_nlg[i] +pe_2_strut_main[i]+ pe_2_strut_nose[i]for i in range(len(centrefreq))] 
+    OSPL_components=[OSPL_dBA_flap,OSPL_dBA_slat,OSPL_dBA_wing,OSPL_dBA_mlg,OSPL_dBA_nlg,OSPL_dBA_mlg_strut,OSPL_dBA_nlg_strut]
+#    OSPL_dBA_tot=get_overall_sound_level_general(pe_tot,freq_delta,centrefreq,r_observer)
+    OSPL_dBA_tot=get_overall_sound_pressure_level(OSPL_components)
+#    S_flap=[log10(S_flap[i]) for i in range(len(centrefreq))]
+#    print(S_flap)
+#    F_flap=[log10(F_flap[i]) for i in range(len(centrefreq))]
+#    print(F_flap)
+#    S_slat=[log10(S_slat[i]) for i in range(len(centrefreq))]
+#    F_slat =[log10(F_slat[i]) for i in range(len(centrefreq))]
+#    
+#    S_wing=[log10(S_wing[i]) for i in range(len(centrefreq))]
+#    F_wing = [log10(F_wing[i]) for i in range(len(centrefreq))]
+#    
+#    S_mlg=[log10(S_mlg[i]) for i in range(len(centrefreq))]
+#    S_nlg=[log10(S_nlg[i]) for i in range(len(centrefreq))]
+#    F_mlg=[log10(F_mlg[i]) for i in range(len(centrefreq))]
+#    F_nlg=[log10(F_nlg[i]) for i in range(len(centrefreq))]
+#    S_strut_mlg=[log10(S_strut_mlg[i]) for i in range(len(centrefreq))]
+#    S_strut_nlg=[log10(S_strut_nlg[i]) for i in range(len(centrefreq))]
+#    F_strut_mlg=[log10(F_strut_mlg[i]) for i in range(len(centrefreq))]
+#    F_strut_nlg=[log10(F_strut_nlg[i]) for i in range(len(centrefreq))]
+#    
+#    plt.figure()
+#    plt.plot(S_flap,F_flap,'-o',label='flap')
+#    plt.plot(S_slat,F_slat,'-o',label='slat')
+#    plt.plot(S_wing,F_wing,'-o',label='wing')
+#    plt.plot(S_mlg,F_mlg,'-o',label='Main LG')
+#    plt.plot(S_nlg,F_nlg,'-o',label='Nose LG')
+##    plt.plot(S_strut_mlg,F_strut_mlg,label='Main strutLG')
+##    plt.plot(S_strut_nlg,F_strut_nlg,label='Nose  strut LG')
+#    plt.xlabel('log(S)')
+#    plt.ylabel('log(F)')
+#    plt.xlim([-2,3])
+#    plt.ylim([-4,0])
+#    plt.title('Strouhal number vs Spectrical function')
+#    plt.legend()
+#    plt.show()
 
-    OSPL_dBA_tot=get_overall_sound_level_general(pe_tot,freq_delta,centrefreq,r_observer)
-
-    S_flap=[log10(S_flap[i]) for i in range(len(centrefreq))]
-    print(S_flap)
-    F_flap=[log10(F_flap[i]) for i in range(len(centrefreq))]
-    print(F_flap)
-    S_slat=[log10(S_slat[i]) for i in range(len(centrefreq))]
-    F_slat =[log10(F_slat[i]) for i in range(len(centrefreq))]
-    
-    S_wing=[log10(S_wing[i]) for i in range(len(centrefreq))]
-    F_wing = [log10(F_wing[i]) for i in range(len(centrefreq))]
-    
-    S_mlg=[log10(S_mlg[i]) for i in range(len(centrefreq))]
-    S_nlg=[log10(S_nlg[i]) for i in range(len(centrefreq))]
-    F_mlg=[log10(F_mlg[i]) for i in range(len(centrefreq))]
-    F_nlg=[log10(F_nlg[i]) for i in range(len(centrefreq))]
-    S_strut_mlg=[log10(S_strut_mlg[i]) for i in range(len(centrefreq))]
-    S_strut_nlg=[log10(S_strut_nlg[i]) for i in range(len(centrefreq))]
-    F_strut_mlg=[log10(F_strut_mlg[i]) for i in range(len(centrefreq))]
-    F_strut_nlg=[log10(F_strut_nlg[i]) for i in range(len(centrefreq))]
-    
-    plt.figure()
-    plt.plot(S_flap,F_flap,'-o',label='flap')
-    plt.plot(S_slat,F_slat,'-o',label='slat')
-    plt.plot(S_wing,F_wing,'-o',label='wing')
-    plt.plot(S_mlg,F_mlg,'-o',label='Main LG')
-    plt.plot(S_nlg,F_nlg,'-o',label='Nose LG')
-#    plt.plot(S_strut_mlg,F_strut_mlg,label='Main strutLG')
-#    plt.plot(S_strut_nlg,F_strut_nlg,label='Nose  strut LG')
-    plt.xlabel('log(S)')
-    plt.ylabel('log(F)')
-    plt.xlim([-2,3])
-    plt.ylim([-4,0])
-    plt.title('Strouhal number vs Spectrical function')
-    plt.legend()
-    plt.show()
-
-#    print('flap',OSPL_dBA_flap, 'dBA' )
-#    print('slat',OSPL_dBA_slat, 'dBA'  )
-#    print('wing',OSPL_dBA_wing, 'dBA'  )
-#    print('mlg',OSPL_dBA_mlg , 'dBA' )
-#    print('nlg',OSPL_dBA_nlg , 'dBA' )
-#    print('m strut',OSPL_dBA_mlg_strut, 'dBA'  )
-#    print('n strut',OSPL_dBA_nlg_strut, 'dBA' )
+    print('flap',OSPL_dBA_flap, 'dBA' )
+    print('slat',OSPL_dBA_slat, 'dBA'  )
+    print('wing',OSPL_dBA_wing, 'dBA'  )
+    print('mlg',OSPL_dBA_mlg , 'dBA' )
+    print('nlg',OSPL_dBA_nlg , 'dBA' )
+    print('m strut',OSPL_dBA_mlg_strut, 'dBA'  )
+    print('n strut',OSPL_dBA_nlg_strut, 'dBA' )
 
     print('overall dBA',OSPL_dBA_tot, 'dBA' )
     

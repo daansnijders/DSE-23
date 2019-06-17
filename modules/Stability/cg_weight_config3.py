@@ -12,7 +12,7 @@ from inputs.constants import *
 
 from modules.Stability.loaddiagram_detailed import *
 from modules.Stability.check_ground import *
-from modules.main_class2 import *
+
 from modules.CG.class2_CG import get_cg
 
 from modules.Stability.loaddiagram_detailed import Loading_diagram

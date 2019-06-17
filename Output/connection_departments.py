@@ -25,7 +25,7 @@ i_h = 0                 #Angle of incidence horinzontal tail in DEG
 i_c = 0                 #Angle of incidence canard in DEG
 i_n = 0                 #Angle of incidence nacelle in DEG
 wing_twist = -3         #Wing twist in DEG
-S_elev = 9.987716166863338      
+S_elev = 9.987716166863338
 Delta_C_L_flap = 2.4 - 1.5          #Cl_land - Cl_clean from performanca_input
 
 'HLD'
@@ -75,7 +75,7 @@ l_fueltank = 1.5
 d_fueltank = 0.3
 
 #Hard to calculate, not important for first iteration, maybe from Daan and Stijn
-delta_C_L_h = 0                 #When i_h = 0 
+delta_C_L_h = 0                 #When i_h = 0
 delta_C_L_c = 0                 #When i_c = 0
 
 #Set up different configurations
@@ -234,7 +234,7 @@ x_v             = empennage1.x_v                                                
 
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
 lambda_h_le_rad2= empennage1.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
+t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
 A_c2            = empennage1.A_c                                                # [-] Aspect ratio of the canard
@@ -242,11 +242,11 @@ b_c2            = empennage1.b_c                                                
 Cr_c2           = empennage1.Cr_c                                               # [m] root chord length canard
 Ct_c2           = empennage1.Ct_c                                               # [m] tip chord length canard
 z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
-l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
+l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
 lambda_h_le_rad3= empennage2.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
+t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard
 Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard
 A_c3            = empennage2.A_c                                                # [-] Aspect ratio of the canard
@@ -254,7 +254,7 @@ b_c3            = empennage2.b_c                                                
 Cr_c3           = empennage2.Cr_c                                               # [m] root chord length canard
 Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
 z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
-l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
+l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
 
 
 
@@ -297,9 +297,9 @@ l_n3 = x_cg_max_flight3 - x_nlg
 
 y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
 
-config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
-config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])
 
 
 frac = np.ones((3,2))
@@ -323,7 +323,8 @@ mass_resolution = 20  # resolution of plotting mass vs take-off field length
 
 'general inputs'
 engine_failure = False
-show_plots = False
+show_performance_plots = False
+show_airport_plots = True
 
 # temporary values, will be removed as soon as aerodynamics inputs are ready
 C_L_to = 1.9
@@ -343,24 +344,24 @@ config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D
                                   friction_coefficient_la, reverse_thrust_factor, engine_failure,
                                   thrust_setting_climb_out, thrust_setting_transition, M_payload[0], M_fuel[0],
                                   max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
-                                  oswald_efficiency_number, correction_factor_to, show_plots)
+                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio, oswald_efficiency_number,
+                                  correction_factor_to, show_performance_plots, show_airport_plots, thrust_setting_descent)
 
 config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[1], MTOW[1], g,
                                   screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
                                   friction_coefficient_la, reverse_thrust_factor, engine_failure,
                                   thrust_setting_climb_out, thrust_setting_transition, M_payload[1], M_fuel[1],
                                   max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
-                                  oswald_efficiency_number, correction_factor_to, show_plots)
+                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio, oswald_efficiency_number,
+                                  correction_factor_to, show_performance_plots, show_airport_plots, thrust_setting_descent)
 
 config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, C_D_to, C_D_la, C_D_cruise, S, OEW[2], MTOW[2], g,
                                   screen_height_to, screen_height_la, thrust_max, friction_coefficient_to,
                                   friction_coefficient_la, reverse_thrust_factor, engine_failure,
                                   thrust_setting_climb_out, thrust_setting_transition, M_payload[2], M_fuel[2],
                                   max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb,
-                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio,
-                                  oswald_efficiency_number, correction_factor_to, show_plots)
+                                  H_m, V_cruise, R[0], lift_over_drag, aspect_ratio, oswald_efficiency_number,
+                                  correction_factor_to, show_performance_plots, show_airport_plots, thrust_setting_descent)
 
 
 """
@@ -375,7 +376,7 @@ config2_emissions=gasemissions.greenhousegas_emissions(config2_Performance,2)
 config3_emissions=gasemissions.greenhousegas_emissions(config3_Performance,3)
 
 #CO_2_tot=get_CO2_emissions(config1_Performance.fuel_mass_nominal)
-#Fuel_per_pax=get_CO2_per_passenger_per_km(CO_2_tot,N_pax[0],R[0]) 
+#Fuel_per_pax=get_CO2_per_passenger_per_km(CO_2_tot,N_pax[0],R[0])
 #
 ##EI_NOx_phase=get_EI_NOX_fuelflow(fuel_flow)
 #fuel_flow_config1=get_fuel_flow_per_phase(config1_Performance.fuel_flow_take_off, config1_Performance.fuel_flow_climb,config1_Performance.fuel_flow_cruise_breguet,config1_Performance.fuel_flow_descent, config1_Performance.fuel_flow_landing)

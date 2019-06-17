@@ -7,7 +7,7 @@ Created on Thu May  9 10:58:36 2019
 
 """ Fuselage Design """
 from math import *
-from modules.initialsizing_weights import *
+#from modules.initialsizing_weights import *
 from inputs.constants import *
 
 def get_d_f_inner(N_sa, seat_width, N_aisle, armrest, aisle_width, s_clearance):
