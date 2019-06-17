@@ -188,6 +188,7 @@ lift_over_drag = conc1.LoverD[0]
 
 aspect_ratio = conc1.A
 oswald_efficiency_number = conc1.e
+print('check 1')
 
 'analysis'
 config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
@@ -199,6 +200,8 @@ config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO1, CD_
                                   const.H_m, const.V_cruise, conc1.R[0], lift_over_drag, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
+
+print('check between conc')
 
 config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
@@ -264,14 +267,14 @@ Vc_V      = 1.                                          #zelf                   
 
 
 # initialize class:
-empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
-x_le_w          = initialplanform.get_le_wing(y_MAC,conc1.x_le_MAC, conc1.lambda_2_rad, conc1.MAC, conc1.Cr)            # [m] x-location of le main wing with updated lemac
+x_le_w          = initialplanform.get_le_wing(conc1.y_MAC,x_le_MAC, conc1.lambda_2_rad, conc1.MAC, conc1.Cr)            # [m] x-location of le main wing with updated lemac
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
