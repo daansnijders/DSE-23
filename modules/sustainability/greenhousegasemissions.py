@@ -53,7 +53,7 @@ class greenhousegas_emissions(object):
         self.configuration=configuration-1
         
     def get_CO2_per_passenger_per_km(self):
-        print(self.performance.fuel_mass_nominal)
+        
         self.fuel_per_pax=self.performance.fuel_mass_nominal/c1.N_pax[self.configuration]/c1.R[self.configuration]*1000
         self.CO2_reduction=(0.021-self.fuel_per_pax)/0.021*100
         return self.fuel_per_pax, self.CO2_reduction
@@ -62,8 +62,8 @@ class greenhousegas_emissions(object):
         return 3.15*self.performance.fuel_mass_nominal
     
     def get_NOx_mass(self):
-        self.fuel_flow_list=[self.performance.fuel_flow_take_off, self.performance.fuel_flow_climb, self.performance.fuel_flow_cruise_breguet,0.4, self.performance.fuel_flow_landing] #self.performance.fuel_flow_descent
-        self.M_fuel_list=[20,self.performance.fuel_mass_climb,self.performance.fuel_mass_cruise_breguet,self.performance.fuel_mass_descent, self.performance.fuel_mass_landing] #self.performance.fuel_mass_take_off
+        self.fuel_flow_list=[self.performance.fuel_flow_take_off, self.performance.fuel_flow_climb, self.performance.fuel_flow_cruise_breguet,self.performance.fuel_flow_descent, self.performance.fuel_flow_landing] #self.performance.fuel_flow_descent
+        self.M_fuel_list=[self.performance.fuel_mass_take_off,self.performance.fuel_mass_climb,self.performance.fuel_mass_cruise_breguet,self.performance.fuel_mass_descent, self.performance.fuel_mass_landing] #self.performance.fuel_mass_take_off
         self.EI_NOx= [29.171*self.fuel_flow_list[i]+3.8626 for i in range(len(self.fuel_flow_list))]
         self.M_NOx=[self.EI_NOx[i]*self.M_fuel_list[i] for i in range(len(self.fuel_flow_list))]
         return sum(self.M_NOx)

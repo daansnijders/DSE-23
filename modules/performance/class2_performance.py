@@ -4,7 +4,7 @@ import pandas as pd
 
 from Structure.Wing.isa import isa
 from modules.performance.class2_performance_defs import get_take_off_field_length, get_landing_field_length,\
-    get_fuel_consumption, get_climb_optimization, get_fuel_burned_breguet, get_thrust_required, get_rate_of_climb
+    get_fuel_consumption, get_climb_optimization, get_fuel_burned_breguet, get_thrust_required, get_descent
 from modules.performance.serviceable_airports import *
 
 
@@ -66,7 +66,8 @@ class Performance:
         self.fuel_fraction_cruise_breguet, self.fuel_fraction_descent, self.fuel_fraction_loiter,\
         self.fuel_fraction_landing, self.fuel_fraction_take_off, self.fuel_fraction_climb_2,\
         self.fuel_fraction_cruise_breguet_2, self.fuel_fraction_descent_2, self.fuel_fraction_loiter_2,\
-        self.fuel_fraction_landing_2 = self.analyze_fuel_consumption()
+        self.fuel_fraction_landing_2, self.fuel_fraction_take_off_2, fuel_fraction_descent_2 = self.analyze_fuel_consumption()
+        print(self.fuel_table)
 
     def cj(self):
         cj = get_fuel_consumption(self.thrust_max, 1, 1)[0] / self.thrust_max
@@ -185,7 +186,7 @@ class Performance:
         loiter_altitude = 450.          # ICAO [s]
         loiter_time = 5 * 60            # ICAO [s]
         loiter_2_time = 30 * 60         # ICAO [s]
-        altitude_cruise_2 = self.altitude_cruise
+        altitude_cruise_2 = self.altitude_cruise * 0.5
 
         """
         analysis
@@ -253,13 +254,12 @@ class Performance:
             fuel_consumption.loc['cruise'] = [fuel_flow_cruise * 2, fuel_mass_cruise * 2]
 
         'descent'
-        fuel_fraction_descent = 0.990
-        fuel_mass_descent = (1 - fuel_fraction_descent) * self.MTOW
-
-
         fuel_flow_descent = get_fuel_consumption(self.thrust_setting_descent * self.thrust_max, 1, 1)[0]
+        fuel_mass_descent, distance_descent = get_descent(self.altitude_cruise, self.cruise_velocity,
+                                                          self.approach_velocity, engines_operative,
+                                                          self.thrust_setting_descent * self.thrust_max,
+                                                          self.S, self.C_D_cruise, mass, self.g)
         fuel_consumption.loc['descent'] = [fuel_flow_descent, fuel_mass_descent]
-
         mass -= fuel_mass_descent
 
         'loiter'
@@ -331,9 +331,11 @@ class Performance:
             fuel_consumption.loc['cruise_2'] = [fuel_flow_cruise_2 * 2, fuel_mass_cruise_2 * 2]
 
         'descent_2'
-        fuel_fraction_descent_2 = 0.990
-        fuel_mass_descent_2 = (1 - fuel_fraction_descent_2) * self.MTOW
         fuel_flow_descent_2 = get_fuel_consumption(self.thrust_setting_descent * self.thrust_max, 1, 1)[0]
+        fuel_mass_descent_2, distance_descent_2 = get_descent(altitude_cruise_2, self.cruise_velocity,
+                                                          self.approach_velocity, engines_operative,
+                                                          self.thrust_setting_descent * self.thrust_max,
+                                                          self.S, self.C_D_cruise, mass, self.g)
         fuel_consumption.loc['descent_2'] = [fuel_flow_descent_2, fuel_mass_descent_2]
 
         mass -= fuel_mass_descent_2
@@ -363,13 +365,15 @@ class Performance:
         fuel_fraction_climb = fuel_mass_climb / self.MTOW
         fuel_fraction_cruise_breguet = fuel_mass_cruise_breguet / self.MTOW
         fuel_fraction_loiter = fuel_mass_loiter / self.MTOW
+        fuel_fraction_descent = fuel_mass_descent / self.MTOW
         fuel_fraction_landing = fuel_mass_landing / self.MTOW
         fuel_fraction_take_off_2 = fuel_mass_take_off_2 / self.MTOW
         fuel_fraction_climb_2 = fuel_mass_climb_2 / self.MTOW
         fuel_fraction_cruise_breguet_2 = fuel_mass_cruise_breguet_2 / self.MTOW
         fuel_fraction_loiter_2 = fuel_mass_loiter_2 / self.MTOW
         fuel_fraction_landing_2 = fuel_mass_landing_2 / self.MTOW
-        return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total, fuel_mass_nominal, fuel_fraction_total, fuel_flow_descent, fuel_flow_descent_2, fuel_mass_take_off, fuel_fraction_take_off, fuel_fraction_climb, fuel_fraction_cruise_breguet, fuel_fraction_descent, fuel_fraction_loiter, fuel_fraction_landing, fuel_fraction_take_off, fuel_fraction_climb_2, fuel_fraction_cruise_breguet_2, fuel_fraction_descent_2, fuel_fraction_loiter_2, fuel_fraction_landing_2
+        fuel_fraction_descent_2 = fuel_mass_descent_2 / self.MTOW
+        return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total, fuel_mass_nominal, fuel_fraction_total, fuel_flow_descent, fuel_flow_descent_2, fuel_mass_take_off, fuel_fraction_take_off, fuel_fraction_climb, fuel_fraction_cruise_breguet, fuel_fraction_descent, fuel_fraction_loiter, fuel_fraction_landing, fuel_fraction_take_off, fuel_fraction_climb_2, fuel_fraction_cruise_breguet_2, fuel_fraction_descent_2, fuel_fraction_loiter_2, fuel_fraction_landing_2, fuel_fraction_take_off_2, fuel_fraction_descent_2
 
     def get_serviceable_airports(self):
         serviceable_airports(self.landing_field_length, self.airport_altitude_list, self.flying_range, self.show_airport_plots)
