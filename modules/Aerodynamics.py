@@ -758,7 +758,7 @@ class Lift:
         CL_alpha_wf = Kwf*CL_alpha_w
         
         CL0 = (self.i_w - np.deg2rad(alpha_0_L_w))*CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)*(self.i_h) + CL_alpha_c*etac*(self.S_c/self.S)*(self.i_c)
-#        print(CL0)
+#         print(CL0)
         KA = (1/self.A) - 1/(1 + self.A**1.7)
         KL = (10 - 3*self.taper_ratio)/7
         l_h = 0.9*self.l_f - self.x_le_MAC - 0.25*self.MAC
