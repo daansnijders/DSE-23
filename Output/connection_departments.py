@@ -278,6 +278,7 @@ empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, c
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
+x_ac            = empennage1.x_ac                                                  # [m] x-location of the aerodynamic centre of the main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
 x_le_w          = initialplanform.get_le_wing(conc1.y_MAC,x_le_MAC, conc1.lambda_2_rad, conc1.MAC, conc1.Cr)            # [m] x-location of le main wing with updated lemac
 
