@@ -269,7 +269,7 @@ class empennage:
         S_c = self.F_c / (0.5*rho*V_cruise**2*self.CL_c)
 
 
-    def plot_stability_canard(self, plot = False):
+    def plot_stability_canard(self, plot = True):
         aa = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2)
         bb = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V + 0.05 * MAC
         
@@ -332,7 +332,7 @@ class empennage:
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard        
     
-    def deflection_curve(self, plot = False):
+    def deflection_curve(self, plot = True):
         C_l_C_l_theory = 1
         etah = 0.9
         K_b = 0.95
