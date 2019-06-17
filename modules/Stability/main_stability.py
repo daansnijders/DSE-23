@@ -20,6 +20,7 @@ from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
+
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
 etah = 0.9                                                                      # [-] eta_h of aerodynamics
