@@ -162,7 +162,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from inputs.concept_1 import x_le_MAC, MAC, l_h, S, get_le_wing, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
-from inputs.constants import *
+import inputs.constants as const
 #from modules.Stability.cg_weight_config1 import *
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
 from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
@@ -173,14 +173,13 @@ from modules.Stability.empennage import empennage
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
-"""Stability and Control"""
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
 etah = 0.9                                                                      # [-] eta_h of aerodynamics
 x_ac      = (x_le_MAC[0]+0.25*MAC)                                              # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
-CL_a_ah   = CL_alpha_w1                                 #TBD                    # [-] CL_alpha_(A-h)
-de_da     = 0                                                             # [-] downwash
+CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
+de_da     = 0.                                                                  # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
 Cm_ac     = -0.3                                        #TBD                    # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
@@ -195,7 +194,7 @@ CN_h_a    = CL_a_h                                                              
 CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
 CN_c_a    = CL_a_c                                                              # [-] C_N_c_alpha canard
 CN_h_def  = 0.5                                         #zelf                   # [-] C_N_h_de elevator deflection
-Vc_V      = 1.                                           #zelf                   # [-] V_c/V velocity factors
+Vc_V      = 1.                                          #zelf                   # [-] V_c/V velocity factors
 """====================="""
 
 
@@ -234,7 +233,7 @@ x_v             = empennage1.x_v                                                
 
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
 lambda_h_le_rad2= empennage1.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard
+t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
 A_c2            = empennage1.A_c                                                # [-] Aspect ratio of the canard
@@ -242,11 +241,11 @@ b_c2            = empennage1.b_c                                                
 Cr_c2           = empennage1.Cr_c                                               # [m] root chord length canard
 Ct_c2           = empennage1.Ct_c                                               # [m] tip chord length canard
 z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
-l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
+l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
-lambda_h_le_rad3= empennage2.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard
+lambda_c_le_rad3= empennage2.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
+t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard
 A_c3            = empennage2.A_c                                                # [-] Aspect ratio of the canard
@@ -254,7 +253,7 @@ b_c3            = empennage2.b_c                                                
 Cr_c3           = empennage2.Cr_c                                               # [m] root chord length canard
 Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
 z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
-l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
+l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
 
 
 
@@ -277,11 +276,11 @@ b_splr = get_b_splr(b)                                                          
 
 # Update cg's DIFFERENT CONFIG'S
 # landing gear placement
-x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flight1, stroke,l_f[0]) # [m] x-location of the mlg
-x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flight2, stroke,l_f[1])])
-x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flight3, stroke,l_f[2])])
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,l_f[1])])
+x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,l_f[2])])
 
-z_mlg = update_z_mlg(x_mlg[0],beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
+z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
 
 x_nlg = 2
 
@@ -297,9 +296,9 @@ l_n3 = x_cg_max_flight3 - x_nlg
 
 y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
 
-config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])
-config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])
-config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
 
 
 frac = np.ones((3,2))
@@ -307,11 +306,45 @@ frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
 frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
 frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
 
+
+# Update cg's DIFFERENT CONFIG'S
+# landing gear placement
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,l_f[1])])
+x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,l_f[2])])
+
+z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
+
+x_nlg = 2
+
+l_m1 = x_cg_max_flight1 - x_mlg[0]
+l_m2 = x_cg_max_flight1 - x_mlg[1]
+l_m3 = x_cg_max_flight1 - x_mlg[2]
+
+
+l_n1 = x_cg_max_flight1 - x_nlg
+l_n2 = x_cg_max_flight2 - x_nlg
+l_n3 = x_cg_max_flight3 - x_nlg
+
+
+y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
+
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+
+
+frac = np.ones((3,2))
+frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
+frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
+frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
+
+
 """
 STRUCTURES
 """
 #Calculate fuel mass available for storage in wings (0.75 of one side of the wing)
-fuel_mass_available = wing_struc_analysis(C_l_max,V_cruise,b,Cr,Ct,S)
+fuel_mass_available = wing_struc_analysis(C_l_max,const.V_cruise,b,Cr,Ct,S)
 
 """
 PERFORMANCE & PROPULSION
