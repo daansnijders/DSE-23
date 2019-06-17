@@ -287,7 +287,7 @@ class Drag:
         
         CD_fus_trans = Rwf*(CDf_fus + CDp_fus) +CD_wave*(math.pi*(self.d_f_outer/2)**2)/self.S
         
-        return(CD_fus_sub, CD_fus_trans)
+        return(CD0_fus, CD_fus_sub, CD_fus_trans)
 
     def empennage_drag(self):
         #Subsonic for horizontal tail(h), vertical tail(v) and canard(c)
@@ -341,13 +341,14 @@ class Drag:
         e_h = 0.5
         e_c = 0.5
         CL0 = self.CL_alpha*(math.pi/180)*5.5
-        alpha = (self.CLdes -CL0)/self.CL_alpha
-        CDL_h_sub = ((self.CL_alpha_h*(alpha*(1-self.de_da)+self.i_h - self.alpha0L_h))**2)/(math.pi*self.A_h*e_h)*(self.S_h/self.S)
-        
+        alpha = (self.CLdes - CL0)/self.CL_alpha
+        C_L_h = (self.CL_alpha_h*(alpha*(1-self.de_da) + self.i_h - np.deg2rad(self.alpha0L_h)))
+        CDL_h_sub = ((C_L_h)**2)/(math.pi*self.A_h*e_h)*(self.S_h/self.S)
+                
         if Re_c_sub == 0:
             CDL_c_sub = 0 
         else:
-            CDL_c_sub = ((self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - self.alpha0L_c))**2)/(math.pi*self.A_c*e_c)*(self.S_c/self.S)
+            CDL_c_sub = ((self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - np.deg2rad(self.alpha0L_c)))**2)/(math.pi*self.A_c*e_c)*(self.S_c/self.S)
         
         CDL_v_sub = 0
         
@@ -370,8 +371,8 @@ class Drag:
         
         #Lift induced drag
         CDL_CL2 = 0.025     #Figure 4.13
-        CL_h = self.CL_alpha_h*(alpha*(1-self.de_da)+self.i_h - self.alpha0L_h)
-        CL_c = self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - self.alpha0L_c)
+        CL_h = self.CL_alpha_h*(alpha*(1-self.de_da)+self.i_h - np.deg2rad(self.alpha0L_h))
+        CL_c = self.CL_alpha_c*(alpha*(1-self.de_da_c)+self.i_c - np.deg2rad(self.alpha0L_c))
         CDL_h_trans = CDL_CL2*CL_h**2
         CDL_c_trans = CDL_CL2*CL_c**2
         CDL_v_trans = 0
@@ -380,7 +381,7 @@ class Drag:
         CD_v_trans = CD0_v_tail_trans + CDL_v_trans
         CD_c_trans = CD0_c_trans + CDL_c_trans
         
-        return(CD_h_sub, CD_v_sub, CD_c_sub, CD_h_trans, CD_v_trans, CD_c_trans)
+        return(CD0_h_tail_sub, CD0_v_tail_sub, CD0_c_tail_sub, CD_h_sub, CD_v_sub, CD_c_sub, CD_h_trans, CD_v_trans, CD_c_trans)
         
     def nacelle_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_nacel / self.mu_37
@@ -412,7 +413,7 @@ class Drag:
         
         CD_nacel_trans = 2*Rwf*(CDf_nacel + CDp_nacel) +CD_wave*(math.pi*(self.d_nacel/2)**2)/self.S
         
-        return(CD_nacel_sub, CD_nacel_trans)
+        return(CD0_nacel, CD_nacel_sub, CD_nacel_trans)
         
         
     def flaps_drag(self, C_D_0_W):
@@ -508,7 +509,7 @@ class Drag:
         
         CD_fueltank_trans = 2*(Rwf*(CDf_fueltank + CDp_fueltank) +CD_wave*(math.pi*(self.d_fueltank/2)**2)/self.S)
 
-        return(CD_fueltank_sub, CD_fueltank_trans)
+        return(CD0_fueltank, CD_fueltank_sub, CD_fueltank_trans)
         
         
     def trim_drag(self):
@@ -763,7 +764,6 @@ class Lift:
         KL = (10 - 3*self.taper_ratio)/7
         l_h = 0.9*self.l_f - self.x_le_MAC - 0.25*self.MAC
         h_h = 0.75*self.d_f_outer
-        print (h_h / (self.b/2))
         Kh = (1-h_h/self.b)/((2*l_h/self.b)**(1/3))
         beta2 = math.sqrt(1-0**2)
         CL_alpha_w_M0 = (2*math.pi*self.A)/(2 + math.sqrt(4+(self.A*beta2/0.95)**2*(1+(np.tan(self.lambda_2_rad)**2)/beta2**2)))
@@ -786,8 +786,7 @@ class Lift:
         etac = 1.0
         delta_ef = np.deg2rad((18.5*delta_CL_w*self.b)/(self.A*2*self.b_flap))
         delta_CL = Kcw*delta_CL_w - CL_alpha_h*etah*(self.S_h/self.S)*delta_ef
-        print(delta_ef)
-                
+                        
         Kwf = 1 + 0.025*(self.d_f_outer/self.b) - 0.25*(self.d_f_outer/self.b)**2
         de_da_c = 0.15  #Figure 8.67
         
@@ -828,10 +827,8 @@ class Lift:
                      
         C_L_flaps = []
         
-        l = alpha.index(0)
         alpha_0_L_flaps = (delta_CL - CL_alpha * np.deg2rad(alpha_0_L)) / -delta_CL_alpha
-        print (alpha_0_L_flaps)
-        
+                
         for i in range(len(alpha)): 
             
             if alpha[i] <= 3:
@@ -843,6 +840,7 @@ class Lift:
                 k = alpha.index(alpha_CL_max*180/math.pi)
                 C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
                 C_L_flaps.append(C_L_i)
+#                print (C_L_i)
                 
             elif alpha[i] == alpha_CL_max*180/math.pi:
                 C_L_i = CL_max + delta_CL_max
@@ -855,7 +853,21 @@ class Lift:
         plt.show
         
         return (C_L)
-        
+    
+    
+    def get_CL(self, CL_alpha, alpha_0_L, CL_max, alpha_CL_max, delta_CL, delta_CL_alpha, delta_CL_max, alpha):
+        if alpha <= 3:
+            C_L = CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))
+            
+        elif alpha > 3 and alpha < alpha_CL_max*180/math.pi : 
+            C_L = (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L))) + ((CL_max - (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L)))) / (k - j)) * (i - j)
+            
+        elif alpha == alpha_CL_max*180/math.pi:
+            C_L = CL_max
+
+        else:
+            C_L = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))))**2
+                    
         
         
 class Moment:

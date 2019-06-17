@@ -67,6 +67,7 @@ delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3 = config3_Lift.Wing_lift_flaps(d
 CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alpha_CL_max3 = config3_Lift.Airplane_lift(CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3)
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
 
+
 CL_TO= 2.215
 CL_cruise1=conc1.CLdes[0]
 CL_cruise2=conc1.CLdes[1]
@@ -74,12 +75,15 @@ CL_cruise3=conc1.CLdes[2]
 CL_land= 2.66
 
 
+
 'Drag'
 #Values that must come from other departments
+
 D_strutt_nlg = conc1.D_strut_mlg                                                #UPDATE 
 D_strutt_mlg = conc1.D_strut_nlg                                                #UPDATE
 l_fueltank = 1.5                                                                #UPDATE
 d_fueltank = 0.3                                                                #UPDATE 
+
 
 #Hard to calculate, not important for first iteration, maybe from Daan and Stijn
 delta_C_L_h = 0                 #When i_h = 0
@@ -166,19 +170,6 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 print('AERO DONE')
 
 
-CD_cruise1=0.02
-CD_cruise2=0.02
-CD_cruise3=0.02
-
-CD_TO1=0.02
-CD_TO2=0.02
-CD_TO3=0.02
-
-CD_land1=0.02
-CD_land2=0.02
-CD_land3=0.02
-
-
 """
 PERFORMANCE & PROPULSION
 """
@@ -193,22 +184,21 @@ show_performance_plots = False
 show_airport_plots = False
 
 # temporary values, will be removed as soon as aerodynamics inputs are ready
-#C_L_to = 1.9
-#C_L_la = 2.3
+
+
+#CL_TO = 1.9
+#CL_land = 2.3
 C_D_0 = 0.018117539865047032
-#C_D_to = 0.19542078310015343
-#C_D_la = 0.28017202214599246
-#C_L_cruise = 0.8
-#C_D_cruise = 0.05
+#CL_cruise = 0.8
 
 
 lift_over_drag = conc1.LoverD[0]
 
 aspect_ratio = conc1.A
 oswald_efficiency_number = conc1.e
-print('check 1')
 
 'analysis'
+
 config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
                                   conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
@@ -218,6 +208,7 @@ config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, C_D_0, CD_TO1, CD_
                                   const.H_m, const.V_cruise, conc1.R[0], lift_over_drag, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
+
 
 print('check between conc')
 
@@ -232,6 +223,7 @@ config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, C_D_0, CD_TO2, CD_
                                   show_airport_plots, perf.thrust_setting_descent)
 
 config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, C_D_0, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
+                                  conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -241,7 +233,8 @@ config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, C_D_0, CD_TO3, CD_
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-print('PP DONE')
+print('P&P DONE')
+
 """
 CONTROL AND STABILITY
 """
@@ -263,11 +256,11 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 """NEED FROM OTHER FILES"""
 V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                                                              # [m/s] V1 speed/V_app
-etah       = 0.9                                                                      # [-] eta_h of aerodynamics
-x_ac      = (conc1.x_le_MAC[0]+0.25*conc1.MAC)                                              # [m] x-location of the main wing ac
+etah       = 0.9                                                                # [-] eta_h of aerodynamics
+x_ac      = (conc1.x_le_MAC[0]+0.25*conc1.MAC)                                  # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
-de_da     = de_da1                                                             # [-] downwash
+de_da     = de_da1                                                              # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
 Cm_ac     = Cm0_w_trans1                                                        # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
@@ -291,6 +284,7 @@ empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, c
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
+x_ac            = empennage1.x_ac                                                  # [m] x-location of the aerodynamic centre of the main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
 x_le_w          = initialplanform.get_le_wing(conc1.y_MAC,x_le_MAC, conc1.lambda_2_rad, conc1.MAC, conc1.Cr)            # [m] x-location of le main wing with updated lemac
 

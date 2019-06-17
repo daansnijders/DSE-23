@@ -178,3 +178,21 @@ cm_des_airfoil3, dcm_dcl_airfoil3 = config3_Moment.Airfoil_moment()
 delta_cm_flap3, delta_cm_krueger3 = config3_Moment.Airfoil_moment_flaps(cm_des_airfoil3)
 Cm0_w_sub3, Cm0_w_trans3, dCm_dCl_w3 = config3_Moment.Wing_moment()
 delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_sub3)
+
+""" Test """
+config1_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[0],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[0], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[0], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[0], conc1.lambda_v_2_rad[0], conc1.MAC_c[0], conc1.Cr_v[0], conc1.Ct_v[0], conc1.Cr_h[0], conc1.Ct_h[0], conc1.S_h[0], conc1.S_v[0], conc1.S_c[0], CL_alpha_h, de_da, i_h, alpha0L_h, conc1.A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+config4_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[0],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[0], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[0], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[0], conc1.lambda_v_2_rad[0], conc1.MAC_c[0], conc1.Cr_v[0], conc1.Ct_v[0], conc1.Cr_h[0], conc1.Ct_h[0], conc1.S_h[0], conc1.S_v[0], conc1.S_c[0], CL_alpha_h1, de_da1, i_h, alpha_0_L1, conc1.A_h, CL_alpha_c1, de_da_c1, i_c, alpha_0_L1, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+CD_w_sub4, CD_w_trans4, CD_0_w4 = config4_Drag.wing_drag()
+CD_fus_sub4, CD_fus_trans4 = config4_Drag.fuse_drag()
+CD_h_sub4, CD_v_sub4, CD_c_sub4, CD_h_trans4, CD_v_trans4, CD_c_trans4 = config4_Drag.empennage_drag()
+CD_nacel_sub4, CD_nacel_trans4 = config4_Drag.nacelle_drag()
+CD_flap_TO4, CD_flap_land4, CD_slat4 = config4_Drag.flaps_drag(CD_0_w1)
+CD_gear4 = config4_Drag.landinggear_drag()
+CD_ws4 = config4_Drag.windshield_drag()
+CD_store_sub4, C_D_store_trans4 = config4_Drag.store_drag()
+CD_trim4 = config4_Drag.trim_drag()
+CD_spoiler4 = config4_Drag.spoiler_drag()
+
+CD_cruise4 = CD_w_trans4 + CD_fus_trans4 + CD_h_trans4 + CD_v_trans4 + CD_c_trans4 + CD_nacel_trans4 + CD_ws4 + C_D_store_trans4 + CD_trim4
+CD_TO4 = CD_w_sub4 + CD_fus_sub4 + CD_h_sub4 + CD_v_sub4 + CD_c_sub4 + CD_flap_TO4 + CD_gear4 + CD_ws4 + CD_store_sub4 + CD_trim4
+CD_land4 = CD_w_sub4 + CD_fus_sub4 + CD_h_sub4 + CD_v_sub4 + CD_c_sub4 + CD_flap_land4 + CD_slat4 + CD_gear4 + CD_ws4 + CD_store_sub4 + CD_trim4
