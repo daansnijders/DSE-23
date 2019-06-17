@@ -225,12 +225,12 @@ class Drag:
         """ C_D_L_w """
         r_LE = 0.01753                  #Leading Edge radius
         RE_LER = self.rho * self.V_cruise * r_LE / self.mu_37
-        R_par = RE_LER * 1/(tan(self.lambda_le_rad)) * sqrt(1 - (self.M*cos(self.lambda_le_rad))**2)
-        R_par2 = self.A * self.taper_ratio / cos(self.lambda_le_rad) 
+        R_par = RE_LER * 1/(math.tan(self.lambda_le_rad)) * math.sqrt(1 - (self.M*math.cos(self.lambda_le_rad))**2)
+        R_par2 = self.A * self.taper_ratio / math.cos(self.lambda_le_rad) 
         #This results in 
         R = 0.95    #Figure 4.7
         
-        beta = mathsqrt(1-self.M**2)
+        beta = math.sqrt(1-self.M**2)
         c_l_alpha = np.rad2deg((1.3 + 0.5)/(7+9))
         k = c_l_alpha/(2*math.pi / beta)
         C_L_a_w = (2*math.pi*self.A)/(2 + ((self.A * beta / k)**2 * (1 + (math.tan(self.lambda_2_rad) / beta) ) + 4)**(1/2) )
@@ -528,7 +528,7 @@ class Drag:
         if self.S_c == 0:
             delta_C_D_trim_lift = ((self.delta_C_L_h)**2 / (math.pi * self.A_h * e_h)) * self.S / self.S_h
         else: 
-            delta_C_D_trim_lift = ((self.delta_C_L_h)**2 / (math.pi * self.A_h * e_h)) * self.S / self.S_h + ((delta_C_L_c)**2 / (pi * self.A_c * e_c)) * self.S / self.S_c
+            delta_C_D_trim_lift = ((self.delta_C_L_h)**2 / (math.pi * self.A_h * e_h)) * self.S / self.S_h + ((delta_C_L_c)**2 / (math.pi * self.A_c * e_c)) * self.S / self.S_c
         
         #It follows that 
         delta_C_D_P_lambda_4_0 = 0.015       #Figure 4.44
@@ -664,7 +664,7 @@ class Lift:
     
     def Wing_lift(self):
 #        alpha = np.array([11,11.25,11.5,11.75,12,12.25,12.5,12.75,13])  * pi/180
-        alpha = np.array([-2,0,2,4,6,8,10,12,14]) * pi/180
+        alpha = np.array([-2,0,2,4,6,8,10,12,14]) * math.pi/180
         alpha_w = alpha - self.i_w
         M_wing = self.M_cruise / math.cos(self.lambda_4_rad)
 #        print (alpha_w)
@@ -678,7 +678,7 @@ class Lift:
         C_l_alpha_Mwing = self.C_l_alpha / math.sqrt(1 - M_wing**2)
         beta = math.sqrt(1-M_wing**2)      # Prandtl-Glauert compressibility correction factor
         k = C_l_alpha_Mwing / (2*math.pi / beta)    # Constant dependent on the airfoil lift curve slope at M=0.75
-        C_L_alpha_w = (2*pi*self.A)/(2 + math.sqrt(4 + (self.A*beta/k)**2 * (1+(math.tan(self.lambda_2_rad)**2)/beta**2)))
+        C_L_alpha_w = (2*math.pi*self.A)/(2 + math.sqrt(4 + (self.A*beta/k)**2 * (1+(math.tan(self.lambda_2_rad)**2)/beta**2)))
 #        print (C_L_alpha_w)
         
         """ Determining the spanwise lift distribution """
@@ -734,7 +734,7 @@ class Lift:
         
         delta_C_L_alpha_w = C_L_alpha_w * (1 + (c_prime - 1) * self.SWF/self.S )
         
-        K_delta = (1 - 0.08*(cmath.os(self.lambda_4_rad))**2)*(math.cos(self.lambda_4_rad))**(0.75)   #Compare to Figure 8.55
+        K_delta = (1 - 0.08*(math.cos(self.lambda_4_rad))**2)*(math.cos(self.lambda_4_rad))**(0.75)   #Compare to Figure 8.55
         delta_C_L_max_w_TE = delta_C_l_max * self.SWF / self.S * K_delta
         
         c_f_c  = 0.1                                    #Figure 8.56
