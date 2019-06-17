@@ -53,14 +53,18 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
             count += 1
             if difference > 0:
                 velocity += step_size
+
             else:
                 velocity -= step_size
-
             nominal_distance = get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one_engine,
                                                          thrust_transition_setting, thrust_climb_out_setting, C_L, C_D,
                                                          S, mu_TO, False, velocity, reverse_thrust_factor)[0]
             try_distance = give_try(velocity)
             difference = nominal_distance - try_distance
+            if count>1000:
+                print('ALERT - decision speed does not converge, check input values')
+                velocity = 30
+                break
             # nominal_list.append(nominal_distance)
             # try_list.append(try_distance)
             # difference_list.append(difference)
