@@ -8,12 +8,16 @@ Created on Wed Jun  5 09:50:12 2019
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
-from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, x_cg, thrust_max, y_engine, x_le_h, x_le_MAC, z_engine, get_b, get_Cr, get_Ct
+from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, x_cg, y_engine, x_le_h, x_le_MAC, z_engine
 from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.main_class2 import config1_cg, config2_cg, config3_cg, config1_cg_x
 from modules.Stability.cg_weight_config2 import x_cg_min2canard_can1, x_cg_max2canard_can1, x_le_MAC_range_perccanard2_can1
 from modules.Stability.cg_weight_config3 import x_cg_min3canard_can2, x_cg_max3canard_can2, x_le_MAC_range_perccanard3_can2
+import inputs.performance_inputs as inputperf
+import modules.initialsizing_planform as initialplanform
+
+
 
 
 V_app = 70  #estimated by RB we will get from rik (lowest speed)
@@ -210,7 +214,7 @@ class empennage:
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
 
         # engine inoperative case
-        N_e = thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
+        N_e = inputperf.thrust_max/2 * y_engine                                           # [N*m] moment caused by engine inoperative
 
         self.l_v = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-vertical tail cg (still needs to be changed to class 2)
 
@@ -243,12 +247,12 @@ class empennage:
         l_h = x_le_h[0] + l_cutout - cg_x[self.config]                          # [m] distance between htail ac and c.g.
         l_cg = (x_le_MAC[self.config] + 0.25*MAC) - cg_x[self.config]           # [m] distance between wing ac and c.g.
         z_e = cg_z[self.config] - z_engine                                      # [m] distance between engine and c.g.
-        F_e = thrust_max                                                        # [N] maximum thrust produced by the engine
+        F_e = inputperf.thrust_max                                                        # [N] maximum thrust produced by the engine
         
         w = self.weight_pass[0][-1] * g
         x_h = x_le_h[0]
         
-        self.F_h = (-w*((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) + thrust_max * (cg_z[0] - config1_cg.z_cg_engines))/-((x_le_MAC[0] + 0.25*MAC) - cg_x[0] - x_h + config1_cg_x)
+        self.F_h = (-w*((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) + inputperf.thrust_max * (cg_z[0] - config1_cg.z_cg_engines))/-((x_le_MAC[0] + 0.25*MAC) - cg_x[0] - x_h + config1_cg_x)
         self.F_w = w - self.F_h 
         
         margin = 1E-8
@@ -326,9 +330,9 @@ class empennage:
         self.Sc_S = 0.2                                                         # [-] Ratio area canard (assumed for now)
         self.S_c = self.Sc_S * self.S                                            # [m^2] Surface area of the canard
         self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
-        self.b_c = get_b(self.S_c, self.A_c)                                    # [m] span canard
-        self.Cr_c = get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
-        self.Ct_c = get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard
+        self.b_c = initialplanform.get_b(self.S_c, self.A_c)                                    # [m] span canard
+        self.Cr_c = initialplanform.get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
+        self.Ct_c = initialplanform.get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard        
     

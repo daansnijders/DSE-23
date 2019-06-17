@@ -7,13 +7,12 @@ import inputs.constants as const
 import inputs.performance_inputs as perf
 import inputs.concept_1 as conc1
 
+
 'department modules'
 import modules.Aerodynamics as aero
-
 import modules.sustainability.greenhousegasemissions as gasemissions
 import modules.sustainability.noise_defs as noise
 
-from modules.performance.class2_performance import *
 
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
 """
@@ -79,9 +78,9 @@ delta_C_L_h = 0                 #When i_h = 0
 delta_C_L_c = 0                 #When i_c = 0
 
 #Set up different configurations
-config1_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[0],conc1.CL_alpha,conc1.l_cockpit, conc1.l_cabin[0], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[0], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[0], conc1.lambda_v_2_rad[0], conc1.MAC_c[0], conc1.Cr_v[0], conc1.Ct_v[0], conc1.Cr_h[0], conc1.Ct_h[0], conc1.S_h[0], conc1.S_v[0], conc1.S_c[0], CL_alpha_h1, de_da1, i_h, alpha_0_L1, conc1.A_h, CL_alpha_c1, de_da_c1, i_c, alpha_0_L1, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
-config2_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[1],conc1.CL_alpha,conc1.l_cockpit, conc1.l_cabin[1], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[1], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[1], conc1.lambda_v_2_rad[1], conc1.MAC_c[1], conc1.Cr_v[1], conc1.Ct_v[1], conc1.Cr_h[1], conc1.Ct_h[1], conc1.S_h[1], conc1.S_v[1], conc1.S_c[1], CL_alpha_h2, de_da2, i_h, alpha_0_L2, conc1.A_h, CL_alpha_c2, de_da_c2, i_c, alpha_0_L2, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
-config3_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[2],const.V_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[2],conc1.CL_alpha,conc1.l_cockpit, conc1.l_cabin[2], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[2], conc1.z_mlg, const.D_mlg, conct.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[2], conc1.lambda_v_2_rad[2], conc1.MAC_c[2], conc1.Cr_v[2], conc1.Ct_v[2], conc1.Cr_h[2], conc1.Ct_h[2], conc1.S_h[2], conc1.S_v[2], conc1.S_c[2], CL_alpha_h3, de_da3, i_h, alpha_0_L3, conc1.A_h, CL_alpha_c3, de_da_c3, i_c, alpha_0_L3, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+config1_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[0],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[0], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[0], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[0], conc1.lambda_v_2_rad[0], conc1.MAC_c[0], conc1.Cr_v[0], conc1.Ct_v[0], conc1.Cr_h[0], conc1.Ct_h[0], conc1.S_h[0], conc1.S_v[0], conc1.S_c[0], CL_alpha_h1, de_da1, i_h, alpha_0_L1, conc1.A_h, CL_alpha_c1, de_da_c1, i_c, alpha_0_L1, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+config2_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[1],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[1], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[1], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[1], conc1.lambda_v_2_rad[1], conc1.MAC_c[1], conc1.Cr_v[1], conc1.Ct_v[1], conc1.Cr_h[1], conc1.Ct_h[1], conc1.S_h[1], conc1.S_v[1], conc1.S_c[1], CL_alpha_h2, de_da2, i_h, alpha_0_L2, conc1.A_h, CL_alpha_c2, de_da_c2, i_c, alpha_0_L2, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+config3_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[2],const.V_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[2],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[2], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[2], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[2], conc1.lambda_v_2_rad[2], conc1.MAC_c[2], conc1.Cr_v[2], conc1.Ct_v[2], conc1.Cr_h[2], conc1.Ct_h[2], conc1.S_h[2], conc1.S_v[2], conc1.S_c[2], CL_alpha_h3, de_da3, i_h, alpha_0_L3, conc1.A_h, CL_alpha_c3, de_da_c3, i_c, alpha_0_L3, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
 
 #Drag outputs
 CD_w_sub1, CD_w_trans1, CD_0_w1 = config1_Drag.wing_drag()
@@ -161,8 +160,9 @@ CONTROL AND STABILITY
 import numpy as np
 import matplotlib.pyplot as plt
 
-from inputs.concept_1 import x_le_MAC, MAC, l_h, S, get_le_wing, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
+from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 import inputs.constants as const
+import modules.initialsizing_planform as initialplanform
 #from modules.Stability.cg_weight_config1 import *
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
 from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
@@ -173,19 +173,20 @@ from modules.Stability.empennage import empennage
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
+
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
 etah = 0.9                                                                      # [-] eta_h of aerodynamics
 x_ac      = (x_le_MAC[0]+0.25*MAC)                                              # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
-de_da     = 0.                                                                  # [-] downwash
+de_da     = de_da                                                               # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
-Cm_ac     = -0.3                                        #TBD                    # [-] moment coefficient of main wing ac
+Cm_ac     = -0.0755159519128478                         #TBD                    # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 1.3                                         #zelf                   # [-] lift coefficient canard
+CL_c      = 0.8                                         #zelf                   # [-] lift coefficient canard
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 a_0       = alpha_0_l                                                           # [rad] zero lift angle of attack
 i_h       = 0                                                                   # [rad] incidence angle htail
@@ -206,7 +207,7 @@ empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
-x_le_w          = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
+x_le_w          = initialplanform.get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
@@ -233,7 +234,7 @@ x_v             = empennage1.x_v                                                
 
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
 lambda_h_le_rad2= empennage1.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard
+t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
 A_c2            = empennage1.A_c                                                # [-] Aspect ratio of the canard
@@ -241,11 +242,11 @@ b_c2            = empennage1.b_c                                                
 Cr_c2           = empennage1.Cr_c                                               # [m] root chord length canard
 Ct_c2           = empennage1.Ct_c                                               # [m] tip chord length canard
 z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
-l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
+l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
 lambda_c_le_rad3= empennage2.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard
+t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard
 A_c3            = empennage2.A_c                                                # [-] Aspect ratio of the canard
@@ -253,7 +254,7 @@ b_c3            = empennage2.b_c                                                
 Cr_c3           = empennage2.Cr_c                                               # [m] root chord length canard
 Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
 z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
-l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
+l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
 
 
 
@@ -272,6 +273,40 @@ b_ail = get_b_ail(b)                                                            
 
 c_splr = get_c_splr(Cr, Ct, b)                                                  # [m] chord length spoiler
 b_splr = get_b_splr(b)                                                          # [m] span spoiler
+
+
+# Update cg's DIFFERENT CONFIG'S
+# landing gear placement
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,l_f[1])])
+x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,l_f[2])])
+
+z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
+
+x_nlg = 2
+
+l_m1 = x_cg_max_flight1 - x_mlg[0]
+l_m2 = x_cg_max_flight1 - x_mlg[1]
+l_m3 = x_cg_max_flight1 - x_mlg[2]
+
+
+l_n1 = x_cg_max_flight1 - x_nlg
+l_n2 = x_cg_max_flight2 - x_nlg
+l_n3 = x_cg_max_flight3 - x_nlg
+
+
+y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
+
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+
+
+frac = np.ones((3,2))
+frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
+frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
+frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
+
 
 
 # Update cg's DIFFERENT CONFIG'S
@@ -367,7 +402,10 @@ C_D_to = 0.19542078310015343
 C_D_la = 0.28017202214599246
 C_L_cruise = 0.8
 C_D_cruise = 0.05
+
+
 lift_over_drag = conc1.LoverD[0]
+
 aspect_ratio = conc1.A
 oswald_efficiency_number = conc1.e
 
