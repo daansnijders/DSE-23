@@ -312,8 +312,7 @@ def get_overall_sound_pressure_level(SPL_list):
     OSPL_A=10*log10(sum_exponent)
 
     return OSPL_A
-    OSPL=10*log10(sum(10**(SPL[i]/10)))
-    return OSPL
+
     
 def get_perceived_noise_level(N):
     L_pn=40+33.3*log10(N)

@@ -15,7 +15,7 @@ b_flap=c1.b/2*0.4
 c_flap=0.35*c1.Cr
 area_flap=b_flap*c_flap
 
-V_approach=50
+V_approach=58
 
 r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
 

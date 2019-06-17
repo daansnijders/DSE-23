@@ -321,7 +321,7 @@ class empennage:
             ax2.plot(self.l, self.Sc_S1)
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_C1)
-            ax2.set( ylim = [-1.4,0.8], ylabel = 'S_c/S')
+            ax2.set( ylim = [0.,0.8], ylabel = 'S_c/S')
             plt.show()
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
@@ -330,7 +330,7 @@ class empennage:
         self.taper_ratio_c = 0.8                                                # [-] taper ratio canard
         self.lambda_c_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
         self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
-        self.Sc_S = input("Enter the Sc_S ratio needed: ")                      # [-] Ratio area canard (assumed for now)
+        self.Sc_S = float(input("Enter the Sc_S ratio needed: "))                      # [-] Ratio area canard (assumed for now)
         self.S_c = self.Sc_S * self.S                                            # [m^2] Surface area of the canard
         self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
         self.b_c = initialplanform.get_b(self.S_c, self.A_c)                                    # [m] span canard
