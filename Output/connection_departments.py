@@ -243,11 +243,11 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 """NEED FROM OTHER FILES"""
 V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                                                              # [m/s] V1 speed/V_app
-etah       = 0.9                                                                      # [-] eta_h of aerodynamics
-x_ac      = (conc1.x_le_MAC[0]+0.25*conc1.MAC)                                              # [m] x-location of the main wing ac
+etah       = 0.9                                                                # [-] eta_h of aerodynamics
+x_ac      = (conc1.x_le_MAC[0]+0.25*conc1.MAC)                                  # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
-de_da     = de_da1                                                             # [-] downwash
+de_da     = de_da1                                                              # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
 Cm_ac     = Cm0_w_trans1                                                        # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
@@ -271,6 +271,7 @@ empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, c
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
+x_ac            = empennage1.x_ac                                                  # [m] x-location of the aerodynamic centre of the main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
 x_le_w          = initialplanform.get_le_wing(conc1.y_MAC,x_le_MAC, conc1.lambda_2_rad, conc1.MAC, conc1.Cr)            # [m] x-location of le main wing with updated lemac
 
