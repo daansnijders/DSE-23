@@ -7,16 +7,18 @@ Created on Wed Jun 12 14:56:29 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-from inputs.concept_1 import x_le_MAC, MAC, l_h, S, get_le_wing, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
+from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 import inputs.constants as const
+import modules.initialsizing_planform as initialplanform
 #from modules.Stability.cg_weight_config1 import *
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
 from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
 from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_mlg, check_ground
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.Stability.empennage import empennage
-from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
+from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l, alpha_0_L1
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
+
 
 
 """NEED FROM OTHER FILES"""
@@ -27,15 +29,15 @@ CL_a_h    = CL_alpha_h1                                                         
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
 de_da     = de_da                                                               # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
-Cm_ac     = -0.3                                        #TBD                    # [-] moment coefficient of main wing ac
+Cm_ac     = -0.0755159519128478                         #TBD                    # [-] moment coefficient of main wing ac
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 1.3                                         #zelf                   # [-] lift coefficient canard
+CL_c      = 0.8                                         #zelf                   # [-] lift coefficient canard
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
-a_0       = alpha_0_l                                                           # [rad] zero lift angle of attack
-i_h       = 0                                                                   # [rad] incidence angle htail
-i_c       = 0                                                                   # [rad] incidence angle canard
+a_0       = alpha_0_L1                                                          # [rad] zero lift angle of attack
+i_h       = 0.                                                                   # [rad] incidence angle htail
+i_c       = 0.                                                                   # [rad] incidence angle canard
 CN_h_a    = CL_a_h                                                              # [-] C_N_h_alpha htail
 CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
 CN_c_a    = CL_a_c                                                              # [-] C_N_c_alpha canard
@@ -52,7 +54,7 @@ empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
-x_le_w          = get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
+x_le_w          = initialplanform.get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
@@ -90,7 +92,7 @@ z_c2            = empennage1.z_c                                                
 l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
-lambda_c_le_rad3= empennage2.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
+lambda_c_le_rad3= empennage2.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
 t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard

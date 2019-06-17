@@ -80,6 +80,8 @@ x_cg_ngear = 5.0
 x_cg_mgear = 16.0
 Xfirst = 6.0
 Xlast = 26.0
+wing_moment = 423445.33268878574/(2.66)
+
 
 #l_fuselage = config1_class2.l_f
 #x_cg_hwing = c1.x_cg_tail
@@ -138,7 +140,7 @@ m = 0
 for i in range(n):
     m+=weights_sum[i]*x[i]
 
-Lift_mainwing = (-m+x_cg_hwing*sum(weights_sum))/(np.average([X_wingbox_start, X_wingbox_end])-x_cg_hwing)
+Lift_mainwing = (-(m-wing_moment*nu)+x_cg_hwing*sum(weights_sum))/(np.average([X_wingbox_start, X_wingbox_end])-x_cg_hwing)
 Lift_tail = -sum(weights_sum)-Lift_mainwing
 
 lift_forces = [0] *n 
@@ -160,8 +162,14 @@ for i in range(n):
 
 M =  [0] *n 
 for i in range(n):
-    for j in range(i):
-        M[i]+=forces_sum[j]*(x[i]-step_size*j)
+    if i > int((x_cg_wing_group/l_fuselage)*n):
+        for j in range(i):
+            M[i]+=forces_sum[j]*(x[i]-step_size*j)
+        M[i] += wing_moment*nu        
+    else:
+        for j in range(i):
+            M[i]+=forces_sum[j]*(x[i]-step_size*j)
+#M[int((x_cg_wing_group/l_fuselage)*n)]+=wing_moment*nu
 
 p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
 
@@ -185,7 +193,7 @@ for i in range(n):
         stress_long_max[i] = (abs(stress_bending_max[i])+stress_pressure_long[i])* safety_factor
      
 #######################################BUCKLING CALCULATION: REQUIRED NO OF STRINGERS###################################
-nu = 1.5
+nu = 1.773
 payload_w = [0] *n
 for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
     payload_w[i]=-M_payload* g*nu/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
@@ -216,7 +224,7 @@ m = 0
 for i in range(n):
     m+=weights_sum[i]*x[i]
 
-Lift_mainwing = (-m+x_cg_hwing*sum(weights_sum))/(np.average([X_wingbox_start, X_wingbox_end])-x_cg_hwing)
+Lift_mainwing = (-(m-wing_moment*nu)+x_cg_hwing*sum(weights_sum))/(np.average([X_wingbox_start, X_wingbox_end])-x_cg_hwing)
 Lift_tail = -sum(weights_sum)-Lift_mainwing
 
 lift_forces = [0] *n 
@@ -238,8 +246,14 @@ for i in range(n):
 
 M =  [0] *n 
 for i in range(n):
-    for j in range(i):
-        M[i]+=forces_sum[j]*(x[i]-step_size*j)
+    if i > int((x_cg_wing_group/l_fuselage)*n):
+        for j in range(i):
+            M[i]+=forces_sum[j]*(x[i]-step_size*j)
+        M[i] += wing_moment*nu        
+    else:
+        for j in range(i):
+            M[i]+=forces_sum[j]*(x[i]-step_size*j)
+
 
 p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
 

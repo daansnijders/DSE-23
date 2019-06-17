@@ -7,7 +7,7 @@ Created on Thu Jun  6 16:41:25 2019
 from modules.sustainability.noise_defs import *
 import inputs.concept_1 as c1
 
-phi_observer=radians(1)
+phi_observer=radians(0.1)
 flap_deflection=radians(40)
 
 b_slat=c1.b*0.6
@@ -15,7 +15,7 @@ b_flap=c1.b/2*0.4
 c_flap=0.35*c1.Cr
 area_flap=b_flap*c_flap
 
-V_approach=64
+V_approach=50
 
 r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
 

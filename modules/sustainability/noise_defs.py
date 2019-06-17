@@ -5,8 +5,8 @@ Created on Tue Jun  4 11:53:00 2019
 @author: Lisa
 """
 from math import *
-from inputs.concept_1 import S, b, N_mw, N_nw, L_strut_mlg, L_strut_nlg
-from inputs.constants import mu_sl, rho_0,a_sl,D_mlg,D_nlg
+from inputs.concept_1 import S, b, L_strut_mlg, L_strut_nlg
+from inputs.constants import mu_sl, rho_0,a_sl,D_mlg,D_nlg,N_mw, N_nw
 import matplotlib.pyplot as plt
 #noise definitions
 
@@ -253,17 +253,17 @@ def get_overall_sound_level_general(p_e_squared,freq_delta,centrefreq,r):
     OSPL_A      =A_weighted_overall_sound_level(centrefreq,PBL_a)
     
     
-    plt.figure()
-    plt.plot(centrefreq,PBL_absor,'-o',label=' PBL with atmospheric absoption')
-    plt.plot(centrefreq,PBL_a,'-o',label='PBL with a weighted level and atmos. absorption')
-    plt.xlabel('frequency [Hz]')
-    plt.ylabel('1/3 octave PBL [dB(A)]')
-    plt.xscale('log')
-    plt.xlim([10,10**4])
-    plt.title('1/3 octave Pressure Band Level ')
-    plt.legend()
-    plt.show()
-#    
+#    plt.figure()
+#    plt.plot(centrefreq,PBL_absor,'-o',label=' PBL with atmospheric absoption')
+#    plt.plot(centrefreq,PBL_a,'-o',label='PBL with a weighted level and atmos. absorption')
+#    plt.xlabel('frequency [Hz]')
+#    plt.ylabel('1/3 octave PBL [dB(A)]')
+#    plt.xscale('log')
+#    plt.xlim([10,10**4])
+#    plt.title('1/3 octave Pressure Band Level ')
+#    plt.legend()
+#    plt.show()
+##    
 #    plt.figure()
 #    plt.plot(centrefreq,delta_L_A,'-o')
 #    plt.xlabel('frequency [Hz]')
