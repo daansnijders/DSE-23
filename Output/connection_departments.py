@@ -67,18 +67,23 @@ delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3 = config3_Lift.Wing_lift_flaps(d
 CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alpha_CL_max3 = config3_Lift.Airplane_lift(CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3)
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
 
-<<<<<<< HEAD
-#Cl_TO= 
-#Cl_cruise=
-#Cl_land= 
+
+CL_TO= 2.215
+CL_cruise1=conc1.CLdes[0]
+CL_cruise2=conc1.CLdes[1]
+CL_cruise3=conc1.CLdes[2]
+CL_land= 2.66
 
 
-=======
->>>>>>> fcb3ed1096b4c28d219a85695c010fb30e56ce25
+
 'Drag'
 #Values that must come from other departments
-l_fueltank = 1.5
-d_fueltank = 0.3
+
+D_strutt_nlg = conc1.D_strut_mlg                                                #UPDATE 
+D_strutt_mlg = conc1.D_strut_nlg                                                #UPDATE
+l_fueltank = 1.5                                                                #UPDATE
+d_fueltank = 0.3                                                                #UPDATE 
+
 
 #Hard to calculate, not important for first iteration, maybe from Daan and Stijn
 delta_C_L_h = 0                 #When i_h = 0
@@ -165,8 +170,6 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 print('AERO DONE')
 
 
-
-
 """
 PERFORMANCE & PROPULSION
 """
@@ -181,13 +184,12 @@ show_performance_plots = False
 show_airport_plots = False
 
 # temporary values, will be removed as soon as aerodynamics inputs are ready
-CL_TO = 1.9
-CL_land = 2.3
+
+
+#CL_TO = 1.9
+#CL_land = 2.3
 C_D_0 = 0.018117539865047032
-#C_D_to = 0.19542078310015343
-#C_D_la = 0.28017202214599246
-CL_cruise = 0.8
-#C_D_cruise = 0.05
+#CL_cruise = 0.8
 
 
 lift_over_drag = conc1.LoverD[0]
@@ -196,7 +198,8 @@ aspect_ratio = conc1.A
 oswald_efficiency_number = conc1.e
 
 'analysis'
-config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
+
+config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, C_D_0, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
                                   conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -206,7 +209,10 @@ config1_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO1, CD_
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
+
+print('check between conc')
+
+config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, C_D_0, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -216,7 +222,8 @@ config2_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO2, CD_
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
+config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, C_D_0, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
+                                  conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -313,6 +320,7 @@ A_c2            = empennage1.A_c                                                
 b_c2            = empennage1.b_c                                                # [m] span canard
 Cr_c2           = empennage1.Cr_c                                               # [m] root chord length canard
 Ct_c2           = empennage1.Ct_c                                               # [m] tip chord length canard
+Cr_t_c2         = Cr_c2*t_c_c2                                                  #[m] thickness at the chord canard
 z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
 l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
 
@@ -324,6 +332,7 @@ S_c3            = empennage2.S_c                                                
 A_c3            = empennage2.A_c                                                # [-] Aspect ratio of the canard
 b_c3            = empennage2.b_c                                                # [m] span canard
 Cr_c3           = empennage2.Cr_c                                               # [m] root chord length canard
+Cr_t_c3         = Cr_c3*t_c_c3                                                  #[m] thickness at the chord canard
 Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
 z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
 l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
@@ -395,10 +404,18 @@ SUSTAINABILITY
 'Greenhouse Gas Emissions'
 
 
-config1_emissions=gasemissions.greenhousegas_emissions(config1_Performance,1)
-config1_NOx=config1_emissions.get_NOx_mass()
-config2_emissions=gasemissions.greenhousegas_emissions(config2_Performance,2)
-config3_emissions=gasemissions.greenhousegas_emissions(config3_Performance,3)
+config1_emissions   =gasemissions.greenhousegas_emissions(config1_Performance,1)
+config1_NOx         =config1_emissions.get_NOx_mass()
+config1_CO2         =config1_emissions.get_CO_2_per_pax_per_km()
+
+
+config2_emissions   =gasemissions.greenhousegas_emissions(config2_Performance,2)
+config2_NOx         =config2_emissions.get_NOx_mass()
+config2_CO2         =config2_emissions.get_CO_2_per_pax_per_km()
+
+config3_emissions   =gasemissions.greenhousegas_emissions(config3_Performance,3)
+config3_NOx         =config3_emissions.get_NOx_mass()
+config3_CO2         =config3_emissions.get_CO_2_per_pax_per_km()
 
 
 
