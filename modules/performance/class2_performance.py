@@ -255,13 +255,9 @@ class Performance:
         'descent'
         fuel_fraction_descent = 0.990
         fuel_mass_descent = (1 - fuel_fraction_descent) * self.MTOW
+
+
         fuel_flow_descent = get_fuel_consumption(self.thrust_setting_descent * self.thrust_max, 1, 1)[0]
-        # fuel_flow_descent, fuel_mass_descent, descent_final_velocity, distance_descent = get_climb_optimization(mass, self.thrust_max,
-        #                                                                                           self.C_D_cruise,
-        #                                                                                           self.S, self.g,
-        #                                                                                           self.altitude_cruise,
-        #                                                                                           self.cruise_velocity,
-        #                                                                                           self.thrust_setting_descent)
         fuel_consumption.loc['descent'] = [fuel_flow_descent, fuel_mass_descent]
 
         mass -= fuel_mass_descent
