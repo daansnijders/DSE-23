@@ -381,7 +381,7 @@ class Drag:
         CD_v_trans = CD0_v_tail_trans + CDL_v_trans
         CD_c_trans = CD0_c_trans + CDL_c_trans
         
-        return(CD0_h_tail_sub, CD0_v_tail_sub, CD0_c_tail_sub, CD_h_sub, CD_v_sub, CD_c_sub, CD_h_trans, CD_v_trans, CD_c_trans)
+        return(CD0_h_tail_sub, CD0_v_tail_sub, CD0_c_sub, CD_h_sub, CD_v_sub, CD_c_sub, CD_h_trans, CD_v_trans, CD_c_trans)
         
     def nacelle_drag(self):
         Re_f  = self.rho   * self.V_cruise * self.l_nacel / self.mu_37
