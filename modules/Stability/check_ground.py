@@ -5,8 +5,10 @@ Created on Tue Jun  4 09:17:48 2019
 @author: daansnijders
 """
 
-from inputs.concept_1 import tangent, b, dihedral_rad, y_engine, z_engine
+from inputs.concept_1 import b, dihedral_rad, y_engine, z_engine
 from inputs.constants import *
+import modules.initialsizing_undercarriage as initialunderc
+
 
 
 class check_ground():
@@ -84,8 +86,8 @@ class check_ground():
 def update_x_mlg(z_cg,theta_rad, beta_rad, x_cg, stroke, l_f):
     beta_rad_correct = beta_rad- np.pi/2
     
-    scrape = tangent(l_f,z_cg,theta_rad)
-    tip_over = tangent(x_cg,z_cg,beta_rad_correct)
+    scrape = initialunderc.tangent(l_f,z_cg,theta_rad)
+    tip_over = initialunderc.tangent(x_cg,z_cg,beta_rad_correct)
     
     x_mlg = (tip_over[1] - scrape[1] + stroke)/(scrape[0] - (tip_over[0])) 
     
@@ -94,7 +96,7 @@ def update_x_mlg(z_cg,theta_rad, beta_rad, x_cg, stroke, l_f):
 def update_z_mlg(x_mlg,beta_rad,x_cg, z_cg):
     beta_rad_correct = beta_rad - np.pi/2
 
-    tip_over = tangent(x_cg,z_cg,beta_rad_correct)
+    tip_over = initialunderc.tangent(x_cg,z_cg,beta_rad_correct)
     
     
     z_mlg = tip_over[0] * x_mlg + tip_over[1]
