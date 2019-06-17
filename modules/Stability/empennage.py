@@ -330,8 +330,8 @@ class empennage:
         self.taper_ratio_c = 0.8                                                # [-] taper ratio canard
         self.lambda_c_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
         self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
-        self.Sc_S = input("Enter the Sc_S ratio needed: ")                      # [-] Ratio area canard (assumed for now)
-        self.S_c = self.Sc_S * self.S                                            # [m^2] Surface area of the canard
+        self.Sc_S = float(input("Enter the Sc_S ratio needed: "))               # [-] Ratio area canard (assumed for now)
+        self.S_c = self.Sc_S * self.S                                           # [m^2] Surface area of the canard
         self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
         self.b_c = initialplanform.get_b(self.S_c, self.A_c)                                    # [m] span canard
         self.Cr_c = initialplanform.get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
@@ -339,7 +339,7 @@ class empennage:
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard        
     
-    def deflection_curve(self, plot = False):
+    def deflection_curve(self, plot = True):
         C_l_C_l_theory = 1
         etah = 0.9
         K_b = 0.95
