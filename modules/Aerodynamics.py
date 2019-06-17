@@ -762,10 +762,10 @@ class Lift:
         KL = (10 - 3*self.taper_ratio)/7
         l_h = 0.9*self.l_f - self.x_le_MAC - 0.25*self.MAC
         h_h = 0.75*self.d_f_outer
-        Kh = (1-h_h/self.b)/(2*l_h/self.b)**(1/3)
+        Kh = (1-h_h/self.b)/((2*l_h/self.b)**(1/3))
         beta2 = math.sqrt(1-0**2)
         CL_alpha_w_M0 = (2*math.pi*self.A)/(2 + math.sqrt(4+(self.A*beta2/0.95)**2*(1+(np.tan(self.lambda_2_rad)**2)/beta2**2)))
-        de_da = 4.44*((KA*KL*Kh*math.cos(self.lambda_4_rad)**0.5)**1.19)*(CL_alpha_w/CL_alpha_w_M0)
+        de_da = 4.44*((KA*KL*Kh*(math.cos(self.lambda_4_rad))**0.5)**1.19)*(CL_alpha_w/CL_alpha_w_M0)
         de_da_c = 0.15  #Figure 8.67
         CL_alpha = CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)*(1 - de_da) + CL_alpha_c*etac*(self.S_c/self.S)*(1 + de_da_c)
         
@@ -790,7 +790,7 @@ class Lift:
         delta_CL_alpha = Kwf*delta_CL_alpha_w + CL_alpha_h*etah*(self.S_h/self.S)*(1-de_da) + CL_alpha_c*etac*(self.S_c/self.S)*(1-de_da_c)
         
         delta_alpha_wc = np.deg2rad(3) 
-        delta_CL_max = Kcw*delta_CL_max_w - delta_CL_alpha_w*delta_alpha_wc + (self.S_h/self.S)*CL_alpha_h*((1-de_da)+self.i_h - delta_ef)
+        delta_CL_max = Kcw*delta_CL_max_w - delta_CL_alpha_w*delta_alpha_wc + (self.S_h/self.S)*CL_alpha_h*((1-de_da)+ self.i_h - delta_ef)
                 
         return(delta_CL, delta_CL_alpha, delta_CL_max)
         
