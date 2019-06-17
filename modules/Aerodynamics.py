@@ -829,25 +829,26 @@ class Lift:
         C_L_flaps = []
         
         l = alpha.index(0)
-        alpha_0_L_flaps = -(delta_CL + CL_alpha * alpha_0_L) / delta_CL_alpha
+        alpha_0_L_flaps = (delta_CL - CL_alpha * np.deg2rad(alpha_0_L)) / -delta_CL_alpha
+        print (alpha_0_L_flaps)
         
         for i in range(len(alpha)): 
             
             if alpha[i] <= 3:
-                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L_flaps))
+                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)
                 C_L_flaps.append(C_L_i)
                 
             elif alpha[i] > 3 and alpha[i]<alpha_CL_max*180/math.pi : 
                 j = alpha.index(3)
                 k = alpha.index(alpha_CL_max*180/math.pi)
-                C_L_i = (delta_CL_alpha * np.deg2rad((alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (CL_alpha * np.deg2rad((alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
+                C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
                 C_L_flaps.append(C_L_i)
                 
             elif alpha[i] == alpha_CL_max*180/math.pi:
                 C_L_i = CL_max + delta_CL_max
                 C_L_flaps.append(C_L_i)
             else:
-                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * np.deg2rad((alpha[i]) - alpha_0_L_flaps)))**2
+                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
                 C_L_flaps.append(C_L_i)
         
         plt.plot(alpha, C_L_flaps, "k-")
