@@ -67,15 +67,13 @@ delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3 = config3_Lift.Wing_lift_flaps(d
 CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alpha_CL_max3 = config3_Lift.Airplane_lift(CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3)
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
 
-Cl_TO=
-Cl_cruise=
-Cl_land= 
+#Cl_TO= 
+#Cl_cruise=
+#Cl_land= 
 
 
 'Drag'
 #Values that must come from other departments
-D_strutt_nlg = 0.15
-D_strutt_mlg = 0.2
 l_fueltank = 1.5
 d_fueltank = 0.3
 
@@ -180,12 +178,12 @@ show_performance_plots = False
 show_airport_plots = False
 
 # temporary values, will be removed as soon as aerodynamics inputs are ready
-C_L_to = 1.9
-C_L_la = 2.3
+CL_TO = 1.9
+CL_land = 2.3
 C_D_0 = 0.018117539865047032
 #C_D_to = 0.19542078310015343
 #C_D_la = 0.28017202214599246
-C_L_cruise = 0.8
+CL_cruise = 0.8
 #C_D_cruise = 0.05
 
 
