@@ -169,7 +169,7 @@ from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_el
 from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_mlg, check_ground
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.Stability.empennage import empennage
-from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
+#from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
