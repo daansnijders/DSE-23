@@ -669,11 +669,11 @@ class Lift:
         M_wing = self.M_cruise / math.cos(self.lambda_4_rad)
 #        print (alpha_w)
                 
-        alpha_0_l_m75_m30 = 0.033               #Figure 8.42
+        alpha_0_l_m75_m30 = 0.1               #Figure 8.42
         
         delta_alpha_0 = (-0.343 - 0.398)/2      #Figure 8.41
-        alpha_0_L_w = (self.alpha_0_l + delta_alpha_0 * self.wing_twist) * (alpha_0_l_m75_m30)
-#        print (alpha_0_L_w)
+        alpha_0_L_w = (self.alpha_0_l + delta_alpha_0 * self.wing_twist)
+#        print (np.rad2deg(self.alpha_0_l + delta_alpha_0 * self.wing_twist))
                 
         C_l_alpha_Mwing = self.C_l_alpha / math.sqrt(1 - M_wing**2)
         beta = math.sqrt(1-M_wing**2)      # Prandtl-Glauert compressibility correction factor
@@ -758,10 +758,12 @@ class Lift:
         CL_alpha_wf = Kwf*CL_alpha_w
         
         CL0 = (self.i_w - np.deg2rad(alpha_0_L_w))*CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)*(self.i_h) + CL_alpha_c*etac*(self.S_c/self.S)*(self.i_c)
+#         print(CL0)
         KA = (1/self.A) - 1/(1 + self.A**1.7)
         KL = (10 - 3*self.taper_ratio)/7
         l_h = 0.9*self.l_f - self.x_le_MAC - 0.25*self.MAC
         h_h = 0.75*self.d_f_outer
+        print (h_h / (self.b/2))
         Kh = (1-h_h/self.b)/((2*l_h/self.b)**(1/3))
         beta2 = math.sqrt(1-0**2)
         CL_alpha_w_M0 = (2*math.pi*self.A)/(2 + math.sqrt(4+(self.A*beta2/0.95)**2*(1+(np.tan(self.lambda_2_rad)**2)/beta2**2)))
@@ -770,19 +772,21 @@ class Lift:
         CL_alpha = CL_alpha_wf + CL_alpha_h*etah*(self.S_h/self.S)*(1 - de_da) + CL_alpha_c*etac*(self.S_c/self.S)*(1 + de_da_c)
         
         alpha_0_L = (-CL0)/CL_alpha
+#        print(np.rad2deg(alpha_0_L))
         
         delta_alpha_wc = np.deg2rad(3)          #rad
         alpha_CL_max = np.deg2rad(alpha_CL_max_w) - self.i_w - delta_alpha_wc
         
         CL_max = CL_max_w - CL_alpha_wf*delta_alpha_wc + CL_alpha_h*(self.S_h/self.S)*(alpha_CL_max*(1-de_da) + self.i_h) + CL_alpha_c*(self.S_c/self.S)*(alpha_CL_max*(1+de_da_c) + self.i_c)
-        return(CL_alpha_h, CL_alpha_c, CL_alpha, alpha_0_L, CL_max, de_da, de_da_c, alpha_CL_max)
+        return(CL_alpha_h, CL_alpha_c, CL_alpha, np.rad2deg(alpha_0_L), CL_max, de_da, de_da_c, alpha_CL_max)
 
     def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c, delta_CL_alpha_w, de_da, delta_CL_max_w): 
         Kcw = 0.95
         etah = 0.9      #Source internet
         etac = 1.0
-        delta_ef = np.deg2rad(18.5*delta_CL_w*self.b)/(self.A*2*self.b_flap)
+        delta_ef = np.deg2rad((18.5*delta_CL_w*self.b)/(self.A*2*self.b_flap))
         delta_CL = Kcw*delta_CL_w - CL_alpha_h*etah*(self.S_h/self.S)*delta_ef
+        print(delta_ef)
                 
         Kwf = 1 + 0.025*(self.d_f_outer/self.b) - 0.25*(self.d_f_outer/self.b)**2
         de_da_c = 0.15  #Figure 8.67
@@ -790,8 +794,8 @@ class Lift:
         delta_CL_alpha = Kwf*delta_CL_alpha_w + CL_alpha_h*etah*(self.S_h/self.S)*(1-de_da) + CL_alpha_c*etac*(self.S_c/self.S)*(1-de_da_c)
         
         delta_alpha_wc = np.deg2rad(3) 
-        delta_CL_max = Kcw*delta_CL_max_w - delta_CL_alpha_w*delta_alpha_wc + (self.S_h/self.S)*CL_alpha_h*((1-de_da)+ self.i_h - delta_ef)
-                
+        delta_CL_max = Kcw*delta_CL_max_w - delta_CL_alpha_w*delta_alpha_wc #+ (self.S_h/self.S)*CL_alpha_h*((1-de_da)+ self.i_h - delta_ef)
+                        
         return(delta_CL, delta_CL_alpha, delta_CL_max)
         
     def CL_alpha_plot(self, CL_alpha, alpha_0_L, CL_max, alpha_CL_max, delta_CL, delta_CL_alpha, delta_CL_max):
@@ -803,20 +807,20 @@ class Lift:
         for i in range(len(alpha)): 
             
             if alpha[i] <= 7:
-                C_L_i = CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)
+                C_L_i = CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))
                 C_L.append(C_L_i)
                 
             elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/math.pi : 
                 j = alpha.index(7)
                 k = alpha.index(alpha_CL_max*180/math.pi)
-                C_L_i = (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L)) + ((CL_max - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L))) / (k - j)) * (i - j)
+                C_L_i = (CL_alpha * (np.deg2rad(alpha[j]) - np.deg2rad(alpha_0_L))) + ((CL_max - (CL_alpha * (np.deg2rad(alpha[j]) - np.deg2rad(alpha_0_L)))) / (k - j)) * (i - j)
                 C_L.append(C_L_i)
                 
             elif alpha[i] == alpha_CL_max*180/math.pi:
                 C_L_i = CL_max
                 C_L.append(C_L_i)
             else:
-                C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L)))**2
+                C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))))**2
                 C_L.append(C_L_i)
         
         
@@ -829,21 +833,21 @@ class Lift:
         
         for i in range(len(alpha)): 
             
-            if alpha[i] <= 7:
-                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)
+            if alpha[i] <= 3:
+                C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L_flaps))
                 C_L_flaps.append(C_L_i)
                 
-            elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/math.pi : 
-                j = alpha.index(7)
+            elif alpha[i] > 3 and alpha[i]<alpha_CL_max*180/math.pi : 
+                j = alpha.index(3)
                 k = alpha.index(alpha_CL_max*180/math.pi)
-                C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps)) + (((CL_max + delta_CL_max) - (CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
+                C_L_i = (delta_CL_alpha * np.deg2rad((alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (CL_alpha * np.deg2rad((alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
                 C_L_flaps.append(C_L_i)
                 
             elif alpha[i] == alpha_CL_max*180/math.pi:
                 C_L_i = CL_max + delta_CL_max
                 C_L_flaps.append(C_L_i)
             else:
-                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
+                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * np.deg2rad((alpha[i]) - alpha_0_L_flaps)))**2
                 C_L_flaps.append(C_L_i)
         
         plt.plot(alpha, C_L_flaps, "k-")

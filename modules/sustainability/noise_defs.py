@@ -253,17 +253,17 @@ def get_overall_sound_level_general(p_e_squared,freq_delta,centrefreq,r):
     OSPL_A      =A_weighted_overall_sound_level(centrefreq,PBL_a)
     
     
-    plt.figure()
-    plt.plot(centrefreq,PBL_absor,'-o',label=' PBL with atmospheric absoption')
-    plt.plot(centrefreq,PBL_a,'-o',label='PBL with a weighted level and atmos. absorption')
-    plt.xlabel('frequency [Hz]')
-    plt.ylabel('1/3 octave PBL [dB(A)]')
-    plt.xscale('log')
-    plt.xlim([10,10**4])
-    plt.title('1/3 octave Pressure Band Level ')
-    plt.legend()
-    plt.show()
-#    
+#    plt.figure()
+#    plt.plot(centrefreq,PBL_absor,'-o',label=' PBL with atmospheric absoption')
+#    plt.plot(centrefreq,PBL_a,'-o',label='PBL with a weighted level and atmos. absorption')
+#    plt.xlabel('frequency [Hz]')
+#    plt.ylabel('1/3 octave PBL [dB(A)]')
+#    plt.xscale('log')
+#    plt.xlim([10,10**4])
+#    plt.title('1/3 octave Pressure Band Level ')
+#    plt.legend()
+#    plt.show()
+##    
 #    plt.figure()
 #    plt.plot(centrefreq,delta_L_A,'-o')
 #    plt.xlabel('frequency [Hz]')
