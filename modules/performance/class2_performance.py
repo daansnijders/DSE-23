@@ -359,20 +359,20 @@ class Performance:
         mass -= fuel_mass_landing_2
         fuel_mass_total = sum(fuel_consumption['fuel_mass'])
         fuel_mass_nominal = sum([fuel_mass_engine_startup, fuel_mass_take_off, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_landing])
-        fuel_fraction_total = fuel_mass_total/self.MTOW
-        fuel_consumption['fuel_fraction'] = fuel_consumption['fuel_mass'] / self.MTOW
-        fuel_fraction_take_off = fuel_mass_take_off / self.MTOW
-        fuel_fraction_climb = fuel_mass_climb / self.MTOW
-        fuel_fraction_cruise_breguet = fuel_mass_cruise_breguet / self.MTOW
-        fuel_fraction_loiter = fuel_mass_loiter / self.MTOW
-        fuel_fraction_descent = fuel_mass_descent / self.MTOW
-        fuel_fraction_landing = fuel_mass_landing / self.MTOW
-        fuel_fraction_take_off_2 = fuel_mass_take_off_2 / self.MTOW
-        fuel_fraction_climb_2 = fuel_mass_climb_2 / self.MTOW
-        fuel_fraction_cruise_breguet_2 = fuel_mass_cruise_breguet_2 / self.MTOW
-        fuel_fraction_loiter_2 = fuel_mass_loiter_2 / self.MTOW
-        fuel_fraction_landing_2 = fuel_mass_landing_2 / self.MTOW
-        fuel_fraction_descent_2 = fuel_mass_descent_2 / self.MTOW
+        fuel_fraction_total = 1 - fuel_mass_total/self.MTOW
+        fuel_consumption['fuel_fraction'] = 1 - fuel_consumption['fuel_mass'] / self.MTOW
+        fuel_fraction_take_off = 1 - fuel_mass_take_off / self.MTOW
+        fuel_fraction_climb = 1 - fuel_mass_climb / self.MTOW
+        fuel_fraction_cruise_breguet = 1 - fuel_mass_cruise_breguet / self.MTOW
+        fuel_fraction_loiter = 1 - fuel_mass_loiter / self.MTOW
+        fuel_fraction_descent = 1 - fuel_mass_descent / self.MTOW
+        fuel_fraction_landing = 1 - fuel_mass_landing / self.MTOW
+        fuel_fraction_take_off_2 = 1 - fuel_mass_take_off_2 / self.MTOW
+        fuel_fraction_climb_2 = 1 - fuel_mass_climb_2 / self.MTOW
+        fuel_fraction_cruise_breguet_2 = 1 - fuel_mass_cruise_breguet_2 / self.MTOW
+        fuel_fraction_loiter_2 = 1 - fuel_mass_loiter_2 / self.MTOW
+        fuel_fraction_landing_2 = 1 - fuel_mass_landing_2 / self.MTOW
+        fuel_fraction_descent_2 = 1 - fuel_mass_descent_2 / self.MTOW
         return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total, fuel_mass_nominal, fuel_fraction_total, fuel_flow_descent, fuel_flow_descent_2, fuel_mass_take_off, fuel_fraction_take_off, fuel_fraction_climb, fuel_fraction_cruise_breguet, fuel_fraction_descent, fuel_fraction_loiter, fuel_fraction_landing, fuel_fraction_take_off, fuel_fraction_climb_2, fuel_fraction_cruise_breguet_2, fuel_fraction_descent_2, fuel_fraction_loiter_2, fuel_fraction_landing_2, fuel_fraction_take_off_2, fuel_fraction_descent_2
 
     def get_serviceable_airports(self):
