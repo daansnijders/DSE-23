@@ -6,7 +6,7 @@ import numpy as np
 import inputs.constants as const
 import inputs.performance_inputs as perf
 import inputs.concept_1 as conc1
-
+import matplotlib.pyplot as plt
 
 'department modules'
 import modules.Aerodynamics as aero
@@ -220,13 +220,12 @@ config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO3, CD_
 """
 CONTROL AND STABILITY
 """
-import numpy as np
-import matplotlib.pyplot as plt
+
 
 from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 import inputs.constants as const
 import modules.initialsizing_planform as initialplanform
-#from modules.Stability.cg_weight_config1 import *
+
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
 from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
 from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_mlg, check_ground
@@ -238,9 +237,9 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
 """NEED FROM OTHER FILES"""
-V_critical = config1_Performance.decisionspeed/config1_Performance.approach_speed                                                               # [m/s] V1 speed/V_app
-etah = 0.9                                                                      # [-] eta_h of aerodynamics
-x_ac      = (x_le_MAC[0]+0.25*MAC)                                              # [m] x-location of the main wing ac
+V_critical = config1_Performance.decision_speed/config1_Performance.approach_speed                                                               # [m/s] V1 speed/V_app
+etah       = 0.9                                                                      # [-] eta_h of aerodynamics
+x_ac      = (conc1.x_le_MAC[0]+0.25*conc1.MAC)                                              # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
 de_da     = de_da1                                                             # [-] downwash
@@ -261,8 +260,8 @@ Vc_V      = 1.                                          #zelf                   
 
 
 # initialize class:
-empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 
 
 # outputs:
@@ -328,19 +327,19 @@ c_rud = get_c_rud(Cr_v, Ct_v, b_v)                                              
 S_rud = get_S_rud(S_v)                                                          # [m^2] surface area rudder
 b_rud = get_b_rud(S_rud,c_rud)                                                  # [m] span rudder
 
-c_ail = get_c_ail(Cr,Ct,b)                                                      # [m] chord length aileron
-S_ail = get_S_ail(S)                                                            # [m^2] surface area aileron
-b_ail = get_b_ail(b)                                                            # [m] span aileron
+c_ail = get_c_ail(conc1.Cr,conc1.Ct,conc1.b)                                                      # [m] chord length aileron
+S_ail = get_S_ail(conc1.S)                                                            # [m^2] surface area aileron
+b_ail = get_b_ail(conc1.b)                                                            # [m] span aileron
 
-c_splr = get_c_splr(Cr, Ct, b)                                                  # [m] chord length spoiler
-b_splr = get_b_splr(b)                                                          # [m] span spoiler
+c_splr = get_c_splr(conc1.Cr, conc1.Ct, conc1.b)                                                  # [m] chord length spoiler
+b_splr = get_b_splr(conc1.b)                                                          # [m] span spoiler
 
 
 # Update cg's DIFFERENT CONFIG'S
 # landing gear placement
-x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
-x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,l_f[1])])
-x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,l_f[2])])
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,conc1.l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + conc1.l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,conc1.l_f[1])])
+x_mlg[2] = max([x_mlg[0] + conc1.l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,conc1.l_f[2])])
 
 z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
 
@@ -372,9 +371,9 @@ frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
 
 # Update cg's DIFFERENT CONFIG'S
 # landing gear placement
-x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
-x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,l_f[1])])
-x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,l_f[2])])
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,conc1.l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + conc1.l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,conc1.l_f[1])])
+x_mlg[2] = max([x_mlg[0] + conc1.l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,conc1.l_f[2])])
 
 z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
 
@@ -405,9 +404,9 @@ frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
 
 # Update cg's DIFFERENT CONFIG'S
 # landing gear placement
-x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,l_f[0]) # [m] x-location of the mlg
-x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,l_f[1])])
-x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,l_f[2])])
+x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,conc1.l_f[0]) # [m] x-location of the mlg
+x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,conc1.l_f[1])])
+x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,conc1.l_f[2])])
 
 z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
 
