@@ -155,7 +155,7 @@ delta_cm_flap3, delta_cm_krueger3 = config3_Moment.Airfoil_moment_flaps(cm_des_a
 Cm0_w_sub3, Cm0_w_trans3, dCm_dCl_w3 = config3_Moment.Wing_moment()
 delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_sub3)
 
-
+print('AERO DONE')
 
 
 
@@ -217,6 +217,8 @@ config3_Performance = Performance(C_L_to, C_L_la, C_L_cruise, C_D_0, CD_TO3, CD_
                                   const.H_m, const.V_cruise, conc1.R[1], lift_over_drag, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
+
+print('PP DONE')
 """
 CONTROL AND STABILITY
 """
@@ -267,7 +269,7 @@ empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], conc1.S, conc1.M
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
 x_le_MAC_l_f    = empennage1.x_le_MAC_l_f                                       # [-] xlemac over fuselage length
-x_le_w          = initialplanform.get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)            # [m] x-location of le main wing with updated lemac
+x_le_w          = initialplanform.get_le_wing(y_MAC,conc1.x_le_MAC, conc1.lambda_2_rad, conc1.MAC, conc1.Cr)            # [m] x-location of le main wing with updated lemac
 
 S_h             = empennage1.S_h                                                # [m^2] surface area of htail
 A_h             = empennage1.A_h                                                # [-] aspect ratio htail
@@ -368,72 +370,7 @@ frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
 frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
 
 
-
-# Update cg's DIFFERENT CONFIG'S
-# landing gear placement
-x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,conc1.l_f[0]) # [m] x-location of the mlg
-x_mlg[1] = max([x_mlg[0] + conc1.l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,conc1.l_f[1])])
-x_mlg[2] = max([x_mlg[0] + conc1.l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,conc1.l_f[2])])
-
-z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
-
-x_nlg = 2
-
-l_m1 = x_cg_max_flight1 - x_mlg[0]
-l_m2 = x_cg_max_flight1 - x_mlg[1]
-l_m3 = x_cg_max_flight1 - x_mlg[2]
-
-
-l_n1 = x_cg_max_flight1 - x_nlg
-l_n2 = x_cg_max_flight2 - x_nlg
-l_n3 = x_cg_max_flight3 - x_nlg
-
-
-y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
-
-config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])
-config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])
-config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])
-
-
-frac = np.ones((3,2))
-frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
-frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
-frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
-
-
-# Update cg's DIFFERENT CONFIG'S
-# landing gear placement
-x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight1, const.stroke,conc1.l_f[0]) # [m] x-location of the mlg
-x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight2, const.stroke,conc1.l_f[1])])
-x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,conc1.l_f[2])])
-
-z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
-
-x_nlg = 2
-
-l_m1 = x_cg_max_flight1 - x_mlg[0]
-l_m2 = x_cg_max_flight1 - x_mlg[1]
-l_m3 = x_cg_max_flight1 - x_mlg[2]
-
-
-l_n1 = x_cg_max_flight1 - x_nlg
-l_n2 = x_cg_max_flight2 - x_nlg
-l_n3 = x_cg_max_flight3 - x_nlg
-
-
-y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
-
-config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])
-config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])
-config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])
-
-
-frac = np.ones((3,2))
-frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
-frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
-frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
-
+print('CS DONE')
 
 """
 STRUCTURES
