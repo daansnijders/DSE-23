@@ -23,8 +23,8 @@ def airfoil( Ct, Cr, MTOW, FF1, FF2, FF3, FF4, FF5, S, sweep_le, sweep_c2, b, Ta
     Reto3 = (const.rho_0*perf.Vto1*const.kts_to_ms*Ct)/const.mu_sl      # Reynolds number at root chord [-]
     q = 0.5*const.rho*const.V_cruise**2        # Dynamic pressure [Pa]
     
-    WSbegin = [(MTOW[i]*g*FF1*FF2*FF3*FF4)/S   for i in range(3)]        # Wing Loading begin cruise  
-    WSend = [(MTOW[i]*g*FF1*FF2*FF3*FF4*FF5)/S  for i in range(3)]        # Wing loading end cruise
+    WSbegin = [(MTOW[i]*const.g*FF1*FF2*FF3*FF4)/S   for i in range(3)]        # Wing Loading begin cruise  
+    WSend = [(MTOW[i]*const.g*FF1*FF2*FF3*FF4*FF5)/S  for i in range(3)]        # Wing loading end cruise
     CLdes =[ 1.1*(1/q)*(0.5*(WSbegin[i] + WSend[i]))   for i in range(3)] # Wing CL design [-]
                                              
     Veff = const.V_cruise*math.cos(sweep_le)             # Effective velocity [m/s]
