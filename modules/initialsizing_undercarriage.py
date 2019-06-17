@@ -41,7 +41,6 @@ def get_z_mlg(x_mlg,beta_rad,x_cg, z_cg):
     return z_mlg
 
 def get_l_mw(x_mlg,x_cg):
-    
     return [x_mlg[i] - x_cg[i] for i in range(3)]
 
 def get_z_mlg_new(l_mw,beta_rad,z_cg):

@@ -5,7 +5,7 @@ Created on Tue May 14 09:27:30 2019
 @author: Lisa
 """
 
-from math import * 
+import math
 import numpy as np
 
 #conversion
@@ -52,7 +52,7 @@ elif H_m<20000:
     p1=22631.7
 
     T=T1+a1*(H_m)                                                               # [K] temperature at cruising altitude
-    p=p1*e**(-g / (gas_constant * T) * (H_m - 11000))                                              # [Pa] pressure at cruising altitude
+    p=p1*math.e**(-g / (gas_constant * T) * (H_m - 11000))                                              # [Pa] pressure at cruising altitude
     rho= rho_0 * (T1/T_0) ** (-g / (gas_constant * -0.0065) - 1) * p / p1                                # [kg/m^3] density at cruising altitude
     
 #get cruise velocities and speed of sound

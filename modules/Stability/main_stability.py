@@ -7,15 +7,16 @@ Created on Wed Jun 12 14:56:29 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-from inputs.concept_1 import *
+from inputs.concept_1 import x_le_MAC, MAC, l_h, S, get_le_wing, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 from inputs.constants import *
-from modules.Stability.cg_weight_config1 import *
-from modules.Stability.cg_weight_loadingdiagram import *
-from modules.Stability.control_surf_func import *
-from modules.Stability.check_ground import *
-from modules.Stability.empennage import *
-from modules.testfile_aero import *
-from modules.main_class2 import *
+#from modules.Stability.cg_weight_config1 import *
+from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
+from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
+from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_mlg, check_ground
+from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
+from modules.Stability.empennage import empennage
+from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
+from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
 
@@ -40,13 +41,13 @@ CN_h_a    = CL_a_h                                                              
 CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
 CN_c_a    = CL_a_c                                                              # [-] C_N_c_alpha canard
 CN_h_def  = 0.5                                         #zelf                   # [-] C_N_h_de elevator deflection
-Vc_V      = 1.                                           #zelf                   # [-] V_c/V velocity factors
+Vc_V      = 1.                                          #zelf                   # [-] V_c/V velocity factors
 """====================="""
 
 
 # initialize class:
-empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, c, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h[0], S, MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 
 
 # outputs:
@@ -126,26 +127,28 @@ x_mlg[0] = update_x_mlg(config1_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flig
 x_mlg[1] = max([x_mlg[0] + l_cutout, update_x_mlg(config2_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flight2, stroke,l_f[1])])
 x_mlg[2] = max([x_mlg[0] + l_cutout, update_x_mlg(config3_cg.calc_z_cg(),theta_rad,beta_rad, x_cg_max_flight3, stroke,l_f[2])])
 
-z_mlg = update_z_mlg(x_mlg[0],beta_rad,config1_cg.calc_x_cg(), config1_cg.calc_z_cg())                                    # [m] z-location of the mlg
-#z_mlg=max(z_mlg)
-#
-#l_m = get_l_mw(x_mlg,x_cg)                                                      # [m] mlg distance from c.g
-#l_n = get_l_nw(l_m,P_mw,N_mw,P_nw,N_nw)                                         # [m] nlg distance from c.g
-#
-#x_nlg = get_x_nlg(x_cg,l_n)                                                     # [m] x-location of nlg
-#x_nlg=min(x_nlg)
-#l_n=[x_cg[i]-x_nlg for i in range(3)]
+z_mlg = update_z_mlg(x_mlg[0],beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
+
+x_nlg = 2
+
+l_m1 = x_cg_max_flight1 - x_mlg[0]
+l_m2 = x_cg_max_flight1 - x_mlg[1]
+l_m3 = x_cg_max_flight1 - x_mlg[2]
 
 
-#config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-#config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
-#config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
-#
-#
-#frac = np.ones((3,2))
-#frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
-#frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
-#frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
+l_n1 = x_cg_max_flight1 - x_nlg
+l_n2 = x_cg_max_flight2 - x_nlg
+l_n3 = x_cg_max_flight3 - x_nlg
 
 
+y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
 
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+
+
+frac = np.ones((3,2))
+frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
+frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
+frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()

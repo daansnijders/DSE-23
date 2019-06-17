@@ -5,7 +5,7 @@ Created on Tue Jun  4 09:17:48 2019
 @author: daansnijders
 """
 
-from inputs.concept_1 import *
+from inputs.concept_1 import tangent, b, dihedral_rad, y_engine, z_engine
 from inputs.constants import *
 
 
@@ -74,6 +74,9 @@ class check_ground():
         for i in range(len(self.weight_fuel)):
             self.frac.append(self.F_n[(i+len(self.weight_fuel)+2*len(self.weight_pass))]/self.weight_fuel[i])
             
+        assert min(self.frac) > 0.08
+        assert max(self.frac) < 0.20
+            
         return min(self.frac), max(self.frac), self.frac
     
     
@@ -97,6 +100,23 @@ def update_z_mlg(x_mlg,beta_rad,x_cg, z_cg):
     z_mlg = tip_over[0] * x_mlg + tip_over[1]
     return z_mlg
 
+def update_l_mw(x_mlg,x_cg):
+    return x_mlg - x_cg
+
+def update_l_nw(l_w,P_mw,N_mw,P_nw,N_nw):
+    return [(l_w[i]*P_mw[i]*N_mw)/(P_nw[i]*N_nw) for i in range(3)]
+
+def update_y_mlg(z_cg,z_mlg,l_n,l_w):
+    z_t = b/(2) * np.tan(dihedral_rad)
+    
+    y_mlg1 = [(l_n[i] + l_w[i])/(np.sqrt((l_n[i]**2 \
+              *np.tan(psi_rad)**2)/(z_cg - z_mlg)**2 - 1)) for i in range(3)]
+    y_mlg2 = [y_engine - (z_engine - z_mlg)/np.tan(phi_rad) for i in range(3)]                           
+    y_mlg3 = [b/2 - (z_t-z_mlg)/np.tan(phi_rad) for i in range(3)] 
+    
+    y_mlg = max([max([y_mlg1[i],y_mlg2[i],y_mlg3[i]]) for i in range(3)])
+    assert y_mlg < 9/2
+    return y_mlg
     
     
     
