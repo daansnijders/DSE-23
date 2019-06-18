@@ -9,7 +9,7 @@ Created on Mon Jun 17 13:43:30 2019
 import inputs.concept_1 as c1
 import modules.weight_class2.class2_weight as c2m
 import modules.CG.class2_CG  as c2cg
-import output.connection_departments as detailedsizing
+import Output.connection_departments as detailedsizing
 
 from inputs.constants import n_max,V_dive
 

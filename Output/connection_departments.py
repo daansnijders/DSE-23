@@ -190,12 +190,13 @@ show_airport_plots = False
 
 #CL_TO = 1.9
 #CL_land = 2.3
-C_D_0 = 0.018117539865047032
+#C_D_0 = 0.018117539865047032
 #CL_cruise = 0.8
 
 
-lift_over_drag = conc1.LoverD[0]
-
+lift_over_drag1 = CL_cruise1/CD_cruise1
+lift_over_drag2 = CL_cruise2/CD_cruise2
+lift_over_drag3 = CL_cruise3/CD_cruise3
 aspect_ratio = conc1.A
 oswald_efficiency_number = conc1.e
 
@@ -207,7 +208,7 @@ config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, CD0_1, CD_TO1, CD_
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
                                   perf.thrust_setting_transition, conc1.M_payload[0], conc1.M_fuel[0],
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
-                                  const.H_m, const.V_cruise, conc1.R[0], lift_over_drag, aspect_ratio,
+                                  const.H_m, const.V_cruise, conc1.R[0], lift_over_drag1, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
@@ -220,7 +221,7 @@ config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
                                   perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
-                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag, aspect_ratio,
+                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag2, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
@@ -230,9 +231,19 @@ config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
                                   perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
-                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag, aspect_ratio,
+                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag3, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
+
+'needed in further programs of iteration'
+'fuel fractions'
+Mff1 = config1_Performance.fuel_fraction_total
+Mff2 = config2_Performance.fuel_fraction_total
+Mff3 = config3_Performance.fuel_fraction_total
+'climb gradient'
+
+'Climb velocity'
+
 
 print('P&P DONE')
 
@@ -242,7 +253,6 @@ CONTROL AND STABILITY
 
 
 from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
-import inputs.constants as const
 import modules.initialsizing_planform as initialplanform
 
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
