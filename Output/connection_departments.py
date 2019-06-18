@@ -12,14 +12,23 @@ import matplotlib.pyplot as plt
 import modules.Aerodynamics as aero
 import modules.sustainability.greenhousegasemissions as gasemissions
 import modules.sustainability.noise_defs as noise
-import modules.performance.class2_performance as class2performance
 import modules.initialsizing_loading as loadingdiagram
-
+from modules.performance.class2_performance import Performance
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
-import csv
+
+"""
+SELECT PARTS TO RUN
+"""
+run_aer = True
+run_pnp = True
+run_snc = True
+run_str = True
+run_sus = True
+
 """
 AERODYNAMICS
 """
+
 # initial guess for some values or needed from other departments, must be updated after iteration
 i_w = 0                 #Angle of incidence wing in DEG
 i_h = 0                 #Angle of incidence horinzontal tail in DEG
@@ -80,10 +89,10 @@ CL_land= 2.66
 'Drag'
 #Values that must come from other departments
 
-D_strutt_nlg = conc1.D_strut_mlg                                                #UPDATE 
+D_strutt_nlg = conc1.D_strut_mlg                                                #UPDATE
 D_strutt_mlg = conc1.D_strut_nlg                                                #UPDATE
 l_fueltank = 1.5                                                                #UPDATE
-d_fueltank = 0.3                                                                #UPDATE 
+d_fueltank = 0.3                                                                #UPDATE
 
 
 #Hard to calculate, not important for first iteration, maybe from Daan and Stijn
@@ -255,10 +264,11 @@ V_climb2=config2_Performance.take_off_velocity*1.3
 V_climb3=config3_Performance.take_off_velocity*1.3
 print('P&P DONE')
 
+
+
 """
 CONTROL AND STABILITY
 """
-
 
 from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 import modules.initialsizing_planform as initialplanform
@@ -405,9 +415,9 @@ l_n3 = x_cg_max_flight3 - x_nlg
 
 y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
 
-config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
-config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])
 
 
 frac = np.ones((3,2))
@@ -421,13 +431,15 @@ print('CS DONE')
 """
 STRUCTURES
 """
-#Calculate fuel mass available for storage in wings (0.75 of one side of the wing)
+
+    #Calculate fuel mass available for storage in wings (0.75 of one side of the wing)
 fuel_mass_available = wing_struc_analysis(C_l_max,const.V_cruise,conc1.b,conc1.Cr,conc1.Ct,conc1.S)
 
 
 """
 SUSTAINABILITY
 """
+
 'Greenhouse Gas Emissions'
 
 
@@ -529,14 +541,3 @@ output_file.close()
 
 
 
-
-
-
-
-
-
-
-
-config1_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise1,CL_land,V_climb1,perf.c,f1,perf.sigma, perf.TOP, CD0_1,conc1.A,conc1.e,1000,7000,100)
-config2_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise2,CL_land,V_climb2,perf.c,f2,perf.sigma, perf.TOP, CD0_2,conc1.A,conc1.e,1000,7000,100)
-config3_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise3,CL_land,V_climb3,perf.c,f3,perf.sigma, perf.TOP, CD0_3,conc1.A,conc1.e,1000,7000,100)

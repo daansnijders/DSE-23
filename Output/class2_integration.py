@@ -15,10 +15,14 @@ from inputs.constants import n_max,V_dive
 import csv 
 import pandas as pd 
 
+
 output_file = open('output_detailedsizing.dat' ,  'r')
 lines= output_file.readlines()
 values=[]
 labels=[]
+
+#datastored = pd.read_csv('output_detailedsizing.csv' ,  'w'))
+
 
 for s in lines:
     words=s.split('=')
@@ -62,6 +66,9 @@ x_le_MAC1=values[28]
 x_le_MAC2=values[29]
 x_le_MAC3=values[30]
 x_le_MAC=[x_le_MAC1,x_le_MAC2,x_le_MAC3]
+
+
+
 
 
 'CLASS 2 WEIGHT EXECUTION AND CG LOCATION ESTIMATION'
