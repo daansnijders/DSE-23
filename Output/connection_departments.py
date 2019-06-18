@@ -464,10 +464,9 @@ OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,config1_Perfo
 
 
 
-
-
-
-
+config1_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise1,CL_land,V_climb1,perf.c,f1,perf.sigma, perf.TOP, CD0_1,conc1.A,conc1.e,1000,7000,100)
+config2_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise2,CL_land,V_climb2,perf.c,f2,perf.sigma, perf.TOP, CD0_2,conc1.A,conc1.e,1000,7000,100)
+config3_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise3,CL_land,V_climb3,perf.c,f3,perf.sigma, perf.TOP, CD0_3,conc1.A,conc1.e,1000,7000,100)
 
 
 'WRITE THE CSV FILE'
@@ -526,33 +525,35 @@ output_file.write('lc_conf3=' + str(l_c3)+ '\n')
 
 
 
-output_file.write('CL_TO' + str(Cl_TO)+'\n')
-output_file.write('CL_land' + str(Cl_land)+'\n')
-output_file.write('CL_cruise1' + str(CL_cruise1)+'\n')
-output_file.write('CL_cruise2' + str(CL_cruise2)+'\n')
-output_file.write('CL_cruise3' + str(CL_cruise3)+'\n')
-output_file.write('Cd_cruise1' + str(CD_cruise1)+'\n')
-output_file.write('Cd_cruise2' + str(CD_cruise2)+'\n')
-output_file.write('Cd_cruise3' + str(CD_cruise3)+'\n')
+output_file.write('CL_TO=' + str(CL_TO)+'\n')
+output_file.write('CL_land=' + str(CL_land)+'\n')
+output_file.write('CL_cruise1=' + str(CL_cruise1)+'\n')
+output_file.write('CL_cruise2=' + str(CL_cruise2)+'\n')
+output_file.write('CL_cruise3=' + str(CL_cruise3)+'\n')
+output_file.write('Cd_cruise1=' + str(CD_cruise1)+'\n')
+output_file.write('Cd_cruise2=' + str(CD_cruise2)+'\n')
+output_file.write('Cd_cruise3=' + str(CD_cruise3)+'\n')
 
 
 
-output_file.write('A' + str(conc1.A)+'\n')
-output_file.write('S' + str(conc1.S)+'\n')
-output_file.write('b' + str(conc1.b)+'\n')
-output_file.write('l_cutout' + str(conc1.l_cutout)+'\n')
-output_file.write('l fuselage' + str(conc1.l_f)+'\n')
-output_file.write('l cabin' + str(conc1.l_cabin)+'\n')
-output_file.write('mff1' + str(Mff1)+'\n')
-output_file.write('mff2' + str(Mff2)+'\n')
-output_file.write('mff3' + str(Mff3)+'\n')
+output_file.write('A=' + str(conc1.A)+'\n')
+output_file.write('S=' + str(conc1.S)+'\n')
+output_file.write('b=' + str(conc1.b)+'\n')
+output_file.write('l_cutout=' + str(conc1.l_cutout)+'\n')
+output_file.write('l fuselage 1=' + str(conc1.l_f[0])+'\n')
+output_file.write('l cabin 1=' + str(conc1.l_cabin[0])+'\n')
+output_file.write('l fuselage extended=' + str(conc1.l_f[1])+'\n')
+output_file.write('l cabin extended=' + str(conc1.l_cabin[1])+'\n')
+output_file.write('mff1=' + str(Mff1)+'\n')
+output_file.write('mff2=' + str(Mff2)+'\n')
+output_file.write('mff3=' + str(Mff3)+'\n')
 
-output_file.write('co2emissions 1 per pax' + str(config1_CO2[0]))
-output_file.write('co2emissions 1 requirement' + str(config1_CO2[1]))
-output_file.write('co2emissions 2 per pax' + str(config2_CO2[0]))
-output_file.write('co2emissions 2 requirement' + str(config2_CO2[1]))
-output_file.write('co2emissions 3 per pax' + str(config3_CO2[0]))
-output_file.write('co2emissions 3 requirement' + str(config3_CO2[1]))
+output_file.write('co2emissions 1 per pax=' + str(config1_CO2[0])+'\n')
+output_file.write('co2emissions 1 requirement=' + str(config1_CO2[1])+'\n')
+output_file.write('co2emissions 2 per pax=' + str(config2_CO2[0])+'\n')
+output_file.write('co2emissions 2 requirement=' + str(config2_CO2[1])+'\n')
+output_file.write('co2emissions 3 per pax=' + str(config3_CO2[0])+'\n')
+output_file.write('co2emissions 3 requirement=' + str(config3_CO2[1])+'\n')
 
 output_file.close()
 
