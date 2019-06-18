@@ -4,7 +4,8 @@ import pandas as pd
 
 from Structure.Wing.isa import isa
 from modules.performance.class2_performance_defs import get_take_off_field_length, get_landing_field_length,\
-    get_fuel_consumption, get_climb_optimization, get_fuel_burned_breguet, get_thrust_required, get_descent
+    get_fuel_consumption, get_climb_optimization, get_fuel_burned_breguet, get_thrust_required, get_descent,\
+    get_take_off_field_length_alt
 from modules.performance.serviceable_airports import *
 
 
@@ -67,7 +68,6 @@ class Performance:
         self.fuel_fraction_landing, self.fuel_fraction_take_off, self.fuel_fraction_climb_2,\
         self.fuel_fraction_cruise_breguet_2, self.fuel_fraction_descent_2, self.fuel_fraction_loiter_2,\
         self.fuel_fraction_landing_2, self.fuel_fraction_take_off_2, fuel_fraction_descent_2 = self.analyze_fuel_consumption()
-        print(self.fuel_table)
 
     def cj(self):
         cj = get_fuel_consumption(self.thrust_max, 1, 1)[0] / self.thrust_max
@@ -83,7 +83,8 @@ class Performance:
 
         for altitude in airport_altitude_list:
             density = isa(altitude)[2]
-            take_off_field_length_list = []; take_off_velocity_list = []
+            take_off_field_length_list = []
+            take_off_velocity_list = []
             decision_speed_list = []
             for mass in mass_list:
                 length, take_off_velocity, decision_speed = get_take_off_field_length(self.engine_failure, density,
@@ -93,8 +94,10 @@ class Performance:
                                                                                       self.thrust_setting_climb_out,
                                                                                       self.C_L_to, self.C_D_to, self.S,
                                                                                       self.friction_coefficient_to,
-                                                                                      True, 30,
-                                                                                      self.reverse_thrust_factor)
+                                                                                      True, 40,
+                                                                                      self.reverse_thrust_factor,
+                                                                                      self.friction_coefficient_la)
+                # length, take_off_velocity, decision_speed = get_take_off_field_length_alt(altitude, self.C_D_to, self.C_L_to, self.friction_coefficient_to, self.g, mass, self.S, self.screen_height_to, self.thrust_max)
                 take_off_field_length_list.append(length * self.correction_factor_to)
                 take_off_velocity_list.append(take_off_velocity)
                 decision_speed_list.append(decision_speed)
@@ -105,7 +108,7 @@ class Performance:
         take_off_field_length, take_off_velocity, decision_speed = tofl_select[1][-1], tofl_select[2][-1], tofl_select[3][-1]
 
         # plotting
-        plt.figure('take off field length')
+        plt.figure()
         for select in tofl:
             h = airport_altitude_list[tofl.index(select)]
             plt.plot(select[1], select[0], label='%a [m]' % h)
@@ -214,7 +217,8 @@ class Performance:
                                                                              self.thrust_setting_climb_out, self.C_L_to,
                                                                              self.C_D_to, self.S,
                                                                              self.friction_coefficient_to, True, 30,
-                                                                             self.reverse_thrust_factor)[:2]
+                                                                             self.reverse_thrust_factor,
+                                                                             self.friction_coefficient_to)[:2]
         fuel_flow_take_off, fuel_mass_take_off = get_fuel_consumption(engines_operative * self.thrust_max,
                                                                       take_off_field_length,
                                                                       take_off_velocity / np.sqrt(2))
@@ -296,7 +300,8 @@ class Performance:
                                                                                  self.thrust_setting_climb_out,
                                                                                  self.C_L_to, self.C_D_to, self.S,
                                                                                  self.friction_coefficient_to,
-                                                                                 True, 30, self.reverse_thrust_factor)[:2]
+                                                                                 True, 30, self.reverse_thrust_factor,
+                                                                                 self.friction_coefficient_to)[:2]
         fuel_flow_take_off_2, fuel_mass_take_off_2 = get_fuel_consumption(engines_operative * self.thrust_max,
                                                                           take_off_2_field_length,
                                                                           take_off_2_velocity / np.sqrt(2))

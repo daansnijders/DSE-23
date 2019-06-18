@@ -7,7 +7,7 @@ def get_climb_gradient(thrust, drag, mass, g):
     return y
 
 
-def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one_engine, thrust_transition_setting, thrust_climb_out_setting, C_L, C_D, S, mu_TO, V_1_guess, V_1, reverse_thrust_factor):
+def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one_engine, thrust_transition_setting, thrust_climb_out_setting, C_L, C_D, S, mu_TO, V_1_guess, V_1, reverse_thrust_factor, mu_LA):
 
     def get_acceleration(V_min, V_max, thrust_total):
         V_average = (V_max - V_min) / np.sqrt(2) + V_min
@@ -19,26 +19,20 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
 
     def get_decision_speed(velocity):
 
-        def give_try(velocity):
-            acceleration_0 = get_acceleration(0, velocity, 2 * thrust_one_engine)
-            acceleration_1 = get_acceleration(velocity, V_liftoff, thrust_one_engine)
-            distance_try = velocity ** 2 / 2. / acceleration_0 + (V_liftoff ** 2 / 2. - velocity ** 2 / 2.) / acceleration_1
+        def give_try(decision_speed):
+            acceleration = get_acceleration(0, decision_speed, 2 * thrust_one_engine)
+            accelerate_stop_distance = decision_speed ** 2 / 2. / acceleration
 
-            if engine_failure:
-                reverse_thrust = reverse_thrust_factor * thrust_one_engine
-            else:
-                reverse_thrust = reverse_thrust_factor * 2 * thrust_one_engine
-            V_average = velocity / np.sqrt(2)
-            average_drag_air = 0.5 * rho * V_average ** 2 * C_D * S
-            average_lift = 0.5 * rho * V_average ** 2 * C_L * S
-            drag_braking_friction = mu_TO * (mass * g - average_lift)
+            reverse_thrust = reverse_thrust_factor * thrust_one_engine
+            average_velocity = decision_speed / np.sqrt(2)
+            average_drag_air = 0.5 * rho * average_velocity ** 2 * C_D * S
+            average_lift = 0.5 * rho * average_velocity ** 2 * C_L * S
+            drag_braking_friction = mu_LA * (mass * g - average_lift)
             a_brake = -1 / mass * (reverse_thrust + average_drag_air + drag_braking_friction)
-            x_brake = -velocity ** 2 / 2 / a_brake
+            x_brake = -decision_speed ** 2 / 2 / a_brake
+            accelerate_stop_distance += x_brake
+            return accelerate_stop_distance
 
-            distance_try+=x_brake
-
-            return(distance_try)
-        # plt.figure('Covergence')
         difference = 100
         count = 0
         # nominal_list = []
@@ -46,8 +40,10 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
         # difference_list = []
         # count_list = []
         while abs(difference)>5:
-            if abs(difference)>50:
+            if abs(difference)>60:
                 step_size = 1
+            elif abs(difference)>40:
+                step_size = 0.5
             else:
                 step_size = 0.1
             count += 1
@@ -56,23 +52,15 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
 
             else:
                 velocity -= step_size
-            nominal_distance = get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one_engine,
+            nominal_distance = get_take_off_field_length(True, rho, g, h_screen, mass, thrust_one_engine,
                                                          thrust_transition_setting, thrust_climb_out_setting, C_L, C_D,
-                                                         S, mu_TO, False, velocity, reverse_thrust_factor)[0]
+                                                         S, mu_TO, False, velocity, reverse_thrust_factor, mu_LA)[0]
             try_distance = give_try(velocity)
             difference = nominal_distance - try_distance
             if count>1000:
                 print('ALERT - decision speed does not converge, check input values')
                 velocity = 30
                 break
-            # nominal_list.append(nominal_distance)
-            # try_list.append(try_distance)
-            # difference_list.append(difference)
-            # count_list.append(count)
-        # plt.plot(count_list, nominal_list, color='C0', label='Nominal')
-        # plt.plot(count_list, try_list, color='C1', label='Try')
-        # plt.plot(count_list, difference_list, color='C2', label='Difference')
-        # plt.legend()
         return velocity
 
     V_min = get_V_stall(mass, g, rho, S, C_L)
@@ -93,7 +81,7 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
     else:
         if V_1_guess:
             V_1 = get_decision_speed(V_1)
-            acceleration_0 = get_acceleration(0, V_1, 2 * thrust_one_engine)
+            acceleration_0 = get_acceleration(0, V_liftoff, 2 * thrust_one_engine)
             acceleration_1 = get_acceleration(V_1, V_liftoff, 2 * thrust_one_engine)
         else:
             acceleration_0 = get_acceleration(0, V_1, 2 * thrust_one_engine)
@@ -114,26 +102,56 @@ def get_take_off_field_length(engine_failure, rho, g, h_screen, mass, thrust_one
     distance_transition = V_liftoff**2/0.15/g*np.sin(climb_gradient)
 
     h_transition = V_liftoff**2/0.15/g*(1-np.cos(climb_gradient))
-
     """
     Climb out distance
     """
     distance_total_airborne = distance_transition
-
-    if h_transition < h_screen:
+    if h_transition > h_screen:
+        distance_total_airborne = distance_transition
+    else:
         if engine_failure:
             climb_out_gradient = get_climb_gradient(thrust_climb_out_setting * thrust_one_engine, drag_air, mass, g)
         else:
             climb_out_gradient = get_climb_gradient(2 * thrust_climb_out_setting * thrust_one_engine, drag_air, mass, g)
         distance_climb = (h_screen - h_transition) / np.tan(climb_out_gradient)
         distance_total_airborne = distance_transition + distance_climb
-
-    else:
-        gamma_2 = np.arccos(1-h_screen/(V_liftoff**2/0.15/g))
-        distance_total_airborne = V_liftoff**2/0.15/g*np.sin(gamma_2)
+    # if h_transition < h_screen:
+    #     if engine_failure:
+    #         climb_out_gradient = get_climb_gradient(thrust_climb_out_setting * thrust_one_engine, drag_air, mass, g)
+    #     else:
+    #         climb_out_gradient = get_climb_gradient(2 * thrust_climb_out_setting * thrust_one_engine, drag_air, mass, g)
+    #     distance_climb = (h_screen - h_transition) / np.tan(climb_out_gradient)
+    #     distance_total_airborne = distance_transition + distance_climb
+    #
+    # else:
+    #     gamma_2 = np.arccos(1-h_screen/(V_liftoff**2/0.15/g))
+    #     distance_total_airborne = V_liftoff**2/0.15/g*np.sin(gamma_2)
 
     distance_total = distance_ground + distance_total_airborne
     return distance_total, V_liftoff, V_1
+
+
+def get_take_off_field_length_alt(altitude, CD_TO, CL_TO, friction_coefficient_to, g, mass, S, screen_height_to, thrust_max):
+    air_density = isa(altitude)[2]
+    stall_velocity = get_V_stall(mass, g, air_density, S, CL_TO)
+    take_off_velocity = 1.05 * stall_velocity
+    average_velocity = take_off_velocity / np.sqrt(2)
+    average_acceleration = (thrust_max * 2 - friction_coefficient_to * (mass * g - CL_TO * 1 / 2 * air_density * average_velocity ** 2 * S) - CD_TO * 1 / 2 * air_density * average_velocity ** 2 * S) / mass
+    distance_ground = take_off_velocity ** 2 / 2 / average_acceleration
+
+    # confirmed it works semi, deltas = 40
+
+    radius = take_off_velocity ** 2 / g / 0.15
+    flight_path_angle = (2 * thrust_max - 1 / 2 * air_density * take_off_velocity ** 2 * S * CD_TO) / mass / g
+    distance_transition = radius * flight_path_angle
+    height_transition = 1 / 2 * distance_transition * flight_path_angle
+
+    distance_climb = (screen_height_to - height_transition) / np.tan(flight_path_angle)
+    if height_transition > screen_height_to:
+        distance = distance_transition + distance_ground
+    else:
+        distance = distance_transition + distance_ground + distance_climb
+    return distance, take_off_velocity, 40
 
 
 def get_friction_coefficient(force_nose, mass, x_m, x_n, x_cg, h_cg, g):
