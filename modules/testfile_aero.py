@@ -201,4 +201,4 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 
 
 C_L, C_L_flaps = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.75)
-print (C_L, C_L_flaps)
+#print (C_L, C_L_flaps)
