@@ -13,17 +13,8 @@ import modules.Aerodynamics as aero
 import modules.sustainability.greenhousegasemissions as gasemissions
 import modules.sustainability.noise_defs as noise
 import modules.initialsizing_loading as loadingdiagram
-from modules.performance.class2_performance import Performance
+import modules.performance.class2_performance as class2performance
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
-
-"""
-SELECT PARTS TO RUN
-"""
-run_aer = True
-run_pnp = True
-run_snc = True
-run_str = True
-run_sus = True
 
 """
 AERODYNAMICS
@@ -194,6 +185,7 @@ mass_resolution = 20  # resolution of plotting mass vs take-off field length
 engine_failure = False
 show_performance_plots = False
 show_airport_plots = False
+show_rate_of_climb_plots = False
 
 # temporary values, will be removed as soon as aerodynamics inputs are ready
 
@@ -220,7 +212,7 @@ config1_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise1, 
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[0], lift_over_drag1, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
 
 
 print('check between conc')
@@ -233,7 +225,7 @@ config2_Performance =class2performance.Performance(CL_TO, CL_land, CL_cruise2, C
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[1], lift_over_drag2, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
 
 config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
@@ -243,7 +235,7 @@ config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, 
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[1], lift_over_drag3, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
 
 'needed in further programs of iteration'
 'fuel fractions'
