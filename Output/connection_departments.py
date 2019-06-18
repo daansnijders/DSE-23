@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import modules.Aerodynamics as aero
 import modules.sustainability.greenhousegasemissions as gasemissions
 import modules.sustainability.noise_defs as noise
-from modules.performance.class2_performance import *
-
+import modules.performance.class2_performance as class2performance
+import modules.initialsizing_loading as loadingdiagram
 
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
 """
@@ -202,7 +202,7 @@ oswald_efficiency_number = conc1.e
 
 'analysis'
 
-config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, CD0_1, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
+config1_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise1, CD0_1, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
                                   conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -215,7 +215,7 @@ config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, CD0_1, CD_TO1, CD_
 
 print('check between conc')
 
-config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
+config2_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -225,7 +225,7 @@ config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent)
 
-config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
+config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -242,13 +242,14 @@ Mff2 = config2_Performance.fuel_fraction_total
 Mff3 = config3_Performance.fuel_fraction_total
 
 f1= config1_Performance.fuel_fraction_cruise_breguet
-f2= config1_Performance.fuel_fraction_cruise_breguet
-f3= config1_Performance.fuel_fraction_cruise_breguet
-'climb gradient'
+f2= config2_Performance.fuel_fraction_cruise_breguet
+f3= config3_Performance.fuel_fraction_cruise_breguet
+
 
 'Climb velocity'
-
-
+V_climb1=config1_Performance.take_off_velocity
+V_climb2=config2_Performance.take_off_velocity
+V_climb3=config3_Performance.take_off_velocity
 print('P&P DONE')
 
 """
@@ -420,17 +421,17 @@ SUSTAINABILITY
 
 
 config1_emissions   =gasemissions.greenhousegas_emissions(config1_Performance,1)
-#config1_NOx         =config1_emissions.get_NOx_mass()
-#config1_CO2         =config1_emissions.get_CO_2_per_pax_per_km()
+config1_NOx         =config1_emissions.get_NOx_mass()
+config1_CO2         =config1_emissions.get_CO2_per_passenger_per_km()
 
 
 config2_emissions   =gasemissions.greenhousegas_emissions(config2_Performance,2)
-#config2_NOx         =config2_emissions.get_NOx_mass()
-#config2_CO2         =config2_emissions.get_CO_2_per_pax_per_km()
+config2_NOx         =config2_emissions.get_NOx_mass()
+config2_CO2         =config2_emissions.get_CO2_per_passenger_per_km()
 
 config3_emissions   =gasemissions.greenhousegas_emissions(config3_Performance,3)
 config3_NOx         =config3_emissions.get_NOx_mass()
-#config3_CO2         =config3_emissions.get_CO_2_per_pax_per_km()
+config3_CO2         =config3_emissions.get_CO2_per_passenger_per_km()
 
 
 
@@ -447,3 +448,9 @@ OSPL_dBA_tot_up=noise.EPNdB_calculations(r1,theta_1,phi_observer,config1_Perform
 OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,config1_Performance.approach_velocity, area_flap, b_flap,flap_deflection, b_slat )
 
 
+
+
+
+config1_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland,CL_TO,CL_cruise1,CL_land,V_climb1,perf.c,f1,perf.sigma, perf.TOP, CD0_1,conc1.A,conc1.e,1000,7000,100)
+config2_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland,CL_TO,CL_cruise2,CL_land,V_climb2,perf.c,f2,perf.sigma, perf.TOP, CD0_2,conc1.A,conc1.e,1000,7000,100)
+config3_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland,CL_TO,CL_cruise3,CL_land,V_climb3,perf.c,f3,perf.sigma, perf.TOP, CD0_3,conc1.A,conc1.e,1000,7000,100)

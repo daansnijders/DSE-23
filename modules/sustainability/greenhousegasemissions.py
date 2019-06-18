@@ -55,7 +55,7 @@ class greenhousegas_emissions(object):
     def get_CO2_per_passenger_per_km(self):
         
         self.fuel_per_pax=self.performance.fuel_mass_nominal/c1.N_pax[self.configuration]/c1.R[self.configuration]*1000
-        self.CO2_reduction=(0.021-self.fuel_per_pax)/0.021*100
+        self.CO2_reduction=(1-self.fuel_per_pax/0.021)*100
         return self.fuel_per_pax, self.CO2_reduction
     
     def get_CO2_emissions(self):

@@ -24,7 +24,7 @@ config1_M_fixedeq               =config1_class2.fixed_equipment_mass()
 
 config1_M_winggroup             =config1_class2.get_wing_group_mass()
 config1_M_fuselagegroup         =config1_class2.get_fuselage_group_mass()
-#x_le_MAC=get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group)
+
 
 config1_class2_OEW              =config1_class2.OEW(config1_M_structural,config1_M_powerplant,config1_M_fixedeq)
 #cg locations
