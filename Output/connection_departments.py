@@ -171,82 +171,82 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 
 print('AERO DONE')
 
-#"""
-#PERFORMANCE & PROPULSION
-#"""
-#'simulation accuracy inputs'
-#max_airport_altitude = 2000.  # [m]
-#altitude_resolution = 5  # number of different altitudes considered
-#mass_resolution = 20  # resolution of plotting mass vs take-off field length
-#
-#'general inputs'
-#engine_failure = False
-#show_performance_plots = False
-#show_airport_plots = False
-#
-## temporary values, will be removed as soon as aerodynamics inputs are ready
-#
-#
-##CL_TO = 1.9
-##CL_land = 2.3
-##C_D_0 = 0.018117539865047032
-##CL_cruise = 0.8
-#
-#
-#lift_over_drag1 = CL_cruise1/CD_cruise1
-#lift_over_drag2 = CL_cruise2/CD_cruise2
-#lift_over_drag3 = CL_cruise3/CD_cruise3
-#aspect_ratio = conc1.A
-#oswald_efficiency_number = conc1.e
-#
-#'analysis'
-#
-#config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, CD0_1, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
-#                                  conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
-#                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
-#                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
-#                                  perf.thrust_setting_transition, conc1.M_payload[0], conc1.M_fuel[0],
-#                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
-#                                  const.H_m, const.V_cruise, conc1.R[0], lift_over_drag1, aspect_ratio,
-#                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-#                                  show_airport_plots, perf.thrust_setting_descent)
-#
-#
-#print('check between conc')
-#
-#config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
-#                                  conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
-#                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
-#                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
-#                                  perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
-#                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
-#                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag2, aspect_ratio,
-#                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-#                                  show_airport_plots, perf.thrust_setting_descent)
-#
-#config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
-#                                  conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
-#                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
-#                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
-#                                  perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
-#                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
-#                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag3, aspect_ratio,
-#                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-#                                  show_airport_plots, perf.thrust_setting_descent)
-#
-#'needed in further programs of iteration'
-#'fuel fractions'
-#Mff1 = config1_Performance.fuel_fraction_total
-#Mff2 = config2_Performance.fuel_fraction_total
-#Mff3 = config3_Performance.fuel_fraction_total
-#
-#f1= config1_Performance.fuel_fraction_cruise_breguet
-#f2= config1_Performance.fuel_fraction_cruise_breguet
-#f3= config1_Performance.fuel_fraction_cruise_breguet
-#'climb gradient'
-#
-#'Climb velocity'
-#
+"""
+PERFORMANCE & PROPULSION
+"""
+'simulation accuracy inputs'
+max_airport_altitude = 2000.  # [m]
+altitude_resolution = 5  # number of different altitudes considered
+mass_resolution = 20  # resolution of plotting mass vs take-off field length
+
+'general inputs'
+engine_failure = False
+show_performance_plots = False
+show_airport_plots = False
+
+# temporary values, will be removed as soon as aerodynamics inputs are ready
+
+
+#CL_TO = 1.9
+#CL_land = 2.3
+#C_D_0 = 0.018117539865047032
+#CL_cruise = 0.8
+
+
+lift_over_drag1 = CL_cruise1/CD_cruise1
+lift_over_drag2 = CL_cruise2/CD_cruise2
+lift_over_drag3 = CL_cruise3/CD_cruise3
+aspect_ratio = conc1.A
+oswald_efficiency_number = conc1.e
+
+'analysis'
+
+config1_Performance = Performance(CL_TO, CL_land, CL_cruise1, CD0_1, CD_TO1, CD_land1, CD_cruise1, conc1.S, conc1.OEW[0],
+                                  conc1.MTOW[0], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
+                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
+                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
+                                  perf.thrust_setting_transition, conc1.M_payload[0], conc1.M_fuel[0],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
+                                  const.H_m, const.V_cruise, conc1.R[0], lift_over_drag1, aspect_ratio,
+                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
+                                  show_airport_plots, perf.thrust_setting_descent)
+
+
+print('check between conc')
+
+config2_Performance = Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
+                                  conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
+                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
+                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
+                                  perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
+                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag2, aspect_ratio,
+                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
+                                  show_airport_plots, perf.thrust_setting_descent)
+
+config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
+                                  conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
+                                  perf.friction_coefficient_to, perf.friction_coefficient_la,
+                                  perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
+                                  perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
+                                  max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
+                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag3, aspect_ratio,
+                                  oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
+                                  show_airport_plots, perf.thrust_setting_descent)
+
+'needed in further programs of iteration'
+'fuel fractions'
+Mff1 = config1_Performance.fuel_fraction_total
+Mff2 = config2_Performance.fuel_fraction_total
+Mff3 = config3_Performance.fuel_fraction_total
+
+f1= config1_Performance.fuel_fraction_cruise_breguet
+f2= config1_Performance.fuel_fraction_cruise_breguet
+f3= config1_Performance.fuel_fraction_cruise_breguet
+'climb gradient'
+
+'Climb velocity'
+
 
 print('P&P DONE')
 
@@ -273,17 +273,17 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 V_critical = 1.2                                              # [m/s] V1 speed/V_app
 etah       = 0.9                                                                # [-] eta_h of aerodynamics
 x_ac      = [conc1.x_le_MAC[0]+0.25*MAC, conc1.x_le_MAC[1]+0.25*MAC, conc1.x_le_MAC[2]+0.25*MAC]   # [m] x-location of the main wing ac
-CL_a_h = 2*np.pi
-#CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
+#CL_a_h = 2*np.pi
+CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
 de_da     = de_da1                                                              # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
-#Cm_ac     = Cm0_w_trans1                                                        # [-] moment coefficient of main wing ac
-Cm_ac       = 0.2
+Cm_ac     = Cm0_w_trans1                                                        # [-] moment coefficient of main wing ac
+#Cm_ac       = 0.2
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 0.8                                                                 # [-] lift coefficient canard
+CL_c      = 1.8                                                                # [-] lift coefficient canard
 #CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 CL_a_c    = 2*np.pi
 a_0       = alpha_0_l*np.pi/180                                                 # [rad] zero lift angle of attack
@@ -366,12 +366,12 @@ c_rud = get_c_rud(Cr_v, Ct_v, b_v)                                              
 S_rud = get_S_rud(S_v)                                                          # [m^2] surface area rudder
 b_rud = get_b_rud(S_rud,c_rud)                                                  # [m] span rudder
 
-c_ail = get_c_ail(conc1.Cr,conc1.Ct,conc1.b)                                                      # [m] chord length aileron
-S_ail = get_S_ail(conc1.S)                                                            # [m^2] surface area aileron
-b_ail = get_b_ail(conc1.b)                                                            # [m] span aileron
+c_ail = get_c_ail(conc1.Cr,conc1.Ct,conc1.b)                                    # [m] chord length aileron
+S_ail = get_S_ail(conc1.S)                                                      # [m^2] surface area aileron
+b_ail = get_b_ail(conc1.b)                                                      # [m] span aileron
 
-c_splr = get_c_splr(conc1.Cr, conc1.Ct, conc1.b)                                                  # [m] chord length spoiler
-b_splr = get_b_splr(conc1.b)                                                          # [m] span spoiler
+c_splr = get_c_splr(conc1.Cr, conc1.Ct, conc1.b)                                # [m] chord length spoiler
+b_splr = get_b_splr(conc1.b)                                                    # [m] span spoiler
 
 
 # Update cg's DIFFERENT CONFIG'S
