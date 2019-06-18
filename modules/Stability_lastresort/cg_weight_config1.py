@@ -65,31 +65,83 @@ config3_load2_emp      = Loading_diagram(x_cargo[2], l_f[2], l_cabin[2], seat_pi
 config3_load3_emp      = Loading_diagram(x_cargo[2], l_f[2], l_cabin[2], seat_pitch, N_pax[2], N_sa, config3_class2_OEW, x_cg_config3_range_emp[2], MAC, S, b, A, Xfirst, M_payload[2], M_cargo_available[2], M_fuel[2], M_pax, M_carry_on, x_cg_wing_config3_range_emp[2], 1, l_cutout)     
 
 
+"""Config 1"""
+cg1_pass_emp1 = [0, 0, 0]
+cg2_pass_emp1 = [0, 0, 0]
+weight_pass_emp1 = [0, 0, 0]
+xcg_max_emp1 = [0, 0, 0, 0, 0, 0]
+xcg_min_emp1 = [0, 0, 0, 0, 0, 0]
+cg1_pass_emp1[0], cg2_pass_emp1[0], weight_pass_emp1[0], xcg_max_emp1[0], xcg_min_emp1[0] = config1_load_emp.loading_diagrams_pass()
+cg1_pass_emp1[1], cg2_pass_emp1[1], weight_pass_emp1[1], xcg_max_emp1[1], xcg_min_emp1[1] = config1_load2_emp.loading_diagrams_pass()
+cg1_pass_emp1[2], cg2_pass_emp1[2], weight_pass_emp1[2], xcg_max_emp1[2], xcg_min_emp1[2] = config1_load3_emp.loading_diagrams_pass()
 
-cg1_pass_emp = [0, 0, 0]
-cg2_pass_emp = [0, 0, 0]
-weight_pass_emp = [0, 0, 0]
-xcg_max_emp = [0, 0, 0, 0, 0, 0]
-xcg_min_emp = [0, 0, 0, 0, 0, 0]
-cg1_pass_emp[0], cg2_pass_emp[0], weight_pass_emp[0], xcg_max_emp[0], xcg_min_emp[0] = config1_load_emp.loading_diagrams_pass()
-cg1_pass_emp[1], cg2_pass_emp[1], weight_pass_emp[1], xcg_max_emp[1], xcg_min_emp[1] = config1_load2_emp.loading_diagrams_pass()
-cg1_pass_emp[2], cg2_pass_emp[2], weight_pass_emp[2], xcg_max_emp[2], xcg_min_emp[2] = config1_load3_emp.loading_diagrams_pass()
+cg1_fuel_emp1 = [0, 0, 0]
+cg2_fuel_emp1 = [0, 0, 0]
+weight_fuel_emp1 = [0, 0, 0]
+cg1_fuel_emp1[0], cg2_fuel_emp1[0], weight_fuel_emp1[0], xcg_max_emp1[3], xcg_min_emp1[3] = config1_load_emp.loading_diagrams_fuel()
+cg1_fuel_emp1[1], cg2_fuel_emp1[1], weight_fuel_emp1[1], xcg_max_emp1[4], xcg_min_emp1[4] = config1_load2_emp.loading_diagrams_fuel()
+cg1_fuel_emp1[2], cg2_fuel_emp1[2], weight_fuel_emp1[2], xcg_max_emp1[5], xcg_min_emp1[5] = config1_load3_emp.loading_diagrams_fuel()
 
-cg1_fuel_emp = [0, 0, 0]
-cg2_fuel_emp = [0, 0, 0]
-weight_fuel_emp = [0, 0, 0]
-cg1_fuel_emp[0], cg2_fuel_emp[0], weight_fuel_emp[0], xcg_max_emp[3], xcg_min_emp[3] = config1_load_emp.loading_diagrams_fuel()
-cg1_fuel_emp[1], cg2_fuel_emp[1], weight_fuel_emp[1], xcg_max_emp[4], xcg_min_emp[4] = config1_load2_emp.loading_diagrams_fuel()
-cg1_fuel_emp[2], cg2_fuel_emp[2], weight_fuel_emp[2], xcg_max_emp[5], xcg_min_emp[5] = config1_load3_emp.loading_diagrams_fuel()
+x_cg_max1_emp1 = [0, 0, 0]
+x_cg_min1_emp1 = [0, 0, 0]
 
-x_cg_max1_emp = [0, 0, 0]
-x_cg_min1_emp = [0, 0, 0]
+x_cg_max1_emp1[0] = max(xcg_max_emp1[0], xcg_max_emp1[3]) + 0.05*MAC
+x_cg_max1_emp1[1] = max(xcg_max_emp1[1], xcg_max_emp1[4]) + 0.05*MAC
+x_cg_max1_emp1[2] = max(xcg_max_emp1[2], xcg_max_emp1[5]) + 0.05*MAC
+x_cg_min1_emp1[0] = min(xcg_min_emp1[0], xcg_min_emp1[3]) - 0.05*MAC
+x_cg_min1_emp1[1] = min(xcg_min_emp1[1], xcg_min_emp1[4]) - 0.05*MAC
+x_cg_min1_emp1[2] = min(xcg_min_emp1[2], xcg_min_emp1[5]) - 0.05*MAC
 
-x_cg_max1_emp[0] = max(xcg_max_emp[0], xcg_max_emp[3]) + 0.05*MAC
-x_cg_max1_emp[1] = max(xcg_max_emp[1], xcg_max_emp[4]) + 0.05*MAC
-x_cg_max1_emp[2] = max(xcg_max_emp[2], xcg_max_emp[5]) + 0.05*MAC
-x_cg_min1_emp[0] = min(xcg_min_emp[0], xcg_min_emp[3]) - 0.05*MAC
-x_cg_min1_emp[1] = min(xcg_min_emp[1], xcg_min_emp[4]) - 0.05*MAC
-x_cg_min1_emp[2] = min(xcg_min_emp[2], xcg_min_emp[5]) - 0.05*MAC
+"""Config 2"""
+cg1_pass_emp2 = [0, 0, 0]
+cg2_pass_emp2 = [0, 0, 0]
+weight_pass_emp2 = [0, 0, 0]
+xcg_max_emp2 = [0, 0, 0, 0, 0, 0]
+xcg_min_emp2 = [0, 0, 0, 0, 0, 0]
+cg1_pass_emp2[0], cg2_pass_emp2[0], weight_pass_emp2[0], xcg_max_emp2[0], xcg_min_emp2[0] = config2_load_emp.loading_diagrams_pass()
+cg1_pass_emp2[1], cg2_pass_emp2[1], weight_pass_emp2[1], xcg_max_emp2[1], xcg_min_emp2[1] = config2_load2_emp.loading_diagrams_pass()
+cg1_pass_emp2[2], cg2_pass_emp2[2], weight_pass_emp2[2], xcg_max_emp2[2], xcg_min_emp2[2] = config2_load3_emp.loading_diagrams_pass()
 
+cg1_fuel_emp2 = [0, 0, 0]
+cg2_fuel_emp2 = [0, 0, 0]
+weight_fuel_emp2 = [0, 0, 0]
+cg1_fuel_emp2[0], cg2_fuel_emp2[0], weight_fuel_emp2[0], xcg_max_emp2[3], xcg_min_emp2[3] = config2_load_emp.loading_diagrams_fuel()
+cg1_fuel_emp2[1], cg2_fuel_emp2[1], weight_fuel_emp2[1], xcg_max_emp2[4], xcg_min_emp2[4] = config2_load2_emp.loading_diagrams_fuel()
+cg1_fuel_emp2[2], cg2_fuel_emp2[2], weight_fuel_emp2[2], xcg_max_emp2[5], xcg_min_emp2[5] = config2_load3_emp.loading_diagrams_fuel()
 
+x_cg_max1_emp2 = [0, 0, 0]
+x_cg_min1_emp2 = [0, 0, 0]
+
+x_cg_max1_emp2[0] = max(xcg_max_emp2[0], xcg_max_emp2[3]) + 0.05*MAC
+x_cg_max1_emp2[1] = max(xcg_max_emp2[1], xcg_max_emp2[4]) + 0.05*MAC
+x_cg_max1_emp2[2] = max(xcg_max_emp2[2], xcg_max_emp2[5]) + 0.05*MAC
+x_cg_min1_emp2[0] = min(xcg_min_emp2[0], xcg_min_emp2[3]) - 0.05*MAC
+x_cg_min1_emp2[1] = min(xcg_min_emp2[1], xcg_min_emp2[4]) - 0.05*MAC
+x_cg_min1_emp2[2] = min(xcg_min_emp2[2], xcg_min_emp2[5]) - 0.05*MAC
+
+"""Config 3"""
+cg1_pass_emp3 = [0, 0, 0]
+cg2_pass_emp3 = [0, 0, 0]
+weight_pass_emp3 = [0, 0, 0]
+xcg_max_emp3 = [0, 0, 0, 0, 0, 0]
+xcg_min_emp3 = [0, 0, 0, 0, 0, 0]
+cg1_pass_emp3[0], cg2_pass_emp3[0], weight_pass_emp3[0], xcg_max_emp3[0], xcg_min_emp3[0] = config3_load_emp.loading_diagrams_pass()
+cg1_pass_emp3[1], cg2_pass_emp3[1], weight_pass_emp3[1], xcg_max_emp3[1], xcg_min_emp3[1] = config3_load2_emp.loading_diagrams_pass()
+cg1_pass_emp3[2], cg2_pass_emp3[2], weight_pass_emp3[2], xcg_max_emp3[2], xcg_min_emp3[2] = config3_load3_emp.loading_diagrams_pass()
+
+cg1_fuel_emp3 = [0, 0, 0]
+cg2_fuel_emp3 = [0, 0, 0]
+weight_fuel_emp3 = [0, 0, 0]
+cg1_fuel_emp3[0], cg2_fuel_emp3[0], weight_fuel_emp3[0], xcg_max_emp3[3], xcg_min_emp3[3] = config3_load_emp.loading_diagrams_fuel()
+cg1_fuel_emp3[1], cg2_fuel_emp3[1], weight_fuel_emp3[1], xcg_max_emp3[4], xcg_min_emp3[4] = config3_load2_emp.loading_diagrams_fuel()
+cg1_fuel_emp3[2], cg2_fuel_emp3[2], weight_fuel_emp3[2], xcg_max_emp3[5], xcg_min_emp3[5] = config3_load3_emp.loading_diagrams_fuel()
+
+x_cg_max1_emp3 = [0, 0, 0]
+x_cg_min1_emp3 = [0, 0, 0]
+
+x_cg_max1_emp3[0] = max(xcg_max_emp3[0], xcg_max_emp3[3]) + 0.05*MAC
+x_cg_max1_emp3[1] = max(xcg_max_emp3[1], xcg_max_emp3[4]) + 0.05*MAC
+x_cg_max1_emp3[2] = max(xcg_max_emp3[2], xcg_max_emp3[5]) + 0.05*MAC
+x_cg_min1_emp3[0] = min(xcg_min_emp3[0], xcg_min_emp3[3]) - 0.05*MAC
+x_cg_min1_emp3[1] = min(xcg_min_emp3[1], xcg_min_emp3[4]) - 0.05*MAC
+x_cg_min1_emp3[2] = min(xcg_min_emp3[2], xcg_min_emp3[5]) - 0.05*MAC
