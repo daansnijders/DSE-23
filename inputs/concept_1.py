@@ -29,8 +29,9 @@ R = [4000E3,2000E3,4000E3]                                                      
 T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
 W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
+#M_ffnew = [0.8177826786119544,0.8748443138202544,0.880362041130813]
 OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
-
+#OEWnew=[36819.31992073485,40721.89132627823,40721.89132627823]
 
 
 d_OEW1,d_OEW2=initialw.get_mass_efficiency(OEW)
