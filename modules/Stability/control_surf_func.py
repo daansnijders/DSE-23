@@ -4,6 +4,7 @@ Created on Thu Jun 13 09:57:56 2019
 
 @author: Stijn
 """
+import numpy as np
 
 def chordlength(perc, Cr, Ct, b):
     decrease = (Cr-Ct)/(b/2)                                                    # [-] slope of decrease of the chord along the length
@@ -18,7 +19,7 @@ def get_c_elev(Cr_h, Ct_h, b_h):
     c_elev_r = chordlength(0, Cr_h, Ct_h, b_h)*0.3
     c_elev_t = chordlength(1, Cr_h, Ct_h, b_h)*0.3
     
-    return c_elev_r, c_elev_t
+    return np.array([c_elev_r, c_elev_t])
 
 def get_b_elev(S_e,c_e):
     return S_e / c_e
