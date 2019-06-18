@@ -15,9 +15,10 @@ b_flap=c1.b/2*0.4
 c_flap=0.35*c1.Cr
 area_flap=b_flap*c_flap
 
-V_approach=50
+V_approach=75
 
 r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
+
 
 OSPL_dBA_tot_2=EPNdB_calculations(r2,theta_2,phi_observer,V_approach, area_flap, b_flap,flap_deflection,b_slat )
 #OSPL_dBA_tot_1=EPNdB_calculations(r1,theta_1,phi_observer,V_approach, area_flap, b_flap,flap_deflection,b_slat )

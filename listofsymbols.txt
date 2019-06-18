@@ -268,7 +268,8 @@ Total spoiler drag				CD_spoiler
 
 Total cruise drag (transonic)			CD_cruise
 Total take-off drag				CD_TO
-Total landing drag				CD_land	
+Total landing drag				CD_land
+Total zero lift drag coefficient 		CD0	
 
 Lift curve slope airfoil 			C_l_alpha
 Alpha at Cl max airfoil				alpha_C_l_max
@@ -285,6 +286,8 @@ CL max aircraft 				CL_max
 Delta CL flaps down aircraft 			delta_CL
 Delta Lift curve slope flaps down aircraft 	delta_CL_alpha
 Delta CL max flaps down aircraft 		delta_CL_max
+Lift coefficient at given alpha			C_L
+Lift coefficient flaps full at given alpha 	C_L_flaps
 
 
 main wheel diameter				D_mlg

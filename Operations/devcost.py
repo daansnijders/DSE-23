@@ -30,13 +30,13 @@ M_operation = 9000
 M_payloads = M_furnish + M_cargohand + M_operation
 
 ########################PRICES PER KG##############################
-wing_per_kg = 39090.12
-empennage_per_kg = 114984.16
-fuselage_per_kg = 70752.87
-landinggear_per_kg = 5509.35
-installedengines_per_kg = 19160.35
-systems_per_kg = 75633.90
-payloads_per_kg = 23728.33
+wing_per_kg = 39090.12 * 1.419106771007
+empennage_per_kg = 114984.16 * 1.419106771007
+fuselage_per_kg = 70752.87 * 1.419106771007
+landinggear_per_kg = 5509.35 * 1.419106771007
+installedengines_per_kg = 19160.35 * 1.419106771007
+systems_per_kg = 75633.90 * 1.419106771007
+payloads_per_kg = 23728.33 * 1.419106771007
 
 ############################TOTAL COSTS############################
 wing_cost = wing_per_kg * M_wing

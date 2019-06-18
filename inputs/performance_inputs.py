@@ -43,7 +43,7 @@ d_CD0_landing=0.065
 d_CD0_gear=0.02
 
 #assumed/chosen values
-c=15
+c=10
 
 #fuel fractions
 FF1 = 0.99           # Fuel Fraction phase 1 [-]

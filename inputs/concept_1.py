@@ -76,8 +76,8 @@ M_carried_canard_MZF=[M_MZF[i]-M_MZF[0] for i in range(3)]
 M_carried_canard_MTOW=[MTOW[i]-MTOW[0] for i in range(3)]                                                    # [N] required thrust                          
 
 "Change this when correct length of modular part is found, implement the l_cutout here" 
-x_cargo = [[const.Xcargo1, const.Xcargo2], [const.Xcargo1+(l_cutout), const.Xcargo2+(l_cutout)]\
-           , [const.Xcargo1+(l_cutout), const.Xcargo2+(l_cutout)]]     
+x_cargo = [[const.Xcargo1, const.Xcargo2], [const.Xcargo1+(2.), const.Xcargo2+(l_cutout)]\
+           , [const.Xcargo1+(2.), const.Xcargo2+(l_cutout)]]     
 
 
 
@@ -132,7 +132,7 @@ M_fuselage, x_cg_fuselage=initialcg.get_mass_fuselage(MTOW,l_f)
 M_tail,x_cg_tail=initialcg.get_mass_tail(MTOW,l_f)
 M_fuselage_group, x_cg_fuselage_group=initialcg.get_mass_fuselagegroup(M_fuselage,M_tail,x_cg_fuselage,x_cg_tail)
 x_le_MAC=initialcg.get_x_le_MAC(l_f,MAC,M_wing_group, M_fuselage_group)
-
+#x_le_MAC=[x_le_MAC[i]+4 for i in range(3)]
 x_le_w = initialplanform.get_le_wing(y_MAC,x_le_MAC, lambda_2_rad, MAC, Cr)
 
 x_cg_wing,x_cg_eng,x_cg_wing_group=initialcg.get_cg_winggroup(x_le_MAC, MAC,M_wing, M_eng, M_wing_group )

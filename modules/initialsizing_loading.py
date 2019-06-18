@@ -76,7 +76,7 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0
 #    ax.scatter(4359,0.33, color = 'r',linewidths=5, label = 'Design point')
 #    ax.set(title = 'Wing/Thrust Loading Diagram', xlabel = 'W/S[-]', ylabel = 'T/W[-]', ylim = (0,max(TW_climb)), xlim = (0,5500))
 #    ax.legend(loc='upper right')
-    plt.savefig('./Output/loading_diagram.pdf')
+#    plt.savefig('./Output/loading_diagram.pdf')
     return TW_cruise,TW_climb,WSrange,WS_L
 
 

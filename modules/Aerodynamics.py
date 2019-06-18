@@ -822,8 +822,9 @@ class Lift:
                 C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))))**2
                 C_L.append(C_L_i)
         
-        
-        plt.plot(alpha, C_L, "b-")
+        plt.axvline(x=0, color='grey')
+        plt.axhline(y=0, color='grey')
+        plt.plot(alpha, C_L, "b-", label="Flaps up")
                      
         C_L_flaps = []
         
@@ -849,7 +850,12 @@ class Lift:
                 C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
                 C_L_flaps.append(C_L_i)
         
-        plt.plot(alpha, C_L_flaps, "k-")
+        plt.plot(alpha, C_L_flaps, "k-", label="Flaps down")
+        plt.grid(True)
+        plt.xlabel("$\\alpha$ [deg]")
+        plt.ylabel("$C_{L_{\\alpha}}$ [-]")
+        plt.xlim(-10,15)
+        plt.legend(loc="best")
         plt.show
         
         return (C_L)

@@ -11,13 +11,14 @@ from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct,
 import inputs.constants as const
 import modules.initialsizing_planform as initialplanform
 #from modules.Stability.cg_weight_config1 import *
-from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
-from modules.Stability.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
-from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_mlg, check_ground
-from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
-from modules.Stability.empennage import empennage
+from modules.Stability_lastresort.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
+from modules.Stability_lastresort.control_surf_func import get_c_elev, get_S_elev, get_b_elev, get_c_rud, get_S_rud, get_b_rud, get_c_ail, get_S_ail, get_b_ail, get_c_splr, get_b_splr
+from modules.Stability_lastresort.check_ground import update_x_mlg, update_z_mlg, update_y_mlg, check_ground
+from modules.Stability_lastresort.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
+from modules.Stability_lastresort.empennage import empennage
 from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l, alpha_0_L1
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
+
 
 
 
