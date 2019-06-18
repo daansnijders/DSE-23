@@ -25,7 +25,7 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
 etah = 0.9                                                                      # [-] eta_h of aerodynamics
-x_ac      = (x_le_MAC[0]+0.25*MAC)                                              # [m] x-location of the main wing ac
+x_ac      = [x_le_MAC[0]+0.25*MAC, x_le_MAC[1]+0.25*MAC, x_le_MAC[2]+0.25*MAC]  # [m] x-location of the main wing ac
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
 de_da     = de_da                                                               # [-] downwash
@@ -34,7 +34,7 @@ Cm_ac     = -0.0755159519128478                         #TBD                    
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 0.8                                         #zelf                   # [-] lift coefficient canard
+CL_c      = 2.                                        #zelf                   # [-] lift coefficient canard
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 a_0       = alpha_0_L1*np.pi/180                                                          # [rad] zero lift angle of attack
 i_h       = 0.                                                                   # [rad] incidence angle htail
