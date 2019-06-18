@@ -187,10 +187,9 @@ show_airport_plots = False
 
 # temporary values, will be removed as soon as aerodynamics inputs are ready
 
-
-#CL_TO = 1.9
+# CL_TO = 1.9
 #CL_land = 2.3
-#C_D_0 = 0.018117539865047032
+# C_D_0 = 0.018117539865047032
 #CL_cruise = 0.8
 
 
@@ -325,7 +324,7 @@ x_v             = empennage1.x_v                                                
 
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
 lambda_h_le_rad2= empennage1.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
+t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
 A_c2            = empennage1.A_c                                                # [-] Aspect ratio of the canard
@@ -334,11 +333,11 @@ Cr_c2           = empennage1.Cr_c                                               
 Ct_c2           = empennage1.Ct_c                                               # [m] tip chord length canard
 Cr_t_c2         = Cr_c2*t_c_c2                                                  #[m] thickness at the chord canard
 z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
-l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
+l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
 lambda_c_le_rad3= empennage2.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
+t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard
 Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard
 A_c3            = empennage2.A_c                                                # [-] Aspect ratio of the canard
@@ -347,7 +346,7 @@ Cr_c3           = empennage2.Cr_c                                               
 Cr_t_c3         = Cr_c3*t_c_c3                                                  #[m] thickness at the chord canard
 Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
 z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
-l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
+l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
 
 
 
@@ -390,9 +389,9 @@ l_n3 = x_cg_max_flight3 - x_nlg
 
 y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
 
-config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])     
-config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])     
-config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])     
+config1_ground      = check_ground(cg1_pass[0], cg2_pass[0], weight_pass[0], cg1_fuel[0], cg2_fuel[0], weight_fuel[0], x_nlg, x_mlg[0])
+config2_ground      = check_ground(cg1_pass[1], cg2_pass[1], weight_pass[1], cg1_fuel[1], cg2_fuel[1], weight_fuel[1], x_nlg, x_mlg[1])
+config3_ground      = check_ground(cg1_pass[2], cg2_pass[2], weight_pass[2], cg1_fuel[2], cg2_fuel[2], weight_fuel[2], x_nlg, x_mlg[2])
 
 
 frac = np.ones((3,2))
