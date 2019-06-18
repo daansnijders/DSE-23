@@ -227,13 +227,13 @@ config2_Performance =class2performance.Performance(CL_TO, CL_land, CL_cruise2, C
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
 
-config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[1],
-                                  conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
+config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[2],
+                                  conc1.MTOW[2], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
-                                  perf.thrust_setting_transition, conc1.M_payload[1], conc1.M_fuel[1],
+                                  perf.thrust_setting_transition, conc1.M_payload[2], conc1.M_fuel[2],
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
-                                  const.H_m, const.V_cruise, conc1.R[1], lift_over_drag3, aspect_ratio,
+                                  const.H_m, const.V_cruise, conc1.R[2], lift_over_drag3, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
                                   show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
 
