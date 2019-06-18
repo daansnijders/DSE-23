@@ -7,9 +7,9 @@ Created on Tue May 14 17:20:01 2019
 # Loading all variables
 import inputs.concept_1 as c1
 #from modules.main_class2 import 
-import output.class2_itegration as massclass2
+import Output.class2_itegration as massclass2
 import inputs.constants as const
-import output.connection_departments as detsiz
+import Output.connection_departments as detsiz
 import csv 
 
 concept=1
@@ -147,6 +147,11 @@ if safety_check == 'yes':
     output_file.write('CL_TO' + str(detsiz.Cl_TO)+'\n')
     output_file.write('CL_land' + str(detsiz.Cl_land)+'\n')
     output_file.write('CL_cruise1' + str(detsiz.CL_cruise1)+'\n')
+    output_file.write('CL_cruise2' + str(detsiz.CL_cruise2)+'\n')
+    output_file.write('CL_cruise3' + str(detsiz.CL_cruise3)+'\n')
+    output_file.write('Cd_cruise1' + str(detsiz.CD_cruise1)+'\n')
+    output_file.write('Cd_cruise2' + str(detsiz.CD_cruise2)+'\n')
+    output_file.write('Cd_cruise3' + str(detsiz.CD_cruise3)+'\n')
 
     
     output_file.write('CLASS MASS 2 ESTIMATION' + '\n')

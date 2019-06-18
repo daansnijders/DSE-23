@@ -43,7 +43,7 @@ d_CD0_landing=0.065
 d_CD0_gear=0.02
 
 #assumed/chosen values
-c=10
+c=15                 # 10 average for reference aircraft, *1.5 safety and accounting for sea-level
 
 #fuel fractions
 FF1 = 0.99           # Fuel Fraction phase 1 [-]
