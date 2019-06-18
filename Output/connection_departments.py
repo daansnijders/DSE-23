@@ -240,6 +240,10 @@ config3_Performance = Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_
 Mff1 = config1_Performance.fuel_fraction_total
 Mff2 = config2_Performance.fuel_fraction_total
 Mff3 = config3_Performance.fuel_fraction_total
+
+f1= config1_Performance.fuel_fraction_cruise_breguet
+f2= config1_Performance.fuel_fraction_cruise_breguet
+f3= config1_Performance.fuel_fraction_cruise_breguet
 'climb gradient'
 
 'Climb velocity'
