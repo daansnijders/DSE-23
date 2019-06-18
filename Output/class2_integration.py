@@ -15,6 +15,7 @@ from inputs.constants import n_max,V_dive
 import csv 
 import pandas as pd 
 
+datastored = pd.read_csv('output_detailedsizing.csv' ,  'w'))
 
 'CLASS 2 WEIGHT EXECUTION AND CG LOCATION ESTIMATION'
 #configuration 1 
