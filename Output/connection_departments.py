@@ -337,7 +337,7 @@ lambda_v_4_rad  = empennage1.lambda_v_4_rad                                     
 x_v             = empennage1.x_v                                                # [m] x-location of ac of the vtail?
 
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
-lambda_h_le_rad2= empennage1.lambda_h_le_rad                                    # [rad] leading edge sweep angle canard
+lambda_c_le_rad2= empennage1.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
 t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
@@ -482,7 +482,7 @@ output_file.write('A_v =' + str(A_v) + '\n')
 output_file.write('lambda_v_le_rad =' + str(lambda_v_le_rad) + '\n')
 #   output_file.write('x_le_v =' + str(x_le_v) + '\n')
 output_file.write('S_v  =' + str(S_v) + '\n')
-output_file.write('b_v =' + str(db_v) + '\n')
+output_file.write('b_v =' + str(b_v) + '\n')
 output_file.write('Cr_v =' + str(Cr_v) + '\n')
 output_file.write('Ct_v =' + str(Ct_v) + '\n')
 
@@ -531,6 +531,6 @@ output_file.write('Cr_t_c3=' + str(Cr_t_c3) + '\n')
 
 
 
-config1_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland,CL_TO,CL_cruise1,CL_land,V_climb1,perf.c,f1,perf.sigma, perf.TOP, CD0_1,conc1.A,conc1.e,1000,7000,100)
-config2_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland,CL_TO,CL_cruise2,CL_land,V_climb2,perf.c,f2,perf.sigma, perf.TOP, CD0_2,conc1.A,conc1.e,1000,7000,100)
-config3_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland,CL_TO,CL_cruise3,CL_land,V_climb3,perf.c,f3,perf.sigma, perf.TOP, CD0_3,conc1.A,conc1.e,1000,7000,100)
+config1_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise1,CL_land,V_climb1,perf.c,f1,perf.sigma, perf.TOP, CD0_1,conc1.A,conc1.e,1000,7000,100)
+config2_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise2,CL_land,V_climb2,perf.c,f2,perf.sigma, perf.TOP, CD0_2,conc1.A,conc1.e,1000,7000,100)
+config3_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise3,CL_land,V_climb3,perf.c,f3,perf.sigma, perf.TOP, CD0_3,conc1.A,conc1.e,1000,7000,100)

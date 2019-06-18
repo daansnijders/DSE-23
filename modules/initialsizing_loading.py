@@ -29,8 +29,8 @@ def thurstloading_takeoff(TOP,sigma,CL,WSrange):
     TW_TO= (WSrange) / (sigma*TOP*CL)    
     return TW_TO
 
-def thrustloading_cruise(CD0,WSrange):
-    TW_cruise=(const.rho_0/const.rho)**0.75*(CD0*0.5*const.rho*const.V_cruise**2/(WSrange)+(WSrange)*1/(m.pi*A*e*0.5*const.rho*const.V_cruise**2))
+def thrustloading_cruise(CD0,WSrange,A,e):
+    TW_cruise=(const.rho_0/const.rho)**0.75*(CD0*0.5*const.rho*const.V_cruise**2/(WSrange)+(WSrange)*1/(np.pi*A*e*0.5*const.rho*const.V_cruise**2))
     return TW_cruise
 
 def thrustloading_climbrate(c,CL,CD,WSrange):
@@ -48,7 +48,7 @@ def get_WSrange(WSstart,WSend,D_WS):
 def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0,A,e,WSstart,WSend,D_Ws):
     
     CD_climb=4*CD0
-    Cl_climb=(3*CD0*pi*A*e)**0.5
+    Cl_climb=(3*CD0*np.pi*A*e)**0.5
     
     WSrange=get_WSrange(WSstart,WSend,D_Ws)
     
@@ -58,7 +58,7 @@ def plot_loadingdiagram(Sland,Cl_TO,Cl_clean,Cl_land,V_climb,c,f,sigma, TOP, CD0
     WS_TO=wingloading_takeoff(Sland,Cl_land,f)                                  #f is the ratio between Mass at takeoff and landing
     
     TW_TO=thurstloading_takeoff(TOP,sigma,Cl_TO,WSrange)
-    TW_cruise=thrustloading_cruise(CD0,WSrange)
+    TW_cruise=thrustloading_cruise(CD0,WSrange,A,e)
     
     TW_climb=thrustloading_climbrate(c,Cl_climb,CD_climb,WSrange)
     TW_cV= thrustloading_climbgradient(c,V_climb,CD0,A,e)
