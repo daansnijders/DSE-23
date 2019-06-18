@@ -147,6 +147,11 @@ if safety_check == 'yes':
     output_file.write('CL_TO' + str(detsiz.Cl_TO)+'\n')
     output_file.write('CL_land' + str(detsiz.Cl_land)+'\n')
     output_file.write('CL_cruise1' + str(detsiz.CL_cruise1)+'\n')
+    output_file.write('CL_cruise2' + str(detsiz.CL_cruise2)+'\n')
+    output_file.write('CL_cruise3' + str(detsiz.CL_cruise3)+'\n')
+    output_file.write('Cd_cruise1' + str(detsiz.CD_cruise1)+'\n')
+    output_file.write('Cd_cruise2' + str(detsiz.CD_cruise2)+'\n')
+    output_file.write('Cd_cruise3' + str(detsiz.CD_cruise3)+'\n')
 
     
     output_file.write('CLASS MASS 2 ESTIMATION' + '\n')

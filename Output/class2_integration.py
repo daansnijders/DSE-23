@@ -12,10 +12,13 @@ import modules.CG.class2_CG  as c2cg
 import Output.connection_departments as detailedsizing
 
 from inputs.constants import n_max,V_dive
+import csv 
+import pandas as pd 
+
 
 'CLASS 2 WEIGHT EXECUTION AND CG LOCATION ESTIMATION'
 #configuration 1 
-config1_class2     = c2m.Class2_weight(1,c1.N_pax[0],c1.MTOW[0],max(c1.MTOW),c1.M_carried_canard_MZF[0],min(c1.M_MZF), n_max[0],V_dive[0],c1.M_fuel[0], max(c1.T_req), c1.l_f[0],c1.d_f_inner,c1.d_f_outer,c1.l_cabin[0], detailedsizing.l_h, c1.S, 0., c1.b, 0., detailedsizing.S_v[0],detailedsizing.S_h[0],c1.Cr_t,0,c1.lambda_2_rad,detailedsizing.lambda_h_2_rad[0], detailedsizing.lambda_v_2_rad[0],0, c1.S_fus[0])     
+config1_class2     = c2m.Class2_weight(1,c1.N_pax[0],c1.MTOW[0],max(c1.MTOW),c1.M_carried_canard_MZF[0],min(c1.M_MZF), n_max[0],V_dive[0],c1.M_fuel[0], max(c1.T_req), c1.l_f[0],c1.d_f_inner,c1.d_f_outer,c1.l_cabin[0], detailedsizing.l_h, c1.S, 0., c1.b, 0., detailedsizing.S_v[0],detailedsizing.S_h,c1.Cr_t,0,c1.lambda_2_rad,detailedsizing.lambda_h_2_rad, detailedsizing.lambda_v_2_rad,0, c1.S_fus[0])     
 
 
 config1_M_structural            =config1_class2.structural_mass()

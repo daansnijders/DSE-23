@@ -16,6 +16,7 @@ import modules.performance.class2_performance as class2performance
 import modules.initialsizing_loading as loadingdiagram
 
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
+import csv
 """
 AERODYNAMICS
 """
@@ -277,19 +278,19 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 V_critical = 1.2                                              # [m/s] V1 speed/V_app
 etah       = 0.9                                                                # [-] eta_h of aerodynamics
 x_ac      = [conc1.x_le_MAC[0]+0.25*MAC, conc1.x_le_MAC[1]+0.25*MAC, conc1.x_le_MAC[2]+0.25*MAC]   # [m] x-location of the main wing ac
-CL_a_h = 2*np.pi
-#CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
+#CL_a_h = 2*np.pi
+CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
 de_da     = de_da1                                                              # [-] downwash
 Vh_V      = 1.                                                                  # [-] V_h/V velocity factors
-#Cm_ac     = Cm0_w_trans1                                                        # [-] moment coefficient of main wing ac
-Cm_ac       = 0.2
+Cm_ac     = Cm0_w_trans1                                                        # [-] moment coefficient of main wing ac
+#Cm_ac       = 0.2
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 0.8                                                                 # [-] lift coefficient canard
-#CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
-CL_a_c    = 2*np.pi
+CL_c      = 1.8                                                                 # [-] lift coefficient canard
+CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
+#CL_a_c    = 2*np.pi
 a_0       = alpha_0_l*np.pi/180                                                 # [rad] zero lift angle of attack
 CN_h_a    = CL_a_h                                                              # [-] C_N_h_alpha htail
 CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
@@ -452,6 +453,77 @@ r1,r2,r3,theta_1,theta_2,theta_3=noise.simulate_flight_path(config1_Performance.
 OSPL_dBA_tot_straight=noise.EPNdB_calculations(r2,theta_2,phi_observer,config1_Performance.approach_velocity, area_flap, b_flap,flap_deflection,b_slat )
 OSPL_dBA_tot_up=noise.EPNdB_calculations(r1,theta_1,phi_observer,config1_Performance.approach_velocity, area_flap, b_flap,flap_deflection,b_slat )
 OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,config1_Performance.approach_velocity, area_flap, b_flap,flap_deflection, b_slat )
+
+
+
+
+
+
+
+
+
+'WRITE THE CSV FILE'
+output_file = open('output_detailedsizing.csv' ,  'w')
+#    output_file.write('V_h =' + str(V_h) + '\n')
+output_file.write('A_h  =' + str(A_h) + '\n')
+output_file.write('taper_ratio_h =' + str(taper_ratio_h) + '\n')
+output_file.write('lambda_h_le_rad =' + str(lambda_h_le_rad) + '\n')
+#    output_file.write('x_le_h =' + str(x_le_h) + '\n')
+output_file.write('S_h=' + str(S_h) + '\n')
+output_file.write('b_h =' + str(b_h) + '\n')
+output_file.write('Cr_h =' + str(Cr_h) + '\n')
+output_file.write('Ct_h =' + str(Ct_h) + '\n')
+
+output_file.write('VERTICAL TAIL PARAMETERS' + '\n')
+#    output_file.write('V_v =' + str(V_v) + '\n')
+output_file.write('A_v =' + str(A_v) + '\n')
+output_file.write('lambda_v_le_rad =' + str(lambda_v_le_rad) + '\n')
+#   output_file.write('x_le_v =' + str(x_le_v) + '\n')
+output_file.write('S_v  =' + str(S_v) + '\n')
+output_file.write('b_v =' + str(db_v) + '\n')
+output_file.write('Cr_v =' + str(Cr_v) + '\n')
+output_file.write('Ct_v =' + str(Ct_v) + '\n')
+
+
+output_file.write('CANARD PARAMETERS CONFIG 2' + '\n')
+#    output_file.write('V_v =' + str(V_v) + '\n')
+output_file.write('A_c2 =' + str(A_c2) + '\n')
+output_file.write('lambda_c_le_rad2 =' + str(lambda_c_le_rad2) + '\n')
+#    output_file.write('x_le_v =' + str(x_le_v) + '\n')
+output_file.write('S_c2  =' + str(S_c2) + '\n')
+output_file.write('b_c2 =' + str(b_c2) + '\n')
+output_file.write('Cr_c2 =' + str(Cr_c2) + '\n')
+output_file.write('Ct_c2 =' + str(Ct_c2) + '\n')
+output_file.write('Cr_t_c2=' + str(Cr_t_c2) + '\n')
+
+output_file.write('CANARD PARAMETERS CONFIG 3' + '\n')
+#    output_file.write('V_v =' + str(V_v) + '\n')
+output_file.write('A_c3 =' + str(A_c3) + '\n')
+output_file.write('lambda_c_le_rad3 =' + str(lambda_c_le_rad3) + '\n')
+#    output_file.write('x_le_v =' + str(x_le_v) + '\n')
+output_file.write('S_c3  =' + str(S_c3) + '\n')
+output_file.write('b_c3 =' + str(b_c3) + '\n')
+output_file.write('Cr_c3 =' + str(Cr_c3) + '\n')
+output_file.write('Ct_c3 =' + str(Ct_c3) + '\n')
+output_file.write('Cr_t_c3=' + str(Cr_t_c3) + '\n')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
