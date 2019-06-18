@@ -250,9 +250,9 @@ f3= config1_Performance.fuel_fraction_cruise_breguet
 
 
 'Climb velocity'
-V_climb1=config1_Performance.take_off_velocity
-V_climb2=config2_Performance.take_off_velocity
-V_climb3=config3_Performance.take_off_velocity
+V_climb1=config1_Performance.take_off_velocity*1.3
+V_climb2=config2_Performance.take_off_velocity*1.3
+V_climb3=config3_Performance.take_off_velocity*1.3
 print('P&P DONE')
 
 """
@@ -338,6 +338,7 @@ x_v             = empennage1.x_v                                                
 
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
 lambda_c_le_rad2= empennage1.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
+
 t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
@@ -348,6 +349,7 @@ Ct_c2           = empennage1.Ct_c                                               
 Cr_t_c2         = Cr_c2*t_c_c2                                                  #[m] thickness at the chord canard
 z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
 l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
+lambda_c_2_rad2 = empennage1.lambda_c_2_rad
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
 lambda_c_le_rad3= empennage2.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
@@ -361,7 +363,7 @@ Cr_t_c3         = Cr_c3*t_c_c3                                                  
 Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
 z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
 l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
-
+lambda_c_2_rad3 = empennage2.lambda_c_2_rad
 
 
 # control surfaces: (inputs still need to be worked on...)
@@ -465,21 +467,21 @@ OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,config1_Perfo
 
 
 'WRITE THE CSV FILE'
-output_file = open('output_detailedsizing.csv' ,  'w')
+output_file = open('output_detailedsizing.dat' ,  'w')
 #    output_file.write('V_h =' + str(V_h) + '\n')
 output_file.write('A_h  =' + str(A_h) + '\n')
 output_file.write('taper_ratio_h =' + str(taper_ratio_h) + '\n')
-output_file.write('lambda_h_le_rad =' + str(lambda_h_le_rad) + '\n')
+output_file.write('lambda_h_2_rad =' + str(lambda_h_2_rad) + '\n')
 #    output_file.write('x_le_h =' + str(x_le_h) + '\n')
 output_file.write('S_h=' + str(S_h) + '\n')
 output_file.write('b_h =' + str(b_h) + '\n')
 output_file.write('Cr_h =' + str(Cr_h) + '\n')
 output_file.write('Ct_h =' + str(Ct_h) + '\n')
 
-output_file.write('VERTICAL TAIL PARAMETERS' + '\n')
+
 #    output_file.write('V_v =' + str(V_v) + '\n')
 output_file.write('A_v =' + str(A_v) + '\n')
-output_file.write('lambda_v_le_rad =' + str(lambda_v_le_rad) + '\n')
+output_file.write('lambda_v_2_rad =' + str(lambda_v_2_rad) + '\n')
 #   output_file.write('x_le_v =' + str(x_le_v) + '\n')
 output_file.write('S_v  =' + str(S_v) + '\n')
 output_file.write('b_v =' + str(b_v) + '\n')
@@ -487,10 +489,9 @@ output_file.write('Cr_v =' + str(Cr_v) + '\n')
 output_file.write('Ct_v =' + str(Ct_v) + '\n')
 
 
-output_file.write('CANARD PARAMETERS CONFIG 2' + '\n')
 #    output_file.write('V_v =' + str(V_v) + '\n')
 output_file.write('A_c2 =' + str(A_c2) + '\n')
-output_file.write('lambda_c_le_rad2 =' + str(lambda_c_le_rad2) + '\n')
+output_file.write('lambda_c_2_rad2 =' + str(lambda_c_2_rad2) + '\n')
 #    output_file.write('x_le_v =' + str(x_le_v) + '\n')
 output_file.write('S_c2  =' + str(S_c2) + '\n')
 output_file.write('b_c2 =' + str(b_c2) + '\n')
@@ -498,10 +499,10 @@ output_file.write('Cr_c2 =' + str(Cr_c2) + '\n')
 output_file.write('Ct_c2 =' + str(Ct_c2) + '\n')
 output_file.write('Cr_t_c2=' + str(Cr_t_c2) + '\n')
 
-output_file.write('CANARD PARAMETERS CONFIG 3' + '\n')
+
 #    output_file.write('V_v =' + str(V_v) + '\n')
 output_file.write('A_c3 =' + str(A_c3) + '\n')
-output_file.write('lambda_c_le_rad3 =' + str(lambda_c_le_rad3) + '\n')
+output_file.write('lambda_c_2_rad3 =' + str(lambda_c_2_rad3) + '\n')
 #    output_file.write('x_le_v =' + str(x_le_v) + '\n')
 output_file.write('S_c3  =' + str(S_c3) + '\n')
 output_file.write('b_c3 =' + str(b_c3) + '\n')
@@ -509,7 +510,12 @@ output_file.write('Cr_c3 =' + str(Cr_c3) + '\n')
 output_file.write('Ct_c3 =' + str(Ct_c3) + '\n')
 output_file.write('Cr_t_c3=' + str(Cr_t_c3) + '\n')
 
+output_file.write('lh=' + str(l_h)+ '\n')
+output_file.write('xleMAC1=' + str(x_le_MAC[0])+ '\n')
+output_file.write('xleMAC2=' + str(x_le_MAC[1])+ '\n')
+output_file.write('xleMAC3=' + str(x_le_MAC[2])+ '\n')
 
+output_file.close()
 
 
 

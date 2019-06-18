@@ -291,6 +291,12 @@ class empennage:
         self.Sc_S2 = [] #stability incl S.M.
         self.Sc_C1 = [] #controlability
         
+        def get_lambda_4_rad_from_lambda_le(lambda_le_rad,Cr,b,taper_ratio):
+            lambda_4_rad= np.arctan(np.tan(lambda_le_rad)+Cr/(2*b)*(taper_ratio-1))
+            return lambda_4_rad
+        
+        def get_lambda_2_rad(lambda_4_rad,A,taper_ratio):
+            return np.arctan(np.tan(lambda_4_rad)-1/A*(1-taper_ratio)/(1+taper_ratio))
         
         for i in range (len(self.l)):
             self.Sc_S1.append(aa*self.l[i]+aa*bb)
@@ -343,7 +349,9 @@ class empennage:
         self.Cr_c = initialplanform.get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
         self.Ct_c = initialplanform.get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
-        self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard        
+        self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard 
+        self.lambda_c_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_c_le_rad,self.Cr_c,self.b_c,self.taper_ratio_c)
+        self.lambda_c_2_rad = get_lambda_2_rad(self.lambda_c_4_rad,self.A_c,self.taper_ratio_c) # [rad] half chord sweep angle
     
     def deflection_curve(self, plot = True):
         C_l_C_l_theory = 1
