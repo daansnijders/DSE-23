@@ -173,7 +173,6 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 print('AERO DONE')
 
 
-
 """
 PERFORMANCE & PROPULSION
 """
@@ -217,7 +216,7 @@ config1_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise1, 
 
 print('check between conc')
 
-config2_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
+config2_Performance =class2performance.Performance(CL_TO, CL_land, CL_cruise2, CD0_2, CD_TO2, CD_land2, CD_cruise2, conc1.S, conc1.OEW[1],
                                   conc1.MTOW[1], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
                                   perf.friction_coefficient_to, perf.friction_coefficient_la,
                                   perf.reverse_thrust_factor, engine_failure, perf.thrust_setting_climb_out,
@@ -244,8 +243,9 @@ Mff2 = config2_Performance.fuel_fraction_total
 Mff3 = config3_Performance.fuel_fraction_total
 
 f1= config1_Performance.fuel_fraction_cruise_breguet
-f2= config2_Performance.fuel_fraction_cruise_breguet
-f3= config3_Performance.fuel_fraction_cruise_breguet
+f2= config1_Performance.fuel_fraction_cruise_breguet
+f3= config1_Performance.fuel_fraction_cruise_breguet
+'Climb gradient'
 
 
 
@@ -274,8 +274,8 @@ from modules.main_class2 import config1_cg, config2_cg, config3_cg
 
 
 """NEED FROM OTHER FILES"""
-#V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                
-V_critical = 1.2                                              # [m/s] V1 speed/V_app
+V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                
+#V_critical = 1.2                                                                        # [m/s] V1 speed/V_app
 etah       = 0.9                                                                # [-] eta_h of aerodynamics
 x_ac      = [conc1.x_le_MAC[0]+0.25*MAC, conc1.x_le_MAC[1]+0.25*MAC, conc1.x_le_MAC[2]+0.25*MAC]   # [m] x-location of the main wing ac
 #CL_a_h = 2*np.pi
@@ -290,7 +290,9 @@ x_cg      = x_cg_max_flight1                                                    
 CL_h      = -0.8                                                                # [-] lift coefficient htail
 CL_c      = 1.8                                                                 # [-] lift coefficient canard
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
-#CL_a_c    = 2*np.pi
+
+
+
 a_0       = alpha_0_l*np.pi/180                                                 # [rad] zero lift angle of attack
 CN_h_a    = CL_a_h                                                              # [-] C_N_h_alpha htail
 CN_w_a    = CL_alpha_w1                                                         # [-] C_N_w_alpha main wing
@@ -371,12 +373,12 @@ c_rud = get_c_rud(Cr_v, Ct_v, b_v)                                              
 S_rud = get_S_rud(S_v)                                                          # [m^2] surface area rudder
 b_rud = get_b_rud(S_rud,c_rud)                                                  # [m] span rudder
 
-c_ail = get_c_ail(conc1.Cr,conc1.Ct,conc1.b)                                                      # [m] chord length aileron
-S_ail = get_S_ail(conc1.S)                                                            # [m^2] surface area aileron
-b_ail = get_b_ail(conc1.b)                                                            # [m] span aileron
+c_ail = get_c_ail(conc1.Cr,conc1.Ct,conc1.b)                                    # [m] chord length aileron
+S_ail = get_S_ail(conc1.S)                                                      # [m^2] surface area aileron
+b_ail = get_b_ail(conc1.b)                                                      # [m] span aileron
 
-c_splr = get_c_splr(conc1.Cr, conc1.Ct, conc1.b)                                                  # [m] chord length spoiler
-b_splr = get_b_splr(conc1.b)                                                          # [m] span spoiler
+c_splr = get_c_splr(conc1.Cr, conc1.Ct, conc1.b)                                # [m] chord length spoiler
+b_splr = get_b_splr(conc1.b)                                                    # [m] span spoiler
 
 
 # Update cg's DIFFERENT CONFIG'S
