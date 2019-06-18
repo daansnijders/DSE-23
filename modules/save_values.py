@@ -7,9 +7,9 @@ Created on Tue May 14 17:20:01 2019
 # Loading all variables
 import inputs.concept_1 as c1
 #from modules.main_class2 import 
-import output.class2_itegration as massclass2
+import Output.class2_itegration as massclass2
 import inputs.constants as const
-import output.connection_departments as detsiz
+import Output.connection_departments as detsiz
 import csv 
 
 concept=1
