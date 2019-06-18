@@ -382,20 +382,24 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
 def get_descent(max_altitude, cruise_velocity, approach_velocity, engines_operative, thrust_descent, S, drag_coefficient, mass, g):
     fuel_flow_descent = get_fuel_consumption(thrust_descent, 1, 1)[0]
 
-    steps = 10
+    pieces = 50
     descent_time = 0
     descent_distance = 0
     fuel_mass_descent = 0
     ROC_list = []
-    altitide_list = np.linspace(max_altitude, 0, steps)
-    velocity_list = np.linspace(cruise_velocity, approach_velocity, steps)
-    for altitude in altitide_list:
-        for velocity in velocity_list:
-            ROC = get_rate_of_climb(engines_operative, thrust_descent, altitude, velocity, S, drag_coefficient, mass, g)
-            ROC_list.append(ROC)
-    for a in range(1, len(altitide_list)):
-        time_add = ((altitide_list[a]+velocity_list[a]**2/2/g)-(altitide_list[a-1]+velocity_list[a-1]**2/2/g))/((ROC_list[a]+ROC_list[a-1])/2)
-        descent_time += time_add
-        descent_distance += ((altitide_list[a]+velocity_list[a]**2/2/g)-(altitide_list[a-1]+velocity_list[a-1]**2/2/g))/np.tan(np.arcsin(((ROC_list[a]+ROC_list[a-1])/2)/((velocity_list[a]+velocity_list[a-1])/2)))
-        fuel_mass_descent += ((altitide_list[a]+velocity_list[a]**2/2/g)-(altitide_list[a-1]+velocity_list[a-1]**2/2/g))*(engines_operative*fuel_flow_descent)/((ROC_list[a]+ROC_list[a-1])/2)
+    altitude_list = np.linspace(max_altitude, 1, pieces)
+    velocity_list = np.linspace(cruise_velocity, approach_velocity, pieces)
+    for index in range(0, len(altitude_list)):
+        altitude = altitude_list[index]
+        velocity = velocity_list[index]
+        ROC = get_rate_of_climb(engines_operative, thrust_descent, altitude, velocity, S, drag_coefficient, mass, g)
+        ROC_list.append(ROC)
+    for a in range(1, len(altitude_list)):
+        if ROC_list[a] < 0:
+            time_add = ((altitude_list[a]+velocity_list[a]**2/2/g)-(altitude_list[a-1]+velocity_list[a-1]**2/2/g))/((ROC_list[a]+ROC_list[a-1])/2)
+            descent_time += time_add
+            descent_distance += ((altitude_list[a]+velocity_list[a]**2/2/g)-(altitude_list[a-1]+velocity_list[a-1]**2/2/g))/np.tan(np.arcsin(((ROC_list[a]+ROC_list[a-1])/2)/((velocity_list[a]+velocity_list[a-1])/2)))
+        else:
+            break
+        fuel_mass_descent = descent_time * (engines_operative*fuel_flow_descent)
     return fuel_mass_descent, descent_distance

@@ -15,7 +15,8 @@ class Performance:
                  engine_failure, thrust_setting_climb_out, thrust_setting_transition, payload_mass, fuel_mass_old,
                  max_airport_altitude, altitude_resolution, mass_resolution, thrust_setting_climb, altitude_cruise,
                  cruise_velocity, flying_range, lift_over_drag, aspect_ratio, oswald_efficiency_number,
-                 correction_factor_to, show_plots, show_airport_plots, thrust_setting_descent):
+                 correction_factor_to, show_plots, show_airport_plots, thrust_setting_descent,
+                 show_rate_of_climb_plots):
         self.C_L_to = C_L_to
         self.C_D_to = C_D_to
         self.C_L_la = C_L_la
@@ -52,11 +53,12 @@ class Performance:
         self.correction_factor_to = correction_factor_to
         self.show_plots = show_plots
         self.show_airport_plots = show_airport_plots
+        self.show_rate_of_climb_plots = show_rate_of_climb_plots
 
         self.cj = self.cj()
         self.tofl, self.airport_altitude_list, self.take_off_field_length, self.take_off_velocity, self.decision_speed = self.analyze_take_off_performance()
         self.lfl, self.landing_field_length, self.approach_velocity = self.analyze_landing_performance()
-        self.fuel_table, self.fuel_mass_engine_startup, self.fuel_mass_taxi, self.fuel_mass_climb,\
+        self.fuel_table, self.fuel_mass_engine_startup, self.fuel_mass_climb,\
         self.fuel_mass_cruise_breguet, self.fuel_mass_descent, self.fuel_mass_loiter, self.fuel_mass_landing,\
         self.fuel_mass_take_off_2, self.fuel_mass_climb_2, self.fuel_mass_cruise_breguet_2, self.fuel_mass_descent_2,\
         self.fuel_mass_loiter_2, self.fuel_mass_landing_2, self.fuel_flow_take_off, self.fuel_flow_climb,\
@@ -162,7 +164,7 @@ class Performance:
         landing_field_length, approach_velocity = lfl_select[1][-1], lfl_select[2][-1]
 
         # plotting
-        plt.figure('landing field length')
+        plt.figure()
         for select in lfl:
             h = airport_altitude_list[lfl.index(select)]
             plt.plot(select[1], select[0], label='%a [m]' % h)
@@ -200,12 +202,12 @@ class Performance:
 
         'engine_startup, taxi'
         fuel_fraction_engine_startup = 0.990
-        fuel_fraction_taxi = 0.990
+        # fuel_fraction_taxi = 0.990
 
         fuel_mass_engine_startup = (1 - fuel_fraction_engine_startup) * self.MTOW
-        fuel_mass_taxi = (1 - fuel_fraction_taxi) * self.MTOW
+        # fuel_mass_taxi = (1 - fuel_fraction_taxi) * self.MTOW
         fuel_consumption.loc['engine_startup'] = [np.NaN, fuel_mass_engine_startup]
-        fuel_consumption.loc['taxi'] = [np.NaN, fuel_mass_taxi]
+        # fuel_consumption.loc['taxi'] = [np.NaN, fuel_mass_taxi]
 
         'take_off'
         # sea level
@@ -225,7 +227,7 @@ class Performance:
         fuel_consumption.loc['take_off'] = [fuel_flow_take_off, fuel_mass_take_off]
 
         mass = self.MTOW - fuel_consumption.loc['take_off']['fuel_mass'] - fuel_consumption.loc['engine_startup'][
-            'fuel_mass'] - fuel_consumption.loc['taxi']['fuel_mass']
+            'fuel_mass']
 
         'climb'
         fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance_climb = get_climb_optimization(mass, self.thrust_max,
@@ -236,36 +238,61 @@ class Performance:
                                                                                                   self.thrust_setting_climb)
         fuel_consumption.loc['climb'] = [fuel_flow_climb, fuel_mass_climb]
         mass -= fuel_mass_climb
-        if self.show_plots is False:
+        if self.show_rate_of_climb_plots is False:
             plt.close()
-        'cruise_breguet'
+
         range_leftover = self.flying_range - distance_climb
-        fuel_mass_cruise_breguet = get_fuel_burned_breguet(mass, range_leftover, self.cruise_velocity, self.cj, self.g,
-                                                           self.lift_over_drag)
-        fuel_flow_cruise_breguet = fuel_mass_cruise_breguet * self.cruise_velocity / range_leftover
+
+        # 'cruise_non_breguet'
+        # cruise_thrust = get_thrust_required(isa(self.altitude_cruise)[2], self.cruise_velocity, self.S, self.C_D_cruise) / 2
+        # fuel_flow_cruise, fuel_mass_cruise = get_fuel_consumption(cruise_thrust, range_leftover, self.cruise_velocity)
+        #
+        # if pick_breguet:
+        #     mass -= fuel_consumption.loc['cruise_breguet']['fuel_mass']
+        # else:
+        #     mass -= fuel_consumption.loc['cruise']['fuel_mass']
+        #     fuel_consumption.loc['cruise'] = [fuel_flow_cruise * 2, fuel_mass_cruise * 2]
+
+        # start guesstimating how much distance still needs to be covered in cruise
+        range_leftover_cruise = range_leftover * 0.85
+
+        'cruise_breguet and descent'
+        def get_cruise_breguet(range_leftover_cruise):
+            fuel_mass_cruise_breguet = get_fuel_burned_breguet(mass, range_leftover_cruise, self.cruise_velocity,
+                                                               self.cj, self.g, self.lift_over_drag)
+            fuel_flow_cruise_breguet = fuel_mass_cruise_breguet * self.cruise_velocity / range_leftover_cruise
+            mass_leftover = mass - fuel_mass_cruise_breguet
+            return fuel_mass_cruise_breguet, fuel_flow_cruise_breguet, mass_leftover
+
+        def git_discint(mass_leftover):
+            fuel_flow_descent = get_fuel_consumption(self.thrust_setting_descent * self.thrust_max, 1, 1)[0]
+            fuel_mass_descent, distance_descent = get_descent(self.altitude_cruise, self.cruise_velocity,
+                                                              self.approach_velocity, engines_operative,
+                                                              self.thrust_setting_descent * self.thrust_max,
+                                                              self.S, self.C_D_cruise, mass_leftover, self.g)
+            return fuel_mass_descent, fuel_flow_descent, distance_descent
+
+        difference = 1000
+        count = 0
+        while abs(difference) > 100:
+            if count>10000:
+                print('ALERT - cruise-descent does not converge')
+                break
+            count+=1
+            fuel_mass_cruise_breguet, fuel_flow_cruise_breguet, mass_leftover = get_cruise_breguet(range_leftover_cruise)
+            fuel_mass_descent, fuel_flow_descent, distance_descent = git_discint(mass_leftover)
+            difference = range_leftover - range_leftover_cruise - distance_descent
+            if difference > 0:
+                range_leftover_cruise += 100
+            else:
+                range_leftover_cruise -= 100
 
         if pick_breguet:
             fuel_consumption.loc['cruise_breguet'] = [fuel_flow_cruise_breguet, fuel_mass_cruise_breguet]
-
-        'cruise_non_breguet'
-        cruise_thrust = get_thrust_required(isa(self.altitude_cruise)[2], self.cruise_velocity, self.S, self.C_D_cruise) / 2
-        fuel_flow_cruise, fuel_mass_cruise = get_fuel_consumption(cruise_thrust, range_leftover, self.cruise_velocity)
-
-        if pick_breguet:
-            mass -= fuel_consumption.loc['cruise_breguet']['fuel_mass']
-        else:
-            mass -= fuel_consumption.loc['cruise']['fuel_mass']
-            fuel_consumption.loc['cruise'] = [fuel_flow_cruise * 2, fuel_mass_cruise * 2]
-
-        'descent'
-        fuel_flow_descent = get_fuel_consumption(self.thrust_setting_descent * self.thrust_max, 1, 1)[0]
-        fuel_mass_descent, distance_descent = get_descent(self.altitude_cruise, self.cruise_velocity,
-                                                          self.approach_velocity, engines_operative,
-                                                          self.thrust_setting_descent * self.thrust_max,
-                                                          self.S, self.C_D_cruise, mass, self.g)
+        if range_leftover_cruise > 0:
+            print('ALERT - negative cruise range, next iteration; optimize cruise altitude')
         fuel_consumption.loc['descent'] = [fuel_flow_descent, fuel_mass_descent]
         mass -= fuel_mass_descent
-
         'loiter'
         loiter_thrust = get_thrust_required(isa(loiter_altitude)[2], loiter_velocity, self.S, self.C_D_cruise)
         fuel_flow_loiter = get_fuel_consumption(loiter_thrust, 1, loiter_velocity)[0]
@@ -313,7 +340,7 @@ class Performance:
                                    self.cruise_velocity, self.thrust_setting_climb)
         fuel_consumption.loc['climb_2'] = [fuel_flow_climb_2, fuel_mass_climb_2]
         mass -= fuel_mass_climb_2
-        if self.show_plots is False:
+        if self.show_rate_of_climb_plots is False:
             plt.close()
 
         'cruise_breguet_2'
@@ -378,7 +405,7 @@ class Performance:
         fuel_fraction_loiter_2 = 1 - fuel_mass_loiter_2 / self.MTOW
         fuel_fraction_landing_2 = 1 - fuel_mass_landing_2 / self.MTOW
         fuel_fraction_descent_2 = 1 - fuel_mass_descent_2 / self.MTOW
-        return fuel_consumption, fuel_mass_engine_startup, fuel_mass_taxi, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total, fuel_mass_nominal, fuel_fraction_total, fuel_flow_descent, fuel_flow_descent_2, fuel_mass_take_off, fuel_fraction_take_off, fuel_fraction_climb, fuel_fraction_cruise_breguet, fuel_fraction_descent, fuel_fraction_loiter, fuel_fraction_landing, fuel_fraction_take_off, fuel_fraction_climb_2, fuel_fraction_cruise_breguet_2, fuel_fraction_descent_2, fuel_fraction_loiter_2, fuel_fraction_landing_2, fuel_fraction_take_off_2, fuel_fraction_descent_2
+        return fuel_consumption, fuel_mass_engine_startup, fuel_mass_climb, fuel_mass_cruise_breguet, fuel_mass_descent, fuel_mass_loiter, fuel_mass_landing, fuel_mass_take_off_2, fuel_mass_climb_2, fuel_mass_cruise_breguet_2, fuel_mass_descent_2, fuel_mass_loiter_2, fuel_mass_landing_2, fuel_flow_take_off, fuel_flow_climb, fuel_flow_cruise_breguet, fuel_flow_loiter, fuel_flow_landing, fuel_flow_take_off_2, fuel_flow_climb_2, fuel_flow_cruise_breguet_2, fuel_flow_loiter_2, fuel_flow_landing_2, fuel_mass_total, fuel_mass_nominal, fuel_fraction_total, fuel_flow_descent, fuel_flow_descent_2, fuel_mass_take_off, fuel_fraction_take_off, fuel_fraction_climb, fuel_fraction_cruise_breguet, fuel_fraction_descent, fuel_fraction_loiter, fuel_fraction_landing, fuel_fraction_take_off, fuel_fraction_climb_2, fuel_fraction_cruise_breguet_2, fuel_fraction_descent_2, fuel_fraction_loiter_2, fuel_fraction_landing_2, fuel_fraction_take_off_2, fuel_fraction_descent_2
 
     def get_serviceable_airports(self):
         serviceable_airports(self.landing_field_length, self.airport_altitude_list, self.flying_range, self.show_airport_plots)
