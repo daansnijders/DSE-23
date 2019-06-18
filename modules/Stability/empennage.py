@@ -63,7 +63,7 @@ class empennage:
 
     
     def calc_xnp(self):
-        self.x_np = self.x_ac + (self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.hortail_vol * (self.Vh_V)**2)*self.c
+        self.x_np = self.x_ac[self.config] + (self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.hortail_vol * (self.Vh_V)**2)*self.c
         return self.x_np
     
     def calc_xcg(self):
@@ -71,7 +71,7 @@ class empennage:
         return self.x_cg
     
     def calc_Cm(self):
-        self.Cm_lesstail = self.Cm_ac + self.CL_ah * (self.x_cg-self.x_ac)/self.c
+        self.Cm_lesstail = self.Cm_ac + self.CL_ah * (self.x_cg-self.x_ac[self.config])/self.c
         self.Cm_tail = -self.CL_h * self.S_h * self.l_h / (self.S * self.c) * (self.Vh_V)**2
         self.Cm = self.Cm_lesstail + self.Cm_tail
         return self.Cm    
@@ -80,15 +80,15 @@ class empennage:
     def plot_stability_tail(self, plot = True):
         """Stability excluding margin"""
         aa = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
-        bb = (self.x_ac) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
+        bb = (self.x_ac[0]) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
         
         """Stability including margin"""
         dd = 1/(self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
-        ee = (self.x_ac - 0.05*self.c) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
+        ee = (self.x_ac[0] - 0.05*self.c) / (self.CL_a_h/self.CL_a_ah*(1-self.de_da)*self.l_h*(self.Vh_V)**2)
         
         """Controlability"""
         ff = self.CL_ah / (self.CL_h*self.l_h*(self.Vh_V)**2)
-        gg = (self.c*self.Cm_ac-self.CL_ah*self.x_ac)/(self.CL_h*self.l_h*(self.Vh_V)**2)
+        gg = (self.c*self.Cm_ac-self.CL_ah*self.x_ac[0])/(self.CL_h*self.l_h*(self.Vh_V)**2)
         
         self.l = np.arange(x_le_MAC_range_emp[0], (x_le_MAC_range_emp[2]+self.c+0.01), 0.01)
         self.Sh_S1 = [] #stability xnp
@@ -119,7 +119,7 @@ class empennage:
         diff_after = 1
         diff_before = 2
         y = 0.41
-        while (abs(diff_before) >= abs(diff_after) and abs(f_C1(f_min(y)) - f_S2(f_max(y))) > 0.000001) or abs(diff_before) > 0.1:
+        while (abs(diff_before) >= abs(diff_after) and abs(f_C1(f_min(y)) - f_S2(f_max(y))) > 0.000001) or abs(diff_before) > 0.01:
             diff_before = f_S2(f_max(y))-f_C1(f_min(y))
             y += 0.00001            
             if f_min(y) > x_cg_min1_emp[1]:
@@ -127,12 +127,14 @@ class empennage:
                 f_max = interpolate1([x_cg_max1_emp[1],x_le_MAC_range_perc_emp[1]],[x_cg_max1_emp[2],x_le_MAC_range_perc_emp[2]])
             diff_after = f_S2(f_max(y))-f_C1(f_min(y))
 
-        self.Sh_S = f_C1(f_min(y))
-        self.x_le_MAC_l_f = y
+#        self.Sh_S = f_C1(f_min(y))
+        self.Sh_S = 0.1646
+        self.x_le_MAC_l_f = 0.4345
+#        self.x_le_MAC_l_f = y
         self.S_h = self.Sh_S * S
         self.x_le_MAC = self.x_le_MAC_l_f * l_f[0]
         self.x_le_MAC_out = [self.x_le_MAC, self.x_le_MAC +l_cutout, self.x_le_MAC  + l_cutout]
-        self.x_ac = self.x_le_MAC + 0.25*MAC 
+        self.x_ac = [self.x_le_MAC + 0.25*MAC, self.x_le_MAC + 0.25*MAC + l_cutout, self.x_le_MAC + 0.25*MAC + l_cutout] 
         if plot:
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
@@ -277,13 +279,13 @@ class empennage:
 
     def plot_stability_canard(self, plot = True):
         aa = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2)
-        bb = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V + 0.05 * MAC
+        bb = -self.x_ac[1] - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V + 0.05 * MAC
         
         cc = 1/(self.CL_a_c / self.CL_a_ah * -self.l_c * self.Vc_V**2) #SAME?
-        dd = -self.x_ac - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V 
+        dd = -self.x_ac[1] - self.CL_a_h / self.CL_a_ah * (1-self.de_da) * self.Sh_S * self.l_h * self.Vh_V 
         
         ee = 1/(self.CL_c / self.CL_ah * -self.l_c * self.Vc_V**2)
-        ff = -self.x_ac + self.Cm_ac / self.CL_ah * MAC - self.CL_h / self.CL_ah * self.Sh_S * self.l_h * self.Vh_V**2
+        ff = -self.x_ac[1] + self.Cm_ac / self.CL_ah * MAC - self.CL_h / self.CL_ah * self.Sh_S * self.l_h * self.Vh_V**2
         
         self.Sc_S1 = [] #stability xnp
         self.Sc_S2 = [] #stability incl S.M.
