@@ -624,7 +624,9 @@ output_file.write('co2emissions 2 per pax=' + str(config2_CO2[0])+'\n')
 output_file.write('co2emissions 2 requirement=' + str(config2_CO2[1])+'\n')
 output_file.write('co2emissions 3 per pax=' + str(config3_CO2[0])+'\n')
 output_file.write('co2emissions 3 requirement=' + str(config3_CO2[1])+'\n')
-
+output_file.write('nox emissions 1=' + str(config1_NOx) + '\n')
+output_file.write('nox emissions 2=' + str(config2_NOx) + '\n')
+output_file.write('nox emissions 3=' + str(config3_NOx) + '\n')
 output_file.close()
 
 
