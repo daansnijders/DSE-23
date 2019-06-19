@@ -196,7 +196,7 @@ CL_clean_max, C_L_flaps_unoptimized = config1_Lift.get_CL(CL_alpha1, alpha_0_L1,
 CL_unoptiized, CL_flaps_max = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.5)
 print('AERO DONE')
 
-CL_TO= (CL_flaps_unoptimized+CL_clean_max)/2 # at an angle of 9.75 deg
+CL_TO= (C_L_flaps_unoptimized+CL_clean_max)/2 # at an angle of 9.75 deg
 CL_cruise1=conc1.CLdes[0] 
 CL_cruise2=conc1.CLdes[1]
 CL_cruise3=conc1.CLdes[2]
@@ -338,7 +338,10 @@ Vc_V      = 1.                                          #zelf                   
 # initialize class:
 empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h, conc1.S, conc1.MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
 empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h, conc1.S, conc1.MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-
+if empennage2.Sc_S >= empennage1.Sc_S:
+    empennage1.Sc_S = empennage2.Sc_S
+else:
+    empennage2.Sc_S = empennage1.Sc_S
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
@@ -601,14 +604,14 @@ output_file.write('z_nlg='+str(z_nlg)+'\n')
 output_file.write('z_mlg='+str(z_mlg)+'\n')
 
 
-output_file.write('A=' + str(conc1.A)+'\n')
-output_file.write('S=' + str(conc1.S)+'\n')
-output_file.write('b=' + str(conc1.b)+'\n')
-output_file.write('l_cutout=' + str(conc1.l_cutout)+'\n')
-output_file.write('l fuselage 1=' + str(conc1.l_f[0])+'\n')
-output_file.write('l cabin 1=' + str(conc1.l_cabin[0])+'\n')
-output_file.write('l fuselage extended=' + str(conc1.l_f[1])+'\n')
-output_file.write('l cabin extended=' + str(conc1.l_cabin[1])+'\n')
+#output_file.write('A=' + str(conc1.A)+'\n')
+#output_file.write('S=' + str(conc1.S)+'\n')
+#output_file.write('b=' + str(conc1.b)+'\n')
+#output_file.write('l_cutout=' + str(conc1.l_cutout)+'\n')
+#output_file.write('l fuselage 1=' + str(conc1.l_f[0])+'\n')
+#output_file.write('l cabin 1=' + str(conc1.l_cabin[0])+'\n')
+#output_file.write('l fuselage extended=' + str(conc1.l_f[1])+'\n')
+#output_file.write('l cabin extended=' + str(conc1.l_cabin[1])+'\n')
 output_file.write('mff1=' + str(Mff1)+'\n')
 output_file.write('mff2=' + str(Mff2)+'\n')
 output_file.write('mff3=' + str(Mff3)+'\n')

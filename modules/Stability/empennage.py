@@ -229,8 +229,9 @@ class empennage:
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
         N_v_max = - Y_v_max * self.l_v                                          # [N*m] moment caused by the vertical tail
-        print (N_e)
-        print (-N_v_max)
+        print ('moment engine inoperative',N_e)
+        print ('moment provided by Vtail',-N_v_max)
+        
         #assert ( N_e < -N_v_max   )                                                # check if tail is capable enough
 
     def size_canard(self):
