@@ -8,7 +8,7 @@ Created on Mon Jun  3 12:43:09 2019
 from inputs.concept_1 import S, b, MAC, N_pax, l_cabin, l_f, x_cargo, A, M_payload, M_cargo_available, M_fuel, l_cutout
 from inputs.constants import *
 from modules.Stability.loaddiagram_detailed import Loading_diagram
-from modules.main_class2 import config1_cg_x, config1_cg, config1_class2_OEW, config2_class2_OEW, config2_cg_x, config2_cg, config3_class2_OEW, config3_cg_x, config3_cg
+from Output.class2_integration import config1_cg_x, config1_cg, config1_class2_OEW, config2_class2_OEW, config2_cg_x, config2_cg, config3_class2_OEW, config3_cg_x, config3_cg
 
 x_cg_config1_range = [config1_cg_x - 0.1* l_f[0],config1_cg_x,config1_cg_x + 0.1* l_f[0]]
 x_cg_wing_config1_range = [config1_cg.x_cg_wing - 0.1* l_f[0], config1_cg.x_cg_wing, config1_cg.x_cg_wing + 0.1* l_f[0]]

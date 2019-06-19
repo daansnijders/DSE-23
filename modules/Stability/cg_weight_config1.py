@@ -6,9 +6,12 @@ Created on Mon Jun  3 12:43:09 2019
 """
 
 
-from inputs.concept_1 import x_le_MAC, l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout
-#from inputs.concept_1 import l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout #new iteration
+#from inputs.concept_1 import x_le_MAC, l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout
+from inputs.concept_1 import l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout #new iteration
 from inputs.constants import *
+import Output.read_load_variables as varib
+
+x_le_MAC = varib.x_le_MAC
 
 from modules.Stability.loaddiagram_detailed import Loading_diagram
 from modules.main_class2 import config1_class2, config1_cg_x, config1_cg, config1_class2_OEW
