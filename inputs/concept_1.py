@@ -27,9 +27,11 @@ N_pax = [90,120,120]                                                            
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
 #inputs to this file 
 T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
-W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
+#T_Wnew=[0.287,0.29,0.293]
+W_S    = [4405, 4405 , 4405]   
+#W_S -[4216.8,4216.8,4216.8]                                                 # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
-#M_ffnew = [0.8177826786119544,0.8748443138202544,0.880362041130813]
+#M_ffnew =[0.8671129569197487,0.9180333011040266,0.8707912564954988]
 OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
 #OEWnew=[36819.31992073485,40721.89132627823,40721.89132627823]
 
@@ -109,7 +111,7 @@ y_MAC = initialplanform.get_y_MAC(b, Cr, MAC, Ct)                               
 dihedral_rad = initialplanform.get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
 lambda_le_rad = initialplanform.get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
-
+'DELETE THIS'
 #canard parameters
 A_c = 6
 b_c = [initialplanform.get_b(A_c,S_c[i]) for i in range(3)]
@@ -154,6 +156,7 @@ taper_ratio_h = 0.39                                                            
 V_v = 0.1                                                                       # [-] volume vertical tail
 A_v = 1.9                                                                       # [-] aspect ratio vertical tail
 taper_ratio_v = 0.375                                                           # [-] taper ratio vertical tail
+'KEEEP THIS'
 x_le_h = initialemp.get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
 

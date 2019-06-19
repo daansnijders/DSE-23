@@ -16,56 +16,7 @@ import csv
 import pandas as pd 
 
 
-output_file = open('output_detailedsizing.dat' ,  'r')
-lines= output_file.readlines()
-values=[]
-labels=[]
 
-#datastored = pd.read_csv('output_detailedsizing.csv' ,  'w'))
-
-
-for s in lines:
-    words=s.split('=')
-    
-    label=words[0].strip()
-    value=words[-1].strip()
-    labels.append(label)
-    values.append(float(value))
-
-output_file.close()
-    
-A_h=values[0]  
-taper_ratio_h=values[1]
-lambda_h_2_rad =values[2]
-S_h=values[3]
-b_h =values[4]
-Cr_h =values[5]
-Ct_h =values[6]
-A_v =values[7]
-lambda_v_2_rad =values[8]
-S_v  =values[9]
-b_v =values[10]
-Cr_v =values[11]
-Ct_v =values[12]
-A_c2 =values[13]
-lambda_c_2_rad2 =values[14]
-S_c2  =values[15]
-b_c2 =values[16]
-Cr_c2 =values[17]
-Ct_c2 =values[18]
-Cr_t_c2=values[19]
-A_c3 =values[20]
-lambda_c_2_rad3 =values[21]
-S_c3  =values[22]
-b_c3 =values[23]
-Cr_c3 =values[24]
-Ct_c3 =values[25]
-Cr_t_c3=values[26]
-l_h=values[27]
-x_le_MAC1=values[28]
-x_le_MAC2=values[29]
-x_le_MAC3=values[30]
-x_le_MAC=[x_le_MAC1,x_le_MAC2,x_le_MAC3]
 
 
 
@@ -129,3 +80,35 @@ config2_cg = c2cg.get_cg(x_le_MAC,config2_class2)
 config2_cg_x=config2_cg.calc_x_cg()
 config2_cg_y=config2_cg.calc_y_cg()
 config2_cg_z=config2_cg.calc_z_cg()
+
+
+
+output_file = open('output_class2iteration.dat' ,  'w')
+
+
+output_file.write('config 1 M struct=' + str(config1_M_structural)+ '\n')
+output_file.write('config 2 M struct=' + str(config2_M_structural)+ '\n')
+output_file.write('config 3 M struct=' + str(config3_M_structural)+ '\n')
+output_file.write('config 1 M pwerplant=' + str(config1_M_powerplant)+ '\n')
+output_file.write('config 2 M pwerplant=' + str(config2_M_powerplant)+ '\n')
+output_file.write('config 3 M pwerplant=' + str(config3_M_powerplant)+ '\n')
+output_file.write('config 1 M fixedeq=' + str(config1_M_fixedeq)+ '\n')
+output_file.write('config 2 M fixedeq=' + str(config2_M_fixedeq)+ '\n')
+output_file.write('config 3 M fixedeq=' + str(config3_M_fixedeq)+ '\n')
+output_file.write('OEW config 1 CLASS 2=' + str(config1_class2_OEW)+ '\n')
+output_file.write('OEW config 2 CLASS 2=' + str(config2_class2_OEW)+ '\n')
+output_file.write('OEW config 3 CLASS 2=' + str(config3_class2_OEW)+ '\n')
+
+
+
+output_file.write('config 1 X CG =' + str(config1_cg_x)+ '\n')
+output_file.write('config 2 X CG =' + str(config2_cg_x)+ '\n')
+output_file.write('config 3 X CG =' + str(config3_cg_x)+ '\n')
+output_file.write('config 1 y CG =' + str(config1_cg_y)+ '\n')
+output_file.write('config 2 y CG =' + str(config2_cg_y)+ '\n')
+output_file.write('config 3 y CG =' + str(config3_cg_y)+ '\n')
+output_file.write('config 1 z CG =' + str(config1_cg_z)+ '\n')
+output_file.write('config 2 z CG =' + str(config2_cg_z)+ '\n')
+output_file.write('config 3 z CG =' + str(config3_cg_z)+ '\n')
+
+output_file.close()

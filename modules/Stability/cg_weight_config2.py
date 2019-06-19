@@ -6,15 +6,16 @@ Created on Mon Jun  3 12:43:09 2019
 """
 
 
-from inputs.concept_1 import x_le_MAC, l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout
+#from inputs.concept_1 import x_le_MAC, l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout
+from inputs.concept_1 import l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout #new iteration
 from inputs.constants import *
+import Output.read_load_variables as varib
 
-from modules.CG.class2_CG import get_cg
 from modules.Stability.loaddiagram_detailed import Loading_diagram
-#from modules.Stability.check_ground import *
-from modules.main_class2 import config2_class2, config2_cg_x, config2_cg, config2_class2_OEW
+from Output.class2_integration import config2_class2, config2_cg_x, config2_cg, config2_class2_OEW
+from modules.CG.class2_CG import get_cg
 
-
+x_le_MAC = varib.x_le_MAC
 x_le_MAC1_can1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_MAC[2] - 0.1 * l_f[2]]
 x_le_MAC2_can1 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
 x_le_MAC3_can1 = [x_le_MAC[0] + 0.1 * l_f[0], x_le_MAC[1] + 0.1 * l_f[1], x_le_MAC[2] + 0.1 * l_f[2]]

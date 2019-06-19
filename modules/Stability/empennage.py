@@ -8,10 +8,10 @@ Created on Wed Jun  5 09:50:12 2019
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
-from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, x_cg, y_engine, x_le_h, x_le_MAC, z_engine
+from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, y_engine, x_le_h, x_le_MAC, z_engine
 from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
-from modules.main_class2 import config1_cg, config2_cg, config3_cg, config1_cg_x
+from Output.class2_integration import config1_cg, config2_cg, config3_cg, config1_cg_x
 from modules.Stability.cg_weight_config2 import x_cg_min2canard_can1, x_cg_max2canard_can1, x_le_MAC_range_perccanard2_can1
 from modules.Stability.cg_weight_config3 import x_cg_min3canard_can2, x_cg_max3canard_can2, x_le_MAC_range_perccanard3_can2
 import inputs.performance_inputs as inputperf
@@ -127,10 +127,10 @@ class empennage:
                 f_max = interpolate1([x_cg_max1_emp[1],x_le_MAC_range_perc_emp[1]],[x_cg_max1_emp[2],x_le_MAC_range_perc_emp[2]])
             diff_after = f_S2(f_max(y))-f_C1(f_min(y))
 
-#        self.Sh_S = f_C1(f_min(y))
-        self.Sh_S = 0.1646
-        self.x_le_MAC_l_f = 0.4345
-#        self.x_le_MAC_l_f = y
+        self.Sh_S = f_C1(f_min(y))
+#        self.Sh_S = 0.1646
+#        self.x_le_MAC_l_f = 0.4345
+        self.x_le_MAC_l_f = y
         self.S_h = self.Sh_S * S
         self.x_le_MAC = self.x_le_MAC_l_f * l_f[0]
         self.x_le_MAC_out = [self.x_le_MAC, self.x_le_MAC +l_cutout, self.x_le_MAC  + l_cutout]
@@ -206,9 +206,9 @@ class empennage:
         self.x_v = self.x_h
         
         def get_S_v(S, b, x_cg, V_v, x_v):
-            return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]
+            return [V_v*S* b / (x_v - x_cg)]
         
-        self.S_v = min(get_S_v(S, b, x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
+        self.S_v = min(get_S_v(S, b, self.x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
         self.Ct_v = get_Ct(self.Cr_v, self.taper_ratio_v)                       # [m] tip chord length vertical tail
@@ -348,6 +348,7 @@ class empennage:
         self.b_c = initialplanform.get_b(self.S_c, self.A_c)                                    # [m] span canard
         self.Cr_c = initialplanform.get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
         self.Ct_c = initialplanform.get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard
+        self.MAC_c= initialplanform.get_MAC(self.Cr_c, self.taper_ratio_c)
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard 
         self.lambda_c_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_c_le_rad,self.Cr_c,self.b_c,self.taper_ratio_c)
@@ -371,9 +372,9 @@ class empennage:
             x_cg_wing = config3_cg.x_cg_wing
             
         self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
-        self.Cm_a = self.CN_w_a * (config_cg- x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        self.Cm_a = self.CN_w_a * (config_cg- x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
         self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
-        
+
         alpha_list = np.arange(0., (0.4+0.001), 0.001)
         def_curve = []
         for i in range (len(alpha_list)):
