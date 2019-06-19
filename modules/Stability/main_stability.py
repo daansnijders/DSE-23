@@ -7,8 +7,9 @@ Created on Wed Jun 12 14:56:29 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-from inputs.concept_1 import l_h, x_le_MAC, MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
-#from inputs.concept_1 import l_h, X_le_MAC, MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m #new iteration
+#from inputs.concept_1 import l_h, x_le_MAC, MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
+from inputs.concept_1 import MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, l_cutout #new iteration
+import Output.read_load_variables as varib
 
 import inputs.constants as const
 import modules.initialsizing_planform as initialplanform
@@ -19,8 +20,14 @@ from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.Stability.empennage import empennage
 from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l, alpha_0_L1
-from modules.main_class2 import config1_cg, config2_cg, config3_cg
+from Output.class2_integration import config1_cg, config2_cg, config3_cg
 
+
+l_h = varib.l_h
+x_le_MAC = varib.x_le_MAC
+x_mlg = varib.x_mlg
+l_n = varib.l_n
+l_m = varib.l_m
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
 etah = 0.9                                                                      # [-] eta_h of aerodynamics
