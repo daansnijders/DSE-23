@@ -8,7 +8,7 @@ Created on Wed Jun  5 09:50:12 2019
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
-from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, x_cg, y_engine, x_le_h, x_le_MAC, z_engine
+from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, y_engine, x_le_h, x_le_MAC, z_engine
 from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.main_class2 import config1_cg, config2_cg, config3_cg, config1_cg_x
@@ -206,9 +206,9 @@ class empennage:
         self.x_v = self.x_h
         
         def get_S_v(S, b, x_cg, V_v, x_v):
-            return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]
+            return [V_v*S* b / (x_v - x_cg)]
         
-        self.S_v = min(get_S_v(S, b, x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
+        self.S_v = min(get_S_v(S, b, self.x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
         self.Ct_v = get_Ct(self.Cr_v, self.taper_ratio_v)                       # [m] tip chord length vertical tail
