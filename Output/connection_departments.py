@@ -432,8 +432,8 @@ z_nlg = z_mlg
 x_nlg = 2
 
 l_m1 = x_cg_max_flight1 - x_mlg[0]
-l_m2 = x_cg_max_flight1 - x_mlg[1]
-l_m3 = x_cg_max_flight1 - x_mlg[2]
+l_m2 = x_cg_max_flight2 - x_mlg[1]
+l_m3 = x_cg_max_flight3 - x_mlg[2]
 
 
 l_n1 = x_cg_max_flight1 - x_nlg

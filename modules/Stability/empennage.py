@@ -379,7 +379,7 @@ class empennage:
 
 
 
-        self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
+        self.A_c =  4.95                                                         # [-] Aspect ratio of the canard
         self.b_c = initialplanform.get_b(self.S_c, self.A_c)                                    # [m] span canard
         self.Cr_c = initialplanform.get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
         self.Ct_c = initialplanform.get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard

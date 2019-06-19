@@ -26,15 +26,18 @@ import inputs.constants as const
 N_pax = [90,120,120]                                                            # [-] number of passengers
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
 #inputs to this file 
-#T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
-T_W=[0.287,0.29,0.293]
-#W_S    = [4405, 4405 , 4405]   
-W_S =[4216.8,4216.8,4216.8]                                                 # [N/m^2] weight over wing surface area
-#M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
-M_ff =[0.8667054429705001,0.9175010276172209,0.8699197424731588]
-#OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
-OEW=[36985.05677345773,40898.12142753238,40898.12142753238]
-
+#T_W1    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
+#T_W2=[0.287,0.29,0.293]
+T_W=[0.281,0.293,0.293]
+#W_S1    = [4405, 4405 , 4405]   
+#W_S2 =[4216.8,4216.8,4216.8] 
+W_S=[4223.7,4223.7,4223.7]                                                # [N/m^2] weight over wing surface area
+#M_ff1   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
+#M_ff2 =[0.8667054429705001,0.9175010276172209,0.8699197424731588]
+M_ff=[0.8744253395572794,0.92122625229399,0.8724511764303788]
+#OEW1 = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
+#OEW2=[36985.05677345773,40898.12142753238,40898.12142753238]
+OEW=[35200.76686849832,38932.05097239078,38932.05097239078]
 
 d_OEW1,d_OEW2=initialw.get_mass_efficiency(OEW)
 
