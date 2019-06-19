@@ -26,14 +26,25 @@ import inputs.constants as const
 N_pax = [90,120,120]                                                            # [-] number of passengers
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
 #inputs to this file 
-T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
-W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
-M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
-#M_ffnew =[0.8671129569197487,0.9180333011040266,0.8707912564954988]
-OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
-#OEWnew=[36819.31992073485,40721.89132627823,40721.89132627823]
-
-
+#T_W1    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
+#T_W2=[0.287,0.29,0.293]
+#T_W3=[0.281,0.293,0.293]
+T_W=[0.283,0.293,0.293]
+#W_S1    = [4405, 4405 , 4405]   
+#W_S2 =[4216.8,4216.8,4216.8] 
+#W_S3=[4223.7,4223.7,4223.7]                                                # [N/m^2] weight over wing surface area
+#W_S4=[4202,4202,4202]
+W_S=[4201,4201,4201]
+#M_ff1   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
+#M_ff2 =[0.8667054429705001,0.9175010276172209,0.8699197424731588]
+#M_ff3=[0.8744253395572794,0.92122625229399,0.8724511764303788]
+#M_ff4=[0.8703352329615669,0.9183433374677511,0.8699327953314783]
+M_ff=[0.8713567833118216,0.9162820869036439,0.8660753056826395]
+#OEW1 = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
+#OEW2=[36985.05677345773,40898.12142753238,40898.12142753238]
+#OEW3=[35200.76686849832,38932.05097239078,38932.05097239078]
+#OEW4=[34275.53955342376,37984.71697075643,37984.74973957771]
+OEW=[33851.98,37691.65,37691.65]
 d_OEW1,d_OEW2=initialw.get_mass_efficiency(OEW)
 
 
@@ -109,7 +120,7 @@ y_MAC = initialplanform.get_y_MAC(b, Cr, MAC, Ct)                               
 dihedral_rad = initialplanform.get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
 lambda_le_rad = initialplanform.get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
-
+'DELETE THIS'
 #canard parameters
 A_c = 6
 b_c = [initialplanform.get_b(A_c,S_c[i]) for i in range(3)]
@@ -154,6 +165,7 @@ taper_ratio_h = 0.39                                                            
 V_v = 0.1                                                                       # [-] volume vertical tail
 A_v = 1.9                                                                       # [-] aspect ratio vertical tail
 taper_ratio_v = 0.375                                                           # [-] taper ratio vertical tail
+'KEEEP THIS'
 x_le_h = initialemp.get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
 
@@ -253,3 +265,67 @@ alpha_cruise_rad = np.deg2rad(0)                                                
 V_TO = [math.sqrt(2* x * 9.80665 /(const.rho_0 * S * inputperf.Cl_TO)) for x in MTOW]
 
 #thrust_cruise = [get_thrust_required(isa(H_m)[2], V_cruise, S, CDcruise[i]) for i in range(3)]
+
+
+
+
+
+output_file = open('output_initialsizing.dat' ,  'w')
+# Selecting variables to save
+output_file.write('MISSION PROFILE' + '\n')
+output_file.write('N_pax = ' + str(N_pax) + '\n')
+output_file.write('R = ' + str(R) + '\n')
+   
+output_file.write('WING LOADING/ THRUST LOADING' + '\n')
+output_file.write('T_W = ' + str(T_W) + '\n')
+output_file.write('W_S = ' + str(W_S) + '\n')
+output_file.write('MASSES' + '\n')
+output_file.write('OEW = ' + str(OEW) + '\n')
+output_file.write('MTOW = ' + str(MTOW) + '\n')
+output_file.write('M_ff = ' + str(M_ff) + '\n')
+output_file.write('M_fuel = ' + str(M_fuel) + '\n')
+output_file.write('T_req = ' + str(T_req) + '\n')
+
+output_file.write('FUSELAGE PARAMETERS' + '\n')
+output_file.write('l_cabin = ' + str(l_cabin) + '\n')
+output_file.write('d_f_inner = ' + str(d_f_inner) + '\n')
+output_file.write('d_f_outer = ' + str(d_f_outer) + '\n')
+#    output_file.write('l_nose = ' + str(l_nose) + '\n')
+ #   output_file.write('l_tailcone = ' + str(l_tailcone) + '\n')
+  #  output_file.write('l_tail = ' + str(l_tail) + '\n')
+output_file.write('l_f = ' + str(l_f) + '\n')
+#    output_file.write('d_f_outer = ' + str(d_f_outer) + '\n')
+#    output_file.write('V_os = ' + str(V_os) + '\n')
+#    output_file.write('V_cc = ' + str(V_cc) + '\n')
+#    output_file.write('V_carry_on = ' + str(V_carry_on) + '\n')
+#    output_file.write('V_check_in = ' + str(V_check_in) + '\n')
+output_file.write('V_cargo_available = ' + str(V_cargo_available) + '\n')
+
+#output_file.write('PROPULSION' + '\n')
+#output_file.write('T_req = ' + str(c1.T_req) + '\n')
+#    output_file.write('fuel_cruise = ' + str(fuel_cruise) + '\n')
+#output_file.write('d_fan = ' + str(d_fan) + '\n')
+#output_file.write('d_nacel = ' + str(d_nacel) + '\n')
+#output_file.write('l_eng = ' + str(l_eng) + '\n')
+#output_file.write('l_nacel = ' + str(c1.l_nacel) + '\n')
+#    output_file.write('y_eng = ' + str(y_eng) + '\n')
+#    output_file.write('d_eng = ' + str(d_eng) + '\n')
+#    output_file.write('z_eng = ' + str(z_eng) + '\n')
+
+
+output_file.write('WING PARAMETERS' + '\n')
+output_file.write('A = ' + str(A) + '\n')
+output_file.write('e = ' + str(e) + '\n')
+output_file.write('S = ' + str(S) + '\n')
+output_file.write('b = ' + str(b) + '\n')
+output_file.write('lambda_4_rad = ' + str(lambda_4_rad) + '\n')
+output_file.write('lambda_2_rad = ' + str(lambda_2_rad) + '\n')
+output_file.write('lambda_le_rad = ' + str(lambda_le_rad) + '\n')
+output_file.write('taper_ratio = ' + str(taper_ratio) + '\n')
+output_file.write('Cr = ' + str(Cr) + '\n')
+output_file.write('Ct = ' + str(Ct) + '\n')
+output_file.write('t_c = ' + str(t_c) + '\n')
+output_file.write('MAC = ' + str(MAC) + '\n')
+output_file.write('y_MAC = ' + str(y_MAC) + '\n')
+output_file.write('dihedral_rad = ' + str(dihedral_rad ) + '\n')
+output_file.close()

@@ -8,10 +8,10 @@ Created on Wed Jun  5 09:50:12 2019
 import numpy as np
 import matplotlib.pyplot as plt
 from inputs.constants import *
-from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, x_cg, y_engine, x_le_h, x_le_MAC, z_engine
+from inputs.concept_1 import S, l_f, l_cutout, d_f_outer, MAC, b, y_engine, x_le_h, x_le_MAC, z_engine
 from modules.Stability.cg_weight_config1 import x_cg_min1_emp, x_cg_max1_emp, x_le_MAC_range_perc_emp, x_le_MAC_range_emp
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
-from modules.main_class2 import config1_cg, config2_cg, config3_cg, config1_cg_x
+from Output.class2_integration import config1_cg, config2_cg, config3_cg, config1_cg_x
 from modules.Stability.cg_weight_config2 import x_cg_min2canard_can1, x_cg_max2canard_can1, x_le_MAC_range_perccanard2_can1
 from modules.Stability.cg_weight_config3 import x_cg_min3canard_can2, x_cg_max3canard_can2, x_le_MAC_range_perccanard3_can2
 import inputs.performance_inputs as inputperf
@@ -20,7 +20,7 @@ import modules.initialsizing_planform as initialplanform
 
 
 
-V_app = 70  #estimated by RB we will get from rik (lowest speed)
+
 
 class empennage:
     def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical):   
@@ -127,10 +127,10 @@ class empennage:
                 f_max = interpolate1([x_cg_max1_emp[1],x_le_MAC_range_perc_emp[1]],[x_cg_max1_emp[2],x_le_MAC_range_perc_emp[2]])
             diff_after = f_S2(f_max(y))-f_C1(f_min(y))
 
-#        self.Sh_S = f_C1(f_min(y))
-        self.Sh_S = 0.1646
-        self.x_le_MAC_l_f = 0.4345
-#        self.x_le_MAC_l_f = y
+        self.Sh_S = f_C1(f_min(y))
+#        self.Sh_S = 0.1646
+#        self.x_le_MAC_l_f = 0.4345
+        self.x_le_MAC_l_f = y
         self.S_h = self.Sh_S * S
         self.x_le_MAC = self.x_le_MAC_l_f * l_f[0]
         self.x_le_MAC_out = [self.x_le_MAC, self.x_le_MAC +l_cutout, self.x_le_MAC  + l_cutout]
@@ -206,9 +206,9 @@ class empennage:
         self.x_v = self.x_h
         
         def get_S_v(S, b, x_cg, V_v, x_v):
-            return [V_v*S* b / (x_v - x_cg[i]) for i in range(3)]
+            return [V_v*S* b / (x_v - x_cg)]
         
-        self.S_v = min(get_S_v(S, b, x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
+        self.S_v = min(get_S_v(S, b, self.x_cg, self.V_v, config1_cg.x_cg_vtail))    # [m^2] surface area vertical tail
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
         self.Ct_v = get_Ct(self.Cr_v, self.taper_ratio_v)                       # [m] tip chord length vertical tail
@@ -229,8 +229,9 @@ class empennage:
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
         N_v_max = - Y_v_max * self.l_v                                          # [N*m] moment caused by the vertical tail
-        print (N_e)
-        print (-N_v_max)
+        print ('moment engine inoperative',N_e)
+        print ('moment provided by Vtail',-N_v_max)
+        
         #assert ( N_e < -N_v_max   )                                                # check if tail is capable enough
 
     def size_canard(self):
@@ -312,6 +313,34 @@ class empennage:
             x_cg_mincanard = x_cg_min3canard_can2
             x_cg_maxcanard = x_cg_max3canard_can2
             x_le_MAC_range_perccanard = x_le_MAC_range_perccanard3_can2
+            
+        # Stijn's automation
+        def interpolate_y(point1, point2):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            b = point1[1] - dydx * point1[0]
+            return lambda y: (y-b) / dydx
+        
+        def interpolate_x(point1, point2):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            b = point1[1] - dydx * point1[0]
+            return lambda x: dydx * x + b
+            
+        f_min_x = interpolate_x([self.l[0],self.Sc_C1[0]],[self.l[-1],self.Sc_C1[-1]])
+        f_max_x = interpolate_x([self.l[0],self.Sc_S1[0]],[self.l[-1],self.Sc_S1[-1]])
+        f_min_y = interpolate_y([self.l[0],self.Sc_C1[0]],[self.l[-1],self.Sc_C1[-1]])
+        f_max_y = interpolate_y([self.l[0],self.Sc_S1[0]],[self.l[-1],self.Sc_S1[-1]])
+        
+        min_point = [x_cg_mincanard,f_min_x(x_cg_mincanard[0])]
+        max_point = [x_cg_maxcanard,f_max_x(x_cg_maxcanard[0])]
+        
+        self.Sc_S = max_point[1]
+        while min_point[1] < max_point[1]:
+            self.Sc_S -= 0.0001
+            max_point[1] = self.Sc_S
+            
+        assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
+        assert f_max_y(self.Sc_S) > x_cg_maxcanard
+        print(self.Sc_S)
         
         if plot:
             fig = plt.figure()
@@ -326,9 +355,15 @@ class empennage:
 #            ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
     
             ax2 = ax1.twinx()
-            ax2.plot(self.l, self.Sc_S1)
+            
+            ax2.plot([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'r')
+            ax2.scatter([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'r')
+            
+
+            
             ax2.plot(self.l, self.Sc_S2)
-            ax2.plot(self.l, self.Sc_C1)
+            ax2.plot(self.l, self.Sc_S1, color = 'g')
+            ax2.plot(self.l, self.Sc_C1, color = 'g')
             ax2.set( ylim = [0.,0.8], ylabel = 'S_c/S')
             plt.show()
 
@@ -339,15 +374,16 @@ class empennage:
         self.lambda_c_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
         self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
 
-        self.Sc_S = float(input("Enter the Sc_S ratio needed: "))                      # [-] Ratio area canard (assumed for now)
-        self.S_c = self.Sc_S * self.S                                            # [m^2] Surface area of the canard
+        self.Sc_S = self.Sc_S                                                   # [-] Ratio area canard
+        self.S_c = self.Sc_S * self.S                                           # [m^2] Surface area of the canard
 
 
 
-        self.A_c =  3.0                                                         # [-] Aspect ratio of the canard
+        self.A_c =  4.95                                                         # [-] Aspect ratio of the canard
         self.b_c = initialplanform.get_b(self.S_c, self.A_c)                                    # [m] span canard
         self.Cr_c = initialplanform.get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
         self.Ct_c = initialplanform.get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard
+        self.MAC_c= initialplanform.get_MAC(self.Cr_c, self.taper_ratio_c)
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard 
         self.lambda_c_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_c_le_rad,self.Cr_c,self.b_c,self.taper_ratio_c)
@@ -371,9 +407,9 @@ class empennage:
             x_cg_wing = config3_cg.x_cg_wing
             
         self.Cm_0 = self.Cm_ac - self.CN_h_a * (self.a_0 + self.i_h) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * (self.a_0 + self.i_c) * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
-        self.Cm_a = self.CN_w_a * (config_cg- x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (self.x_cg - self.x_c) / MAC
+        self.Cm_a = self.CN_w_a * (config_cg- x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
         self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
-        
+
         alpha_list = np.arange(0., (0.4+0.001), 0.001)
         def_curve = []
         for i in range (len(alpha_list)):

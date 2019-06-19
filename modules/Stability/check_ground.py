@@ -75,9 +75,12 @@ class check_ground():
             self.frac.append(self.F_n[(2*len(self.weight_pass)+i)]/self.weight_fuel[i])
         for i in range(len(self.weight_fuel)):
             self.frac.append(self.F_n[(i+len(self.weight_fuel)+2*len(self.weight_pass))]/self.weight_fuel[i])
-            
-        assert min(self.frac) > 0.08
-        assert max(self.frac) < 0.20
+        
+        
+        
+#        assert min(self.frac) > 0.08
+#        assert max(self.frac) < 0.20
+        print(min(self.frac), max(self.frac))
             
         return min(self.frac), max(self.frac), self.frac
     
