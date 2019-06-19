@@ -458,7 +458,7 @@ class Drag:
         drag_par2 = self.z_nlg / self.D_nlg
         S_mlg = self.D_nlg * self.b_nlg * 2 + self.D_strutt_nlg * self.z_nlg
         #From this follows
-        C_D_nlg = 0.5   #Figure 4.58
+        C_D_nlg = 0.75   #Figure 4.58
         
         S_mlg = self.D_mlg * self.b_mlg * 2 + self.D_strutt_mlg * self.z_mlg
         a = 2* self.b_mlg + self.D_strutt_mlg
@@ -508,6 +508,9 @@ class Drag:
         CD_wave = 0.005     #Figure 4.22
         
         CD_fueltank_trans = 2*(Rwf*(CDf_fueltank + CDp_fueltank) +CD_wave*(math.pi*(self.d_fueltank/2)**2)/self.S)
+        CD0_fueltank = 0
+        CD_fueltank_sub = 0
+        CD_fueltank_trans = 0
 
         return(CD0_fueltank, CD_fueltank_sub, CD_fueltank_trans)
         
@@ -652,6 +655,10 @@ class Lift:
         k2 = 1.0                #Figure 8.33
         k3 = 1.0                #Figure 8.34
         delta_clmax_flap = delclmax_base*k1*k2*k3
+        
+        k2_TO = 0.7
+        k3_TO = 0.5
+        delta_clmax_flap_TO = delclmax_base*k1*k2_TO*k3_TO
         
         cldmax = 1.2            #Figure 8.35
         r_LE = 0.01753          #Leading Edge radius http://www.pdas.com/sections6.html#s65618
