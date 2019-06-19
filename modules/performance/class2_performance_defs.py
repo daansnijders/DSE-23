@@ -2,6 +2,7 @@ import numpy as np
 from Structure.Wing.isa import isa
 import matplotlib.pyplot as plt
 
+
 def get_climb_gradient(thrust, drag, mass, g):
     y = (thrust - drag) / mass / g
     return y
