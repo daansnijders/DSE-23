@@ -107,7 +107,10 @@ fuel_force_lst = fuel[1]
 
 check = sum(np.array(fuel_force_lst)[:,-1])/load_factor/9.81
 print(check)
-
+"""
+Calculate skin mass
+"""
+print("Skin mass = " , sum(cross_section_lst[:,-1])*(wing_span)/(2*N))
 """
 Calculate structural weight force
 """
