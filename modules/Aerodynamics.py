@@ -942,16 +942,17 @@ class Moment:
         c_prime = 1.20 
         delta_cm_flap = self.delta_cl_flap*(self.x_ref - xcp_cprime*c_prime)
         
+        c_prime_le = 1.1
         cmdle = -0.0007      #Figure 8.93
         dfle = 60           #DEG
-        delta_cm_krueger = cmdle*c_prime**2*dfle + (self.x_ref + (c_prime-1))*self.delta_cl_krueger + cm_des_airfoil*(c_prime**2 -1) + 0.75*self.cl_des_airfoil*c_prime*(c_prime-1)
+        delta_cm_krueger = cmdle*c_prime_le**2*dfle + (self.x_ref + (c_prime_le-1))*self.delta_cl_krueger + cm_des_airfoil*(c_prime_le**2 -1) + 0.75*self.cl_des_airfoil*c_prime_le*(c_prime_le-1)
         return(delta_cm_flap, delta_cm_krueger)
         
     def Wing_moment(self):
         cm0_tip = -0.123        #Zero lift moment coefficient at tip according to JAVAfoil
         cm0_root = -0.123       #Zero lift moment coefficient at root according to JAVAfoil
-        delta_cm0_et = -0.005 + (-0.009 - -0.005)/5 * 3
-        Cm0_w_sub = ((self.A*np.cos(self.lambda_4_rad)**2)/(self.A + 2*math.cos(self.lambda_4_rad)))*(cm0_tip+cm0_root)/2 + delta_cm0_et*self.wing_twist
+        delta_cm0_et = -0.005 + (-0.009 - -0.005)/5 * 3         #1/DEG, Figure 8.98
+        Cm0_w_sub = ((self.A*np.cos(self.lambda_4_rad)**2)/(self.A + 2*np.cos(self.lambda_4_rad)))*(cm0_tip+cm0_root)/2 + delta_cm0_et*self.wing_twist
         
         Cm0M_Cm0 = 1.23
         Cm0_w_trans = Cm0_w_sub*Cm0M_Cm0

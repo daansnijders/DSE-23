@@ -110,7 +110,7 @@ alpha_C_l_max = np.rad2deg(10.75)
 C_l_max = 1.58
 C_l_alpha_M75 = C_l_alpha / math.sqrt(1 - const.M_cruise**2)
 i_w= 0
-wing_twist = -3 
+wing_twist = -3         #DEG
 
 #Configuration 1
 config1_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, conc1.A_h, conc1.A_c,conc1.lambda_h_2_rad[0], conc1.lambda_c_2_rad, i_c, conc1.S_h[0], conc1.S_c[0], i_h, conc1.x_le_MAC[0], b_flap, SWF)
@@ -147,12 +147,12 @@ delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(del
 #print(CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3)
 
 
-plot = config1_Lift.CL_alpha_plot(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1)
+#plot = config1_Lift.CL_alpha_plot(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1)
 
 
 """ Moment classII estimations """
 'Constants'
-x_ref = 0.5                     #Own decision based on nothing
+x_ref = 0.3                     #Own decision based on nothing
 cl_des_airfoil = 0.651          #CL at zero angle of attack from JAVAfoil (RE = 17*10^6, 65-615)
 
 #Configuration 1
@@ -161,9 +161,9 @@ cm_des_airfoil1, dcm_dcl_airfoil1 = config1_Moment.Airfoil_moment()
 delta_cm_flap1, delta_cm_krueger1 = config1_Moment.Airfoil_moment_flaps(cm_des_airfoil1)
 Cm0_w_sub1, Cm0_w_trans1, dCm_dCl_w1 = config1_Moment.Wing_moment()
 delta_Cm_w_flaps1, delta_Cm_w_krueger1 = config1_Moment.Wing_moment_flaps(Cm0_w_sub1)
-#print(cm_des_airfoil1, dcm_dcl_airfoil1)
+print(cm_des_airfoil1, dcm_dcl_airfoil1)
 #print(delta_cm_flap1, delta_cm_krueger1)
-#print(Cm0_w_sub1, Cm0_w_trans1, dCm_dCl_w1)
+print(Cm0_w_sub1, Cm0_w_trans1, dCm_dCl_w1)
 #print(delta_Cm_w_flaps1, delta_Cm_w_krueger1)
 
 
