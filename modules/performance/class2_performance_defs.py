@@ -381,8 +381,8 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
 
     fuel_flow_climb = engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0]
     climb_final_velocity = V_optimal[-1]
-
-    return fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance, fuel_mass_3000
+    fuel_flow_nox = fuel_flow_climb
+    return fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance, fuel_mass_3000, fuel_flow_nox
 
 
 def get_descent(max_altitude, cruise_velocity, approach_velocity, engines_operative, thrust_descent, S, drag_coefficient, mass, g):
