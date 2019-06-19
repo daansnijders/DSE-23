@@ -27,7 +27,9 @@ N_pax = [90,120,120]                                                            
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
 #inputs to this file 
 T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
-W_S    = [4405, 4405 , 4405]                                                    # [N/m^2] weight over wing surface area
+#T_Wnew=[0.287,0.291,0.294]
+W_S    = [4405, 4405 , 4405]   
+#W_S -[4185,4185,4185]                                                 # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
 #M_ffnew =[0.8671129569197487,0.9180333011040266,0.8707912564954988]
 OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
@@ -109,7 +111,7 @@ y_MAC = initialplanform.get_y_MAC(b, Cr, MAC, Ct)                               
 dihedral_rad = initialplanform.get_dihedral_rad(lambda_4_rad)                                   # [rad] dihedral angle of the main wing
 lambda_le_rad = initialplanform.get_lambda_le_rad(lambda_4_rad, Cr, b, taper_ratio)             # [rad] leading edge sweep angle main wing
 
-
+'DELETE THIS'
 #canard parameters
 A_c = 6
 b_c = [initialplanform.get_b(A_c,S_c[i]) for i in range(3)]
