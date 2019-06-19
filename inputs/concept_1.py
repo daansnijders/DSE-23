@@ -27,9 +27,9 @@ N_pax = [90,120,120]                                                            
 R = [4000E3,2000E3,4000E3]                                                      # [m] range of the aircraft
 #inputs to this file 
 T_W    = [0.29,0.29,0.29]                                                       # [-] thrust over weight ratio
-#T_Wnew=[0.287,0.291,0.294]
+#T_Wnew=[0.287,0.29,0.293]
 W_S    = [4405, 4405 , 4405]   
-#W_S -[4185,4185,4185]                                                 # [N/m^2] weight over wing surface area
+#W_S -[4216.8,4216.8,4216.8]                                                 # [N/m^2] weight over wing surface area
 M_ff   = [0.7567, 0.8274, 0.7567]                                               # [kg] mass fuel fraction
 #M_ffnew =[0.8671129569197487,0.9180333011040266,0.8707912564954988]
 OEW = [34631.92,38223.31-360,38729.81]                                          # [kg] operational empty weight
@@ -156,6 +156,7 @@ taper_ratio_h = 0.39                                                            
 V_v = 0.1                                                                       # [-] volume vertical tail
 A_v = 1.9                                                                       # [-] aspect ratio vertical tail
 taper_ratio_v = 0.375                                                           # [-] taper ratio vertical tail
+'KEEEP THIS'
 x_le_h = initialemp.get_x_h(l_f)                                                           # [m] x-position leading edge horizontal tail
 x_le_v = x_le_h                                                                 # [m] x-position leading edge vertical tail
 

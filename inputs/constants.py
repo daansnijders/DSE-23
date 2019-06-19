@@ -106,10 +106,13 @@ N_struts = 2                                                                    
 stroke = 0.3                                                                    # [m] shock absorber stroke
 
 #chosen tires
-D_nlg = 28.4*inch_to_m
+#D_nlg = 28.4*inch_to_m
+D_nlg=29.4*inch_to_m
 w_nlg = 7.85*inch_to_m
 D_mlg = 40*inch_to_m
 w_mlg = 15.5*inch_to_m
+max_P_nlg=16500*lbs_to_kg*9.81
+max_P_mlg=36300*lbs_to_kg*9.81
 
 LCN = 45                                                                        # [-] load classification number    
  

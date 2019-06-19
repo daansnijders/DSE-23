@@ -16,56 +16,7 @@ import csv
 import pandas as pd 
 
 
-output_file = open('output_detailedsizing.dat' ,  'r')
-lines= output_file.readlines()
-values=[]
-labels=[]
 
-#datastored = pd.read_csv('output_detailedsizing.csv' ,  'w'))
-
-
-for s in lines:
-    words=s.split('=')
-    
-    label=words[0].strip()
-    value=words[-1].strip()
-    labels.append(label)
-    values.append(float(value))
-
-output_file.close()
-    
-A_h=values[0]  
-taper_ratio_h=values[1]
-lambda_h_2_rad =values[2]
-S_h=values[3]
-b_h =values[4]
-Cr_h =values[5]
-Ct_h =values[6]
-A_v =values[7]
-lambda_v_2_rad =values[8]
-S_v  =values[9]
-b_v =values[10]
-Cr_v =values[11]
-Ct_v =values[12]
-A_c2 =values[13]
-lambda_c_2_rad2 =values[14]
-S_c2  =values[15]
-b_c2 =values[16]
-Cr_c2 =values[17]
-Ct_c2 =values[18]
-Cr_t_c2=values[19]
-A_c3 =values[20]
-lambda_c_2_rad3 =values[21]
-S_c3  =values[22]
-b_c3 =values[23]
-Cr_c3 =values[24]
-Ct_c3 =values[25]
-Cr_t_c3=values[26]
-l_h=values[27]
-x_le_MAC1=values[28]
-x_le_MAC2=values[29]
-x_le_MAC3=values[30]
-x_le_MAC=[x_le_MAC1,x_le_MAC2,x_le_MAC3]
 
 
 

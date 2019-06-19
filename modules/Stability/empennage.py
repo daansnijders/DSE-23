@@ -348,6 +348,7 @@ class empennage:
         self.b_c = initialplanform.get_b(self.S_c, self.A_c)                                    # [m] span canard
         self.Cr_c = initialplanform.get_Cr(self.S_c, self.taper_ratio_c, self.b_c)              # [m] root chord length canard
         self.Ct_c = initialplanform.get_Ct(self.Cr_c, self.taper_ratio_c)                       # [m] tip chord length canard
+        self.MAC_c= initialplanform.get_MAC(self.Cr_c, self.taper_ratio_c)
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard 
         self.lambda_c_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_c_le_rad,self.Cr_c,self.b_c,self.taper_ratio_c)
