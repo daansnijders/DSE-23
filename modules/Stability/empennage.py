@@ -20,7 +20,7 @@ import modules.initialsizing_planform as initialplanform
 
 
 
-V_app = 70  #estimated by RB we will get from rik (lowest speed)
+
 
 class empennage:
     def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical):   

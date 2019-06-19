@@ -87,11 +87,6 @@ CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alph
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
 
 
-CL_TO= 2.245 # at an angle of 9.75 deg
-CL_cruise1=conc1.CLdes[0] 
-CL_cruise2=conc1.CLdes[1]
-CL_cruise3=conc1.CLdes[2]
-CL_land= 2.68 # at an angle of 9.5 deg 
 
 
 
@@ -201,6 +196,12 @@ CL_clean_max, C_L_flaps_unoptimized = config1_Lift.get_CL(CL_alpha1, alpha_0_L1,
 CL_unoptiized, CL_flaps_max = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.5)
 print('AERO DONE')
 
+CL_TO= (CL_flaps_unoptimized+CL_clean_max)/2 # at an angle of 9.75 deg
+CL_cruise1=conc1.CLdes[0] 
+CL_cruise2=conc1.CLdes[1]
+CL_cruise3=conc1.CLdes[2]
+CL_land= CL_flaps_max # at an angle of 9.5 deg 
+
 
 """
 PERFORMANCE & PROPULSION
@@ -306,7 +307,7 @@ from Output.class2_integration import config1_cg, config2_cg, config3_cg
 
 'DELETE CONC1 BEFORE X LE MAC'
 """NEED FROM OTHER FILES"""
-V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                
+V_critical = min(config1_Performance.decision_speed,config1_Performance.approach_velocity )               
 #V_critical = 1.2                                                                        # [m/s] V1 speed/V_app
 etah       = 0.9                                                                # [-] eta_h of aerodynamics
 x_ac      = [x_le_MAC[0]+0.25*MAC, x_le_MAC[1]+0.25*MAC, x_le_MAC[2]+0.25*MAC]   # [m] x-location of the main wing ac
