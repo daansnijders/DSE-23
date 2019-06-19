@@ -7,7 +7,9 @@ Created on Wed Jun 12 14:56:29 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
+from inputs.concept_1 import l_h, x_le_MAC, MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
+#from inputs.concept_1 import l_h, X_le_MAC, MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m #new iteration
+
 import inputs.constants as const
 import modules.initialsizing_planform as initialplanform
 #from modules.Stability.cg_weight_config1 import *
@@ -18,8 +20,6 @@ from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_fl
 from modules.Stability.empennage import empennage
 from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l, alpha_0_L1
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
-
-
 
 """NEED FROM OTHER FILES"""
 V_critical = 70                                                                 # [m/s] V1 speed/V_app
