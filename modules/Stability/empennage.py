@@ -20,7 +20,7 @@ import modules.initialsizing_planform as initialplanform
 
 
 
-V_app = 70  #estimated by RB we will get from rik (lowest speed)
+
 
 class empennage:
     def __init__(self, config, x_ac, CL_a_h, CL_a_ah, de_da, l_h, S, c, Vh_V, x_le_MAC, Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical):   
@@ -312,6 +312,34 @@ class empennage:
             x_cg_mincanard = x_cg_min3canard_can2
             x_cg_maxcanard = x_cg_max3canard_can2
             x_le_MAC_range_perccanard = x_le_MAC_range_perccanard3_can2
+            
+        # Stijn's automation
+        def interpolate_y(point1, point2):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            b = point1[1] - dydx * point1[0]
+            return lambda y: (y-b) / dydx
+        
+        def interpolate_x(point1, point2):
+            dydx = (point1[1] - point2[1]) / (point1[0] - point2[0])
+            b = point1[1] - dydx * point1[0]
+            return lambda x: dydx * x + b
+            
+        f_min_x = interpolate_x([self.l[0],self.Sc_C1[0]],[self.l[-1],self.Sc_C1[-1]])
+        f_max_x = interpolate_x([self.l[0],self.Sc_S1[0]],[self.l[-1],self.Sc_S1[-1]])
+        f_min_y = interpolate_y([self.l[0],self.Sc_C1[0]],[self.l[-1],self.Sc_C1[-1]])
+        f_max_y = interpolate_y([self.l[0],self.Sc_S1[0]],[self.l[-1],self.Sc_S1[-1]])
+        
+        min_point = [x_cg_mincanard,f_min_x(x_cg_mincanard[0])]
+        max_point = [x_cg_maxcanard,f_max_x(x_cg_maxcanard[0])]
+        
+        self.Sc_S = max_point[1]
+        while min_point[1] < max_point[1]:
+            self.Sc_S -= 0.0001
+            max_point[1] = self.Sc_S
+            
+        assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
+        assert f_max_y(self.Sc_S) > x_cg_maxcanard
+        print(self.Sc_S)
         
         if plot:
             fig = plt.figure()
@@ -326,9 +354,15 @@ class empennage:
 #            ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
     
             ax2 = ax1.twinx()
-            ax2.plot(self.l, self.Sc_S1)
+            
+            ax2.plot([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'r')
+            ax2.scatter([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'r')
+            
+
+            
             ax2.plot(self.l, self.Sc_S2)
-            ax2.plot(self.l, self.Sc_C1)
+            ax2.plot(self.l, self.Sc_S1, color = 'g')
+            ax2.plot(self.l, self.Sc_C1, color = 'g')
             ax2.set( ylim = [0.,0.8], ylabel = 'S_c/S')
             plt.show()
 
@@ -339,8 +373,8 @@ class empennage:
         self.lambda_c_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
         self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
 
-        self.Sc_S = float(input("Enter the Sc_S ratio needed: "))                      # [-] Ratio area canard (assumed for now)
-        self.S_c = self.Sc_S * self.S                                            # [m^2] Surface area of the canard
+        self.Sc_S = self.Sc_S                                                   # [-] Ratio area canard
+        self.S_c = self.Sc_S * self.S                                           # [m^2] Surface area of the canard
 
 
 

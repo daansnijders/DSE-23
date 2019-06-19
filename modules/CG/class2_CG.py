@@ -9,7 +9,7 @@ import inputs.concept_1 as c1
 import modules.CG.CG_func as cgcomp
 
 class get_cg(object):
-    def __init__(self,x_le_MAC,weights,b_h,Cr_h,Ct_h,lambda_h_le_rad,x_le_h,b_v,Cr_v,Ct_v,lambda_v_le_rad,x_le_v,Cr_c,t_c_c,z_mlg,x_mlg,x_nlg):
+    def __init__(self,x_le_MAC,weights,b_h,Cr_h,Ct_h,lambda_h_le_rad,x_le_h,b_v,Cr_v,Ct_v,lambda_v_le_rad,x_le_v,Cr_c,t_c_c,z_mlg,z_nlg,x_mlg,x_nlg):
         self.x_le_MAC      = x_le_MAC                                           # [m]
         self.weights       = weights                                            # [kg] class
         self.config        = self.weights.config-1                              # [-] 
@@ -25,9 +25,11 @@ class get_cg(object):
         self.x_le_v          =x_le_v
         self.b_h           = b_h
         self.Cr_c           = Cr_c
-        self.Ct_c          = Ct_c
+        self.t_c_c          = t_c_c
         self.z_mlg         =z_mlg
         self.z_nlg         =z_nlg 
+        self.x_mlg          =x_mlg
+        self.x_nlg          = x_nlg
         
         self.x_cg_wing,self.y_cg_wing,self.z_cg_wing=cgcomp.get_cg_wing( c1.b, c1.Cr, c1.Ct, c1.t_c, c1.lambda_le_rad, c1.y_MAC,self.x_le_MAC[self.config]) # [m] x,y,z-location of the main wing
         self.x_cg_fuselage,self.y_cg_fuselage,self.z_cg_fuselage=cgcomp.get_cg_fuselage( c1.l_f[self.config], c1.d_f_outer) # [m] x,y,z-location of the fuselage

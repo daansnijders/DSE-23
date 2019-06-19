@@ -7,7 +7,7 @@ Created on Mon Jun  3 12:43:09 2019
 
 
 #from inputs.concept_1 import x_le_MAC, l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout
-from inputs.concept_1 import l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout #new iteration
+from inputs.concept_1 import l_f, x_cargo, l_cabin, N_pax, MAC, S, b, A, M_payload, M_cargo_available, M_fuel, l_cutout, x_le_h, x_le_v #new iteration
 from inputs.constants import *
 import Output.read_load_variables as varib
 
@@ -20,8 +20,13 @@ x_le_MAC1_can1 = [x_le_MAC[0] - 0.1 * l_f[0], x_le_MAC[1] - 0.1 * l_f[1], x_le_M
 x_le_MAC2_can1 = [x_le_MAC[0] , x_le_MAC[1], x_le_MAC[2]]
 x_le_MAC3_can1 = [x_le_MAC[0] + 0.1 * l_f[0], x_le_MAC[1] + 0.1 * l_f[1], x_le_MAC[2] + 0.1 * l_f[2]]
 
-x_cg_config2_range_can1 = [get_cg(x_le_MAC1_can1,config2_class2).calc_x_cg(),get_cg(x_le_MAC2_can1,config2_class2).calc_x_cg(),get_cg(x_le_MAC3_can1,config2_class2).calc_x_cg()]
-x_cg_wing_config2_range_can1 = [get_cg(x_le_MAC1_can1,config2_class2).x_cg_wing,get_cg(x_le_MAC2_can1,config2_class2).x_cg_wing,get_cg(x_le_MAC3_can1,config2_class2).x_cg_wing]
+
+config2_cgrange1=get_cg(x_le_MAC1_can1,config2_class2,varib.b_h,varib.Cr_h,varib.Ct_h,varib.lambda_h_le_rad,x_le_h[1],varib.b_v,varib.Cr_v,varib.Ct_v,varib.lambda_v_le_rad,x_le_v[1],varib.Cr_c2,varib.t_c_c2,varib.z_mlg,varib.z_nlg,varib.x_mlg,varib.x_nlg)
+config2_cgrange2=get_cg(x_le_MAC2_can1,config2_class2,varib.b_h,varib.Cr_h,varib.Ct_h,varib.lambda_h_le_rad,x_le_h[1],varib.b_v,varib.Cr_v,varib.Ct_v,varib.lambda_v_le_rad,x_le_v[1],varib.Cr_c2,varib.t_c_c2,varib.z_mlg,varib.z_nlg,varib.x_mlg,varib.x_nlg)
+config2_cgrange3=get_cg(x_le_MAC3_can1,config2_class2,varib.b_h,varib.Cr_h,varib.Ct_h,varib.lambda_h_le_rad,x_le_h[1],varib.b_v,varib.Cr_v,varib.Ct_v,varib.lambda_v_le_rad,x_le_v[1],varib.Cr_c2,varib.t_c_c2,varib.z_mlg,varib.z_nlg,varib.x_mlg,varib.x_nlg)
+
+x_cg_config2_range_can1 = [config2_cgrange1.calc_x_cg(),config2_cgrange2.calc_x_cg(),config2_cgrange3.calc_x_cg()]
+x_cg_wing_config2_range_can1 = [config2_cgrange1.x_cg_wing,config2_cgrange2.x_cg_wing,config2_cgrange3.x_cg_wing]
 
 x_le_MAC_range_can1 = [x_le_MAC1_can1[1], x_le_MAC2_can1[1], x_le_MAC3_can1[1]]
 #x_le_MAC_range_perc = [x_le_MAC1[1]/l_f[1], x_le_MAC2[1]/l_f[1], x_le_MAC3[1]/l_f[1]]
