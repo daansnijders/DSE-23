@@ -9,18 +9,34 @@ import inputs.concept_1 as c1
 import modules.CG.CG_func as cgcomp
 
 class get_cg(object):
-    def __init__(self,x_le_MAC,weights):
+    def __init__(self,x_le_MAC,weights,b_h,Cr_h,Ct_h,lambda_h_le_rad,x_le_h,b_v,Cr_v,Ct_v,lambda_v_le_rad,x_le_v,Cr_c,t_c_c,z_mlg,x_mlg,x_nlg):
         self.x_le_MAC      = x_le_MAC                                           # [m]
         self.weights       = weights                                            # [kg] class
         self.config        = self.weights.config-1                              # [-] 
+        self.b_h           = b_h
+        self.Cr_h           = Cr_h
+        self.Ct_h          = Ct_h
+        self.lambda_h_le_rad =lambda_h_le_rad
+        self.x_le_h          =x_le_h
+        self.b_v           = b_v
+        self.Cr_v           = Cr_v
+        self.Ct_v          = Ct_v
+        self.lambda_v_le_rad =lambda_v_le_rad
+        self.x_le_v          =x_le_v
+        self.b_h           = b_h
+        self.Cr_c           = Cr_c
+        self.Ct_c          = Ct_c
+        self.z_mlg         =z_mlg
+        self.z_nlg         =z_nlg 
+        
         self.x_cg_wing,self.y_cg_wing,self.z_cg_wing=cgcomp.get_cg_wing( c1.b, c1.Cr, c1.Ct, c1.t_c, c1.lambda_le_rad, c1.y_MAC,self.x_le_MAC[self.config]) # [m] x,y,z-location of the main wing
         self.x_cg_fuselage,self.y_cg_fuselage,self.z_cg_fuselage=cgcomp.get_cg_fuselage( c1.l_f[self.config], c1.d_f_outer) # [m] x,y,z-location of the fuselage
-        self.x_cg_htail,self.y_cg_htail,self.z_cg_htail=cgcomp.get_cg_hwing( c1.b_h[self.config], c1.Cr_h[self.config], c1.Ct_h[self.config], c1.lambda_h_le_rad, c1.x_le_h[self.config],c1.d_f_outer) # [m] x,y,z-location of the htail
-        self.x_cg_vtail,self.y_cg_vtail,self.z_cg_vtail= cgcomp.get_cg_vwing( c1.b_v[self.config], c1.Cr_v[self.config], c1.Ct_v[self.config], c1.lambda_v_le_rad, c1.x_le_v[self.config], c1.d_f_outer) # [m] x,y,z-location of the vtail
-        self.x_cg_engines,self.y_cg_engines,self.z_cg_engines=cgcomp.get_cg_engines( c1.x_cg_eng[self.config]) # [m] x,y,z-location of the engines
-        self.x_cg_canard,self.y_cg_canard,self.z_cg_canard=cgcomp.get_cg_canard( c1.Cr_c[self.config], c1.t_c_c[self.config], c1.l_cutout, const.l_cockpit) # [m] x,y,z-location of the canard
-        self.x_cg_landinggear_main, self.y_cg_landinggear_main, self.z_cg_landinggear_main = cgcomp.get_cg_landinggear_main( c1.z_mlg, c1.x_mlg[self.config]) # [m] x,y,z-location of the mlg
-        self.x_cg_landinggear_nose, self.y_cg_landinggear_nose, self.z_cg_landinggear_nose = cgcomp.get_cg_landinggear_nose( c1.z_nlg, c1.x_nlg) # [m] x,y,z-location of the nlg
+        self.x_cg_htail,self.y_cg_htail,self.z_cg_htail=cgcomp.get_cg_hwing( self.b_h, self.Cr_h, self.Ct_h, self.lambda_h_le_rad, self.x_le_h,c1.d_f_outer) # [m] x,y,z-location of the htail
+        self.x_cg_vtail,self.y_cg_vtail,self.z_cg_vtail= cgcomp.get_cg_vwing( self.b_v, self.Cr_v, self.Ct_v, self.lambda_v_le_rad, self.x_le_v, c1.d_f_outer) # [m] x,y,z-location of the vtail
+        self.x_cg_engines,self.y_cg_engines,self.z_cg_engines=cgcomp.get_cg_engines( self.x_le_MAC[self.config]) # [m] x,y,z-location of the engines
+        self.x_cg_canard,self.y_cg_canard,self.z_cg_canard=cgcomp.get_cg_canard( self.Cr_c, self.t_c_c, c1.l_cutout, const.l_cockpit) # [m] x,y,z-location of the canard
+        self.x_cg_landinggear_main, self.y_cg_landinggear_main, self.z_cg_landinggear_main = cgcomp.get_cg_landinggear_main( self.z_mlg, self.x_mlg[self.config]) # [m] x,y,z-location of the mlg
+        self.x_cg_landinggear_nose, self.y_cg_landinggear_nose, self.z_cg_landinggear_nose = cgcomp.get_cg_landinggear_nose( self.z_nlg, self.x_nlg) # [m] x,y,z-location of the nlg
         
     def calc_x_cg(self):                                                        # [kg*m] mass times c.g distance of the different groups. 
         wing = self.weights.M_wing *  self.x_cg_wing
