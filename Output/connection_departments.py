@@ -16,6 +16,32 @@ import modules.initialsizing_loading as loadingdiagram
 import modules.performance.class2_performance as class2performance
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
 
+
+
+
+#output_file = open('output_detailedsizing.dat' ,  'r')
+#lines= output_file.readlines()
+#values=[]
+#labels=[]
+#
+#
+#for s in lines:
+#    words=s.split('=')
+#    
+#    label=words[0].strip()
+#    value=words[-1].strip()
+#    labels.append(label)
+#    values.append(float(value))
+#
+#output_file.close()
+#
+#l_h=values[27]
+#x_le_MAC1=values[28]
+#x_le_MAC2=values[29]
+#x_le_MAC3=values[30]
+#x_le_MAC=[x_le_MAC1,x_le_MAC2,x_le_MAC3]
+
+
 """
 AERODYNAMICS
 """
@@ -31,6 +57,7 @@ Delta_C_L_flap = 2.4 - 1.5          #Cl_land - Cl_clean from performanca_input
 
 'HLD'
 config1_HLD = aero.HLD_class(perf.Cl_land,perf.Cl_clean,conc1.S,conc1.A,conc1.lambda_4_rad,conc1.taper_ratio,conc1.CL_alpha,conc1.lambda_le_rad,conc1.Cr,conc1.d_f_outer)
+#config1_HLD = aero.HLD_class(CL_land,CL_cleanMax,conc1.S,conc1.A,conc1.lambda_4_rad,conc1.taper_ratio,conc1.CL_alpha,conc1.lambda_le_rad,conc1.Cr,conc1.d_f_outer)
 SWF, b_flap, SWF_LE, b_slat = config1_HLD.HLD()
 
 
@@ -69,11 +96,11 @@ CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alph
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
 
 
-CL_TO= 2.215
-CL_cruise1=conc1.CLdes[0]
+CL_TO= 2.245 # at an angle of 9.75 deg
+CL_cruise1=conc1.CLdes[0] 
 CL_cruise2=conc1.CLdes[1]
 CL_cruise3=conc1.CLdes[2]
-CL_land= 2.66
+CL_land= 2.68 # at an angle of 9.5 deg 
 
 
 
@@ -170,6 +197,8 @@ Cm0_w_sub3, Cm0_w_trans3, dCm_dCl_w3 = config3_Moment.Wing_moment()
 delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_sub3)
 
 
+CL_clean_max, C_L_flaps_unoptimized = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.75)
+CL_unoptiized, CL_flaps_max = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.5)
 print('AERO DONE')
 
 
@@ -262,7 +291,7 @@ print('P&P DONE')
 CONTROL AND STABILITY
 """
 
-from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
+from inputs.concept_1 import x_le_MAC,l_h, MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 import modules.initialsizing_planform as initialplanform
 
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
@@ -271,8 +300,8 @@ from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.Stability.empennage import empennage
 #from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
+#from Output.class2_integration import config1_cg, config2_cg, config3_cg
 from modules.main_class2 import config1_cg, config2_cg, config3_cg
-
 
 
 """NEED FROM OTHER FILES"""
@@ -425,7 +454,7 @@ STRUCTURES
 """
 
     #Calculate fuel mass available for storage in wings (0.75 of one side of the wing)
-fuel_mass_available = wing_struc_analysis(C_l_max,const.V_cruise,conc1.b,conc1.Cr,conc1.Ct,conc1.S)
+fuel_mass_available = wing_struc_analysis(CL_flaps_max,const.V_cruise,conc1.b,conc1.Cr,conc1.Ct,conc1.S)
 
 
 """
@@ -533,6 +562,8 @@ output_file.write('CL_cruise3=' + str(CL_cruise3)+'\n')
 output_file.write('Cd_cruise1=' + str(CD_cruise1)+'\n')
 output_file.write('Cd_cruise2=' + str(CD_cruise2)+'\n')
 output_file.write('Cd_cruise3=' + str(CD_cruise3)+'\n')
+output_file.write('CL_clean_max=' + str(CL_clean_max)+'\n')
+output_file.write('CL_flaps_max=' + str(CL_flaps_max)+'\n')
 
 
 
