@@ -87,11 +87,6 @@ CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alph
 delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
 
 
-CL_TO= 2.245 # at an angle of 9.75 deg
-CL_cruise1=conc1.CLdes[0] 
-CL_cruise2=conc1.CLdes[1]
-CL_cruise3=conc1.CLdes[2]
-CL_land= 2.68 # at an angle of 9.5 deg 
 
 
 
@@ -201,6 +196,12 @@ CL_clean_max, C_L_flaps_unoptimized = config1_Lift.get_CL(CL_alpha1, alpha_0_L1,
 CL_unoptiized, CL_flaps_max = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.5)
 print('AERO DONE')
 
+CL_TO= (CL_flaps_unoptimized+CL_clean_max)/2 # at an angle of 9.75 deg
+CL_cruise1=conc1.CLdes[0]
+CL_cruise2=conc1.CLdes[1]
+CL_cruise3=conc1.CLdes[2]
+CL_land= CL_flaps_max # at an angle of 9.5 deg
+
 
 """
 PERFORMANCE & PROPULSION
@@ -212,7 +213,7 @@ mass_resolution = 20  # resolution of plotting mass vs take-off field length
 
 'general inputs'
 engine_failure = False
-show_performance_plots = False
+show_performance_plots = True
 show_airport_plots = False
 show_rate_of_climb_plots = False
 
@@ -241,7 +242,7 @@ config1_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise1, 
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[0], lift_over_drag1, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots, 1)
 
 
 print('check between conc')
@@ -254,7 +255,7 @@ config2_Performance =class2performance.Performance(CL_TO, CL_land, CL_cruise2, C
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[1], lift_over_drag2, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots, 2)
 
 config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[2],
                                   conc1.MTOW[2], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
@@ -264,7 +265,7 @@ config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, 
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[2], lift_over_drag3, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots, 3)
 
 'needed in further programs of iteration'
 'fuel fractions'
@@ -306,7 +307,7 @@ from Output.class2_integration import config1_cg, config2_cg, config3_cg
 
 'DELETE CONC1 BEFORE X LE MAC'
 """NEED FROM OTHER FILES"""
-V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                
+V_critical = min(config1_Performance.decision_speed,config1_Performance.approach_velocity )
 #V_critical = 1.2                                                                        # [m/s] V1 speed/V_app
 etah       = 0.9                                                                # [-] eta_h of aerodynamics
 x_ac      = [x_le_MAC[0]+0.25*MAC, x_le_MAC[1]+0.25*MAC, x_le_MAC[2]+0.25*MAC]   # [m] x-location of the main wing ac
@@ -371,7 +372,7 @@ x_v             = empennage1.x_v                                                
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
 lambda_c_le_rad2= empennage1.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
 
-t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
+t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
 A_c2            = empennage1.A_c                                                # [-] Aspect ratio of the canard
@@ -380,13 +381,13 @@ Cr_c2           = empennage1.Cr_c                                               
 Ct_c2           = empennage1.Ct_c                                               # [m] tip chord length canard
 Cr_t_c2         = Cr_c2*t_c_c2                                                  #[m] thickness at the chord canard
 z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
-l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
+l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
 lambda_c_2_rad2 = empennage1.lambda_c_2_rad
 MAC_c2          = empennage1.MAC_c
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
 lambda_c_le_rad3= empennage2.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
+t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard
 Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard
 A_c3            = empennage2.A_c                                                # [-] Aspect ratio of the canard
@@ -395,7 +396,7 @@ Cr_c3           = empennage2.Cr_c                                               
 Cr_t_c3         = Cr_c3*t_c_c3                                                  #[m] thickness at the chord canard
 Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
 z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
-l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
+l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
 lambda_c_2_rad3 = empennage2.lambda_c_2_rad
 MAC_c3          = empennage2.MAC_c
 

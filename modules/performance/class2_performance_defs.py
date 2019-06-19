@@ -344,6 +344,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     # V_optimal.append(np.real((fn_roots[np.isreal(fn_roots)])[0]))
     # z_optimal.append(get_rate_of_climb(engines_operative, thrust_max, take_off_velocity**2/2/g, np.sqrt(V_optimal[-1]*2*g), S, CD[i], mass[i], g))
 
+    h_nox = 3000 * 0.3048
 
     h_optimal = list(np.flip(h_optimal, 0))
     V_optimal = list(np.flip(V_optimal, 0))
@@ -359,11 +360,15 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     climb_time = 0
     distance = 0
     fuel_mass_climb = 0
+    fuel_mass_3000 = 0
     for a in range(1, len(h_optimal)):
         time_add = ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))/((z_optimal[a]+z_optimal[a-1])/2)
         climb_time += time_add
         distance += ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))/np.tan(np.arcsin(((z_optimal[a]+z_optimal[a-1])/2)/((V_optimal[a]+V_optimal[a-1])/2)))
-        fuel_mass_climb += ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))*(engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0])/((z_optimal[a]+z_optimal[a-1])/2)
+        fuel_add = ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))*(engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0])/((z_optimal[a]+z_optimal[a-1])/2)
+        fuel_mass_climb += fuel_add
+        if h_optimal[a] < h_nox:
+            fuel_mass_3000 += fuel_add
     # plt.scatter(x_loc_list, y_loc_list)
     plt.scatter(V_optimal, h_optimal)
     # polyfit_x = np.linspace(500, 2000, 1000)
@@ -376,8 +381,8 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
 
     fuel_flow_climb = engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0]
     climb_final_velocity = V_optimal[-1]
-
-    return fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance
+    fuel_flow_nox = fuel_flow_climb
+    return fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance, fuel_mass_3000, fuel_flow_nox
 
 
 def get_descent(max_altitude, cruise_velocity, approach_velocity, engines_operative, thrust_descent, S, drag_coefficient, mass, g):
