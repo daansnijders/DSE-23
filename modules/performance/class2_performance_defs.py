@@ -332,6 +332,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
             y_loc_list.append(y_loc)
 
     # filtering out points below cruise altitude
+    H_e_max = H_m + V_cruise**2/2/g
     below_cruise_altitude = [item <= H_m for item in y_loc_list]
     h_optimal = [d for (d, remove) in zip(y_loc_list, below_cruise_altitude) if remove]
     V_optimal = [d for (d, remove) in zip(x_loc_list, below_cruise_altitude) if remove]
@@ -388,10 +389,13 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
 def get_descent(max_altitude, cruise_velocity, approach_velocity, engines_operative, thrust_descent, S, drag_coefficient, mass, g):
     fuel_flow_descent = get_fuel_consumption(thrust_descent, 1, 1)[0]
 
-    pieces = 50
+    h_nox = 3000 * 0.3048
+    pieces = 1000
     descent_time = 0
     descent_distance = 0
+    descent_time_nox = 0
     fuel_mass_descent = 0
+    fuel_mass_nox = 0
     ROC_list = []
     altitude_list = np.linspace(max_altitude, 1, pieces)
     velocity_list = np.linspace(cruise_velocity, approach_velocity, pieces)
@@ -403,9 +407,12 @@ def get_descent(max_altitude, cruise_velocity, approach_velocity, engines_operat
     for a in range(1, len(altitude_list)):
         if ROC_list[a] < 0:
             time_add = ((altitude_list[a]+velocity_list[a]**2/2/g)-(altitude_list[a-1]+velocity_list[a-1]**2/2/g))/((ROC_list[a]+ROC_list[a-1])/2)
+            if altitude_list[a] < h_nox:
+                descent_time_nox += time_add
             descent_time += time_add
             descent_distance += ((altitude_list[a]+velocity_list[a]**2/2/g)-(altitude_list[a-1]+velocity_list[a-1]**2/2/g))/np.tan(np.arcsin(((ROC_list[a]+ROC_list[a-1])/2)/((velocity_list[a]+velocity_list[a-1])/2)))
         else:
             break
         fuel_mass_descent = descent_time * (engines_operative*fuel_flow_descent)
-    return fuel_mass_descent, descent_distance
+        fuel_mass_nox = descent_time_nox * (engines_operative * fuel_flow_descent)
+    return fuel_mass_descent, descent_distance, fuel_mass_nox
