@@ -346,8 +346,9 @@ class empennage:
             self.Sc_S -= 0.0001
             max_point[1] = self.Sc_S
             
-        assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
-        assert f_max_y(self.Sc_S) > x_cg_maxcanard
+        print(self.Sc_S)
+        #assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
+#        assert f_max_y(self.Sc_S) > x_cg_maxcanard
         print(self.Sc_S)
         
         if plot:

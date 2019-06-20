@@ -323,7 +323,7 @@ Cm_ac     = Cm0_w_trans1                                                        
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 1.8                                                                 # [-] lift coefficient canard
+CL_c      = 1.5                                                                   # [-] lift coefficient canard
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 
 
