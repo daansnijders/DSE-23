@@ -335,22 +335,22 @@ while sigma > sigma_critical:
 
 print t
 
-##########Titanium Ti-6Al-4V aged##########
-delta = 0.0001
-b = 0.5 *t +0.25 *t + delta
-Mom = sigma*A*(b/2)
-bolt_d = D - delta*2
-bolt_rupture = 1020000000
-I_bolt = np.pi/4 * (bolt_d/2)**4
-MS = ((Mom*bolt_d)/(2*I_bolt))/bolt_rupture  -1
-print "MS:", MS
-
-
-#################################Frame spacing################################
-width = 0.0625
-r_frame = max(radius)
-I_frame = np.pi/4 * (r_frame**4 - (r_frame-width)**4)
-######frame: Aluminum 2024-T81########
+###########Titanium Ti-6Al-4V aged##########
+#delta = 0.0001
+#b = 0.5 *t +0.25 *t + delta
+#Mom = sigma*A*(b/2)
+#bolt_d = D - delta*2
+#bolt_rupture = 1020000000
+#I_bolt = np.pi/4 * (bolt_d/2)**4
+#MS = ((Mom*bolt_d)/(2*I_bolt))/bolt_rupture  -1
+#print "MS:", MS
+#
+#
+##################################Frame spacing################################
+#width = 0.0625
+#r_frame = max(radius)
+#I_frame = np.pi/4 * (r_frame**4 - (r_frame-width)**4)
+#######frame: Aluminum 2024-T81########
 #Y_mod = 72 * 10**9
 #v = 0.33
 #frame_yield = 372000000

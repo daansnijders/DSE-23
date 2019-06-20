@@ -194,6 +194,9 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 
 CL_clean_max, C_L_flaps_unoptimized = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.75)
 CL_unoptiized, CL_flaps_max = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.5)
+
+#CL_flaps_max = CL_max1 + delta_CL_max1
+
 print('AERO DONE')
 
 
@@ -323,7 +326,9 @@ Cm_ac     = Cm0_w_trans1                                                        
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 1.8                                                                 # [-] lift coefficient canard
+
+CL_c      = 1.4                                                                 # [-] lift coefficient canard
+
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 
 
@@ -442,6 +447,9 @@ l_n1 = x_cg_max_flight1 - x_nlg
 l_n2 = x_cg_max_flight2 - x_nlg
 l_n3 = x_cg_max_flight3 - x_nlg
 
+moment = x_cg_min_flight1 * conc1.MTOW[0]
+F_h_req = moment / (x_h-x_cg_min_flight1) 
+assert S_h > F_h_req / (0.5*1.225*58.61409173313211**2 * 0.860)
 
 y_mlg = update_y_mlg(config1_cg.calc_z_cg(),z_mlg,l_n,l_m)            # [m] y-location of the mlg
 
@@ -519,115 +527,115 @@ config1_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,
 config2_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise2,CL_land,V_climb2,perf.c,f2,perf.sigma, perf.TOP, CD0_2,conc1.A,conc1.e,1000,7000,100)
 config3_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise3,CL_land,V_climb3,perf.c,f3,perf.sigma, perf.TOP, CD0_3,conc1.A,conc1.e,1000,7000,100)
 
-
-'WRITE THE CSV FILE'
-output_file = open('output_detailedsizing.dat' ,  'w')
-#    output_file.write('V_h =' + str(V_h) + '\n')
-output_file.write('A_h  =' + str(A_h) + '\n')
-output_file.write('taper_ratio_h =' + str(taper_ratio_h) + '\n')
-output_file.write('lambda_h_2_rad =' + str(lambda_h_2_rad) + '\n')
-#    output_file.write('x_le_h =' + str(x_le_h) + '\n')
-output_file.write('S_h=' + str(S_h) + '\n')
-output_file.write('b_h =' + str(b_h) + '\n')
-output_file.write('Cr_h =' + str(Cr_h) + '\n')
-output_file.write('Ct_h =' + str(Ct_h) + '\n')
-
-
-#    output_file.write('V_v =' + str(V_v) + '\n')
-output_file.write('A_v =' + str(A_v) + '\n')
-output_file.write('lambda_v_2_rad =' + str(lambda_v_2_rad) + '\n')
-#   output_file.write('x_le_v =' + str(x_le_v) + '\n')
-output_file.write('S_v  =' + str(S_v) + '\n')
-output_file.write('b_v =' + str(b_v) + '\n')
-output_file.write('Cr_v =' + str(Cr_v) + '\n')
-output_file.write('Ct_v =' + str(Ct_v) + '\n')
-
-
-#    output_file.write('V_v =' + str(V_v) + '\n')
-output_file.write('A_c2 =' + str(A_c2) + '\n')
-output_file.write('lambda_c_2_rad2 =' + str(lambda_c_2_rad2) + '\n')
-#    output_file.write('x_le_v =' + str(x_le_v) + '\n')
-output_file.write('S_c2  =' + str(S_c2) + '\n')
-output_file.write('b_c2 =' + str(b_c2) + '\n')
-output_file.write('Cr_c2 =' + str(Cr_c2) + '\n')
-output_file.write('Ct_c2 =' + str(Ct_c2) + '\n')
-output_file.write('Cr_t_c2=' + str(Cr_t_c2) + '\n')
-
-
-#    output_file.write('V_v =' + str(V_v) + '\n')
-output_file.write('A_c3 =' + str(A_c3) + '\n')
-output_file.write('lambda_c_2_rad3 =' + str(lambda_c_2_rad3) + '\n')
-#    output_file.write('x_le_v =' + str(x_le_v) + '\n')
-output_file.write('S_c3  =' + str(S_c3) + '\n')
-output_file.write('b_c3 =' + str(b_c3) + '\n')
-output_file.write('Cr_c3 =' + str(Cr_c3) + '\n')
-output_file.write('Ct_c3 =' + str(Ct_c3) + '\n')
-output_file.write('Cr_t_c3=' + str(Cr_t_c3) + '\n')
-
-output_file.write('lh=' + str(l_h)+ '\n')
-output_file.write('xleMAC1=' + str(x_le_MAC[0])+ '\n')
-output_file.write('xleMAC2=' + str(x_le_MAC[1])+ '\n')
-output_file.write('xleMAC3=' + str(x_le_MAC[2])+ '\n')
-
-output_file.write('MAC canard 2=' + str(MAC_c2) + '\n')
-output_file.write('MAC canard 3=' + str(MAC_c3) + '\n')
-
-
-output_file.write('lc_conf2=' + str(l_c2)+ '\n')
-output_file.write('lc_conf3=' + str(l_c3)+ '\n')
-
-output_file.write('x loc main 1 =' + str(x_mlg[0]) + '\n')
-output_file.write('x loc main 2 =' + str(x_mlg[1]) + '\n')
-output_file.write('x loc main 3 =' + str(x_mlg[2]) + '\n')
-output_file.write('x loc nose ='   + str(x_nlg) + '\n')
-output_file.write('l m 1 =' + str(l_m1) + '\n')
-output_file.write('l m 2 =' + str(l_m2) + '\n')
-output_file.write('l m 3 =' + str(l_m3) + '\n')
-output_file.write('l n 1 =' + str(l_n1) + '\n')
-output_file.write('l n 2 =' + str(l_n2) + '\n')
-output_file.write('l n 3 =' + str(l_n3) + '\n')
-output_file.write('L main landing gear strut ='+ str(L_strut_mlg)+ '\n')
-output_file.write('L nose landing gear strut ='+ str(L_strut_nlg)+ '\n')
-output_file.write('D main landing gear strut ='+ str(D_strut_mlg)+ '\n')
-output_file.write('D nose landing gear strut ='+ str(D_strut_nlg)+ '\n')
-
-output_file.write('CL_clean_max=' + str(CL_clean_max)+'\n')
-output_file.write('CL_flaps_max=' + str(CL_flaps_max)+'\n')
-output_file.write('CL_TO=' + str(CL_TO)+'\n')
-output_file.write('CL_land=' + str(CL_land)+'\n')
-output_file.write('CL_cruise1=' + str(CL_cruise1)+'\n')
-output_file.write('CL_cruise2=' + str(CL_cruise2)+'\n')
-output_file.write('CL_cruise3=' + str(CL_cruise3)+'\n')
-output_file.write('CD_cruise1=' + str(CD_cruise1)+'\n')
-output_file.write('CD_cruise2=' + str(CD_cruise2)+'\n')
-output_file.write('CD_cruise3=' + str(CD_cruise3)+'\n')
-
-output_file.write('z_nlg='+str(z_nlg)+'\n')
-output_file.write('z_mlg='+str(z_mlg)+'\n')
-
-
-#output_file.write('A=' + str(conc1.A)+'\n')
-#output_file.write('S=' + str(conc1.S)+'\n')
-#output_file.write('b=' + str(conc1.b)+'\n')
-#output_file.write('l_cutout=' + str(conc1.l_cutout)+'\n')
-#output_file.write('l fuselage 1=' + str(conc1.l_f[0])+'\n')
-#output_file.write('l cabin 1=' + str(conc1.l_cabin[0])+'\n')
-#output_file.write('l fuselage extended=' + str(conc1.l_f[1])+'\n')
-#output_file.write('l cabin extended=' + str(conc1.l_cabin[1])+'\n')
-output_file.write('mff1=' + str(Mff1)+'\n')
-output_file.write('mff2=' + str(Mff2)+'\n')
-output_file.write('mff3=' + str(Mff3)+'\n')
-
-output_file.write('co2emissions 1 per pax=' + str(config1_CO2[0])+'\n')
-output_file.write('co2emissions 1 requirement=' + str(config1_CO2[1])+'\n')
-output_file.write('co2emissions 2 per pax=' + str(config2_CO2[0])+'\n')
-output_file.write('co2emissions 2 requirement=' + str(config2_CO2[1])+'\n')
-output_file.write('co2emissions 3 per pax=' + str(config3_CO2[0])+'\n')
-output_file.write('co2emissions 3 requirement=' + str(config3_CO2[1])+'\n')
-output_file.write('nox emissions 1=' + str(config1_NOx) + '\n')
-output_file.write('nox emissions 2=' + str(config2_NOx) + '\n')
-output_file.write('nox emissions 3=' + str(config3_NOx) + '\n')
-output_file.close()
+#
+##'WRITE THE CSV FILE'
+#output_file = open('output_detailedsizing.dat' ,  'w')
+##    output_file.write('V_h =' + str(V_h) + '\n')
+#output_file.write('A_h  =' + str(A_h) + '\n')
+#output_file.write('taper_ratio_h =' + str(taper_ratio_h) + '\n')
+#output_file.write('lambda_h_2_rad =' + str(lambda_h_2_rad) + '\n')
+##    output_file.write('x_le_h =' + str(x_le_h) + '\n')
+#output_file.write('S_h=' + str(S_h) + '\n')
+#output_file.write('b_h =' + str(b_h) + '\n')
+#output_file.write('Cr_h =' + str(Cr_h) + '\n')
+#output_file.write('Ct_h =' + str(Ct_h) + '\n')
+#
+#
+##    output_file.write('V_v =' + str(V_v) + '\n')
+#output_file.write('A_v =' + str(A_v) + '\n')
+#output_file.write('lambda_v_2_rad =' + str(lambda_v_2_rad) + '\n')
+##   output_file.write('x_le_v =' + str(x_le_v) + '\n')
+#output_file.write('S_v  =' + str(S_v) + '\n')
+#output_file.write('b_v =' + str(b_v) + '\n')
+#output_file.write('Cr_v =' + str(Cr_v) + '\n')
+#output_file.write('Ct_v =' + str(Ct_v) + '\n')
+#
+#
+##    output_file.write('V_v =' + str(V_v) + '\n')
+#output_file.write('A_c2 =' + str(A_c2) + '\n')
+#output_file.write('lambda_c_2_rad2 =' + str(lambda_c_2_rad2) + '\n')
+##    output_file.write('x_le_v =' + str(x_le_v) + '\n')
+#output_file.write('S_c2  =' + str(S_c2) + '\n')
+#output_file.write('b_c2 =' + str(b_c2) + '\n')
+#output_file.write('Cr_c2 =' + str(Cr_c2) + '\n')
+#output_file.write('Ct_c2 =' + str(Ct_c2) + '\n')
+#output_file.write('Cr_t_c2=' + str(Cr_t_c2) + '\n')
+#
+#
+##    output_file.write('V_v =' + str(V_v) + '\n')
+#output_file.write('A_c3 =' + str(A_c3) + '\n')
+#output_file.write('lambda_c_2_rad3 =' + str(lambda_c_2_rad3) + '\n')
+##    output_file.write('x_le_v =' + str(x_le_v) + '\n')
+#output_file.write('S_c3  =' + str(S_c3) + '\n')
+#output_file.write('b_c3 =' + str(b_c3) + '\n')
+#output_file.write('Cr_c3 =' + str(Cr_c3) + '\n')
+#output_file.write('Ct_c3 =' + str(Ct_c3) + '\n')
+#output_file.write('Cr_t_c3=' + str(Cr_t_c3) + '\n')
+#
+#output_file.write('lh=' + str(l_h)+ '\n')
+#output_file.write('xleMAC1=' + str(x_le_MAC[0])+ '\n')
+#output_file.write('xleMAC2=' + str(x_le_MAC[1])+ '\n')
+#output_file.write('xleMAC3=' + str(x_le_MAC[2])+ '\n')
+#
+#output_file.write('MAC canard 2=' + str(MAC_c2) + '\n')
+#output_file.write('MAC canard 3=' + str(MAC_c3) + '\n')
+#
+#
+#output_file.write('lc_conf2=' + str(l_c2)+ '\n')
+#output_file.write('lc_conf3=' + str(l_c3)+ '\n')
+#
+#output_file.write('x loc main 1 =' + str(x_mlg[0]) + '\n')
+#output_file.write('x loc main 2 =' + str(x_mlg[1]) + '\n')
+#output_file.write('x loc main 3 =' + str(x_mlg[2]) + '\n')
+#output_file.write('x loc nose ='   + str(x_nlg) + '\n')
+#output_file.write('l m 1 =' + str(l_m1) + '\n')
+#output_file.write('l m 2 =' + str(l_m2) + '\n')
+#output_file.write('l m 3 =' + str(l_m3) + '\n')
+#output_file.write('l n 1 =' + str(l_n1) + '\n')
+#output_file.write('l n 2 =' + str(l_n2) + '\n')
+#output_file.write('l n 3 =' + str(l_n3) + '\n')
+#output_file.write('L main landing gear strut ='+ str(L_strut_mlg)+ '\n')
+#output_file.write('L nose landing gear strut ='+ str(L_strut_nlg)+ '\n')
+#output_file.write('D main landing gear strut ='+ str(D_strut_mlg)+ '\n')
+#output_file.write('D nose landing gear strut ='+ str(D_strut_nlg)+ '\n')
+#
+#output_file.write('CL_clean_max=' + str(CL_clean_max)+'\n')
+#output_file.write('CL_flaps_max=' + str(CL_flaps_max)+'\n')
+#output_file.write('CL_TO=' + str(CL_TO)+'\n')
+#output_file.write('CL_land=' + str(CL_land)+'\n')
+#output_file.write('CL_cruise1=' + str(CL_cruise1)+'\n')
+#output_file.write('CL_cruise2=' + str(CL_cruise2)+'\n')
+#output_file.write('CL_cruise3=' + str(CL_cruise3)+'\n')
+#output_file.write('CD_cruise1=' + str(CD_cruise1)+'\n')
+#output_file.write('CD_cruise2=' + str(CD_cruise2)+'\n')
+#output_file.write('CD_cruise3=' + str(CD_cruise3)+'\n')
+#
+#output_file.write('z_nlg='+str(z_nlg)+'\n')
+#output_file.write('z_mlg='+str(z_mlg)+'\n')
+#
+#
+##output_file.write('A=' + str(conc1.A)+'\n')
+##output_file.write('S=' + str(conc1.S)+'\n')
+##output_file.write('b=' + str(conc1.b)+'\n')
+##output_file.write('l_cutout=' + str(conc1.l_cutout)+'\n')
+##output_file.write('l fuselage 1=' + str(conc1.l_f[0])+'\n')
+##output_file.write('l cabin 1=' + str(conc1.l_cabin[0])+'\n')
+##output_file.write('l fuselage extended=' + str(conc1.l_f[1])+'\n')
+##output_file.write('l cabin extended=' + str(conc1.l_cabin[1])+'\n')
+#output_file.write('mff1=' + str(Mff1)+'\n')
+#output_file.write('mff2=' + str(Mff2)+'\n')
+#output_file.write('mff3=' + str(Mff3)+'\n')
+#
+#output_file.write('co2emissions 1 per pax=' + str(config1_CO2[0])+'\n')
+#output_file.write('co2emissions 1 requirement=' + str(config1_CO2[1])+'\n')
+#output_file.write('co2emissions 2 per pax=' + str(config2_CO2[0])+'\n')
+#output_file.write('co2emissions 2 requirement=' + str(config2_CO2[1])+'\n')
+#output_file.write('co2emissions 3 per pax=' + str(config3_CO2[0])+'\n')
+#output_file.write('co2emissions 3 requirement=' + str(config3_CO2[1])+'\n')
+#output_file.write('nox emissions 1=' + str(config1_NOx) + '\n')
+#output_file.write('nox emissions 2=' + str(config2_NOx) + '\n')
+#output_file.write('nox emissions 3=' + str(config3_NOx) + '\n')
+#output_file.close()
 
 
 

@@ -127,11 +127,13 @@ class empennage:
                 f_max = interpolate1([x_cg_max1_emp[1],x_le_MAC_range_perc_emp[1]],[x_cg_max1_emp[2],x_le_MAC_range_perc_emp[2]])
             diff_after = f_S2(f_max(y))-f_C1(f_min(y))
 
-        self.Sh_S = f_C1(f_min(y))
+        self.Sh_S = max(f_C1(f_min(y)),29/self.S)
+        
 #        self.Sh_S = 0.1646
 #        self.x_le_MAC_l_f = 0.4345
         self.x_le_MAC_l_f = y
         self.S_h = self.Sh_S * S
+        
         self.x_le_MAC = self.x_le_MAC_l_f * l_f[0]
         self.x_le_MAC_out = [self.x_le_MAC, self.x_le_MAC +l_cutout, self.x_le_MAC  + l_cutout]
         self.x_ac = [self.x_le_MAC + 0.25*MAC, self.x_le_MAC + 0.25*MAC + l_cutout, self.x_le_MAC + 0.25*MAC + l_cutout] 
@@ -188,7 +190,7 @@ class empennage:
             return Cr * 2/3 * (1+taper_ratio + taper_ratio**2) / (1 + taper_ratio)
         
         def get_y_MAC(b, Cr, MAC, Ct):
-            return b/2 * (Cr - MAC) / (Cr - Ct)
+            return b/2 * (Cr - MAC) / (Cr - Ct)        
         
         self.x_h = get_x_h(l_f)                                                 # [m] x-location of the htail ac
         self.b_h = get_b(self.S_h, self.A_h)                                    # [m] span horizontal tail
@@ -346,8 +348,9 @@ class empennage:
             self.Sc_S -= 0.0001
             max_point[1] = self.Sc_S
             
-        assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
-        assert f_max_y(self.Sc_S) > x_cg_maxcanard
+        print(self.Sc_S)
+        #assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
+#        assert f_max_y(self.Sc_S) > x_cg_maxcanard
         print(self.Sc_S)
         
         if plot:
