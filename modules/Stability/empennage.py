@@ -397,6 +397,8 @@ class empennage:
         self.MAC_c= initialplanform.get_MAC(self.Cr_c, self.taper_ratio_c)
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard 
+        self.y_MAC_c = initialplanform.get_y_MAC(self.b_c, self.Cr_c, self.MAC_c, self.Ct_c)    # [m] distance of MAC horizontal tail from centre line
+        
         self.lambda_c_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_c_le_rad,self.Cr_c,self.b_c,self.taper_ratio_c)
         self.lambda_c_2_rad = get_lambda_2_rad(self.lambda_c_4_rad,self.A_c,self.taper_ratio_c) # [rad] half chord sweep angle
     
