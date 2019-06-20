@@ -48,7 +48,7 @@ from isa import isa
 
 fitting_factor = 1.15
 safety_factor = 1.5
-nu = 3
+nu = 1
 g = 9.80665
 ######stringers: Aluminum 2024-T81########
 stringer_yield = 372000000
@@ -104,6 +104,7 @@ for i in range(n):
     
     
 p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
+
 skin_thickness = (p_diff* max(radius))/(skin_yield/safety_factor)
 skin_thickness = 0.0015
 
@@ -155,7 +156,6 @@ V =  [0] *n
 for i in range(n):
     V[i]=V[i-1]+forces_sum[i]
 
-
 M =  [0] *n 
 for i in range(n):
     if i > int((x_cg_wing_group/l_fuselage)*n):
@@ -167,7 +167,7 @@ for i in range(n):
             M[i]+=forces_sum[j]*(x[i]-step_size*j)
 #M[int((x_cg_wing_group/l_fuselage)*n)]+=wing_moment*nu
 
-p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
+p_diff = isa(2438/3.281)[1] - isa(37000 /3.281)[1]
 
 
 stringer_no = [0] *n
@@ -187,9 +187,10 @@ for i in range(n):
         stress_bending_max[i] = M[i]*radius[i]/MOI[i]    
        
         stress_long_max[i] = (abs(stress_bending_max[i])+stress_pressure_long[i])* safety_factor
-     
+
+
 #######################################BUCKLING CALCULATION: REQUIRED NO OF STRINGERS###################################
-nu = 1.773
+nu = 1
 payload_w = [0] *n
 for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
     payload_w[i]=-M_payload* g*nu/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
@@ -251,6 +252,7 @@ for i in range(n):
 p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
 
 
+
 stringer_no_buckle = [0] *n
 MOI = [0] *n
 stress_pressure_long =  [0] *n
@@ -273,7 +275,7 @@ for i in range(n):
     
         stress_bending_max[i] = M[i]*radius[i]/MOI[i]    
        
-        stress_long_max[i] = (abs(stress_bending_max[i])-stress_pressure_long[i])* safety_factor
+        stress_long_max[i] = (abs(stress_bending_max[i]))* safety_factor
      
 
 
