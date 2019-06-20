@@ -10,12 +10,16 @@ import inputs.concept_1 as c1
 phi_observer=radians(0.1)
 flap_deflection=radians(40)
 
-b_slat=c1.b*0.6
-b_flap=c1.b/2*0.4
-c_flap=0.35*c1.Cr
-area_flap=b_flap*c_flap
+b_slat=12.815
+b_flap=9.127
 
-V_approach=75
+area_flap=28.14
+
+V_approach1=62.2
+V_approach2=65.3
+V_approach3=67.06
+
+
 
 r1,r2,r3,theta_1,theta_2,theta_3=simulate_flight_path(V_approach)
 
