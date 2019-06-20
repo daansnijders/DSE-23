@@ -48,7 +48,7 @@ from isa import isa
 
 fitting_factor = 1.15
 safety_factor = 1.5
-nu = 1
+nu = 3
 g = 9.80665
 ######stringers: Aluminum 2024-T81########
 stringer_yield = 372000000
@@ -70,7 +70,8 @@ M_landinggear_main = 1500.0
 M_wing_group = 12000.0
 M_horizontal_tail = 1500.0
 M_fuel = 15000.0
-M_total = M_payload+M_fuselage+M_fittings+M_verticaltail+M_landinggear_nose+M_landinggear_main+M_wing_group+M_horizontal_tail+M_fuel
+M_canard = 1000
+M_total = M_payload+M_fuselage+M_fittings+M_verticaltail+M_landinggear_nose+M_landinggear_main+M_wing_group+M_horizontal_tail+M_fuel + M_canard
 l_fuselage = 35.0
 x_cg_hwing = 34.0
 x_cg_vwing = 34.0
@@ -79,6 +80,11 @@ x_cg_mgear = 16.0
 Xfirst = 6.0
 Xlast = 26.0
 wing_moment = 423445.33268878574/(2.66)
+x_canard = 6.0
+
+#Lift_mainwing has to be equal to M_total * g from other program    
+Lift_mainwing_wonu = 605069.0
+
 
 
 #l_fuselage = config1_class2.l_f
@@ -135,18 +141,24 @@ for i in range(n):
 #    for j in range(i):
 #        m[i]+=weights_sum[j]*(x[i]-step_size*j)
 #        
+
+Lift_mainwing = Lift_mainwing_wonu * nu
 m = 0     
 for i in range(n):
     m+=weights_sum[i]*x[i]
+m+= (-wing_moment*nu) + Lift_mainwing * x_cg_wing_group
 
-Lift_mainwing = (-(m-wing_moment*nu)+x_cg_hwing*sum(weights_sum))/(np.average([X_wingbox_start, X_wingbox_end])-x_cg_hwing)
-Lift_tail = -sum(weights_sum)-Lift_mainwing
+
+Lift_tail = (-(m)+x_canard*(sum(weights_sum)+Lift_mainwing))/(x_cg_hwing-x_canard)
+Lift_canard = -sum(weights_sum)- Lift_mainwing - Lift_tail
 
 lift_forces = [0] *n 
 for i in range(int((X_wingbox_start/l_fuselage)*n),int((X_wingbox_end/l_fuselage)*n)):
     lift_forces[i]=Lift_mainwing/(int((X_wingbox_end/l_fuselage)*n)-int((X_wingbox_start/l_fuselage)*n))
     
 lift_forces[int((x_cg_hwing/l_fuselage)*n)]=Lift_tail
+lift_forces[int((x_canard/l_fuselage)*n)]=Lift_canard
+
 
 forces_sum =  [0] *n 
 for i in range(n):
@@ -190,7 +202,7 @@ for i in range(n):
 
 
 #######################################BUCKLING CALCULATION: REQUIRED NO OF STRINGERS###################################
-nu = 1
+nu = 1.773
 payload_w = [0] *n
 for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
     payload_w[i]=-M_payload* g*nu/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
@@ -216,19 +228,26 @@ for i in range(n):
 #for i in range(n):
 #    for j in range(i):
 #        m[i]+=weights_sum[j]*(x[i]-step_size*j)
-#        
+# 
+
+
+
+Lift_mainwing = Lift_mainwing_wonu * nu
 m = 0     
 for i in range(n):
     m+=weights_sum[i]*x[i]
+m+= Lift_mainwing * x_cg_wing_group + (-wing_moment*nu)
 
-Lift_mainwing = (-(m-wing_moment*nu)+x_cg_hwing*sum(weights_sum))/(np.average([X_wingbox_start, X_wingbox_end])-x_cg_hwing)
-Lift_tail = -sum(weights_sum)-Lift_mainwing
+
+Lift_tail = (-(m)+x_canard*(sum(weights_sum)+Lift_mainwing))/(x_cg_hwing-x_canard)
+Lift_canard = -sum(weights_sum)-Lift_mainwing - Lift_tail
 
 lift_forces = [0] *n 
 for i in range(int((X_wingbox_start/l_fuselage)*n),int((X_wingbox_end/l_fuselage)*n)):
     lift_forces[i]=Lift_mainwing/(int((X_wingbox_end/l_fuselage)*n)-int((X_wingbox_start/l_fuselage)*n))
     
 lift_forces[int((x_cg_hwing/l_fuselage)*n)]=Lift_tail
+lift_forces[int((x_canard/l_fuselage)*n)]=Lift_canard
 
 forces_sum =  [0] *n 
 for i in range(n):
@@ -275,17 +294,8 @@ for i in range(n):
     
         stress_bending_max[i] = M[i]*radius[i]/MOI[i]    
        
-        stress_long_max[i] = (abs(stress_bending_max[i]))* safety_factor
+        stress_long_max[i] = (abs(stress_bending_max[i])-stress_pressure_long[i])* safety_factor
      
-
-
-
-
-
-
-
-
-
 
 
 frame_spacing = 0.5  
@@ -337,28 +347,28 @@ while sigma > sigma_critical:
 
 print t
 
-##########Titanium Ti-6Al-4V aged##########
-delta = 0.0001
-b = 0.5 *t +0.25 *t + delta
-Mom = sigma*A*(b/2)
-bolt_d = D - delta*2
-bolt_rupture = 1020000000
-I_bolt = np.pi/4 * (bolt_d/2)**4
-MS = ((Mom*bolt_d)/(2*I_bolt))/bolt_rupture  -1
-print "MS:", MS
-
-
-#################################Frame spacing################################
-width = 0.0625
-r_frame = max(radius)
-I_frame = np.pi/4 * (r_frame**4 - (r_frame-width)**4)
-######frame: Aluminum 2024-T81########
-#Y_mod = 72 * 10**9
-#v = 0.33
-#frame_yield = 372000000
-#L = abs(min(M))*(r_frame*2)**2/(16000*Y_mod*I_frame)
-#b_skin =  2* np.pi / *r_frame
-#buckling_crit = (0.001/b_skin)**2 * (np.pi**2 * 4 * Y_mod)/(12*(1-v**2)
+###########Titanium Ti-6Al-4V aged##########
+#delta = 0.0001
+#b = 0.5 *t +0.25 *t + delta
+#Mom = sigma*A*(b/2)
+#bolt_d = D - delta*2
+#bolt_rupture = 1020000000
+#I_bolt = np.pi/4 * (bolt_d/2)**4
+#MS = ((Mom*bolt_d)/(2*I_bolt))/bolt_rupture  -1
+#print "MS:", MS
+#
+#
+##################################Frame spacing################################
+#width = 0.0625
+#r_frame = max(radius)
+#I_frame = np.pi/4 * (r_frame**4 - (r_frame-width)**4)
+#######frame: Aluminum 2024-T81########
+##Y_mod = 72 * 10**9
+##v = 0.33
+##frame_yield = 372000000
+##L = abs(min(M))*(r_frame*2)**2/(16000*Y_mod*I_frame)
+##b_skin =  2* np.pi / *r_frame
+##buckling_crit = (0.001/b_skin)**2 * (np.pi**2 * 4 * Y_mod)/(12*(1-v**2)
 
 skin_density = 1540
 stringer_density = 2780
