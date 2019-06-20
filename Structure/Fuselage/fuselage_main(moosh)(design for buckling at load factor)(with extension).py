@@ -146,8 +146,7 @@ Lift_mainwing = Lift_mainwing_wonu * nu
 m = 0     
 for i in range(n):
     m+=weights_sum[i]*x[i]
-m+= (-wing_moment*nu) + Lift_mainwing * x_cg_wing_group
-
+m+= Lift_mainwing * (np.average([X_wingbox_start, X_wingbox_end])) + (-wing_moment*nu)
 
 Lift_tail = (-(m)+x_canard*(sum(weights_sum)+Lift_mainwing))/(x_cg_hwing-x_canard)
 Lift_canard = -sum(weights_sum)- Lift_mainwing - Lift_tail
@@ -236,7 +235,7 @@ Lift_mainwing = Lift_mainwing_wonu * nu
 m = 0     
 for i in range(n):
     m+=weights_sum[i]*x[i]
-m+= Lift_mainwing * x_cg_wing_group + (-wing_moment*nu)
+m+= Lift_mainwing * (np.average([X_wingbox_start, X_wingbox_end])) + (-wing_moment*nu)
 
 
 Lift_tail = (-(m)+x_canard*(sum(weights_sum)+Lift_mainwing))/(x_cg_hwing-x_canard)
