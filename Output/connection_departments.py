@@ -72,19 +72,19 @@ delta_cl_flap1, delta_cl_krueger1, clalpha_flaps1, delta_clmax_flap1, delta_clma
 C_L_w1, CL_alpha_w1, alpha_0_L_w1, CL_max_w1, alpha_CL_max_w1 = config1_Lift.Wing_lift()
 delta_CL_w1, delta_CL_alpha_w1, delta_CL_max_w1, delta_CL_w_TO1, delta_CL_alpha_w_TO1, delta_CL_max_w_TO1 = config1_Lift.Wing_lift_flaps(delta_cl_flap1,CL_alpha_w1,C_l_alpha,(delta_clmax_flap1 + delta_clmax_krueger1),b_slat, delta_cl_flap_TO1, delta_clmax_TO1)
 CL_alpha_h1, CL_alpha_c1, CL_alpha1, alpha_0_L1, CL_max1, de_da1, de_da_c1, alpha_CL_max1 = config1_Lift.Airplane_lift(CL_alpha_w1, alpha_0_L_w1, CL_max_w1, alpha_CL_max_w1)
-delta_CL1, delta_CL_alpha1, delta_CL_max1 = config1_Lift.Airplane_lift_flaps(delta_CL_w1, CL_alpha_h1, CL_alpha_c1, delta_CL_alpha_w1, de_da1, delta_CL_max_w1)
+delta_CL1, delta_CL_alpha1, delta_CL_max1, delta_CL_TO1, delta_CL_alpha_TO1, delta_CL_max_TO1 = config1_Lift.Airplane_lift_flaps(delta_CL_w1, CL_alpha_h1, CL_alpha_c1, delta_CL_alpha_w1, de_da1, delta_CL_max_w1, delta_CL_w_TO1, delta_CL_alpha_w_TO1, delta_CL_max_w_TO1)
 
 delta_cl_flap2, delta_cl_krueger2, clalpha_flaps2, delta_clmax_flap2, delta_clmax_krueger2, delta_cl_flap_TO2, delta_clmax_TO2, clalpha_TO2 = config2_Lift.Airfoil_lift_flaps()
 C_L_w2, CL_alpha_w2, alpha_0_L_w2, CL_max_w2, alpha_CL_max_w2 = config2_Lift.Wing_lift()
 delta_CL_w2, delta_CL_alpha_w2, delta_CL_max_w2, delta_CL_w_TO2, delta_CL_alpha_w_TO2, delta_CL_max_w_TO2 = config2_Lift.Wing_lift_flaps(delta_cl_flap2,CL_alpha_w2,C_l_alpha,(delta_clmax_flap2 + delta_clmax_krueger2),b_slat, delta_cl_flap_TO2, delta_clmax_TO2)
 CL_alpha_h2, CL_alpha_c2, CL_alpha2, alpha_0_L2, CL_max2, de_da2, de_da_c2, alpha_CL_max2 = config2_Lift.Airplane_lift(CL_alpha_w2, alpha_0_L_w2, CL_max_w2, alpha_CL_max_w2)
-delta_CL2, delta_CL_alpha2, delta_CL_max2 = config2_Lift.Airplane_lift_flaps(delta_CL_w2, CL_alpha_h2, CL_alpha_c2, delta_CL_alpha_w2, de_da2, delta_CL_max_w2)
+delta_CL2, delta_CL_alpha2, delta_CL_max2, delta_CL_TO2, delta_CL_alpha_TO2, delta_CL_max_TO2 = config2_Lift.Airplane_lift_flaps(delta_CL_w2, CL_alpha_h2, CL_alpha_c2, delta_CL_alpha_w2, de_da2, delta_CL_max_w2, delta_CL_w_TO2, delta_CL_alpha_w_TO2, delta_CL_max_w_TO2)
 
 delta_cl_flap3, delta_cl_krueger3, clalpha_flaps3, delta_clmax_flap3, delta_clmax_krueger3, delta_cl_flap_TO3, delta_clmax_TO3, clalpha_TO3 = config3_Lift.Airfoil_lift_flaps()
 C_L_w3, CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3  = config3_Lift.Wing_lift()
 delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3, delta_CL_w_TO3, delta_CL_alpha_w_TO3, delta_CL_max_w_TO3 = config3_Lift.Wing_lift_flaps(delta_cl_flap3,CL_alpha_w3,C_l_alpha,(delta_clmax_flap3 + delta_clmax_krueger3),b_slat, delta_cl_flap_TO3, delta_clmax_TO3)
 CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alpha_CL_max3 = config3_Lift.Airplane_lift(CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3)
-delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
+delta_CL3, delta_CL_alpha3, delta_CL_max3, delta_CL_TO3, delta_CL_alpha_TO3, delta_CL_max_TO3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3, delta_CL_w_TO3, delta_CL_alpha_w_TO3, delta_CL_max_w_TO3)
 
 
 

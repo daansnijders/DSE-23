@@ -184,13 +184,21 @@ class empennage:
         def get_lambda_2_rad(lambda_4_rad,A,taper_ratio):
             return np.arctan(np.tan(lambda_4_rad)-1/A*(1-taper_ratio)/(1+taper_ratio))
         
+        def get_MAC(Cr, taper_ratio):
+            return Cr * 2/3 * (1+taper_ratio + taper_ratio**2) / (1 + taper_ratio)
+        
+        def get_y_MAC(b, Cr, MAC, Ct):
+            return b/2 * (Cr - MAC) / (Cr - Ct)
+        
         self.x_h = get_x_h(l_f)                                                 # [m] x-location of the htail ac
         self.b_h = get_b(self.S_h, self.A_h)                                    # [m] span horizontal tail
         self.Cr_h = get_Cr(self.S_h, self.taper_ratio_h, self.b_h)              # [m] root chord length horizontal tail
         self.Ct_h = get_Ct(self.Cr_h, self.taper_ratio_h)                       # [m] tip chord length horizontal tail
         self.z_h = 0.75 * d_f_outer                                             # [m] height of the vertical tail
         self.l_h = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
-   
+        self.MAC_h = get_MAC(self.Cr_h, self.taper_ratio_h)                     # [m] MAC length of the horizontal tail
+        self.y_MAC_h = get_y_MAC(self.b_h, self.Cr_h, self.MAC_h, self.Ct_h)    # [m] distance of MAC horizontal tail from centre line
+        
         self.lambda_h_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_h_le_rad,self.Cr_h,self.b_h,self.taper_ratio_h) # [rad] quarter chord sweep angle
         self.lambda_h_2_rad = get_lambda_2_rad(self.lambda_h_4_rad,self.A_h,self.taper_ratio_h) # [rad] half chord sweep angle
 

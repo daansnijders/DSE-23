@@ -64,8 +64,8 @@ class greenhousegas_emissions(object):
     def get_NOx_mass(self):
         self.fuel_flow_list=[self.performance.fuel_flow_take_off, self.performance.fuel_flow_climb, self.performance.fuel_flow_cruise_breguet,self.performance.fuel_flow_descent, self.performance.fuel_flow_landing] #self.performance.fuel_flow_descent
         self.M_fuel_list=[self.performance.fuel_mass_take_off,self.performance.fuel_mass_climb,self.performance.fuel_mass_cruise_breguet,self.performance.fuel_mass_descent, self.performance.fuel_mass_landing] #self.performance.fuel_mass_take_off
-        self.EI_NOx= 29.171*self.performance.fuel_flow_nox
-        self.M_NOx=self.EI_NOx*self.performance.fuel_mass_nox 
+        self.EI_NOx= 29.171*self.performance.fuel_flow_nox/2
+        self.M_NOx=self.EI_NOx*self.performance.fuel_mass_nox /2
         return self.M_NOx
 
 
