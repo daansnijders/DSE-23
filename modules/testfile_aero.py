@@ -11,6 +11,7 @@ import inputs.constants as const
 import inputs.performance_inputs as perf
 import inputs.concept_1 as conc1
 import modules.Aerodynamics as aero
+import Output.connection_departments as connect
 
 """ Yet unknown values needed to start the simulation """
 D_nlg = 0.5
@@ -147,7 +148,7 @@ delta_CL3, delta_CL_alpha3, delta_CL_max3, delta_CL_TO3, delta_CL_alpha_TO3, del
 #print(CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3)
 
 
-plot = config1_Lift.CL_alpha_plot(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1)
+plot = config1_Lift.CL_alpha_plot(connect.CL_alpha1, connect.alpha_0_L1, connect.CL_max1, connect.alpha_CL_max1, connect.delta_CL1, connect.delta_CL_alpha1, connect.delta_CL_max1)
 
 
 """ Moment classII estimations """
