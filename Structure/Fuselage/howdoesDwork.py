@@ -8,7 +8,7 @@ Created on Thu Jun  6 13:40:26 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-D = np.linspace(0,0.2, 1000)
+D = np.linspace(0.01,0.2, 1000)
 sigma = 350616614.36523831
 delta = 0.0001
 t = 0.0049
