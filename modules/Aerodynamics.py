@@ -611,25 +611,26 @@ class Lift:
         Phi_TE_upper = np.arctan(10*0.03)
         df1_land = 35       #deg
         df2_land = 15       #deg
-        df1_TO   = 20       #deg
-        df2_TO   = 0        #deg
-        eta1 = 0.46         #Figure 8.20
-        eta2 = 0.38         #Figure 8.20
+        eta1_LA = 0.67      #Figure 8.20
+        eta2_LA = 0.52      #Figure 8.20
         etat = 1.0          #Figure 8.22
         cldf1 = 0.0605      #Figure 8.21
         cldf2 = 0.054       #Figure 8.21
         cldf1_TO = 0.0605   #Figure 8.21    LOOK UP
         cldf2_TO = 0.054    #Figure 8.21    LOOK UP
+        alpha_delta_TO = 0.55     #Figure 8.17
+        
         
         #Wild guess for chord extension due to flaps
         c_a_prime = 1.13        #1.13*c
         c_prime = 1.20          #1.20*c
-        c_a_prime_TO = 1.10     #1.08*c
-        c_prime_TO = 1.20       #1.15*c
-
-        delta_cl_flap    = eta1 * cldf1    * df1_land * c_a_prime    + eta2 * etat * cldf2    * df2_land * (1 + (c_prime    - c_a_prime))
-        delta_cl_flap_TO = eta1 * cldf1_TO * df1_TO   * c_a_prime_TO + eta2 * etat * cldf2_TO * df2_TO   * (1 + (c_prime_TO - c_a_prime_TO))
+        c_f = 0.35
+        delta_TO   = np.deg2rad(20)
+        c_prime_TO   = 1 + np.cos(delta_TO)*c_f
         
+        delta_cl_flap    = eta1_LA * cldf1    * df1_land * c_a_prime    + eta2_LA * etat * cldf2    * df2_land * (1 + (c_prime    - c_a_prime))
+        delta_cl_flap_TO   = self.C_l_alpha * alpha_delta_TO   * c_prime_TO   * delta_TO
+
         #Lift increase due to Krueger flaps
         cld = 0.0015    #Figure 8.26
         df = 10         #Wild guess
@@ -785,7 +786,7 @@ class Lift:
         return(CL_alpha_h, CL_alpha_c, CL_alpha, np.rad2deg(alpha_0_L), CL_max, de_da, de_da_c, alpha_CL_max)
 
     def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c, delta_CL_alpha_w, de_da, delta_CL_max_w, delta_CL_w_TO, delta_CL_alpha_w_TO, delta_CL_max_w_TO): 
-        Kcw = 0.95
+        Kcw = 0.95      #Wim said maybe sensitivity analysis
         etah = 0.9      #Source internet
         etac = 1.0
         delta_ef = np.deg2rad((18.5*delta_CL_w*self.b)/(self.A*2*self.b_flap))

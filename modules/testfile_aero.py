@@ -161,9 +161,9 @@ cm_des_airfoil1, dcm_dcl_airfoil1 = config1_Moment.Airfoil_moment()
 delta_cm_flap1, delta_cm_krueger1 = config1_Moment.Airfoil_moment_flaps(cm_des_airfoil1)
 Cm0_w_sub1, Cm0_w_trans1, dCm_dCl_w1 = config1_Moment.Wing_moment()
 delta_Cm_w_flaps1, delta_Cm_w_krueger1 = config1_Moment.Wing_moment_flaps(Cm0_w_sub1)
-print(cm_des_airfoil1, dcm_dcl_airfoil1)
+#print(cm_des_airfoil1, dcm_dcl_airfoil1)
 #print(delta_cm_flap1, delta_cm_krueger1)
-print(Cm0_w_sub1, Cm0_w_trans1, dCm_dCl_w1)
+#print(Cm0_w_sub1, Cm0_w_trans1, dCm_dCl_w1)
 #print(delta_Cm_w_flaps1, delta_Cm_w_krueger1)
 
 
