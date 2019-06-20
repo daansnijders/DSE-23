@@ -271,7 +271,7 @@ class Performance:
             return fuel_mass_cruise_breguet, fuel_flow_cruise_breguet, mass_leftover
 
         def git_discint(mass_leftover):
-            fuel_flow_descent = get_fuel_consumption(self.thrust_setting_descent * self.thrust_max, 1, 1)[0]
+            fuel_flow_descent = 2* get_fuel_consumption(self.thrust_setting_descent * self.thrust_max, 1, 1)[0]
             fuel_mass_descent, distance_descent, fuel_mass_nox_descent = get_descent(self.altitude_cruise, self.cruise_velocity,
                                                               self.approach_velocity, engines_operative,
                                                               self.thrust_setting_descent * self.thrust_max,
