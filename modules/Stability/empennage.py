@@ -211,7 +211,7 @@ class empennage:
         self.V_v = 0.1                                                          # [-] volume vertical tail
         self.A_v = 1.5                                                          # [-] aspect ratio vertical tail
         self.taper_ratio_v = 0.375                                              # [-] taper ratio vertical tail
-        self.lambda_v_le_rad = np.deg2rad(40)                                   # [rad] leading edge sweep angle vertical tail
+        self.lambda_v_le_rad = np.deg2rad(56)                                   # [rad] leading edge sweep angle vertical tail
         self.t_c_v = 0.12                                                       # [-] tickness over chord ratio vertical tail
         self.x_v = self.x_h
         
