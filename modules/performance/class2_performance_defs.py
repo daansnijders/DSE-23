@@ -2,6 +2,7 @@ import numpy as np
 from Structure.Wing.isa import isa
 import matplotlib.pyplot as plt
 
+
 def get_climb_gradient(thrust, drag, mass, g):
     y = (thrust - drag) / mass / g
     return y
@@ -331,6 +332,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
             y_loc_list.append(y_loc)
 
     # filtering out points below cruise altitude
+    H_e_max = H_m + V_cruise**2/2/g
     below_cruise_altitude = [item <= H_m for item in y_loc_list]
     h_optimal = [d for (d, remove) in zip(y_loc_list, below_cruise_altitude) if remove]
     V_optimal = [d for (d, remove) in zip(x_loc_list, below_cruise_altitude) if remove]
@@ -343,6 +345,7 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     # V_optimal.append(np.real((fn_roots[np.isreal(fn_roots)])[0]))
     # z_optimal.append(get_rate_of_climb(engines_operative, thrust_max, take_off_velocity**2/2/g, np.sqrt(V_optimal[-1]*2*g), S, CD[i], mass[i], g))
 
+    h_nox = 3000 * 0.3048
 
     h_optimal = list(np.flip(h_optimal, 0))
     V_optimal = list(np.flip(V_optimal, 0))
@@ -358,11 +361,15 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
     climb_time = 0
     distance = 0
     fuel_mass_climb = 0
+    fuel_mass_3000 = 0
     for a in range(1, len(h_optimal)):
         time_add = ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))/((z_optimal[a]+z_optimal[a-1])/2)
         climb_time += time_add
         distance += ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))/np.tan(np.arcsin(((z_optimal[a]+z_optimal[a-1])/2)/((V_optimal[a]+V_optimal[a-1])/2)))
-        fuel_mass_climb += ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))*(engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0])/((z_optimal[a]+z_optimal[a-1])/2)
+        fuel_add = ((h_optimal[a]+V_optimal[a]**2/2/g)-(h_optimal[a-1]+V_optimal[a-1]**2/2/g))*(engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0])/((z_optimal[a]+z_optimal[a-1])/2)
+        fuel_mass_climb += fuel_add
+        if h_optimal[a] < h_nox:
+            fuel_mass_3000 += fuel_add
     # plt.scatter(x_loc_list, y_loc_list)
     plt.scatter(V_optimal, h_optimal)
     # polyfit_x = np.linspace(500, 2000, 1000)
@@ -375,17 +382,20 @@ def get_climb_optimization(mass_climb_initial, thrust_max, CD_climb, S, g, H_m, 
 
     fuel_flow_climb = engines_operative*get_fuel_consumption(climb_thrust, 1, 1)[0]
     climb_final_velocity = V_optimal[-1]
-
-    return fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance
+    fuel_flow_nox = fuel_flow_climb
+    return fuel_flow_climb, fuel_mass_climb, climb_final_velocity, distance, fuel_mass_3000, fuel_flow_nox
 
 
 def get_descent(max_altitude, cruise_velocity, approach_velocity, engines_operative, thrust_descent, S, drag_coefficient, mass, g):
     fuel_flow_descent = get_fuel_consumption(thrust_descent, 1, 1)[0]
 
-    pieces = 50
+    h_nox = 3000 * 0.3048
+    pieces = 1000
     descent_time = 0
     descent_distance = 0
+    descent_time_nox = 0
     fuel_mass_descent = 0
+    fuel_mass_nox = 0
     ROC_list = []
     altitude_list = np.linspace(max_altitude, 1, pieces)
     velocity_list = np.linspace(cruise_velocity, approach_velocity, pieces)
@@ -397,9 +407,12 @@ def get_descent(max_altitude, cruise_velocity, approach_velocity, engines_operat
     for a in range(1, len(altitude_list)):
         if ROC_list[a] < 0:
             time_add = ((altitude_list[a]+velocity_list[a]**2/2/g)-(altitude_list[a-1]+velocity_list[a-1]**2/2/g))/((ROC_list[a]+ROC_list[a-1])/2)
+            if altitude_list[a] < h_nox:
+                descent_time_nox += time_add
             descent_time += time_add
             descent_distance += ((altitude_list[a]+velocity_list[a]**2/2/g)-(altitude_list[a-1]+velocity_list[a-1]**2/2/g))/np.tan(np.arcsin(((ROC_list[a]+ROC_list[a-1])/2)/((velocity_list[a]+velocity_list[a-1])/2)))
         else:
             break
         fuel_mass_descent = descent_time * (engines_operative*fuel_flow_descent)
-    return fuel_mass_descent, descent_distance
+        fuel_mass_nox = descent_time_nox * (engines_operative * fuel_flow_descent)
+    return fuel_mass_descent, descent_distance, fuel_mass_nox

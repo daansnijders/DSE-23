@@ -15,6 +15,14 @@ import modules.sustainability.noise_defs as noise
 import modules.initialsizing_loading as loadingdiagram
 import modules.performance.class2_performance as class2performance
 from Structure.Wing.wing_canard_iteration import wing_struc_analysis
+import modules.initialsizing_undercarriage as initialunderc
+
+'Iteration values'
+import Output.read_load_variables as variab
+
+print('check')
+
+
 
 """
 AERODYNAMICS
@@ -29,8 +37,10 @@ wing_twist = -3         #Wing twist in DEG
 S_elev = 9.987716166863338
 Delta_C_L_flap = 2.4 - 1.5          #Cl_land - Cl_clean from performanca_input
 
+print('check')
 'HLD'
-config1_HLD = aero.HLD_class(perf.Cl_land,perf.Cl_clean,conc1.S,conc1.A,conc1.lambda_4_rad,conc1.taper_ratio,conc1.CL_alpha,conc1.lambda_le_rad,conc1.Cr,conc1.d_f_outer)
+#config1_HLD = aero.HLD_class(perf.Cl_land,perf.Cl_clean,conc1.S,conc1.A,conc1.lambda_4_rad,conc1.taper_ratio,conc1.CL_alpha,conc1.lambda_le_rad,conc1.Cr,conc1.d_f_outer)
+config1_HLD = aero.HLD_class(variab.CL_land,variab.CL_clean_max,conc1.S,conc1.A,conc1.lambda_4_rad,conc1.taper_ratio,conc1.CL_alpha,conc1.lambda_le_rad,conc1.Cr,conc1.d_f_outer)
 SWF, b_flap, SWF_LE, b_slat = config1_HLD.HLD()
 
 
@@ -45,43 +55,48 @@ C_l_alpha_M75 = C_l_alpha / math.sqrt(1 - const.M_cruise**2)
 
 
 #Set up different configurations
-config1_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, conc1.A_h, conc1.A_c,conc1.lambda_h_2_rad[0], conc1.lambda_c_2_rad, i_c, conc1.S_h[0], conc1.S_c[0], i_h, conc1.x_le_MAC[0], b_flap, SWF)
-config2_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,const.M_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, conc1.A_h, conc1.A_c,conc1.lambda_h_2_rad[1], conc1.lambda_c_2_rad, i_c, conc1.S_h[1], conc1.S_c[1], i_h, conc1.x_le_MAC[1], b_flap, SWF)
-config3_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, conc1.A_h, conc1.A_c,conc1.lambda_h_2_rad[2], conc1.lambda_c_2_rad, i_c, conc1.S_h[2], conc1.S_c[2], i_h, conc1.x_le_MAC[2], b_flap, SWF)
+#config1_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, conc1.A_h, conc1.A_c,conc1.lambda_h_2_rad[0], conc1.lambda_c_2_rad, i_c, conc1.S_h[0], conc1.S_c[0], i_h, conc1.x_le_MAC[0], b_flap, SWF)
+#config2_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,const.M_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, conc1.A_h, conc1.A_c,conc1.lambda_h_2_rad[1], conc1.lambda_c_2_rad, i_c, conc1.S_h[1], conc1.S_c[1], i_h, conc1.x_le_MAC[1], b_flap, SWF)
+#config3_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, conc1.A_h, conc1.A_c,conc1.lambda_h_2_rad[2], conc1.lambda_c_2_rad, i_c, conc1.S_h[2], conc1.S_c[2], i_h, conc1.x_le_MAC[2], b_flap, SWF)
+
+
+config1_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, variab.A_h, 0,variab.lambda_h_2_rad, 0.0, i_c, variab.S_h, 0., i_h, variab.x_le_MAC[0], b_flap, SWF)
+config2_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,const.M_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, variab.A_h, variab.A_c2,variab.lambda_h_2_rad, variab.lambda_c_2_rad2, i_c, variab.S_h, variab.S_c2, i_h, variab.x_le_MAC[1], b_flap, SWF)
+config3_Lift = aero.Lift(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad,alpha_0_l,C_l_alpha,alpha_C_l_max,C_l_max,alpha_star_l,i_w,wing_twist, variab.A_h, variab.A_c3,variab.lambda_h_2_rad, variab.lambda_c_2_rad3, i_c, variab.S_h, variab.S_c3, i_h, variab.x_le_MAC[2], b_flap, SWF)
+
+
+
 
 #Lift outputs
-delta_cl_flap1, delta_cl_krueger1, clalpha_flaps1, delta_clmax_flap1, delta_clmax_krueger1 = config1_Lift.Airfoil_lift_flaps()
+delta_cl_flap1, delta_cl_krueger1, clalpha_flaps1, delta_clmax_flap1, delta_clmax_krueger1, delta_cl_flap_TO1, delta_clmax_TO1, clalpha_TO1 = config1_Lift.Airfoil_lift_flaps()
 C_L_w1, CL_alpha_w1, alpha_0_L_w1, CL_max_w1, alpha_CL_max_w1 = config1_Lift.Wing_lift()
-delta_CL_w1, delta_CL_alpha_w1, delta_CL_max_w1 = config1_Lift.Wing_lift_flaps(delta_cl_flap1,CL_alpha_w1,C_l_alpha,(delta_clmax_flap1 + delta_clmax_krueger1),b_slat)
+delta_CL_w1, delta_CL_alpha_w1, delta_CL_max_w1, delta_CL_w_TO1, delta_CL_alpha_w_TO1, delta_CL_max_w_TO1 = config1_Lift.Wing_lift_flaps(delta_cl_flap1,CL_alpha_w1,C_l_alpha,(delta_clmax_flap1 + delta_clmax_krueger1),b_slat, delta_cl_flap_TO1, delta_clmax_TO1)
 CL_alpha_h1, CL_alpha_c1, CL_alpha1, alpha_0_L1, CL_max1, de_da1, de_da_c1, alpha_CL_max1 = config1_Lift.Airplane_lift(CL_alpha_w1, alpha_0_L_w1, CL_max_w1, alpha_CL_max_w1)
-delta_CL1, delta_CL_alpha1, delta_CL_max1 = config1_Lift.Airplane_lift_flaps(delta_CL_w1, CL_alpha_h1, CL_alpha_c1, delta_CL_alpha_w1, de_da1, delta_CL_max_w1)
+delta_CL1, delta_CL_alpha1, delta_CL_max1, delta_CL_TO1, delta_CL_alpha_TO1, delta_CL_max_TO1 = config1_Lift.Airplane_lift_flaps(delta_CL_w1, CL_alpha_h1, CL_alpha_c1, delta_CL_alpha_w1, de_da1, delta_CL_max_w1, delta_CL_w_TO1, delta_CL_alpha_w_TO1, delta_CL_max_w_TO1)
 
-delta_cl_flap2, delta_cl_krueger2, clalpha_flaps2, delta_clmax_flap2, delta_clmax_krueger2 = config2_Lift.Airfoil_lift_flaps()
+delta_cl_flap2, delta_cl_krueger2, clalpha_flaps2, delta_clmax_flap2, delta_clmax_krueger2, delta_cl_flap_TO2, delta_clmax_TO2, clalpha_TO2 = config2_Lift.Airfoil_lift_flaps()
 C_L_w2, CL_alpha_w2, alpha_0_L_w2, CL_max_w2, alpha_CL_max_w2 = config2_Lift.Wing_lift()
-delta_CL_w2, delta_CL_alpha_w2, delta_CL_max_w2 = config2_Lift.Wing_lift_flaps(delta_cl_flap2,CL_alpha_w2,C_l_alpha,(delta_clmax_flap2 + delta_clmax_krueger2),b_slat)
+delta_CL_w2, delta_CL_alpha_w2, delta_CL_max_w2, delta_CL_w_TO2, delta_CL_alpha_w_TO2, delta_CL_max_w_TO2 = config2_Lift.Wing_lift_flaps(delta_cl_flap2,CL_alpha_w2,C_l_alpha,(delta_clmax_flap2 + delta_clmax_krueger2),b_slat, delta_cl_flap_TO2, delta_clmax_TO2)
 CL_alpha_h2, CL_alpha_c2, CL_alpha2, alpha_0_L2, CL_max2, de_da2, de_da_c2, alpha_CL_max2 = config2_Lift.Airplane_lift(CL_alpha_w2, alpha_0_L_w2, CL_max_w2, alpha_CL_max_w2)
-delta_CL2, delta_CL_alpha2, delta_CL_max2 = config2_Lift.Airplane_lift_flaps(delta_CL_w2, CL_alpha_h2, CL_alpha_c2, delta_CL_alpha_w2, de_da2, delta_CL_max_w2)
+delta_CL2, delta_CL_alpha2, delta_CL_max2, delta_CL_TO2, delta_CL_alpha_TO2, delta_CL_max_TO2 = config2_Lift.Airplane_lift_flaps(delta_CL_w2, CL_alpha_h2, CL_alpha_c2, delta_CL_alpha_w2, de_da2, delta_CL_max_w2, delta_CL_w_TO2, delta_CL_alpha_w_TO2, delta_CL_max_w_TO2)
 
-delta_cl_flap3, delta_cl_krueger3, clalpha_flaps3, delta_clmax_flap3, delta_clmax_krueger3 = config3_Lift.Airfoil_lift_flaps()
+delta_cl_flap3, delta_cl_krueger3, clalpha_flaps3, delta_clmax_flap3, delta_clmax_krueger3, delta_cl_flap_TO3, delta_clmax_TO3, clalpha_TO3 = config3_Lift.Airfoil_lift_flaps()
 C_L_w3, CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3  = config3_Lift.Wing_lift()
-delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3 = config3_Lift.Wing_lift_flaps(delta_cl_flap3,CL_alpha_w3,C_l_alpha,(delta_clmax_flap3 + delta_clmax_krueger3),b_slat)
+delta_CL_w3, delta_CL_alpha_w3, delta_CL_max_w3, delta_CL_w_TO3, delta_CL_alpha_w_TO3, delta_CL_max_w_TO3 = config3_Lift.Wing_lift_flaps(delta_cl_flap3,CL_alpha_w3,C_l_alpha,(delta_clmax_flap3 + delta_clmax_krueger3),b_slat, delta_cl_flap_TO3, delta_clmax_TO3)
 CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3, de_da3, de_da_c3, alpha_CL_max3 = config3_Lift.Airplane_lift(CL_alpha_w3, alpha_0_L_w3, CL_max_w3, alpha_CL_max_w3)
-delta_CL3, delta_CL_alpha3, delta_CL_max3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3)
+delta_CL3, delta_CL_alpha3, delta_CL_max3, delta_CL_TO3, delta_CL_alpha_TO3, delta_CL_max_TO3 = config3_Lift.Airplane_lift_flaps(delta_CL_w3, CL_alpha_h3, CL_alpha_c3, delta_CL_alpha_w3, de_da3, delta_CL_max_w3, delta_CL_w_TO3, delta_CL_alpha_w_TO3, delta_CL_max_w_TO3)
 
 
-CL_TO= 2.215
-CL_cruise1=conc1.CLdes[0]
-CL_cruise2=conc1.CLdes[1]
-CL_cruise3=conc1.CLdes[2]
-CL_land= 2.66
 
 
 
 'Drag'
 #Values that must come from other departments
 
-D_strutt_nlg = conc1.D_strut_mlg                                                #UPDATE
-D_strutt_mlg = conc1.D_strut_nlg                                                #UPDATE
+#D_strutt_nlg = conc1.D_strut_mlg                                                #UPDATE
+#D_strutt_mlg = conc1.D_strut_nlg                                                #UPDATE
+D_strutt_nlg = variab.D_strut_mlg                                                #UPDATE
+D_strutt_mlg = variab.D_strut_nlg                                                #UPDATE
 l_fueltank = 1.5                                                                #UPDATE
 d_fueltank = 0.3                                                                #UPDATE
 
@@ -91,9 +106,13 @@ delta_C_L_h = 0                 #When i_h = 0
 delta_C_L_c = 0                 #When i_c = 0
 
 #Set up different configurations
-config1_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[0],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[0], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[0], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[0], conc1.lambda_v_2_rad[0], conc1.MAC_c[0], conc1.Cr_v[0], conc1.Ct_v[0], conc1.Cr_h[0], conc1.Ct_h[0], conc1.S_h[0], conc1.S_v[0], conc1.S_c[0], CL_alpha_h1, de_da1, i_h, alpha_0_L1, conc1.A_h, CL_alpha_c1, de_da_c1, i_c, alpha_0_L1, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
-config2_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[1],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[1], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[1], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[1], conc1.lambda_v_2_rad[1], conc1.MAC_c[1], conc1.Cr_v[1], conc1.Ct_v[1], conc1.Cr_h[1], conc1.Ct_h[1], conc1.S_h[1], conc1.S_v[1], conc1.S_c[1], CL_alpha_h2, de_da2, i_h, alpha_0_L2, conc1.A_h, CL_alpha_c2, de_da_c2, i_c, alpha_0_L2, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
-config3_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[2],const.V_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[2],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[2], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[2], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[2], conc1.lambda_v_2_rad[2], conc1.MAC_c[2], conc1.Cr_v[2], conc1.Ct_v[2], conc1.Cr_h[2], conc1.Ct_h[2], conc1.S_h[2], conc1.S_v[2], conc1.S_c[2], CL_alpha_h3, de_da3, i_h, alpha_0_L3, conc1.A_h, CL_alpha_c3, de_da_c3, i_c, alpha_0_L3, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+#config1_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[0],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[0], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[0], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[0], conc1.lambda_v_2_rad[0], conc1.MAC_c[0], conc1.Cr_v[0], conc1.Ct_v[0], conc1.Cr_h[0], conc1.Ct_h[0], conc1.S_h[0], conc1.S_v[0], conc1.S_c[0], CL_alpha_h1, de_da1, i_h, alpha_0_L1, conc1.A_h, CL_alpha_c1, de_da_c1, i_c, alpha_0_L1, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+#config2_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[1],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[1], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[1], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[1], conc1.lambda_v_2_rad[1], conc1.MAC_c[1], conc1.Cr_v[1], conc1.Ct_v[1], conc1.Cr_h[1], conc1.Ct_h[1], conc1.S_h[1], conc1.S_v[1], conc1.S_c[1], CL_alpha_h2, de_da2, i_h, alpha_0_L2, conc1.A_h, CL_alpha_c2, de_da_c2, i_c, alpha_0_L2, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+#config3_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[2],const.V_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[2],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[2], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[2], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[2], conc1.lambda_v_2_rad[2], conc1.MAC_c[2], conc1.Cr_v[2], conc1.Ct_v[2], conc1.Cr_h[2], conc1.Ct_h[2], conc1.S_h[2], conc1.S_v[2], conc1.S_c[2], CL_alpha_h3, de_da3, i_h, alpha_0_L3, conc1.A_h, CL_alpha_c3, de_da_c3, i_c, alpha_0_L3, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+
+config1_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[0],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[0], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,variab.x_nlg, variab.z_nlg, const.D_nlg, const.w_nlg, variab.D_strut_nlg, variab.x_mlg[0], variab.z_mlg, const.D_mlg, const.w_mlg, variab.D_strut_mlg, variab.lambda_h_2_rad, variab.lambda_v_2_rad, 0.0, variab.Cr_v, variab.Ct_v, variab.Cr_h, variab.Ct_h, variab.S_h, variab.S_v, 0., CL_alpha_h1, de_da1, i_h, alpha_0_L1, variab.A_h, CL_alpha_c1, de_da_c1, i_c, alpha_0_L1, 0, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+config2_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[1],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[1], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,variab.x_nlg, variab.z_nlg, const.D_nlg, const.w_nlg, variab.D_strut_nlg, variab.x_mlg[1], variab.z_mlg, const.D_mlg, const.w_mlg, variab.D_strut_mlg, variab.lambda_h_2_rad, variab.lambda_v_2_rad, variab.MAC_c2, variab.Cr_v, variab.Ct_v,variab.Cr_h, variab.Ct_h, variab.S_h, variab.S_v, variab.S_c2, CL_alpha_h2, de_da2, i_h, alpha_0_L2, variab.A_h, CL_alpha_c2, de_da_c2, i_c, alpha_0_L2, variab.A_c2, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
+config3_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[2],const.V_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[2],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[2], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,variab.x_nlg, variab.z_nlg, const.D_nlg, const.w_nlg, variab.D_strut_nlg, variab.x_mlg[2], variab.z_mlg, const.D_mlg, const.w_mlg, variab.D_strut_mlg, variab.lambda_h_2_rad, variab.lambda_v_2_rad, variab.MAC_c3, variab.Cr_v, variab.Ct_v, variab.Cr_h, variab.Ct_h, variab.S_h, variab.S_v, variab.S_c3, CL_alpha_h3, de_da3, i_h, alpha_0_L3, variab.A_h, CL_alpha_c3, de_da_c3, i_c, alpha_0_L3, variab.A_c3, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
 
 #Drag outputs
 CD_w_sub1, CD_w_trans1, CD0_w1 = config1_Drag.wing_drag()
@@ -154,6 +173,9 @@ config1_Moment = aero.Moment(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],
 config2_Moment = aero.Moment(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad, conc1.t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger1, x_ref, cl_des_airfoil, wing_twist, conc1.y_MAC, C_L_w1, delta_CL_w1, SWF_LE, b_slat, const.l_cockpit, conc1.l_cabin[1], conc1.l_tail)
 config3_Moment = aero.Moment(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,const.M_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.lambda_4_rad,conc1.lambda_2_rad, conc1.t_c, C_l_alpha, alpha_0_l, alpha_star_l,delta_cl_flap1,delta_cl_krueger1, x_ref, cl_des_airfoil, wing_twist, conc1.y_MAC, C_L_w1, delta_CL_w1, SWF_LE, b_slat, const.l_cockpit, conc1.l_cabin[1], conc1.l_tail)
 
+
+
+
 cm_des_airfoil1, dcm_dcl_airfoil1 = config1_Moment.Airfoil_moment()
 delta_cm_flap1, delta_cm_krueger1 = config1_Moment.Airfoil_moment_flaps(cm_des_airfoil1)
 Cm0_w_sub1, Cm0_w_trans1, dCm_dCl_w1 = config1_Moment.Wing_moment()
@@ -170,7 +192,17 @@ Cm0_w_sub3, Cm0_w_trans3, dCm_dCl_w3 = config3_Moment.Wing_moment()
 delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_sub3)
 
 
+CL_clean_max, C_L_flaps_unoptimized = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.75)
+CL_unoptiized, CL_flaps_max = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.5)
 print('AERO DONE')
+
+
+CL_TO= (C_L_flaps_unoptimized+CL_clean_max)/2 # at an angle of 9.75 deg
+CL_cruise1=conc1.CLdes[0]
+
+CL_cruise2=conc1.CLdes[1]
+CL_cruise3=conc1.CLdes[2]
+CL_land= CL_flaps_max # at an angle of 9.5 deg
 
 
 """
@@ -183,7 +215,7 @@ mass_resolution = 20  # resolution of plotting mass vs take-off field length
 
 'general inputs'
 engine_failure = False
-show_performance_plots = False
+show_performance_plots = True
 show_airport_plots = False
 show_rate_of_climb_plots = False
 
@@ -212,7 +244,7 @@ config1_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise1, 
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[0], lift_over_drag1, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots, 1)
 
 
 print('check between conc')
@@ -225,7 +257,7 @@ config2_Performance =class2performance.Performance(CL_TO, CL_land, CL_cruise2, C
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[1], lift_over_drag2, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots, 2)
 
 config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, CD0_3, CD_TO3, CD_land3, CD_cruise3, conc1.S, conc1.OEW[2],
                                   conc1.MTOW[2], const.g, perf.screen_height_to, perf.screen_height_la, perf.thrust_max,
@@ -235,7 +267,7 @@ config3_Performance = class2performance.Performance(CL_TO, CL_land, CL_cruise3, 
                                   max_airport_altitude, altitude_resolution, mass_resolution, perf.thrust_setting_climb,
                                   const.H_m, const.V_cruise, conc1.R[2], lift_over_drag3, aspect_ratio,
                                   oswald_efficiency_number, perf.correction_factor_to, show_performance_plots,
-                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots)
+                                  show_airport_plots, perf.thrust_setting_descent, show_rate_of_climb_plots, 3)
 
 'needed in further programs of iteration'
 'fuel fractions'
@@ -261,8 +293,9 @@ print('P&P DONE')
 """
 CONTROL AND STABILITY
 """
-
-from inputs.concept_1 import x_le_MAC, MAC, l_h, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
+from Output.read_load_variables import x_le_MAC,l_h, x_mlg, l_n, l_m
+from inputs.concept_1 import  MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f,l_cutout
+#from inputs.concept_1 import x_le_MAC,l_h, MAC, S, y_MAC, lambda_2_rad, Cr, Ct, b, l_f, x_mlg, l_cutout, l_n, l_m
 import modules.initialsizing_planform as initialplanform
 
 from modules.Stability.cg_weight_loadingdiagram import cg1_pass, cg2_pass, cg1_fuel, cg2_fuel, weight_fuel
@@ -271,15 +304,15 @@ from modules.Stability.check_ground import update_x_mlg, update_z_mlg, update_y_
 from modules.Stability.cg_weight_loadingdiagram import  weight_pass, x_cg_min_flight1, x_cg_max_flight1, x_cg_max_flight2, x_cg_max_flight3
 from modules.Stability.empennage import empennage
 #from modules.testfile_aero import CL_alpha_h1, CL_alpha_w1, de_da, CL_max_w1, CL_alpha_c2, alpha_0_l
-from modules.main_class2 import config1_cg, config2_cg, config3_cg
+#from Output.class2_integration import config1_cg, config2_cg, config3_cg
+from Output.class2_integration import config1_cg, config2_cg, config3_cg
 
-
-
+'DELETE CONC1 BEFORE X LE MAC'
 """NEED FROM OTHER FILES"""
-V_critical = config1_Performance.decision_speed/config1_Performance.approach_velocity                
+V_critical = min(config1_Performance.decision_speed,config1_Performance.approach_velocity )
 #V_critical = 1.2                                                                        # [m/s] V1 speed/V_app
 etah       = 0.9                                                                # [-] eta_h of aerodynamics
-x_ac      = [conc1.x_le_MAC[0]+0.25*MAC, conc1.x_le_MAC[1]+0.25*MAC, conc1.x_le_MAC[2]+0.25*MAC]   # [m] x-location of the main wing ac
+x_ac      = [x_le_MAC[0]+0.25*MAC, x_le_MAC[1]+0.25*MAC, x_le_MAC[2]+0.25*MAC]   # [m] x-location of the main wing ac
 #CL_a_h = 2*np.pi
 CL_a_h    = CL_alpha_h1                                                         # [-] CL_alpha_h
 CL_a_ah   = CL_alpha_w1                                                         # [-] CL_alpha_(A-h)
@@ -305,9 +338,12 @@ Vc_V      = 1.                                          #zelf                   
 
 
 # initialize class:
-empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, conc1.l_h[0], conc1.S, conc1.MAC, Vh_V, conc1.x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
-
+empennage1 = empennage(2, x_ac, CL_a_h, CL_a_ah, de_da, l_h, conc1.S, conc1.MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+empennage2 = empennage(3, x_ac, CL_a_h, CL_a_ah, de_da, l_h, conc1.S, conc1.MAC, Vh_V, x_le_MAC[0], Cm_ac, CL_ah, x_cg, CL_h, CL_c, CL_a_c, a_0, i_h, i_c, CN_h_a, CN_w_a, CN_c_a, CN_h_def, Vc_V, V_critical)
+if empennage2.Sc_S >= empennage1.Sc_S:
+    empennage1.Sc_S = empennage2.Sc_S
+else:
+    empennage2.Sc_S = empennage1.Sc_S
 
 # outputs:
 x_le_MAC        = empennage1.x_le_MAC_out                                       # [m] x-location of MAC main wing
@@ -341,7 +377,7 @@ x_v             = empennage1.x_v                                                
 taper_ratio_c2  = empennage1.taper_ratio_c                                      # [-] taper ratio canard
 lambda_c_le_rad2= empennage1.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
 
-t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard   
+t_c_c2          = empennage1.t_c_c                                              # [-] tickness over chord ratio canard
 Sc_S2           = empennage1.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c2            = empennage1.S_c                                                # [m^2] Surface area of the canard
 A_c2            = empennage1.A_c                                                # [-] Aspect ratio of the canard
@@ -350,12 +386,13 @@ Cr_c2           = empennage1.Cr_c                                               
 Ct_c2           = empennage1.Ct_c                                               # [m] tip chord length canard
 Cr_t_c2         = Cr_c2*t_c_c2                                                  #[m] thickness at the chord canard
 z_c2            = empennage1.z_c                                                # [m] veritcal height of the canard
-l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard    
+l_c2            = empennage1.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
 lambda_c_2_rad2 = empennage1.lambda_c_2_rad
+MAC_c2          = empennage1.MAC_c
 
 taper_ratio_c3  = empennage2.taper_ratio_c                                      # [-] taper ratio canard
 lambda_c_le_rad3= empennage2.lambda_c_le_rad                                    # [rad] leading edge sweep angle canard
-t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard   
+t_c_c3          = empennage2.t_c_c                                              # [-] tickness over chord ratio canard
 Sc_S3           = empennage2.Sc_S                                               # [-] Ratio area canard (assumed for now)
 S_c3            = empennage2.S_c                                                # [m^2] Surface area of the canard
 A_c3            = empennage2.A_c                                                # [-] Aspect ratio of the canard
@@ -364,9 +401,9 @@ Cr_c3           = empennage2.Cr_c                                               
 Cr_t_c3         = Cr_c3*t_c_c3                                                  #[m] thickness at the chord canard
 Ct_c3           = empennage2.Ct_c                                               # [m] tip chord length canard
 z_c3            = empennage2.z_c                                                # [m] veritcal height of the canard
-l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard   
+l_c3            = empennage2.l_c                                                # [m] distance 0.25mac-wing to 0.25MAC canard
 lambda_c_2_rad3 = empennage2.lambda_c_2_rad
-
+MAC_c3          = empennage2.MAC_c
 
 # control surfaces: (inputs still need to be worked on...)
 c_elev = get_c_elev(Cr_h, Ct_h, b_h)                                            # [m] chord length elevator
@@ -392,12 +429,13 @@ x_mlg[1] = max([x_mlg[0] + conc1.l_cutout, update_x_mlg(config2_cg.calc_z_cg(),c
 x_mlg[2] = max([x_mlg[0] + conc1.l_cutout, update_x_mlg(config3_cg.calc_z_cg(),const.theta_rad,const.beta_rad, x_cg_max_flight3, const.stroke,conc1.l_f[2])])
 
 z_mlg = update_z_mlg(x_mlg[0],const.beta_rad,x_cg_max_flight1, config1_cg.calc_z_cg()) # [m] z-location of the mlg
+z_nlg = z_mlg
 
 x_nlg = 2
 
 l_m1 = x_cg_max_flight1 - x_mlg[0]
-l_m2 = x_cg_max_flight1 - x_mlg[1]
-l_m3 = x_cg_max_flight1 - x_mlg[2]
+l_m2 = x_cg_max_flight2 - x_mlg[1]
+l_m3 = x_cg_max_flight3 - x_mlg[2]
 
 
 l_n1 = x_cg_max_flight1 - x_nlg
@@ -416,7 +454,20 @@ frac = np.ones((3,2))
 frac[0,0], frac[0,1], frac1 = config1_ground.check_equilibrium()
 frac[1,0], frac[1,1], frac2 = config2_ground.check_equilibrium()
 frac[2,0], frac[2,1], frac2 = config3_ground.check_equilibrium()
+load_nlg_strut=[frac[0,1]*conc1.MTOW[0]*9.81, frac[1,1]*conc1.MTOW[1]*9.81, frac[2,1]*conc1.MTOW[2]*9.81]
+load_nlg_strut=max(load_nlg_strut)
+load_mlg_strut=[(1-frac[0,0])/2*conc1.MTOW[0]*9.81, (1-frac[1,0])/2*conc1.MTOW[1]*9.81, (1-frac[1,0])/2*conc1.MTOW[2]*9.81]
+load_mlg_strut=max(load_mlg_strut)
+if load_mlg_strut/2>const.max_P_mlg:
+    print('landing gear main tires cannot handle the pressure')
+if load_nlg_strut/2> const.max_P_nlg:
+    print('landing gear nose tires cannot handle the pressure')
 
+
+L_strut_mlg= -z_mlg-const.D_mlg/2
+L_strut_nlg= -z_nlg-const.D_nlg/2
+D_strut_mlg= initialunderc.get_d_lg(load_mlg_strut,L_strut_mlg)
+D_strut_nlg= initialunderc.get_d_lg(load_nlg_strut,L_strut_nlg)
 
 print('CS DONE')
 
@@ -425,7 +476,7 @@ STRUCTURES
 """
 
     #Calculate fuel mass available for storage in wings (0.75 of one side of the wing)
-fuel_mass_available = wing_struc_analysis(C_l_max,const.V_cruise,conc1.b,conc1.Cr,conc1.Ct,conc1.S)
+fuel_mass_available = wing_struc_analysis(CL_flaps_max,const.V_cruise,conc1.b,conc1.Cr,conc1.Ct,conc1.S)
 
 
 """
@@ -464,10 +515,9 @@ OSPL_dBA_tot_down=noise.EPNdB_calculations(r3,theta_3,phi_observer,config1_Perfo
 
 
 
-
-
-
-
+config1_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise1,CL_land,V_climb1,perf.c,f1,perf.sigma, perf.TOP, CD0_1,conc1.A,conc1.e,1000,7000,100)
+config2_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise2,CL_land,V_climb2,perf.c,f2,perf.sigma, perf.TOP, CD0_2,conc1.A,conc1.e,1000,7000,100)
+config3_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise3,CL_land,V_climb3,perf.c,f3,perf.sigma, perf.TOP, CD0_3,conc1.A,conc1.e,1000,7000,100)
 
 
 'WRITE THE CSV FILE'
@@ -519,6 +569,64 @@ output_file.write('xleMAC1=' + str(x_le_MAC[0])+ '\n')
 output_file.write('xleMAC2=' + str(x_le_MAC[1])+ '\n')
 output_file.write('xleMAC3=' + str(x_le_MAC[2])+ '\n')
 
+output_file.write('MAC canard 2=' + str(MAC_c2) + '\n')
+output_file.write('MAC canard 3=' + str(MAC_c3) + '\n')
+
+
+output_file.write('lc_conf2=' + str(l_c2)+ '\n')
+output_file.write('lc_conf3=' + str(l_c3)+ '\n')
+
+output_file.write('x loc main 1 =' + str(x_mlg[0]) + '\n')
+output_file.write('x loc main 2 =' + str(x_mlg[1]) + '\n')
+output_file.write('x loc main 3 =' + str(x_mlg[2]) + '\n')
+output_file.write('x loc nose ='   + str(x_nlg) + '\n')
+output_file.write('l m 1 =' + str(l_m1) + '\n')
+output_file.write('l m 2 =' + str(l_m2) + '\n')
+output_file.write('l m 3 =' + str(l_m3) + '\n')
+output_file.write('l n 1 =' + str(l_n1) + '\n')
+output_file.write('l n 2 =' + str(l_n2) + '\n')
+output_file.write('l n 3 =' + str(l_n3) + '\n')
+output_file.write('L main landing gear strut ='+ str(L_strut_mlg)+ '\n')
+output_file.write('L nose landing gear strut ='+ str(L_strut_nlg)+ '\n')
+output_file.write('D main landing gear strut ='+ str(D_strut_mlg)+ '\n')
+output_file.write('D nose landing gear strut ='+ str(D_strut_nlg)+ '\n')
+
+output_file.write('CL_clean_max=' + str(CL_clean_max)+'\n')
+output_file.write('CL_flaps_max=' + str(CL_flaps_max)+'\n')
+output_file.write('CL_TO=' + str(CL_TO)+'\n')
+output_file.write('CL_land=' + str(CL_land)+'\n')
+output_file.write('CL_cruise1=' + str(CL_cruise1)+'\n')
+output_file.write('CL_cruise2=' + str(CL_cruise2)+'\n')
+output_file.write('CL_cruise3=' + str(CL_cruise3)+'\n')
+output_file.write('CD_cruise1=' + str(CD_cruise1)+'\n')
+output_file.write('CD_cruise2=' + str(CD_cruise2)+'\n')
+output_file.write('CD_cruise3=' + str(CD_cruise3)+'\n')
+
+output_file.write('z_nlg='+str(z_nlg)+'\n')
+output_file.write('z_mlg='+str(z_mlg)+'\n')
+
+
+#output_file.write('A=' + str(conc1.A)+'\n')
+#output_file.write('S=' + str(conc1.S)+'\n')
+#output_file.write('b=' + str(conc1.b)+'\n')
+#output_file.write('l_cutout=' + str(conc1.l_cutout)+'\n')
+#output_file.write('l fuselage 1=' + str(conc1.l_f[0])+'\n')
+#output_file.write('l cabin 1=' + str(conc1.l_cabin[0])+'\n')
+#output_file.write('l fuselage extended=' + str(conc1.l_f[1])+'\n')
+#output_file.write('l cabin extended=' + str(conc1.l_cabin[1])+'\n')
+output_file.write('mff1=' + str(Mff1)+'\n')
+output_file.write('mff2=' + str(Mff2)+'\n')
+output_file.write('mff3=' + str(Mff3)+'\n')
+
+output_file.write('co2emissions 1 per pax=' + str(config1_CO2[0])+'\n')
+output_file.write('co2emissions 1 requirement=' + str(config1_CO2[1])+'\n')
+output_file.write('co2emissions 2 per pax=' + str(config2_CO2[0])+'\n')
+output_file.write('co2emissions 2 requirement=' + str(config2_CO2[1])+'\n')
+output_file.write('co2emissions 3 per pax=' + str(config3_CO2[0])+'\n')
+output_file.write('co2emissions 3 requirement=' + str(config3_CO2[1])+'\n')
+output_file.write('nox emissions 1=' + str(config1_NOx) + '\n')
+output_file.write('nox emissions 2=' + str(config2_NOx) + '\n')
+output_file.write('nox emissions 3=' + str(config3_NOx) + '\n')
 output_file.close()
 
 

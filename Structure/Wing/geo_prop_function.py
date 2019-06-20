@@ -358,7 +358,7 @@ def get_cross_sec_prop(chord,y_loc,span):
 #    print("Moment of inertia [%] =", (1-moi/0.003)*100)
     
     return [y_loc,enclosed_area,total_area,fuel_area,neutral_x,neutral_z,min_z,max_z,moi_x,\
-            spar_height,Q_z,stringer_space,moi_z,Q_x,min_x,max_x,E_modulus,density,cost]
+            spar_height,Q_z,stringer_space,moi_z,Q_x,min_x,max_x,E_modulus,density,cost,skin_box_area*density_skin]
 
 ##Verification
 #stuff = get_cross_sec_prop(5,1,1)

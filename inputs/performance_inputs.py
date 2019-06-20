@@ -58,7 +58,7 @@ thrust_setting_transition = 1.
 thrust_setting_climb_out = 1.
 thrust_setting_climb = 0.9
 reverse_thrust_factor = 0.45
-thrust_setting_descent = 0.07
+thrust_setting_descent = [0.055, 0.07, 0.07]
 
 # friction coefficients
 friction_coefficient_to = 0.05
