@@ -907,7 +907,7 @@ class Lift:
             
         elif alpha > 7 and alpha < alpha_CL_max*180/math.pi : 
             C_L = (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L))) + ((CL_max - (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L)))) / (np.deg2rad(alpha_CL_max - 7)) * np.deg2rad(alpha - 7))
-            C_L_flaps = (delta_CL_alpha * (np.deg2rad(alpha) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha) - alpha_0_L_flaps))) / (np.deg2rad(alpha_CL_max - 7)) * np.deg2rad(alpha - 7))
+            C_L_flaps = (delta_CL_alpha * (np.deg2rad(7) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(7) - alpha_0_L_flaps))) / (np.deg2rad(alpha_CL_max - 7)) * np.deg2rad(alpha - 7))
         elif alpha == alpha_CL_max*180/math.pi:
             C_L = CL_max
             C_L_flaps = CL_max + delta_CL_max
