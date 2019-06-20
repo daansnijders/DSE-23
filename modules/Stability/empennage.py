@@ -382,7 +382,7 @@ class empennage:
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
         self.taper_ratio_c = 0.8                                                # [-] taper ratio canard
-        self.lambda_c_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
+        self.lambda_c_le_rad = np.deg2rad(-0.1)                                   # [rad] leading edge sweep angle canard
         self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
 
         self.Sc_S = self.Sc_S                                                   # [-] Ratio area canard
