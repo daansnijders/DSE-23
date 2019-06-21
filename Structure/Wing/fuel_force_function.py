@@ -30,7 +30,7 @@ def get_fuel_force(cross_section_lst,N,wing_span,load_factor,fuel_mass,LE_sweep,
         yi = i*step_size
         zi = 0
         C_i = lsf.get_chord(yi,wing_span,Cr,Ct)        
-        xi = yi*np.tan(LE_sweep/180*np.pi)+(front_spar+rear_spar)/2*C_i
+        xi = yi*np.tan(LE_sweep/180*np.pi)+cross_section_lst[i,4]
         fuel_i = (cross_section_lst[i,3]*(wing_span/2)/N)*804
         fuel -= fuel_i
         if fuel>0:
