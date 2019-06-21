@@ -200,9 +200,9 @@ class empennage:
         self.l_h = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
         self.MAC_h = get_MAC(self.Cr_h, self.taper_ratio_h)                     # [m] MAC length of the horizontal tail
         self.y_MAC_h = get_y_MAC(self.b_h, self.Cr_h, self.MAC_h, self.Ct_h)    # [m] distance of MAC horizontal tail from centre line
-        
         self.lambda_h_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_h_le_rad,self.Cr_h,self.b_h,self.taper_ratio_h) # [rad] quarter chord sweep angle
         self.lambda_h_2_rad = get_lambda_2_rad(self.lambda_h_4_rad,self.A_h,self.taper_ratio_h) # [rad] half chord sweep angle
+        self.x_le_hor = (self.x_h - 0.25*self.MAC_h + 0.5 * self.MAC_h) - np.tan(self.lambda_h_2_rad) * self.y_MAC_h - 0.5*self.Cr_h #starting point horizontal tail on centre line fuselage
 
         # =============================================================================
         # Vertical tail - NACA 63 012
@@ -211,7 +211,7 @@ class empennage:
         self.V_v = 0.1                                                          # [-] volume vertical tail
         self.A_v = 1.5                                                          # [-] aspect ratio vertical tail
         self.taper_ratio_v = 0.375                                              # [-] taper ratio vertical tail
-        self.lambda_v_le_rad = np.deg2rad(40)                                   # [rad] leading edge sweep angle vertical tail
+        self.lambda_v_le_rad = np.deg2rad(56)                                   # [rad] leading edge sweep angle vertical tail
         self.t_c_v = 0.12                                                       # [-] tickness over chord ratio vertical tail
         self.x_v = self.x_h
         
@@ -222,9 +222,12 @@ class empennage:
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
         self.Ct_v = get_Ct(self.Cr_v, self.taper_ratio_v)                       # [m] tip chord length vertical tail
+        self.MAC_v = get_MAC(self.Cr_v, self.taper_ratio_v)                     # [m] MAC length of the horizontal tail
+        self.y_MAC_v = get_y_MAC(self.b_v, self.Cr_v, self.MAC_v, self.Ct_v)    # [m] distance of MAC horizontal tail from centre line
         
         self.lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_v_le_rad,self.Cr_v,self.b_v,self.taper_ratio_v) # [rad] quarter chord sweep angle
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
+        self.x_le_ver = (self.x_v - 0.25*self.MAC_v + 0.5 * self.MAC_v) - np.tan(self.lambda_v_2_rad) * self.y_MAC_v - 0.5*self.Cr_v #starting point vertical tail on centre line fuselage
 
         # engine inoperative case
         N_e = inputperf.thrust_max * y_engine                                           # [N*m] moment caused by engine inoperative
@@ -382,7 +385,7 @@ class empennage:
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
         self.taper_ratio_c = 0.8                                                # [-] taper ratio canard
-        self.lambda_c_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
+        self.lambda_c_le_rad = np.deg2rad(-0.1)                                   # [rad] leading edge sweep angle canard
         self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
 
         self.Sc_S = self.Sc_S                                                   # [-] Ratio area canard
@@ -397,9 +400,12 @@ class empennage:
         self.MAC_c= initialplanform.get_MAC(self.Cr_c, self.taper_ratio_c)
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard 
+        self.y_MAC_c = initialplanform.get_y_MAC(self.b_c, self.Cr_c, self.MAC_c, self.Ct_c)    # [m] distance of MAC horizontal tail from centre line
+        
         self.lambda_c_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_c_le_rad,self.Cr_c,self.b_c,self.taper_ratio_c)
         self.lambda_c_2_rad = get_lambda_2_rad(self.lambda_c_4_rad,self.A_c,self.taper_ratio_c) # [rad] half chord sweep angle
-    
+        self.x_le_can = (self.x_c - 0.25*self.MAC_c + 0.5 * self.MAC_c) - np.tan(self.lambda_c_2_rad) * self.y_MAC_c - 0.5*self.Cr_c #starting point vertical tail on centre line fuselage
+        
     def deflection_curve(self, plot = True):
         C_l_C_l_theory = 1
         etah = 0.9

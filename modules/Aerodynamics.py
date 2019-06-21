@@ -832,7 +832,7 @@ class Lift:
             else:
                 C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))))**2
                 C_L.append(C_L_i)
-        
+        plt.figure(25)
         plt.axvline(x=0, color='grey')
         plt.axhline(y=0, color='grey')
         plt.plot(alpha, C_L, "b-", label="Flaps up")
@@ -846,7 +846,7 @@ class Lift:
         x3 = 13
         y1 = delta_CL_alpha * (np.deg2rad(5) - alpha_0_L_flaps)
         y2 = CL_max + delta_CL_max
-        y3 = y2 - 0.2
+        y3 = y2 - 0.17
         
         A = np.array([[1, x1, x1**2], [1, x2, x2**2], [1, x3, x3**2]])
         b = np.array([y1, y2, y3])
@@ -875,8 +875,9 @@ class Lift:
         
         plt.plot(alpha, C_L_flaps, "k-", label="Flaps down")        
         plt.grid(True)
+        plt.title("$C_L - \\alpha$ curve configuration 1")
         plt.xlabel("$\\alpha$ [deg]")
-        plt.ylabel("$C_{L_{\\alpha}}$ [-]")
+        plt.ylabel("$C_{L}$ [-]")
         plt.xlim(-10,15)
         plt.legend(loc="best")
         plt.show
