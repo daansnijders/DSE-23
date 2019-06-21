@@ -15,7 +15,7 @@ Parameters
 """
 
 # Spar thickness [m]
-t_spar = 0.015
+t_spar = 0.010
 
 # Skin thickness [m]
 t_skin = 0.003
@@ -29,8 +29,8 @@ spar_rear = 0.65
 # Chord [m] example
 chord = 5
 
-stringer_area_upper = 400/10**6
-stringer_area_lower = 400/10**6
+stringer_area_upper = 500/10**6
+stringer_area_lower = 500/10**6
 
 # Spar materials properties: Aluminium 7150T7751
 E_spar = 71*10**9
@@ -92,6 +92,7 @@ Read excel data
 Obtain number of stringers and position of ribs
 ------------------------------------------------------------------------------
 """
+
 component = pd.read_excel('wing_box_design.xlsx','design')
 
 ks = pd.read_excel('wing_box_design.xlsx','ks_hinged')
@@ -142,8 +143,8 @@ def get_skin_buckling(y_loc,stringer_space, span):
             y_ribs2 = ribs_loc[i]
             break
     ribs_pitch = (y_ribs2-y_ribs1)*(span/2)
-    b = min(ribs_pitch,stringer_space)
-    a = max(ribs_pitch,stringer_space)
+    b = stringer_space
+    a = ribs_pitch
     kc_value = np.interp(a/b,kc['ratio'],kc['kc'])
     sigma_cr = (np.pi**2*kc_value*E_skin)/(12*(1-skin_poisson_ratio**2))*(t_skin/b)**2
     
@@ -376,10 +377,10 @@ def get_struc_force(cross_section_lst,load_factor,sweep_LE,b_wing,Cr,Ct):
         xi = yi*np.tan(sweep_LE/180*np.pi)+cross_section_lst[i,4]
         zi = 0
         Fx = 0
-        Fy = 0
+        Ti = 0
         Fz = -9.81*load_factor*cross_section_lst[i,17]*cross_section_lst[i,2]*step_size
         
-        struc_force_lst.append([xi,yi,zi,Fx,Fy,Fz])
+        struc_force_lst.append([xi,yi,zi,Fx,Ti,Fz])
     return struc_force_lst
     
 """
