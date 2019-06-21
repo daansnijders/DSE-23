@@ -243,8 +243,8 @@ class empennage:
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
         N_v_max = - Y_v_max * self.l_v                                          # [N*m] moment caused by the vertical tail
-        print ('moment engine inoperative',N_e)
-        print ('moment provided by Vtail',-N_v_max)
+        #print ('moment engine inoperative',N_e)
+        #print ('moment provided by Vtail',-N_v_max)
         
         #assert ( N_e < -N_v_max   )                                                # check if tail is capable enough
 
@@ -273,7 +273,7 @@ class empennage:
         
         self.F_h = (-w*((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) + inputperf.thrust_max * (cg_z[0] - config1_cg.z_cg_engines))/-((x_le_MAC[0] + 0.25*MAC) - cg_x[0] - x_h + config1_cg_x)
         self.F_w = w - self.F_h 
-        
+#        print (self.F_w, self.F_h)
         margin = 1E-8
         assert -margin <= -self.F_w * ((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) - self.F_h * (x_h - cg_x[0]) + F_e * (cg_z[0] - z_engine) <= margin
         assert -margin <= self.F_w + self.F_h - w <= margin
@@ -282,7 +282,7 @@ class empennage:
         #self.F_h = (self.l_c * (self.weight - self.F_w) - l_cg * self.F_w + F_e * z_e) / (l_h + self.l_c)
 
         self.F_c = -self.F_w + self.weight - self.F_h
-        
+#        print (self.F_c, self.F_w, self.F_h)
         margin = 1E-8
         assert -margin <= self.F_c + self.F_w + self.F_h - self.weight <= margin
         assert -margin <= self.l_c * self.F_c - l_cg * self.F_w - l_h * self.F_h + F_e * z_e <= margin
@@ -352,10 +352,10 @@ class empennage:
             self.Sc_S -= 0.0001
             max_point[1] = self.Sc_S
             
-        print(self.Sc_S)
+#        print(self.Sc_S)
         #assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
 #        assert f_max_y(self.Sc_S) > x_cg_maxcanard
-        print(self.Sc_S)
+#        print(self.Sc_S)
         
         if plot:
             fig = plt.figure()
