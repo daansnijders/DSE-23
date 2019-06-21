@@ -139,12 +139,13 @@ class empennage:
         self.x_ac = [self.x_le_MAC + 0.25*MAC, self.x_le_MAC + 0.25*MAC + l_cutout, self.x_le_MAC + 0.25*MAC + l_cutout] 
         if plot:
             fig = plt.figure()
+            plt.title('X-plot for sizing horizontal tail')
             ax1 = fig.add_subplot(111)
             ax1.plot(x_cg_min1_emp, x_le_MAC_range_perc_emp)
             ax1.plot(x_cg_max1_emp, x_le_MAC_range_perc_emp)
             ax1.scatter(x_cg_min1_emp, x_le_MAC_range_perc_emp)
             ax1.scatter(x_cg_max1_emp, x_le_MAC_range_perc_emp)
-            ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
+            ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
             ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
             ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
@@ -153,7 +154,7 @@ class empennage:
             ax2.plot(self.l, self.Sh_S1)
             ax2.plot(self.l, self.Sh_S2)
             ax2.plot(self.l, self.Sh_C1)
-            ax2.set( ylim = [0,0.2565], ylabel = 'S_h/S')
+            ax2.set( ylim = [0,0.2565], ylabel = '$S_h/S \ [-]$')
             
             ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
             ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
@@ -358,12 +359,13 @@ class empennage:
         
         if plot:
             fig = plt.figure()
+            plt.title('X-plot for sizing canard')
             ax1 = fig.add_subplot(111)
 #            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
-#            ax1.plot(x_cg_max1, x_le_MAC_range_perc)
+#            ax1.plot(x_cg_max1, x_le_MAC_range_perc)s
             ax1.scatter(x_cg_mincanard, x_le_MAC_range_perccanard)
             ax1.scatter(x_cg_maxcanard, x_le_MAC_range_perccanard)
-            ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
+            ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
 #            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
 #            ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
@@ -378,7 +380,7 @@ class empennage:
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_S1, color = 'g')
             ax2.plot(self.l, self.Sc_C1, color = 'g')
-            ax2.set( ylim = [0.,0.8], ylabel = 'S_c/S')
+            ax2.set( ylim = [0.,0.8], ylabel = '$S_c/S \ [-]$')
             plt.show()
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
@@ -427,15 +429,16 @@ class empennage:
         self.Cm_a = self.CN_w_a * (config_cg- x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
         self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
 
-        alpha_list = np.arange(0., (0.4+0.001), 0.001)
+        alpha_list = np.arange(-0.2, (0.4+0.001), 0.001)
         def_curve = []
         for i in range (len(alpha_list)):
             def_curve.append(- 1 / self.Cm_def * (self.Cm_0 + self.Cm_a * (alpha_list[i] - self.a_0)))
         
         if plot:
             fig = plt.figure()
+            plt.title('Elevator trim curve')
             ax = fig.add_subplot(111)
-            ax.set ( ylabel = 'delta_e')
-            ax.set ( xlabel = 'angle of attack [deg]')
+            ax.set ( ylabel = '$\delta_e \ [deg]$')
+            ax.set ( xlabel = '$\\alpha \ [deg]$')
             ax.plot((np.rad2deg(alpha_list)), def_curve)
             plt.gca().invert_yaxis()
