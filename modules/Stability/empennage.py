@@ -154,8 +154,8 @@ class empennage:
             ax2.plot(self.l, self.Sh_S1)
             ax2.plot(self.l, self.Sh_S2)
             ax2.plot(self.l, self.Sh_C1)
-            ax2.set( ylim = [0,0.2565], ylabel = '$S_h/S \ [-]$')
-            
+#            ax2.set( ylim = [0,0.2565], ylabel = '$S_h/S \ [-]$')
+            ax2.set( ylim = [-0.032,0.2245], ylabel = '$S_h/S \ [-]$')            
             ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
             ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
@@ -380,7 +380,7 @@ class empennage:
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_S1, color = 'g')
             ax2.plot(self.l, self.Sc_C1, color = 'g')
-            ax2.set( ylim = [0.,0.8], ylabel = '$S_c/S \ [-]$')
+            ax2.set( ylim = [0.0,0.8], ylabel = '$S_c/S \ [-]$')
             plt.show()
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
