@@ -168,6 +168,11 @@ def get_cross_sec_prop(chord,y_loc,span):
     y_frac = y_loc/(span/2)
     upper_stringer = int(np.interp(y_frac,component['y_frac'],component['stringer_up']))
     lower_stringer = int(np.interp(y_frac,component['y_frac'],component['stringer_down']))
+    
+#    #Verification
+#    upper_stringer = 0
+#    lower_stringer = 0
+    
     stringer_interval_upper = (rear_spar-front_spar)/(upper_stringer+1)
     stringer_interval_lower = (rear_spar-front_spar)/(lower_stringer+1)
     
@@ -177,8 +182,12 @@ def get_cross_sec_prop(chord,y_loc,span):
     else:
         foil_upper = root_foil_upper*chord
         foil_lower = root_foil_lower*chord
+    
 
     foil_upper=foil_upper[np.argsort(foil_upper[:, 0])]
+#    # Verification
+#    foil_upper = np.array([[-5,5],[5,5]])
+#    foil_lower= np.array([[-5,-5],[5,-5]])
     #------------------------------------------------------------------------------
     upper_frontspar_z = np.interp(front_spar,foil_upper[:,0],foil_upper[:,1])
     lower_frontspar_z = np.interp(front_spar,foil_lower[:,0],foil_lower[:,1])
@@ -238,7 +247,6 @@ def get_cross_sec_prop(chord,y_loc,span):
         
     total_area = skin_box_area+tot_stringer_area+front_spar_area+rear_spar_area
     total_area_z = skin_box_area_z+tot_stringer_area_z+front_spar_area_z+rear_spar_area_z
-    
     front_spar_area_x = front_spar_area*front_spar
     rear_spar_area_x = rear_spar_area*rear_spar
     
@@ -295,7 +303,7 @@ def get_cross_sec_prop(chord,y_loc,span):
     for i in range(N):
         x1 = front_spar+i*step_size
         x2 = front_spar+i*step_size+step_size
-        skin_area_i = abs(x2-x1)*t_skin
+        skin_area_i = step_size*t_skin
         z1_up = np.interp(x1,foil_upper[:,0],foil_upper[:,1])
         z2_up = np.interp(x1,foil_upper[:,0],foil_upper[:,1])
         z1_low = np.interp(x1,foil_lower[:,0],foil_lower[:,1])
@@ -347,23 +355,23 @@ def get_cross_sec_prop(chord,y_loc,span):
     
 #    # First moment verification by calculating it at every corner
 #    print(Q,rear_spar_Q,lower_stringer_Q,lower_skin_Q)
-#    
+    
 #    # Verification with CATIA Model
 #    print("Verification--------------------------------------------------")
 #    print("CATIA Model | Chord = 5m, 2 stringers top and 2 stringers at bottom")
 #    print("")
-#    print("Front Spar height diff [%]= ", abs(1-(upper_frontspar_z-lower_frontspar_z)/0.688)*100)
-#    print("Rear Spar Height diff [%]= ", abs(1-(upper_rearspar_z-lower_rearspar_z)/0.337)*100)
-#    print("Cross-section Area diff [%] =",1-(total_area/1.333)*100)
-#    print("Neutral-axis [%] =", abs(1-neutral_z/0.1518)*100)
-#    print("Moment of inertia [%] =", (1-moi/0.003)*100)
-    
+#    print("Front Spar height diff [%]= ", abs(1-(upper_frontspar_z-lower_frontspar_z)/0.5357)*100)
+#    print("Rear Spar Height diff [%]= ", abs(1-(upper_rearspar_z-lower_rearspar_z)/0.5048)*100)
+#    print("Cross-section Area diff [%] =",1-(total_area/1.337)*100)
+#    print("Neutral-axis [%] =", abs(1-neutral_z/0.143)*100)
+#    print("Moment of inertia [%] =", (1-moi_x/0.00232)*100)
+#    
     return [y_loc,enclosed_area,total_area,fuel_area,neutral_x,neutral_z,min_z,max_z,moi_x,\
             spar_height,Q_z,stringer_space,moi_z,Q_x,min_x,max_x,E_modulus,density,cost,skin_box_area*density_skin]
 
-##Verification
-#stuff = get_cross_sec_prop(5,1,1)
-#print(stuff)
+#Verification
+stuff = get_cross_sec_prop(5,1,1)
+print(stuff)
     
 """
 Get structural weight at every point of the wing
@@ -396,3 +404,32 @@ def get_wingbox_mass_cost(cross_section_lst,b_wing):
         cost+= mass_i*cross_section_lst[i,18]
     return [mass,cost]
     
+def get_deflections(cross_section_lst,moment_lst,span):
+    N = len(cross_section_lst)
+    Li = span/(2*N)
+    deflection_lst = []
+    deflection = 0
+    theta_i = 0
+    for i in range(N):
+        moi_i = cross_section_lst[i,8]
+        E_modulus =  cross_section_lst[i,16]
+        moment_i =  moment_lst[i] 
+        delta_i = 0#moment_i*Li**2/(2*moi_i*E_modulus)
+        theta_i += moment_i*Li/(moi_i*E_modulus)
+        deflection += delta_i + theta_i*Li
+        deflection_lst.append([moment_i,moi_i,E_modulus,deflection])
+    return np.array(deflection_lst)
+
+def analytical_max_deflect(force_lst,force_y_lst,cross_section_lst,span):
+    N = len(force_lst)
+    deflections = 0
+    L = span/2
+    for i in range(N):
+        force = force_lst[i]
+        a = force_y_lst[i]
+        moi = np.interp(a,cross_section_lst[:,0],cross_section_lst[:,8])
+        E = np.interp(a,cross_section_lst[:,0],cross_section_lst[:,16])
+        deflections += force*a**2*(3*L-a)/(6*E*moi)
+    return deflections
+
+
