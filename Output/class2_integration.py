@@ -84,32 +84,32 @@ config2_cg_z=config2_cg.calc_z_cg()
 
 
 
-output_file = open('output_class2iteration.dat' ,  'w')
-
-
-output_file.write('config 1 M struct=' + str(config1_M_structural)+ '\n')
-output_file.write('config 2 M struct=' + str(config2_M_structural)+ '\n')
-output_file.write('config 3 M struct=' + str(config3_M_structural)+ '\n')
-output_file.write('config 1 M pwerplant=' + str(config1_M_powerplant)+ '\n')
-output_file.write('config 2 M pwerplant=' + str(config2_M_powerplant)+ '\n')
-output_file.write('config 3 M pwerplant=' + str(config3_M_powerplant)+ '\n')
-output_file.write('config 1 M fixedeq=' + str(config1_M_fixedeq)+ '\n')
-output_file.write('config 2 M fixedeq=' + str(config2_M_fixedeq)+ '\n')
-output_file.write('config 3 M fixedeq=' + str(config3_M_fixedeq)+ '\n')
-output_file.write('OEW config 1 CLASS 2=' + str(config1_class2_OEW)+ '\n')
-output_file.write('OEW config 2 CLASS 2=' + str(config2_class2_OEW)+ '\n')
-output_file.write('OEW config 3 CLASS 2=' + str(config3_class2_OEW)+ '\n')
-
-
-
-output_file.write('config 1 X CG =' + str(config1_cg_x)+ '\n')
-output_file.write('config 2 X CG =' + str(config2_cg_x)+ '\n')
-output_file.write('config 3 X CG =' + str(config3_cg_x)+ '\n')
-output_file.write('config 1 y CG =' + str(config1_cg_y)+ '\n')
-output_file.write('config 2 y CG =' + str(config2_cg_y)+ '\n')
-output_file.write('config 3 y CG =' + str(config3_cg_y)+ '\n')
-output_file.write('config 1 z CG =' + str(config1_cg_z)+ '\n')
-output_file.write('config 2 z CG =' + str(config2_cg_z)+ '\n')
-output_file.write('config 3 z CG =' + str(config3_cg_z)+ '\n')
-
-output_file.close()
+#output_file = open('output_class2iteration.dat' ,  'w')
+#
+#
+#output_file.write('config 1 M struct=' + str(config1_M_structural)+ '\n')
+#output_file.write('config 2 M struct=' + str(config2_M_structural)+ '\n')
+#output_file.write('config 3 M struct=' + str(config3_M_structural)+ '\n')
+#output_file.write('config 1 M pwerplant=' + str(config1_M_powerplant)+ '\n')
+#output_file.write('config 2 M pwerplant=' + str(config2_M_powerplant)+ '\n')
+#output_file.write('config 3 M pwerplant=' + str(config3_M_powerplant)+ '\n')
+#output_file.write('config 1 M fixedeq=' + str(config1_M_fixedeq)+ '\n')
+#output_file.write('config 2 M fixedeq=' + str(config2_M_fixedeq)+ '\n')
+#output_file.write('config 3 M fixedeq=' + str(config3_M_fixedeq)+ '\n')
+#output_file.write('OEW config 1 CLASS 2=' + str(config1_class2_OEW)+ '\n')
+#output_file.write('OEW config 2 CLASS 2=' + str(config2_class2_OEW)+ '\n')
+#output_file.write('OEW config 3 CLASS 2=' + str(config3_class2_OEW)+ '\n')
+#
+#
+#
+#output_file.write('config 1 X CG =' + str(config1_cg_x)+ '\n')
+#output_file.write('config 2 X CG =' + str(config2_cg_x)+ '\n')
+#output_file.write('config 3 X CG =' + str(config3_cg_x)+ '\n')
+#output_file.write('config 1 y CG =' + str(config1_cg_y)+ '\n')
+#output_file.write('config 2 y CG =' + str(config2_cg_y)+ '\n')
+#output_file.write('config 3 y CG =' + str(config3_cg_y)+ '\n')
+#output_file.write('config 1 z CG =' + str(config1_cg_z)+ '\n')
+#output_file.write('config 2 z CG =' + str(config2_cg_z)+ '\n')
+#output_file.write('config 3 z CG =' + str(config3_cg_z)+ '\n')
+#
+#output_file.close()

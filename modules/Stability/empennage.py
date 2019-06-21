@@ -127,7 +127,7 @@ class empennage:
                 f_max = interpolate1([x_cg_max1_emp[1],x_le_MAC_range_perc_emp[1]],[x_cg_max1_emp[2],x_le_MAC_range_perc_emp[2]])
             diff_after = f_S2(f_max(y))-f_C1(f_min(y))
 
-        self.Sh_S = max(f_C1(f_min(y)),28/self.S)
+        self.Sh_S = max(f_C1(f_min(y)),29/self.S)
         
 #        self.Sh_S = 0.1646
 #        self.x_le_MAC_l_f = 0.4345
@@ -139,12 +139,13 @@ class empennage:
         self.x_ac = [self.x_le_MAC + 0.25*MAC, self.x_le_MAC + 0.25*MAC + l_cutout, self.x_le_MAC + 0.25*MAC + l_cutout] 
         if plot:
             fig = plt.figure()
+            plt.title('X-plot for sizing horizontal tail')
             ax1 = fig.add_subplot(111)
             ax1.plot(x_cg_min1_emp, x_le_MAC_range_perc_emp)
             ax1.plot(x_cg_max1_emp, x_le_MAC_range_perc_emp)
             ax1.scatter(x_cg_min1_emp, x_le_MAC_range_perc_emp)
             ax1.scatter(x_cg_max1_emp, x_le_MAC_range_perc_emp)
-            ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
+            ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
             ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
             ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
@@ -153,8 +154,8 @@ class empennage:
             ax2.plot(self.l, self.Sh_S1)
             ax2.plot(self.l, self.Sh_S2)
             ax2.plot(self.l, self.Sh_C1)
-            ax2.set( ylim = [0,0.2565], ylabel = 'S_h/S')
-            
+#            ax2.set( ylim = [0,0.2565], ylabel = '$S_h/S \ [-]$')
+            ax2.set( ylim = [-0.032,0.2245], ylabel = '$S_h/S \ [-]$')            
             ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
             ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
@@ -200,9 +201,9 @@ class empennage:
         self.l_h = 0.9*l_f[0] - self.x_le_MAC - 0.25*MAC                        # [m] distance 0.25mac-horizontal tail cg (still needs to be changed to class 2)
         self.MAC_h = get_MAC(self.Cr_h, self.taper_ratio_h)                     # [m] MAC length of the horizontal tail
         self.y_MAC_h = get_y_MAC(self.b_h, self.Cr_h, self.MAC_h, self.Ct_h)    # [m] distance of MAC horizontal tail from centre line
-        
         self.lambda_h_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_h_le_rad,self.Cr_h,self.b_h,self.taper_ratio_h) # [rad] quarter chord sweep angle
         self.lambda_h_2_rad = get_lambda_2_rad(self.lambda_h_4_rad,self.A_h,self.taper_ratio_h) # [rad] half chord sweep angle
+        self.x_le_hor = (self.x_h - 0.25*self.MAC_h + 0.5 * self.MAC_h) - np.tan(self.lambda_h_2_rad) * self.y_MAC_h - 0.5*self.Cr_h #starting point horizontal tail on centre line fuselage
 
         # =============================================================================
         # Vertical tail - NACA 63 012
@@ -211,7 +212,7 @@ class empennage:
         self.V_v = 0.1                                                          # [-] volume vertical tail
         self.A_v = 1.5                                                          # [-] aspect ratio vertical tail
         self.taper_ratio_v = 0.375                                              # [-] taper ratio vertical tail
-        self.lambda_v_le_rad = np.deg2rad(40)                                   # [rad] leading edge sweep angle vertical tail
+        self.lambda_v_le_rad = np.deg2rad(56)                                   # [rad] leading edge sweep angle vertical tail
         self.t_c_v = 0.12                                                       # [-] tickness over chord ratio vertical tail
         self.x_v = self.x_h
         
@@ -222,9 +223,12 @@ class empennage:
         self.b_v = get_b(self.S_v, self.A_v)                                    # [m] span vertical tail
         self.Cr_v = get_Cr(self.S_v, self.taper_ratio_v, self.b_v)              # [m] root chord lengh vertical tail
         self.Ct_v = get_Ct(self.Cr_v, self.taper_ratio_v)                       # [m] tip chord length vertical tail
+        self.MAC_v = get_MAC(self.Cr_v, self.taper_ratio_v)                     # [m] MAC length of the horizontal tail
+        self.y_MAC_v = get_y_MAC(self.b_v, self.Cr_v, self.MAC_v, self.Ct_v)    # [m] distance of MAC horizontal tail from centre line
         
         self.lambda_v_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_v_le_rad,self.Cr_v,self.b_v,self.taper_ratio_v) # [rad] quarter chord sweep angle
         self.lambda_v_2_rad = get_lambda_2_rad(self.lambda_v_4_rad,self.A_v,self.taper_ratio_v) # [rad] half chord sweep angle
+        self.x_le_ver = (self.x_v - 0.25*self.MAC_v + 0.5 * self.MAC_v) - np.tan(self.lambda_v_2_rad) * self.y_MAC_v - 0.5*self.Cr_v #starting point vertical tail on centre line fuselage
 
         # engine inoperative case
         N_e = inputperf.thrust_max * y_engine                                           # [N*m] moment caused by engine inoperative
@@ -239,8 +243,8 @@ class empennage:
         beta_max = 12.0                                                         # [deg] stall angle of the vertical tail
         beta_req = C_y_req / C_y_max * beta_max                                 # [deg] side-slip angle
         N_v_max = - Y_v_max * self.l_v                                          # [N*m] moment caused by the vertical tail
-        print ('moment engine inoperative',N_e)
-        print ('moment provided by Vtail',-N_v_max)
+        #print ('moment engine inoperative',N_e)
+        #print ('moment provided by Vtail',-N_v_max)
         
         #assert ( N_e < -N_v_max   )                                                # check if tail is capable enough
 
@@ -269,7 +273,7 @@ class empennage:
         
         self.F_h = (-w*((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) + inputperf.thrust_max * (cg_z[0] - config1_cg.z_cg_engines))/-((x_le_MAC[0] + 0.25*MAC) - cg_x[0] - x_h + config1_cg_x)
         self.F_w = w - self.F_h 
-        
+#        print (self.F_w, self.F_h)
         margin = 1E-8
         assert -margin <= -self.F_w * ((x_le_MAC[0] + 0.25*MAC) - cg_x[0]) - self.F_h * (x_h - cg_x[0]) + F_e * (cg_z[0] - z_engine) <= margin
         assert -margin <= self.F_w + self.F_h - w <= margin
@@ -278,7 +282,7 @@ class empennage:
         #self.F_h = (self.l_c * (self.weight - self.F_w) - l_cg * self.F_w + F_e * z_e) / (l_h + self.l_c)
 
         self.F_c = -self.F_w + self.weight - self.F_h
-        
+#        print (self.F_c, self.F_w, self.F_h)
         margin = 1E-8
         assert -margin <= self.F_c + self.F_w + self.F_h - self.weight <= margin
         assert -margin <= self.l_c * self.F_c - l_cg * self.F_w - l_h * self.F_h + F_e * z_e <= margin
@@ -348,18 +352,20 @@ class empennage:
             self.Sc_S -= 0.0001
             max_point[1] = self.Sc_S
             
-        assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
-        assert f_max_y(self.Sc_S) > x_cg_maxcanard
-        print(self.Sc_S)
+#        print(self.Sc_S)
+        #assert abs(f_min_y(self.Sc_S) - x_cg_mincanard) < 0.1
+#        assert f_max_y(self.Sc_S) > x_cg_maxcanard
+#        print(self.Sc_S)
         
         if plot:
             fig = plt.figure()
+            plt.title('X-plot for sizing canard')
             ax1 = fig.add_subplot(111)
 #            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
-#            ax1.plot(x_cg_max1, x_le_MAC_range_perc)
+#            ax1.plot(x_cg_max1, x_le_MAC_range_perc)s
             ax1.scatter(x_cg_mincanard, x_le_MAC_range_perccanard)
             ax1.scatter(x_cg_maxcanard, x_le_MAC_range_perccanard)
-            ax1.set(xlabel =  'x_cg', ylabel = 'x_le_MAC/l_f')
+            ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
 #            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
 #            ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
@@ -374,14 +380,14 @@ class empennage:
             ax2.plot(self.l, self.Sc_S2)
             ax2.plot(self.l, self.Sc_S1, color = 'g')
             ax2.plot(self.l, self.Sc_C1, color = 'g')
-            ax2.set( ylim = [0.,0.8], ylabel = 'S_c/S')
+            ax2.set( ylim = [0.0,0.8], ylabel = '$S_c/S \ [-]$')
             plt.show()
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 #            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
 
         self.taper_ratio_c = 0.8                                                # [-] taper ratio canard
-        self.lambda_c_le_rad = np.deg2rad(10)                                   # [rad] leading edge sweep angle canard
+        self.lambda_c_le_rad = np.deg2rad(-0.1)                                   # [rad] leading edge sweep angle canard
         self.t_c_c = 0.10                                                       # [-] tickness over chord ratio canard   
 
         self.Sc_S = self.Sc_S                                                   # [-] Ratio area canard
@@ -396,9 +402,12 @@ class empennage:
         self.MAC_c= initialplanform.get_MAC(self.Cr_c, self.taper_ratio_c)
         self.z_c = 0.05 * d_f_outer                                             # [m] veritcal height of the canard
         self.l_c = self.x_le_MAC + 0.25*MAC - self.x_c                        # [m] distance 0.25mac-wing to 0.25MAC canard 
+        self.y_MAC_c = initialplanform.get_y_MAC(self.b_c, self.Cr_c, self.MAC_c, self.Ct_c)    # [m] distance of MAC horizontal tail from centre line
+        
         self.lambda_c_4_rad = get_lambda_4_rad_from_lambda_le(self.lambda_c_le_rad,self.Cr_c,self.b_c,self.taper_ratio_c)
         self.lambda_c_2_rad = get_lambda_2_rad(self.lambda_c_4_rad,self.A_c,self.taper_ratio_c) # [rad] half chord sweep angle
-    
+        self.x_le_can = (self.x_c - 0.25*self.MAC_c + 0.5 * self.MAC_c) - np.tan(self.lambda_c_2_rad) * self.y_MAC_c - 0.5*self.Cr_c #starting point vertical tail on centre line fuselage
+        
     def deflection_curve(self, plot = True):
         C_l_C_l_theory = 1
         etah = 0.9
@@ -420,15 +429,16 @@ class empennage:
         self.Cm_a = self.CN_w_a * (config_cg- x_cg_wing) / MAC - self.CN_h_a * (1-self.de_da) * self.Vh_V**2 * self.Sh_S * self.l_h / MAC + self.CN_c_a * self.Vc_V**2 * self.Sc_S * (config_cg - self.x_c) / MAC
         self.Cm_def = - self.CN_h_def * self.Vh_V**2 * self.Sh_S * self.l_h / MAC
 
-        alpha_list = np.arange(0., (0.4+0.001), 0.001)
+        alpha_list = np.arange(-0.2, (0.4+0.001), 0.001)
         def_curve = []
         for i in range (len(alpha_list)):
             def_curve.append(- 1 / self.Cm_def * (self.Cm_0 + self.Cm_a * (alpha_list[i] - self.a_0)))
         
         if plot:
             fig = plt.figure()
+            plt.title('Elevator trim curve')
             ax = fig.add_subplot(111)
-            ax.set ( ylabel = 'delta_e')
-            ax.set ( xlabel = 'angle of attack [deg]')
+            ax.set ( ylabel = '$\delta_e \ [deg]$')
+            ax.set ( xlabel = '$\\alpha \ [deg]$')
             ax.plot((np.rad2deg(alpha_list)), def_curve)
             plt.gca().invert_yaxis()

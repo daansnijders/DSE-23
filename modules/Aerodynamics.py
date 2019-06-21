@@ -809,12 +809,11 @@ class Lift:
               
         return(delta_CL, delta_CL_alpha, delta_CL_max, delta_CL_TO, delta_CL_alpha_TO, delta_CL_max_TO)
         
-    def CL_alpha_plot(self, CL_alpha, alpha_0_L, CL_max, alpha_CL_max, delta_CL, delta_CL_alpha, delta_CL_max, delta_CL_TO, delta_CL_alpha_TO, delta_CL_max_TO):
+    def CL_alpha_plot(self, CL_alpha, alpha_0_L, CL_max, alpha_CL_max, delta_CL, delta_CL_alpha, delta_CL_max):
         
-        alpha = list(np.arange(-10,14,0.25))
-                        
+        alpha = list(np.arange(-10,13,0.25))
         C_L = []
-        
+                      
         for i in range(len(alpha)): 
             
             if alpha[i] <= 7:
@@ -833,7 +832,7 @@ class Lift:
             else:
                 C_L_i = CL_max - (CL_max - (CL_alpha * (np.deg2rad(alpha[i]) - np.deg2rad(alpha_0_L))))**2
                 C_L.append(C_L_i)
-        
+        plt.figure(25)
         plt.axvline(x=0, color='grey')
         plt.axhline(y=0, color='grey')
         plt.plot(alpha, C_L, "b-", label="Flaps up")
@@ -841,17 +840,28 @@ class Lift:
         C_L_flaps = []
         
         alpha_0_L_flaps = (delta_CL - CL_alpha * np.deg2rad(alpha_0_L)) / -delta_CL_alpha
+        
+        x1 = 5
+        x2 = 9.75
+        x3 = 13
+        y1 = delta_CL_alpha * (np.deg2rad(5) - alpha_0_L_flaps)
+        y2 = CL_max + delta_CL_max
+        y3 = y2 - 0.17
+        
+        A = np.array([[1, x1, x1**2], [1, x2, x2**2], [1, x3, x3**2]])
+        b = np.array([y1, y2, y3])
+        x = np.linalg.solve(A,b)
                 
         for i in range(len(alpha)): 
-            
-            if alpha[i] <= 7:
+            if alpha[i] <= 5:
                 C_L_i = delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)
                 C_L_flaps.append(C_L_i)
                 
-            elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/math.pi : 
-                j = alpha.index(7)
-                k = alpha.index(alpha_CL_max*180/math.pi)
-                C_L_i = (delta_CL_alpha * (np.deg2rad(alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
+            elif alpha[i] > 5 and alpha[i]<alpha_CL_max*180/math.pi : 
+#                j = alpha.index(4)
+#                k = alpha.index(alpha_CL_max*180/math.pi)
+                C_L_i = x[0] + x[1]*alpha[i] + x[2]*(alpha[i]**2)
+#                (delta_CL_alpha * (np.deg2rad(alpha[j]) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[j]) - alpha_0_L_flaps))) / (k - j)) * (i - j)
                 C_L_flaps.append(C_L_i)
 #                print (C_L_i)
                 
@@ -859,38 +869,15 @@ class Lift:
                 C_L_i = CL_max + delta_CL_max
                 C_L_flaps.append(C_L_i)
             else:
-                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
+#                C_L_i = (CL_max + delta_CL_max) - ((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha[i]) - alpha_0_L_flaps)))**2
+                C_L_i = x[0] + x[1]*alpha[i] + x[2]*(alpha[i]**2)
                 C_L_flaps.append(C_L_i)
         
         plt.plot(alpha, C_L_flaps, "k-", label="Flaps down")        
-        C_L_TO = []
-        
-        alpha_0_L_TO = (delta_CL_TO - CL_alpha * np.deg2rad(alpha_0_L)) / (- delta_CL_alpha_TO)
-                
-        for i in range(len(alpha)): 
-            
-            if alpha[i] <= 7:
-                C_L_i = delta_CL_alpha_TO * (np.deg2rad(alpha[i]) - alpha_0_L_TO)
-                C_L_TO.append(C_L_i)
-                
-            elif alpha[i] > 7 and alpha[i]<alpha_CL_max*180/math.pi : 
-                j = alpha.index(7)
-                k = alpha.index(alpha_CL_max*180/math.pi)
-                C_L_i = (delta_CL_alpha_TO * (np.deg2rad(alpha[j]) - (alpha_0_L_TO))) + (((CL_max + delta_CL_max_TO) - (delta_CL_alpha_TO * (np.deg2rad(alpha[j]) - alpha_0_L_TO))) / (k - j)) * (i - j)
-                C_L_TO.append(C_L_i)
-#                print (C_L_i)
-                
-            elif alpha[i] == alpha_CL_max*180/math.pi:
-                C_L_i = CL_max + delta_CL_max_TO
-                C_L_TO.append(C_L_i)
-            else:
-                C_L_i = (CL_max + delta_CL_max_TO) - ((CL_max + delta_CL_max_TO) - (delta_CL_alpha_TO * (np.deg2rad(alpha[i]) - alpha_0_L_TO)))**2
-                C_L_TO.append(C_L_i)
-        
-        plt.plot(alpha, C_L_TO, "r-", label="Flaps TO")
         plt.grid(True)
+        plt.title("$C_L - \\alpha$ curve configuration 1")
         plt.xlabel("$\\alpha$ [deg]")
-        plt.ylabel("$C_{L_{\\alpha}}$ [-]")
+        plt.ylabel("$C_{L}$ [-]")
         plt.xlim(-10,15)
         plt.legend(loc="best")
         plt.show
@@ -907,7 +894,7 @@ class Lift:
             
         elif alpha > 7 and alpha < alpha_CL_max*180/math.pi : 
             C_L = (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L))) + ((CL_max - (CL_alpha * (np.deg2rad(7) - np.deg2rad(alpha_0_L)))) / (np.deg2rad(alpha_CL_max - 7)) * np.deg2rad(alpha - 7))
-            C_L_flaps = (delta_CL_alpha * (np.deg2rad(alpha) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(alpha) - alpha_0_L_flaps))) / (np.deg2rad(alpha_CL_max - 7)) * np.deg2rad(alpha - 7))
+            C_L_flaps = (delta_CL_alpha * (np.deg2rad(7) - (alpha_0_L_flaps))) + (((CL_max + delta_CL_max) - (delta_CL_alpha * (np.deg2rad(7) - alpha_0_L_flaps))) / (np.deg2rad(alpha_CL_max - 7)) * np.deg2rad(alpha - 7))
         elif alpha == alpha_CL_max*180/math.pi:
             C_L = CL_max
             C_L_flaps = CL_max + delta_CL_max

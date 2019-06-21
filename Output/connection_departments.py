@@ -194,6 +194,9 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 
 CL_clean_max, C_L_flaps_unoptimized = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.75)
 CL_unoptiized, CL_flaps_max = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 9.5)
+
+#CL_flaps_max = CL_max1 + delta_CL_max1
+
 print('AERO DONE')
 
 
@@ -323,7 +326,9 @@ Cm_ac     = Cm0_w_trans1                                                        
 CL_ah     = CL_max_w1                                                           # [-] CL_(A-h)
 x_cg      = x_cg_max_flight1                                                    # [m] x-location of the most aft cg location for configuration 1 during flight
 CL_h      = -0.8                                                                # [-] lift coefficient htail
-CL_c      = 1.2                                                                 # [-] lift coefficient canard
+
+CL_c      = 1.4                                                                 # [-] lift coefficient canard
+
 CL_a_c    = CL_alpha_c2                                                         # [-] CL_alpha_canard
 
 
@@ -523,7 +528,7 @@ config2_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,
 config3_plotdiagram=loadingdiagram.plot_loadingdiagram(perf.Sland*const.m_to_ft,CL_TO,CL_cruise3,CL_land,V_climb3,perf.c,f3,perf.sigma, perf.TOP, CD0_3,conc1.A,conc1.e,1000,7000,100)
 
 #
-#'WRITE THE CSV FILE'
+##'WRITE THE CSV FILE'
 #output_file = open('output_detailedsizing.dat' ,  'w')
 ##    output_file.write('V_h =' + str(V_h) + '\n')
 #output_file.write('A_h  =' + str(A_h) + '\n')

@@ -11,6 +11,7 @@ import inputs.constants as const
 import inputs.performance_inputs as perf
 import inputs.concept_1 as conc1
 import modules.Aerodynamics as aero
+#import Output.connection_departments as connect
 
 """ Yet unknown values needed to start the simulation """
 D_nlg = 0.5
@@ -147,7 +148,7 @@ delta_CL3, delta_CL_alpha3, delta_CL_max3, delta_CL_TO3, delta_CL_alpha_TO3, del
 #print(CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3)
 
 
-plot = config1_Lift.CL_alpha_plot(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, delta_CL_TO1, delta_CL_alpha_TO1, delta_CL_max_TO1)
+#plot = config1_Lift.CL_alpha_plot(connect.CL_alpha1, connect.alpha_0_L1, connect.CL_max1, connect.alpha_CL_max1, connect.delta_CL1, connect.delta_CL_alpha1, connect.delta_CL_max1)
 
 
 """ Moment classII estimations """
@@ -199,6 +200,4 @@ delta_Cm_w_flaps3, delta_Cm_w_krueger3 = config3_Moment.Wing_moment_flaps(Cm0_w_
 #CD_TO4 = CD_w_sub4 + CD_fus_sub4 + CD_h_sub4 + CD_v_sub4 + CD_c_sub4 + CD_flap_TO4 + CD_gear4 + CD_ws4 + CD_store_sub4 + CD_trim4
 #CD_land4 = CD_w_sub4 + CD_fus_sub4 + CD_h_sub4 + CD_v_sub4 + CD_c_sub4 + CD_flap_land4 + CD_slat4 + CD_gear4 + CD_ws4 + CD_store_sub4 + CD_trim4
 
-
-C_L, C_L_flaps = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 0.58)
-#print (C_L, C_L_flaps)
+C_L, C_L_flaps = config1_Lift.get_CL(CL_alpha1, alpha_0_L1, CL_max1, alpha_CL_max1, delta_CL1, delta_CL_alpha1, delta_CL_max1, 4)
