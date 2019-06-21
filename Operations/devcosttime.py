@@ -41,7 +41,7 @@ plt.show
 #area =np.trapz(yr, xr)
 #print (area)
 a_tot =0
-no_of_years = 8
+no_of_years = 16
 n_per_year = n/no_of_years
 for i in range(no_of_years):
     a = np.trapz(yr[(i*n_per_year): ((i+1)*n_per_year)], xr[(i*n_per_year): ((i+1)*n_per_year)])

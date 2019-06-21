@@ -5,29 +5,32 @@ Created on Thu Jun 13 13:38:04 2019
 @author: ahmadmahmoud
 """
 ############################IMPORT MASSES##########################
-M_wing = 6359
-M_verticaltail = 83
-M_horizontaltail = 151
-M_canard = 1000
+M_wing = 5614.98#
+M_verticaltail = 58.97#
+M_horizontaltail = 75.73#
+M_canard = 626.18#
 M_empennage = M_canard + M_horizontaltail + M_verticaltail
-M_fuselage = 9100
-M_landinggear = 2700
-M_engines_total = 4354
-M_airinduction = 0
-M_fuelsystem = 0
-M_propulsionsystem = 0
-M_fc = 0
-M_hydr = 0
-M_els = 0
-M_avion = 0
-M_environ = 0
-M_oxygen = 0
-M_apu = 6481 
+M_fuselage = 9604.23#
+M_landinggear_nose = 364.07# 
+M_landinggear_main = 1967.13#
+M_landinggear = M_landinggear_nose + M_landinggear_main
+M_engines_total = 4380#
+M_airinduction = 0#
+M_fuelsystem = 345.10#
+M_propulsionsystem = 111.19#
+M_fc = 748.20#
+M_hydr = 534.15#
+M_els = 1583.13#
+M_avion = 428.68#
+M_environ = 903.40#
+M_oxygen = 148.77#
+M_apu = 504.48#
 M_systems = M_airinduction + M_fuelsystem + M_propulsionsystem + M_fc + M_hydr + M_els + M_avion + M_environ + M_oxygen + M_apu
-M_furnish = 0
-M_cargohand = 0
-M_operation = 9000
+M_furnish = 3790.83#
+M_cargohand = 329.514#
+M_operation = 0.0#
 M_payloads = M_furnish + M_cargohand + M_operation
+
 
 ########################PRICES PER KG##############################
 wing_per_kg = 39090.12 * 1.419106771007
@@ -92,8 +95,10 @@ installedengines_support = installedengines_cost * 0.047
 systems_support = systems_cost * 0.047
 payloads_support = payloads_cost * 0.047
 
-
-
+#==============================================================================
+#                               TOTAL COSTS
+#==============================================================================
+totalcost = wing_cost + empennage_cost+fuselage_cost+landinggear_cost+installedengines_cost +systems_cost +payloads_cost
 
 
 
