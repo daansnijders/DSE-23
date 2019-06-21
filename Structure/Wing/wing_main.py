@@ -18,7 +18,6 @@ import numpy as np
 import geo_prop_function as gpf
 import fuel_force_function as fff
 
-import inputs.concept_1 as c1
 
 """
 Parameters
@@ -31,60 +30,62 @@ spar_front = gpf.spar_front
 spar_rear = gpf.spar_rear
 
 # Maximum Take-off Mass [kg]
-MTOM = c1.MTOW[0]
+MTOM = 51263.22926932698
 print("MTOM [kg] = ",MTOM)
 
 # Wing span [m]
-wing_span = c1.b
+wing_span = 33.82991669684063
 print("Wing span [m] = ",wing_span)
 
 # Root chord [m]
-chord_root = c1.Cr
+chord_root = 5.439388629571751
 print("Root chord [m] = ",chord_root)
 
 # Tip Chord [m]
-chord_tip = c1.Ct
+chord_tip = 1.6826990960789077
 print("Tip chord [m] = ",chord_tip)
 # Wing surface area [m^2]
-wing_area = c1.S
+wing_area = 120.46981723317646
 print("Wing area [m^2] = ",wing_area)
 
 # Discretisation number [-]
 N = 200
 
 # Lift Coefficient [-]
-coeff_lift = 1.584
+coeff_lift = 2.0027650789158025
 # Drag Coefficient [-]
-coeff_drag = 0.00668
-
+coeff_drag = 0.04537879775725347
+# Moment Coefficient
+coeff_moment=-0.06139508285597382
 # Load_factor [-]
-load_factor = 3.1
+load_factor = 3.002215506825051
 
 # Safety_factor [-]
 safety_factor = 1.5
 
 # Leading edge sweep [deg]
-sweep_LE = c1.lambda_le_rad*180/np.pi
+sweep_LE = 0.49711733752373455*180/np.pi
 
 # Engine property list[x_loc(m), y_loc(m), z_loc(m), thrust [N], y_force, weight[N]
 engine_thrust = 108540    #[N]
 engine_mass = 2177      #[kg]
-print("Y engine [m] = ",c1.y_engine) 
-engine = [0,c1.y_engine,0,-engine_thrust,0,engine_mass*-9.81*load_factor]
+x_engine = 12.176410131024054-8.39448188
+print("Y engine [m] = ",5.074487504526094) 
+engine = [x_engine,5.074487504526094,0,-engine_thrust,0,engine_mass*-9.81*load_factor]
 
 # main landing gear property list[x_loc(m), y_loc(m), z_loc(m), drag [N], y_force, weight[N]]
-mlg_drag = 200       #[N]
+mlg_drag = 0       #[N]
 mlg_mass = 2500     #[kg]
-x_mlg = c1.x_mlg[0]-c1.x_le_w[0]
-y_mlg = c1.y_mlg[0]
-z_mlg = c1.z_mlg
+x_mlg = 14.3464-8.39448188
+y_mlg = 3.0681711047469924
+z_mlg = -2.0281969834383204
 print("X mlg [m] = ",x_mlg)
 print("Y mlg [m] = ",y_mlg)
 print("Z mlg [m] = ",z_mlg)
 mlg = [x_mlg,y_mlg,-z_mlg,mlg_drag,0,mlg_mass*-9.81*load_factor]
 
 # Fuel Mass [kg]
-fuel_mass = c1.M_fuel[0]
+fuel_mass = 7265.3677
 print("fuel mass [kg] = ",fuel_mass)
 
 """
@@ -125,14 +126,14 @@ print("Wing box mass [kg] = ", mass_cost[0])
 print("Wing box cost [USD] = ", mass_cost[1])
 """
 Form list of external forces
-[x,y,z,Fx,Fy,Fz]
+[x,y,z,Fx,T,Fz]
 -------------------------------------------------------------------------------
 """
 
 force_lst = []
 aero_force_lst = lsf.get_aeroforce_distri(MTOM, load_factor, wing_area, \
                                           wing_span,sweep_LE,chord_root, \
-                                          chord_tip,N,coeff_lift,coeff_drag)
+                                          chord_tip,N,coeff_lift,coeff_drag,coeff_moment)
 force_lst.extend(aero_force_lst)
 force_lst.extend([mlg])
 force_lst.extend([engine])
@@ -141,8 +142,8 @@ force_lst.extend(struc_force_lst)
 force_lst = np.array(force_lst)
 force_lst=force_lst[np.argsort(force_lst[:,1])]
 
-#plt.figure()
-#plt.scatter(force_lst[:,1],force_lst[:,0])
+plt.figure()
+plt.scatter(force_lst[:,1],force_lst[:,0])
 
 """
 Form list of internal loads
@@ -155,17 +156,19 @@ internal_loads_lst = np.array(internal_loads_lst)
 """
 ANSWER ANALYSIS 1
 """
-#plt.figure("Shear x")
-#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,3])
-#plt.figure("Shear z")
-#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,4])
-#plt.figure("Moment x")
-#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,5])
-#plt.figure("Moment z")
-#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,6])
-#plt.figure("Torque")
-#plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,7])
-#plt.show()
+plt.figure("Torque")
+plt.scatter(force_lst[:,1],force_lst[:,4])
+plt.figure("Shear x")
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,3])
+plt.figure("Shear z")
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,4])
+plt.figure("Moment x")
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,5])
+plt.figure("Moment z")
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,6])
+plt.figure("Internal Torque")
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,7])
+plt.show()
 
 """
 Calculate normal stress due to bending
