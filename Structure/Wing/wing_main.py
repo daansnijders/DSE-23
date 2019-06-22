@@ -23,6 +23,7 @@ import fuel_force_function as fff
 Parameters
 ------------------------------------------------------------------------------
 """
+case = "Case 8"
 # Front Spar location [-]
 spar_front = gpf.spar_front
 
@@ -30,7 +31,7 @@ spar_front = gpf.spar_front
 spar_rear = gpf.spar_rear
 
 # Maximum Take-off Mass [kg]
-MTOM = 51263.22926932698
+MTOM = 51263.22926932698-7265.3677
 print("MTOM [kg] = ",MTOM)
 
 # Wing span [m]
@@ -49,7 +50,7 @@ wing_area = 120.46981723317646
 print("Wing area [m^2] = ",wing_area)
 
 # Discretisation number [-]
-N = 200
+N = 100
 
 # Lift Coefficient [-]
 coeff_lift = 2.0027650789158025
@@ -68,7 +69,7 @@ sweep_LE = 0.49711733752373455*180/np.pi
 
 # Engine property list[x_loc(m), y_loc(m), z_loc(m), thrust [N], y_force, weight[N]
 engine_thrust = 108540    #[N]
-engine_mass = 2177      #[kg]
+engine_mass = 4837.1884287882185/2      #[kg]
 x_engine = 12.176410131024054-8.39448188
 print("Y engine [m] = ",5.074487504526094) 
 engine = [x_engine,5.074487504526094,0,-engine_thrust,0,engine_mass*-9.81*load_factor]
@@ -85,7 +86,7 @@ print("Z mlg [m] = ",z_mlg)
 mlg = [x_mlg,y_mlg,-z_mlg,mlg_drag,0,mlg_mass*-9.81*load_factor]
 
 # Fuel Mass [kg]
-fuel_mass = 7265.3677
+fuel_mass = 0#7265.3677
 print("fuel mass [kg] = ",fuel_mass)
 
 """
@@ -156,18 +157,44 @@ internal_loads_lst = np.array(internal_loads_lst)
 """
 ANSWER ANALYSIS 1
 """
-plt.figure("Torque")
-plt.scatter(force_lst[:,1],force_lst[:,4])
+
+#plt.figure("Torque")
+#plt.scatter(force_lst[:,1],force_lst[:,4])
+
 plt.figure("Shear x")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,3])
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,3], label = case)
+plt.legend()
+plt.title("Internal Shear Diagram")
+plt.xlabel("y [m]")
+plt.ylabel("V_x [m]")
+
 plt.figure("Shear z")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,4])
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,4], label = case)
+plt.legend()
+plt.title("Internal Shear Diagram")
+plt.xlabel("y [m]")
+plt.ylabel("V_z [m]")
+
 plt.figure("Moment x")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,5])
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,5], label = case)
+plt.legend()
+plt.title("Internal Moment Diagram")
+plt.xlabel("y [m]")
+plt.ylabel("M_x [m]")
+
 plt.figure("Moment z")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,6])
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,6], label = case)
+plt.legend()
+plt.title("Internal Moment Diagram")
+plt.xlabel("y [m]")
+plt.ylabel("M_z [m]")
+
 plt.figure("Internal Torque")
-plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,7])
+plt.plot(internal_loads_lst[:,0],internal_loads_lst[:,7], label = case)
+plt.legend()
+plt.title("Internal Torque Diagram")
+plt.xlabel("y [m]")
+plt.ylabel("Torque [m]")
 plt.show()
 
 """
@@ -230,11 +257,26 @@ shear_skin_lst = safety_factor*(q_torque_lst+q_skin_lst)/gpf.t_skin
 """Combine stresses"""
 stress = abs(sigmax_upper)+abs(sigmaz_upper)
 
-plt.figure("Skin Stress")
+""" Plot upper skin stress """
+plt.figure("Upper Skin Stress")
 plt.plot(cross_section_lst[:,0],stress)
 plt.plot(cross_section_lst[:,0],sigma_cr_skin_lst[:,4:])
-plt.show
 
+
+plt.figure("Shear at web")
+plt.plot(cross_section_lst[:,0],q_web_lst)
+plt.plot(cross_section_lst[:,0],shear_web_lst)
+
+""" Calculate deflections """
+deflections = gpf.get_deflections(cross_section_lst,internal_loads_lst[:,5],wing_span)
+#print(deflections[-1,-1])
+
+#max_deflec_analytical = gpf.analytical_max_deflect(force_lst[:,5],force_lst[:,1],cross_section_lst,wing_span)
+#print(max_deflec_analytical)
+
+plt.figure("Deflections")
+plt.plot(cross_section_lst[:,0],deflections[:,-1])
+plt.show()
 #plt.figure("Stress")
 #plt.plot(cross_section_lst[:,0],sigmax_upper)
 #plt.plot(cross_section_lst[:,0],sigmaz_upper)

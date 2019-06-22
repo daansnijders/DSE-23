@@ -58,40 +58,32 @@ skin_yield = 627*10**6
 
 
 
-x_cg_wing_group = 16.0
-X_wingbox_start = 15.0
-X_wingbox_end = 17.5
-M_payload = 12500.0
-M_fuselage = 9000.0
-M_fittings = 9000.0
-M_verticaltail = 1000.0
-M_landinggear_nose = 200.0
-M_landinggear_main = 1500.0
-M_wing_group = 12000.0
-M_horizontal_tail = 1500.0
-M_fuel = 15000.0
+X_wingbox_start = 11.12#
+X_wingbox_end = 13.84#
+x_cg_wing_group = np.average([X_wingbox_start, X_wingbox_end])#
+M_payload = 10306.40#
+M_fuselage = 7665.99#
+M_fittings = 7934.3#
+M_verticaltail = 58.97#
+M_landinggear_nose = 364.07#
+M_landinggear_main = 1967.13#
+M_wing_group = 17076.11#
+M_horizontal_tail = 75.73#
+M_fuel = 6742.59#
 M_total = M_payload+M_fuselage+M_fittings+M_verticaltail+M_landinggear_nose+M_landinggear_main+M_wing_group+M_horizontal_tail+M_fuel
-l_fuselage = 35.0
-x_cg_hwing = 34.0
-x_cg_vwing = 34.0
-x_cg_ngear = 5.0
-x_cg_mgear = 16.0
-Xfirst = 6.0
-Xlast = 26.0
-wing_moment = 423445.33268878574/(2.66)
+l_fuselage = 30.13#
+x_cg_hwing = 29.51#
+x_cg_vwing = 29.84#
+x_cg_ngear = 2.0#
+x_cg_mgear = 15.34#
+Xfirst = 7.09#
+Xlast = 20.91#
+wing_moment = 214599.7501376995/(3.0)
 
 
-#l_fuselage = config1_class2.l_f
-#x_cg_hwing = c1.x_cg_tail
-#x_cg_vwing = c1.x_cg_tail
-#x_cg_ngear = c1.x_nlg
-#x_cg_mgear = c1.x_mlg
-#Xfirst = c1.l_cockpit
-#Xlast = Xfirst+c1.l_cabin
-#M_horizontal_tail = config1_class2.M_horizontaltail
 
 
-n= 1000
+n= 2000
 step_size = float(l_fuselage)/n
 
 x = np.linspace(0,l_fuselage,n)
@@ -105,6 +97,7 @@ for i in range(n):
     
 p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
 skin_thickness = (p_diff* max(radius))/(skin_yield/safety_factor)
+print skin_thickness
 skin_thickness = 0.0015
 
 
@@ -187,9 +180,27 @@ for i in range(n):
         stress_bending_max[i] = M[i]*radius[i]/MOI[i]    
        
         stress_long_max[i] = (abs(stress_bending_max[i])+stress_pressure_long[i])* safety_factor
+
+
+
+
+
+plt.figure()
+plt.plot(x, V)
+plt.xlabel("x location in fuselage [m]")
+plt.ylabel("Internal shear [N]")
+plt.title("Internal shear across fuselage length")
+plt.show()
+
+plt.figure()
+plt.plot(x, M)
+plt.xlabel("x location in fuselage [m]")
+plt.ylabel("Internal bending moment[Nm]")
+plt.title("Internal bending moment across fuselage length")
+plt.show()
      
 #######################################BUCKLING CALCULATION: REQUIRED NO OF STRINGERS###################################
-nu = 1.773
+nu = 2
 payload_w = [0] *n
 for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
     payload_w[i]=-M_payload* g*nu/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
@@ -290,10 +301,10 @@ frame_spacing = 0.5
 no_of_frames = int(l_fuselage/ frame_spacing)
 n_in_frame = int(1.0/no_of_frames* n)
 k = 0
-stringer_no_new= [1]* n
+stringer_no_new1= [1]* n
 for j in range(no_of_frames):
     for i in range(k, k + n_in_frame):
-        stringer_no_new[i] = max([max(stringer_no[k:k+n_in_frame]),max(stringer_no_buckle[k:k+n_in_frame])])
+        stringer_no_new1[i] = max([max(stringer_no[k:k+n_in_frame]),max(stringer_no_buckle[k:k+n_in_frame])])
     k+= n_in_frame
         
     
@@ -335,38 +346,16 @@ while sigma > sigma_critical:
 
 print t
 
-###########Titanium Ti-6Al-4V aged##########
-#delta = 0.0001
-#b = 0.5 *t +0.25 *t + delta
-#Mom = sigma*A*(b/2)
-#bolt_d = D - delta*2
-#bolt_rupture = 1020000000
-#I_bolt = np.pi/4 * (bolt_d/2)**4
-#MS = ((Mom*bolt_d)/(2*I_bolt))/bolt_rupture  -1
-#print "MS:", MS
-#
-#
-##################################Frame spacing################################
-#width = 0.0625
-#r_frame = max(radius)
-#I_frame = np.pi/4 * (r_frame**4 - (r_frame-width)**4)
-#######frame: Aluminum 2024-T81########
-#Y_mod = 72 * 10**9
-#v = 0.33
-#frame_yield = 372000000
-#L = abs(min(M))*(r_frame*2)**2/(16000*Y_mod*I_frame)
-#b_skin =  2* np.pi / *r_frame
-#buckling_crit = (0.001/b_skin)**2 * (np.pi**2 * 4 * Y_mod)/(12*(1-v**2)
 
 skin_density = 1540
 stringer_density = 2780
 skin_weight = l_fuselage * max(radius) *2 *np.pi * skin_density * skin_thickness
-stringer_weight = np.trapz(stringer_no_new, x)* stringer_area * stringer_density
+stringer_weight = np.trapz(stringer_no_new1, x)* stringer_area * stringer_density
     
 
 
 plt.figure()
-plt.plot(x,stringer_no_new)
+plt.plot(x,stringer_no_new1)
 plt.show()
 
 plt.figure()
@@ -378,10 +367,3 @@ plt.plot(x,stringer_no_buckle)
 plt.show()
 
 
-plt.figure()
-plt.plot(x, V)
-plt.show()
-
-plt.figure()
-plt.plot(x, M)
-plt.show()
