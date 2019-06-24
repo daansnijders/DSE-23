@@ -11,7 +11,7 @@ import inputs.constants as const
 import inputs.performance_inputs as perf
 import inputs.concept_1 as conc1
 import modules.Aerodynamics as aero
-#import Output.connection_departments as connect
+import Output.connection_departments as connect
 
 """ Yet unknown values needed to start the simulation """
 D_nlg = 0.5
@@ -45,7 +45,7 @@ SWF, b_flap, SWF_LE, b_slat = config1_HLD.HLD()
 #Configuration 1
 config1_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[0],const.V_cruise,conc1.V_TO[0],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[0],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[0], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[0], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[0], conc1.lambda_v_2_rad[0], conc1.MAC_c[0], conc1.Cr_v[0], conc1.Ct_v[0], conc1.Cr_h[0], conc1.Ct_h[0], conc1.S_h[0], conc1.S_v[0], conc1.S_c[0], CL_alpha_h, de_da, i_h, alpha0L_h, conc1.A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
 
-CD_w_sub1, CD_w_trans1, CD0_w1 = config1_Drag.wing_drag()
+CD_w_sub1, CD_w_trans1, CD0_w1, e1 = config1_Drag.wing_drag()
 CD0_fus1, CD_fus_sub1, CD_fus_trans1 = config1_Drag.fuse_drag()
 CD0_h_tail1, CD0_v_tail1, CD0_c_tail1, CD_h_sub1, CD_v_sub1, CD_c_sub1, CD_h_trans1, CD_v_trans1, CD_c_trans1 = config1_Drag.empennage_drag()
 CD0_nacel1, CD_nacel_sub1, CD_nacel_trans1 = config1_Drag.nacelle_drag()
@@ -64,7 +64,7 @@ CD0_1 = CD0_w1 + CD0_fus1 + CD0_h_tail1 + CD0_v_tail1 + CD0_c_tail1 + CD0_nacel1
 #Configuration 2
 config2_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[1],const.V_cruise,conc1.V_TO[1],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[1],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[1], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[1], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[1], conc1.lambda_v_2_rad[1], conc1.MAC_c[1], conc1.Cr_v[1], conc1.Ct_v[1], conc1.Cr_h[1], conc1.Ct_h[1], conc1.S_h[1], conc1.S_v[1], conc1.S_c[1], CL_alpha_h, de_da, i_h, alpha0L_h, conc1.A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
 
-CD_w_sub2, CD_w_trans2, CD0_w2 = config2_Drag.wing_drag()
+CD_w_sub2, CD_w_trans2, CD0_w2, e2 = config2_Drag.wing_drag()
 CD0_fus2, CD_fus_sub2, CD_fus_trans2 = config2_Drag.fuse_drag()
 CD0_h_tail2, CD0_v_tail2, CD0_c_tail2, CD_h_sub2, CD_v_sub2, CD_c_sub2, CD_h_trans2, CD_v_trans2, CD_c_trans2 = config2_Drag.empennage_drag()
 CD0_nacel2, CD_nacel_sub2, CD_nacel_trans2 = config2_Drag.nacelle_drag()
@@ -83,7 +83,7 @@ CD0_2 = CD0_w2 + CD0_fus2 + CD0_h_tail2 + CD0_v_tail2 + CD0_c_tail2 + CD0_nacel2
 #Configuration 3
 config3_Drag = aero.Drag(conc1.S,conc1.A,const.rho,const.rho_0,conc1.l_f[2],const.V_cruise,conc1.V_TO[2],const.mu_37,const.mu_sl,conc1.MAC,conc1.Cr,conc1.Ct,conc1.b,conc1.taper_ratio,conc1.d_f_outer,conc1.lambda_le_rad,conc1.CLdes[2],conc1.CL_alpha,const.l_cockpit, conc1.l_cabin[2], conc1.l_tail, conc1.lambda_2_rad, conc1.lambda_4_rad,conc1.x_nlg, conc1.z_nlg, const.D_nlg, const.w_nlg, conc1.D_strut_nlg, conc1.x_mlg[2], conc1.z_mlg, const.D_mlg, const.w_mlg, conc1.D_strut_mlg, conc1.lambda_h_2_rad[2], conc1.lambda_v_2_rad[2], conc1.MAC_c[2], conc1.Cr_v[2], conc1.Ct_v[2], conc1.Cr_h[2], conc1.Ct_h[2], conc1.S_h[2], conc1.S_v[2], conc1.S_c[2], CL_alpha_h, de_da, i_h, alpha0L_h, conc1.A_h, CL_alpha_c, de_da_c, i_c, alpha0L_c, conc1.A_c, l_fueltank, d_fueltank, delta_C_L_h, delta_C_L_c, S_elev, conc1.l_nacel, conc1.d_nacel, i_n, SWF, SWF_LE, Delta_C_L_flap, b_slat, b_flap)
 
-CD_w_sub3, CD_w_trans3, CD0_w3 = config3_Drag.wing_drag()
+CD_w_sub3, CD_w_trans3, CD0_w3, e3 = config3_Drag.wing_drag()
 CD0_fus3, CD_fus_sub3, CD_fus_trans3 = config3_Drag.fuse_drag()
 CD0_h_tail3, CD0_v_tail3, CD0_c_tail3, CD_h_sub3, CD_v_sub3, CD_c_sub3, CD_h_trans3, CD_v_trans3, CD_c_trans3 = config3_Drag.empennage_drag()
 CD0_nacel3, CD_nacel_sub3, CD_nacel_trans3 = config3_Drag.nacelle_drag()
@@ -148,7 +148,7 @@ delta_CL3, delta_CL_alpha3, delta_CL_max3, delta_CL_TO3, delta_CL_alpha_TO3, del
 #print(CL_alpha_h3, CL_alpha_c3, CL_alpha3, alpha_0_L3, CL_max3)
 
 
-#plot = config1_Lift.CL_alpha_plot(connect.CL_alpha1, connect.alpha_0_L1, connect.CL_max1, connect.alpha_CL_max1, connect.delta_CL1, connect.delta_CL_alpha1, connect.delta_CL_max1)
+plot = config1_Lift.CL_alpha_plot(connect.CL_alpha1, connect.alpha_0_L1, connect.CL_max1, connect.alpha_CL_max1, connect.delta_CL1, connect.delta_CL_alpha1, connect.delta_CL_max1, connect.CD0_1, connect.e1)
 
 
 """ Moment classII estimations """
