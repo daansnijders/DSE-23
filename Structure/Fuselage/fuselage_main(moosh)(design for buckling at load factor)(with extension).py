@@ -33,6 +33,7 @@ Assumptions:
 #X_wingbox_end, M_payload, M_fuselage, M_fittings, M_horizontaltail, M_verticaltail, M_landinggear_nose, M_landinggear_main, M_wing_group,\
 #Lift_mainwing, Lift_tail):
 
+
 import numpy as np
 import matplotlib.pyplot as plt
 from isa import isa
@@ -58,29 +59,32 @@ skin_yield = 627*10**6
 
 
 
-x_cg_wing_group = 16.0
-X_wingbox_start = 15.0
-X_wingbox_end = 17.5
-M_payload = 12500.0
-M_fuselage = 9000.0
-M_fittings = 9000.0
-M_verticaltail = 1000.0
-M_landinggear_nose = 200.0
-M_landinggear_main = 1500.0
-M_wing_group = 12000.0
-M_horizontal_tail = 1500.0
-M_fuel = 15000.0
-M_canard = 1000
+
+X_wingbox_start = 16.81#
+X_wingbox_end = 19.53#
+x_cg_wing_group = np.average([X_wingbox_start, X_wingbox_end])#
+M_payload = 13575.55#
+M_fuselage = 9604.23#
+M_fittings = 9238.26#
+M_verticaltail = 58.97#
+M_landinggear_nose = 364.07# 
+M_landinggear_main = 1967.13#
+M_wing_group = 17076.11#
+M_horizontal_tail = 75.73#
+M_fuel = 8393.4#
+M_canard = 626.18#
 M_total = M_payload+M_fuselage+M_fittings+M_verticaltail+M_landinggear_nose+M_landinggear_main+M_wing_group+M_horizontal_tail+M_fuel + M_canard
-l_fuselage = 35.0
-x_cg_hwing = 34.0
-x_cg_vwing = 34.0
-x_cg_ngear = 5.0
-x_cg_mgear = 16.0
-Xfirst = 6.0
-Xlast = 26.0
-wing_moment = 423445.33268878574/(2.66)
-x_canard = 6.0
+l_fuselage = 35.8#
+x_cg_hwing = 34.63#
+x_cg_vwing = 34.96#
+x_cg_ngear = 2.0#
+x_cg_mgear = 21.03#
+Xfirst = 7.09#
+Xlast = 25.78#
+wing_moment = 214599.7501376995/(3.0)
+x_canard = 7.5#
+x_cut1 = 6.817#
+x_cut2 = x_cut1 + 5.69#
 
 #Lift_mainwing has to be equal to M_total * g from other program    
 Lift_mainwing_wonu = 605069.0
@@ -97,7 +101,7 @@ Lift_mainwing_wonu = 605069.0
 #M_horizontal_tail = config1_class2.M_horizontaltail
 
 
-n= 1000
+n= int(2000 * 1.1881845336873547)
 step_size = float(l_fuselage)/n
 
 x = np.linspace(0,l_fuselage,n)
@@ -112,6 +116,7 @@ for i in range(n):
 p_diff = isa(2438/3.281)[1] - isa(37000/3.281)[1]
 
 skin_thickness = (p_diff* max(radius))/(skin_yield/safety_factor)
+print skin_thickness
 skin_thickness = 0.0015
 
 
@@ -200,8 +205,22 @@ for i in range(n):
         stress_long_max[i] = (abs(stress_bending_max[i])+stress_pressure_long[i])* safety_factor
 
 
+
+plt.figure()
+plt.plot(x, V)
+plt.xlabel("x location in fuselage [m]")
+plt.ylabel("Internal shear [N]")
+plt.title("Internal shear across fuselage length")
+plt.show()
+
+plt.figure()
+plt.plot(x, M)
+plt.xlabel("x location in fuselage [m]")
+plt.ylabel("Internal bending moment[Nm]")
+plt.title("Internal bending moment across fuselage length")
+plt.show()
 #######################################BUCKLING CALCULATION: REQUIRED NO OF STRINGERS###################################
-nu = 1.773
+nu = 2
 payload_w = [0] *n
 for i in range(int((Xfirst/l_fuselage)*n),int((Xlast/l_fuselage)*n)):
     payload_w[i]=-M_payload* g*nu/(int((Xlast/l_fuselage)*n)-int((Xfirst/l_fuselage)*n)) 
@@ -308,9 +327,48 @@ for j in range(no_of_frames):
     k+= n_in_frame
         
     
-######################################JOINT CALCULATION########################
+######################################JOINT CALCULATION:  1########################
 radius_joint = 3.685*0.5
-x_cut = 6.0
+x_cut = x_cut1
+joint_no = 12.0
+t = 0.0001  
+sigma = 1000000000000000.0
+sigma_critical = 0.0
+while sigma > sigma_critical:
+    t+=0.0001
+    D = 4 * t  
+    a = 1.5 * D
+    w = 2 * a
+    A = w * t
+    ###########Titanium Ti-6Al-4V aged##########
+    sigma_ult = 1100000000.0    
+    sigma_y = 1020000000.0
+    sigma_yt = 1100000000.0
+    Kbr = 1.1
+    Kt = 0.94
+    sigma_cr1 = Kbr * sigma_ult * D/w
+    sigma_cr2 = Kt * (w-D) * sigma_ult/w
+    factor = min(sigma_cr1, sigma_cr2) *w*t/(D*t* sigma_ult)
+    if factor <= 3.0 and factor >= 1.0:
+        C = -0.2105* factor + 1.3473
+    else:
+        print ("ERROR with C value")
+    sigma_cr3 = C * (sigma_y/sigma_ult) * min(sigma_cr1, sigma_cr2)
+    sigma_critical = (min(sigma_cr1, sigma_cr2, sigma_cr3))/fitting_factor
+    
+    MOI_joint = joint_no* radius_joint**2 *0.5 * A
+    sigma_press=(p_diff*np.pi*(radius_joint)**2)/(A*joint_no)  
+    sigma_bend = (M[int((x_cut/l_fuselage)*n)]* radius_joint/MOI_joint)* safety_factor
+    sigma = sigma_press + abs(sigma_bend)
+    
+    
+
+print t
+
+
+###################################### JOINT CALCULATION:  2 ########################
+radius_joint = 3.685*0.5
+x_cut = x_cut2
 joint_no = 12.0
 t = 0.0001  
 sigma = 1000000000000000.0
@@ -389,10 +447,4 @@ plt.plot(x,stringer_no_buckle)
 plt.show()
 
 
-plt.figure()
-plt.plot(x, V)
-plt.show()
 
-plt.figure()
-plt.plot(x, M)
-plt.show()
