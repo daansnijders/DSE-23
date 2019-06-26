@@ -32,25 +32,27 @@ title = data.axes[1][1]
 x_label = data.iloc[2,1]
 y_label = data.iloc[2,2]
 x = np.array(data.iloc[5:l,1])
-y = np.array(data.iloc[5:l,2:])
+y = np.array(data.iloc[5:l,2:])[:,0]
 label = data.iloc[l+1,2:]
 graph_type = data.iloc[l+2,1]
 legend = data.iloc[l+3,1]
-save_path = data.iloc[l+4,1]
+save_path = data.iloc[28,1]
 
 # Building the figure
-fig = plt.figure()
+fig = plt.figure(figsize = (12,4))
 ax = fig.add_subplot(111)
-if graph_type == 'scatter':
-    for i in range(len(y[0])):
-        ax.scatter(x,y[:,i], label = label[i])    
-if graph_type == 'plot':
-    for i in range(len(y[0])):
-        ax.plot(x,y[:,i], label = label[i])    
-#ax.set(xlabel = x_label, ylabel = y_label, title = title)  
-#ax.set(xlim = (0,np.max(x)*1.1), ylim = (0,np.max(y)*1.1))  
-ax.grid()
-if legend != 'no':
-    ax.legend(loc = legend)
 
-fig.savefig(save_path)
+plt.gcf().subplots_adjust(bottom=0.15)
+
+for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
+             ax.get_xticklabels() + ax.get_yticklabels()):
+    item.set_fontsize(15)
+
+ax.plot(x,y*100)    
+ax.set(xlabel = x_label, ylabel = y_label, title = title)  
+#ax.set(xlim = (0,np.max(x)*1.1), ylim = (0,np.max(y)*1.1))  
+#ax.grid()
+#if legend != 'no':
+#    ax.legend(loc = legend)
+#
+fig.savefig('Seasonalfluctuations.pdf')
