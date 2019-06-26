@@ -141,23 +141,27 @@ class empennage:
             fig = plt.figure()
             plt.title('X-plot for sizing horizontal tail')
             ax1 = fig.add_subplot(111)
-            ax1.plot(x_cg_min1_emp, x_le_MAC_range_perc_emp)
-            ax1.plot(x_cg_max1_emp, x_le_MAC_range_perc_emp)
-            ax1.scatter(x_cg_min1_emp, x_le_MAC_range_perc_emp)
-            ax1.scatter(x_cg_max1_emp, x_le_MAC_range_perc_emp)
+            ax1.plot(x_cg_min1_emp, x_le_MAC_range_perc_emp, color = 'b')
+            cg = ax1.plot(x_cg_max1_emp, x_le_MAC_range_perc_emp, color = 'b',label = 'XLEMAC shift')
+            #ax1.scatter(x_cg_min1_emp, x_le_MAC_range_perc_emp, color = 'b')
+            #ax1.scatter(x_cg_max1_emp, x_le_MAC_range_perc_emp, color = 'b')
             ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
             ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
             ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
     
             ax2 = ax1.twinx()
-            ax2.plot(self.l, self.Sh_S1)
-            ax2.plot(self.l, self.Sh_S2)
-            ax2.plot(self.l, self.Sh_C1)
+            sc = ax2.plot(self.l, self.Sh_S1, color = 'r',label = 'Stability/controlability')
+            ax2.plot(self.l, self.Sh_S2, color = 'r')
+            ax2.plot(self.l, self.Sh_C1, color = 'r')
 #            ax2.set( ylim = [0,0.2565], ylabel = '$S_h/S \ [-]$')
             ax2.set( ylim = [-0.045,0.2375], ylabel = '$S_h/S \ [-]$')            
-            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
-            ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
+            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'g')
+            ds = ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'g',label = 'Selected design region')
+
+            lns = cg + sc + ds
+            labs = [l.get_label() for l in lns]
+            ax1.legend(lns, labs, loc=4)
 
         # =============================================================================
         # Horizontal tail - NACA 63 010
@@ -363,8 +367,8 @@ class empennage:
             ax1 = fig.add_subplot(111)
 #            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
 #            ax1.plot(x_cg_max1, x_le_MAC_range_perc)s
-            ax1.scatter(x_cg_mincanard, x_le_MAC_range_perccanard)
-            ax1.scatter(x_cg_maxcanard, x_le_MAC_range_perccanard)
+            #ax1.scatter(x_cg_mincanard, x_le_MAC_range_perccanard)
+            #ax1.scatter(x_cg_maxcanard, x_le_MAC_range_perccanard)
             ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
 #            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
@@ -372,15 +376,16 @@ class empennage:
     
             ax2 = ax1.twinx()
             
-            ax2.plot([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'r')
-            ax2.scatter([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'r')
+            ax2.plot([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'b',label = 'Selected design region')
+            ax2.scatter([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'b')
             
 
             
-            ax2.plot(self.l, self.Sc_S2)
-            ax2.plot(self.l, self.Sc_S1, color = 'g')
+            ax2.plot(self.l, self.Sc_S2,label = 'Absolute max c.g. location', color = 'r')
+            ax2.plot(self.l, self.Sc_S1,label = 'Design region', color = 'g')
             ax2.plot(self.l, self.Sc_C1, color = 'g')
             ax2.set( ylim = [0.0,0.8], ylabel = '$S_c/S \ [-]$')
+            plt.legend()    
             plt.show()
 
 #            ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'r')
