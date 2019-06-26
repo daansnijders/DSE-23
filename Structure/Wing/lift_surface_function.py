@@ -16,7 +16,7 @@ def get_chord(point,span,Cr,Ct):
 """
 Get aerodynamic force at every point
 """
-def get_aeroforce_distri(mass,load_factor,S,b,LE_sweep,Cr,Ct,number,CL,CD):
+def get_aeroforce_distri(mass,load_factor,S,b,LE_sweep,Cr,Ct,number,CL,CD,CM):
     print("------------------------------------------")
     print("Run get_aeroforce_distri")
     aero_force_lst = []
@@ -32,10 +32,11 @@ def get_aeroforce_distri(mass,load_factor,S,b,LE_sweep,Cr,Ct,number,CL,CD):
         Cr_i = get_chord(yi,b,Cr,Ct)        
         xi = yi*np.tan(LE_sweep/180*np.pi)+0.25*Cr_i
         Si = 0.5*(Cr_i+Ct_i)*step_size
-        Fy_i = 0
+        #Fy_i = 0
         Fx_i = drag_q*Si
         Fz_i = lift_q*Si
-        aero_force_lst.append([xi,yi,zi,Fx_i,Fy_i,Fz_i])
+        T_i = lift_q*CM/CL*Cr_i
+        aero_force_lst.append([xi,yi,zi,Fx_i,T_i,Fz_i])
         lift += Fz_i
         area += Si
     delta_lift = 2*lift-mass*9.81*load_factor
@@ -57,7 +58,8 @@ def get_internal_force_distri(span,Cr,Ct,N,force_lst,LE_sweep,spar_front,spar_re
     root_moment_z = sum(force_lst[:,3]*force_lst[:,1])
     root_moment_x = sum(force_lst[:,-1]*force_lst[:,1])
     torque_lst = force_lst[:,5]*(force_lst[:,0]-(force_lst[:,1]*np.tan(LE_sweep/180*np.pi)+\
-                      (spar_front+spar_rear)/2*get_chord(force_lst[:,1],span,Cr,Ct)))+ force_lst[:,3]*-force_lst[:,2]
+                      (spar_front+spar_rear)/2*get_chord(force_lst[:,1],span,Cr,Ct)))+ \
+                          force_lst[:,3]*-force_lst[:,2] - force_lst[:,4]
     root_torque = sum(torque_lst)
     internal_loads = []
     print("-----Checking-----")

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jun  3 14:23:05 2019
+Created on Mon Jun 24 09:19:24 2019
 
-@author: Anique
+@author: Sybren
 """
 
 import math  
@@ -197,7 +197,7 @@ class Drag:
         self.b_flap         = b_flap
         self.b_slat         = b_slat
 
-    def wing_drag(self):
+    def wing_drag(self, C_D_w_wave):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
         Re_f0 = self.rho_0 * self.V_TO     * self.l_f / self.mu_sl
         #These result in
@@ -243,7 +243,7 @@ class Drag:
         C_D_w_sub = C_D_0_w + C_D_L_w
         
         """ Transsonic drag """
-        C_D_w_wave = 0.002      #Figure 4.11
+#        C_D_w_wave = 0.002      #Figure 4.11
         C_D_0_w_trans = C_D_0_w + C_D_w_wave
         
         CDL_CL2 = 0.025         #Figure 4.13
@@ -254,7 +254,7 @@ class Drag:
         return (C_D_w_sub, C_D_w_trans, C_D_0_w, e)
         
                         
-    def fuse_drag(self):
+    def fuse_drag(self, CD_wave):
         Re_f  = self.rho   * self.V_cruise * self.l_f / self.mu_37
         Re_f0 = self.rho_0 * self.V_TO     * self.l_f / self.mu_sl
         #RE at service ceiling results in (same for all configurations)
@@ -283,13 +283,13 @@ class Drag:
         
         CDf_fus = Cf_fus*(Swet_fus/self.S)
         CDp_fus = Cf_fus*(60/(self.l_f/self.d_f_outer)**3 + 0.0025*(self.l_f/self.d_f_outer))*Swet_fus/self.S
-        CD_wave = 0.005     #Figure 4.22
+#        CD_wave = 0.005     #Figure 4.22
         
         CD_fus_trans = Rwf*(CDf_fus + CDp_fus) +CD_wave*(math.pi*(self.d_f_outer/2)**2)/self.S
         
         return(CD0_fus, CD_fus_sub, CD_fus_trans)
 
-    def empennage_drag(self):
+    def empennage_drag(self, CD_wave):
         #Subsonic for horizontal tail(h), vertical tail(v) and canard(c)
         #Zero lift drag calculations
         cos_lambda_v_2_rad   = math.cos(self.lambda_v_2_rad)
@@ -359,15 +359,15 @@ class Drag:
         
         #Transonic for horizontal tail(h), vertical tail(v) and canard(c)
         #Zero lift drag calculations
-        CD0_h_tail_trans = R_LS_h*Cf_emp_h_trans*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_h/self.S + 0.002*(self.S_h/self.S)
-        CD0_v_tail_trans = R_LS_v*Cf_emp_v_trans*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_v/self.S + 0.002*(self.S_v/self.S)
-        
+#        CD_wave = 0.002
+        CD0_h_tail_trans = R_LS_h*Cf_emp_h_trans*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_h/self.S + CD_wave*(self.S_h/self.S)
+        CD0_v_tail_trans = R_LS_v*Cf_emp_v_trans*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_v/self.S + CD_wave*(self.S_v/self.S)
         if Re_c_trans == 0:
             CD0_c_trans = 0
         elif self.MAC_c <= 1.15:
-            CD0_c_trans = R_LS_c*Cf_emp_c_trans_2*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S + 0.002*(self.S_c/self.S)
+            CD0_c_trans = R_LS_c*Cf_emp_c_trans_2*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S + CD_wave*(self.S_c/self.S)
         else:
-            CD0_c_trans = R_LS_c*Cf_emp_c_trans_3*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S + 0.002*(self.S_h/self.S)
+            CD0_c_trans = R_LS_c*Cf_emp_c_trans_3*(1+L_prime*t_over_c+100*(t_over_c)**4)*Swet_c/self.S + CD_wave*(self.S_h/self.S)
         
         #Lift induced drag
         CDL_CL2 = 0.025     #Figure 4.13
@@ -383,7 +383,7 @@ class Drag:
         
         return(CD0_h_tail_sub, CD0_v_tail_sub, CD0_c_sub, CD_h_sub, CD_v_sub, CD_c_sub, CD_h_trans, CD_v_trans, CD_c_trans)
         
-    def nacelle_drag(self):
+    def nacelle_drag(self, CD_wave):
         Re_f  = self.rho   * self.V_cruise * self.l_nacel / self.mu_37
         Re_f0 = self.rho_0 * self.V_TO     * self.l_nacel / self.mu_sl
         #RE at service ceiling results in (same for all configurations)
@@ -409,7 +409,7 @@ class Drag:
         
         CDf_nacel = Cf_nacel*(Swet_nacel/self.S)
         CDp_nacel = Cf_nacel*(60/(self.l_nacel/self.d_nacel)**3 + 0.0025*(self.l_nacel/self.d_nacel))*Swet_nacel/self.S
-        CD_wave = 0     #Figure 4.22
+#        CD_wave = 0     #Figure 4.22
         
         CD_nacel_trans = 2*Rwf*(CDf_nacel + CDp_nacel) +CD_wave*(math.pi*(self.d_nacel/2)**2)/self.S
         
@@ -796,8 +796,8 @@ class Lift:
         CL_max = CL_max_w - CL_alpha_wf*delta_alpha_wc + CL_alpha_h*(self.S_h/self.S)*(alpha_CL_max*(1-de_da) + self.i_h) + CL_alpha_c*(self.S_c/self.S)*(alpha_CL_max*(1+de_da_c) + self.i_c)
         return(CL_alpha_h, CL_alpha_c, CL_alpha, np.rad2deg(alpha_0_L), CL_max, de_da, de_da_c, alpha_CL_max)
 
-    def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c, delta_CL_alpha_w, de_da, delta_CL_max_w, delta_CL_w_TO, delta_CL_alpha_w_TO, delta_CL_max_w_TO): 
-        Kcw = 0.95      #Wim said maybe sensitivity analysis
+    def Airplane_lift_flaps(self, delta_CL_w, CL_alpha_h, CL_alpha_c, delta_CL_alpha_w, de_da, delta_CL_max_w, delta_CL_w_TO, delta_CL_alpha_w_TO, delta_CL_max_w_TO, Kcw): 
+#        Kcw = 0.95      #Wim said maybe sensitivity analysis
         etah = 0.9      #Source internet
         etac = 1.0
         delta_ef = np.deg2rad((18.5*delta_CL_w*self.b)/(self.A*2*self.b_flap))
