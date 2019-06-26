@@ -151,15 +151,15 @@ class empennage:
             ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
     
             ax2 = ax1.twinx()
-            sc = ax2.plot(self.l, self.Sh_S1, color = 'r',label = 'Stability/controlability')
-            ax2.plot(self.l, self.Sh_S2, color = 'r')
-            ax2.plot(self.l, self.Sh_C1, color = 'r')
+            c = ax2.plot(self.l, self.Sh_S1, color = 'orange',label = 'Controlability')
+            ax2.plot(self.l, self.Sh_S2, color = 'k')
+            s = ax2.plot(self.l, self.Sh_C1, color = 'r', label = 'Stability')
 #            ax2.set( ylim = [0,0.2565], ylabel = '$S_h/S \ [-]$')
             ax2.set( ylim = [-0.045,0.2375], ylabel = '$S_h/S \ [-]$')            
             ax2.scatter([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'g')
             ds = ax2.plot([f_min(y),f_max(y)],[f_C1(f_min(y)),f_S2(f_max(y))], color = 'g',label = 'Selected design region')
 
-            lns = cg + sc + ds
+            lns = cg + s + c + ds
             labs = [l.get_label() for l in lns]
             ax1.legend(lns, labs, loc=4)
 
@@ -367,8 +367,8 @@ class empennage:
             ax1 = fig.add_subplot(111)
 #            ax1.plot(x_cg_min1, x_le_MAC_range_perc)
 #            ax1.plot(x_cg_max1, x_le_MAC_range_perc)s
-            #ax1.scatter(x_cg_mincanard, x_le_MAC_range_perccanard)
-            #ax1.scatter(x_cg_maxcanard, x_le_MAC_range_perccanard)
+            ax1.scatter(x_cg_mincanard, x_le_MAC_range_perccanard,color = 'k')
+            ax1.scatter(x_cg_maxcanard, x_le_MAC_range_perccanard,color = 'k')
             ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
 #            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
