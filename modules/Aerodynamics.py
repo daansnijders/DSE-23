@@ -250,7 +250,7 @@ class Drag:
         C_D_L_w_trans = CDL_CL2 * C_L_w**2.
         
         C_D_w_trans = C_D_0_w_trans + C_D_L_w_trans
-        
+
         return (C_D_w_sub, C_D_w_trans, C_D_0_w, e)
         
                         
