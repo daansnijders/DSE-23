@@ -42,7 +42,7 @@ x = np.array(x,dtype = 'f8')
 y = np.array(y,dtype = 'f8')
 
 x_current = 55
-step = 10
+step = 5
 index = 0
 
 x_new = []
@@ -60,7 +60,7 @@ while x_current<150:
             
 fig = plt.figure(figsize = (12,6))
 ax = fig.add_subplot(111)
-ax.bar(y_new, x_new,width = step-2, align = 'center')
+ax.bar(y_new, x_new,width = step-1, align = 'center')
 ax.set_xticks(range(50,160,10))
 
 
@@ -71,4 +71,4 @@ for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
 ax.set(xlabel = x_label, ylabel = y_label, title = title)  
 
 
-fig.savefig('barplot.pdf')
+fig.savefig('barplot_5.pdf')

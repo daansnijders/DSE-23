@@ -147,6 +147,12 @@ class empennage:
             #ax1.scatter(x_cg_max1_emp, x_le_MAC_range_perc_emp, color = 'b')
             ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
+            for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label] + ax1.get_xticklabels() + ax1.get_yticklabels()):
+                item.set_fontsize(15)
+            plt.gcf().subplots_adjust(bottom=0.15)
+            plt.gcf().subplots_adjust(left=0.20)
+            
+            
             ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
             ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
     

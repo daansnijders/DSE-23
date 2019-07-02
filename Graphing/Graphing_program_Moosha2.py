@@ -60,7 +60,7 @@ while x_current<5500:
             
 fig = plt.figure(figsize = (12,6))
 ax = fig.add_subplot(111)
-ax.bar(y_new, x_new,width = step-5, align = 'center')
+ax.bar(y_new, x_new,width = step-10, align = 'center')
 #ax.set_xticks(range(50,160,10))
 
 
