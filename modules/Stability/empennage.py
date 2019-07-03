@@ -147,16 +147,21 @@ class empennage:
             ax1.scatter(x_cg_max1_emp, x_le_MAC_range_perc_emp, color = 'b')
             ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
-            for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label] + ax1.get_xticklabels() + ax1.get_yticklabels()):
+            for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label]):
                 item.set_fontsize(15)
             plt.gcf().subplots_adjust(bottom=0.15)
             plt.gcf().subplots_adjust(left=0.20)
+            plt.gcf().subplots_adjust(right=0.87)
             
             
             ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
             ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
     
             ax2 = ax1.twinx()
+            
+            for item in ([ax2.title, ax2.xaxis.label, ax2.yaxis.label]):
+                item.set_fontsize(15)
+            
             s = ax2.plot(self.l, self.Sh_S1, color = 'orange',label = 'Stability limit')
             s2 = ax2.plot(self.l, self.Sh_S2, color = 'c', label = 'Stability limit incl margin')
             c = ax2.plot(self.l, self.Sh_C1, color = 'r', label = 'Controlability limit')
@@ -380,10 +385,19 @@ class empennage:
             ax1.scatter(x_cg_maxcanard, test2,color = 'b')
             ax1.set(xlabel =  '$x_{cg} \ [m]$', ylabel = '$x_{le_{MAC}}/l_f \ [-]$')
             
+            for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label]):
+                item.set_fontsize(15)
+            plt.gcf().subplots_adjust(bottom=0.15)
+            plt.gcf().subplots_adjust(left=0.20)
+            plt.gcf().subplots_adjust(right=0.87)
+            
 #            ax1.scatter([f_min(y),f_max(y)],[y,y], color = 'b')
 #            ax1.plot([f_min(y),f_max(y)],[y,y], color = 'b')
     
             ax2 = ax1.twinx()
+            
+            for item in ([ax2.title, ax2.xaxis.label, ax2.yaxis.label]):
+                item.set_fontsize(15)
             
             ax2.plot([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'g',label = 'Selected design region')
             ax2.scatter([min_point[0],max_point[0]],[min_point[1],max_point[1]], color = 'g')
